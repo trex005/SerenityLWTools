@@ -53,11 +53,11 @@ export function AdminInterface() {
     return cleanup
   }, [])
 
-  // State for date range - now defaults to next 7 days for schedule view in UTC-2
+  // State for date range - now defaults to next 3 days for briefing in UTC-2
   const [dateRange, setDateRange] = useState<[Date | undefined, Date | undefined]>(() => {
     const utcMinus2 = getAppTimezoneDate()
     const today = startOfDay(utcMinus2)
-    return [today, endOfDay(addDays(today, 6))] // Default to next 7 days from UTC-2 today
+    return [today, endOfDay(addDays(today, 2))] // Default to next 3 days from UTC-2 today
   })
 
   // State for active day - set to UTC-2 today
@@ -99,7 +99,7 @@ export function AdminInterface() {
           <TabsContent value="schedule" className="mt-0">
             {/* Date range selector */}
             <div className="flex justify-center mb-4">
-              <DateRangeSelector value={dateRange} onChange={setDateRange} />
+              <DateRangeSelector value={dateRange} onChange={setDateRange} quickSelectDays={3} />
             </div>
 
             {/* Display date range information */}

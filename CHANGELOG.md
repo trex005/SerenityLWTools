@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 
 ## 2025-09-10
 
+### Changed
+- **Simplified Date Controls**: Completely replaced complex calendar components with native HTML date inputs
+  - **Date Range Selector**: Clean button-based interface with native date inputs for custom ranges
+    - Streamlined to just "Today", "Next 3 days", and "Custom" options
+    - Default view changed from 7 days to 3 days for better focus
+    - Custom option uses simple date inputs instead of complex calendar widget
+    - Navigation arrows work when complete range is selected
+    - Clean horizontal layout with date display
+  - **Reminders Date Picker**: Replaced calendar popover with simple date input field
+  - **Removed Dependencies**: No longer uses react-day-picker or complex calendar styling
+  - **Better UX**: Native date inputs provide consistent, familiar interface across all devices
+
 ### Added
 - **Simplified Reminders Feature**: Streamlined reminder functionality for events/operations
   - Two simple checkboxes: "Remind previous day" and "Remind at end of day"

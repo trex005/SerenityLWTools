@@ -96,9 +96,13 @@ export function EmailGenerator({ initialDateRange }: EmailGeneratorProps) {
     const saved = localStorage.getItem("daily-agenda-clear-tip-preference")
     return saved ? JSON.parse(saved) : true
   })
+  const [rememberDecision, setRememberDecision] = useState(false)
 
   // Ref to track previous date range for comparison
   const prevDateRangeRef = useRef<[Date | undefined, Date | undefined]>(dateRange)
+  
+  // Check localStorage for remembered decision
+  const rememberedDecision = typeof window !== "undefined" ? localStorage.getItem("regenerate-agenda-decision") : null
 
   // Load persisted content from localStorage on initial render
   useEffect(() => {
@@ -153,12 +157,21 @@ export function EmailGenerator({ initialDateRange }: EmailGeneratorProps) {
       currentEnd !== undefined &&
       (prevStart !== currentStart || prevEnd !== currentEnd)
     ) {
-      setShowRegenerateDialog(true)
+      // Check if user has a remembered decision
+      if (rememberedDecision === "regenerate") {
+        generateAgendaContent()
+        setEditedAgendaContent(agendaContent)
+      } else if (rememberedDecision === "keep") {
+        // Do nothing, keep current content
+      } else {
+        // Show dialog if no remembered decision
+        setShowRegenerateDialog(true)
+      }
     }
 
     // Update ref with current date range
     prevDateRangeRef.current = dateRange
-  }, [dateRange])
+  }, [dateRange, rememberedDecision])
 
   // Generate email content when date range changes
   useEffect(() => {
@@ -674,6 +687,9 @@ export function EmailGenerator({ initialDateRange }: EmailGeneratorProps) {
    * Handle regenerate dialog confirmation
    */
   const handleRegenerateConfirm = () => {
+    if (rememberDecision && typeof window !== "undefined") {
+      localStorage.setItem("regenerate-agenda-decision", "regenerate")
+    }
     generateAgendaContent()
     setEditedAgendaContent(agendaContent)
 
@@ -684,6 +700,15 @@ export function EmailGenerator({ initialDateRange }: EmailGeneratorProps) {
     }
 
     setShowRegenerateDialog(false)
+    setRememberDecision(false)
+  }
+
+  const handleRegenerateCancel = () => {
+    if (rememberDecision && typeof window !== "undefined") {
+      localStorage.setItem("regenerate-agenda-decision", "keep")
+    }
+    setShowRegenerateDialog(false)
+    setRememberDecision(false)
   }
 
   return (
@@ -891,16 +916,26 @@ export function EmailGenerator({ initialDateRange }: EmailGeneratorProps) {
               The date range has changed. Would you like to regenerate the agenda content?
             </AlertDialogDescription>
           </AlertDialogHeader>
-          <div className="flex items-center space-x-2 py-4">
-            <Checkbox
-              id="clear-tip"
-              checked={clearTipOnRegenerate}
-              onCheckedChange={(checked) => setClearTipOnRegenerate(!!checked)}
-            />
-            <Label htmlFor="clear-tip">Also clear the tip of the day</Label>
+          <div className="space-y-3 py-4">
+            <div className="flex items-center space-x-2">
+              <Checkbox
+                id="clear-tip"
+                checked={clearTipOnRegenerate}
+                onCheckedChange={(checked) => setClearTipOnRegenerate(!!checked)}
+              />
+              <Label htmlFor="clear-tip">Also clear the tip of the day</Label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <Checkbox
+                id="remember-decision"
+                checked={rememberDecision}
+                onCheckedChange={(checked) => setRememberDecision(!!checked)}
+              />
+              <Label htmlFor="remember-decision">Remember this decision</Label>
+            </div>
           </div>
           <AlertDialogFooter>
-            <AlertDialogCancel>Keep Current Content</AlertDialogCancel>
+            <AlertDialogCancel onClick={handleRegenerateCancel}>Keep Current Content</AlertDialogCancel>
             <AlertDialogAction onClick={handleRegenerateConfirm}>Regenerate</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

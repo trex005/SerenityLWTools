@@ -2,22 +2,25 @@
 
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import { Calendar } from "@/components/ui/calendar"
 import { CalendarIcon, ChevronLeft, ChevronRight } from "lucide-react"
-import { format, addDays, startOfDay, endOfDay, isBefore, differenceInDays } from "date-fns"
+import { format, addDays, startOfDay, endOfDay, differenceInDays } from "date-fns"
 import { cn } from "@/lib/utils"
 import { getAppTimezoneDate } from "@/lib/date-utils"
+import { Input } from "@/components/ui/input"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 
 interface DateRangeSelectorProps {
   value: [Date | undefined, Date | undefined]
   onChange: (value: [Date | undefined, Date | undefined]) => void
   className?: string
+  quickSelectDays?: number // Number of days for the "Next X days" option
 }
 
-export function DateRangeSelector({ value, onChange, className }: DateRangeSelectorProps) {
-  const [isOpen, setIsOpen] = useState(false)
+export function DateRangeSelector({ value, onChange, className, quickSelectDays = 3 }: DateRangeSelectorProps) {
   const [startDate, endDate] = value
-
+  const [isCustomOpen, setIsCustomOpen] = useState(false)
+  const [tempStartDate, setTempStartDate] = useState<Date | undefined>()
+  const [tempEndDate, setTempEndDate] = useState<Date | undefined>()
 
   // Quick select options
   const quickSelectOptions = [
@@ -29,172 +32,156 @@ export function DateRangeSelector({ value, onChange, className }: DateRangeSelec
       },
     },
     {
-      label: "Next 7 days",
+      label: `Next ${quickSelectDays} days`,
       getValue: () => {
         const today = startOfDay(getAppTimezoneDate())
-        return [today, endOfDay(addDays(today, 6))]
-      },
-    },
-    {
-      label: "This week",
-      getValue: () => {
-        const today = getAppTimezoneDate()
-        const day = today.getDay() || 7 // Convert Sunday (0) to 7
-        const startOfWeek = startOfDay(addDays(today, 1 - day)) // Monday
-        const endOfWeek = endOfDay(addDays(startOfWeek, 6)) // Sunday
-        return [startOfWeek, endOfWeek]
-      },
-    },
-    {
-      label: "Today & Tomorrow",
-      getValue: () => {
-        const today = startOfDay(getAppTimezoneDate())
-        return [today, endOfDay(addDays(today, 1))]
+        return [today, endOfDay(addDays(today, quickSelectDays - 1))]
       },
     },
   ]
 
-  // Handle date selection in the calendar
-  const handleSelect = (date: Date | undefined) => {
-    if (!date) return
-
-    const newDate = startOfDay(date)
-
-    if (!startDate) {
-      // If no start date is set, set the clicked date as start date
-      onChange([newDate, undefined])
-    } else if (!endDate) {
-      // If start date is set but no end date, set the clicked date as end date
-      // (regardless of whether it's before or after start date)
-      if (isBefore(newDate, startDate)) {
-        // If selected date is before start date, swap them
-        onChange([newDate, endOfDay(startDate)])
-      } else {
-        // Otherwise use normal order
-        onChange([startDate, endOfDay(newDate)])
-      }
-      setIsOpen(false)
-    } else {
-      // If both dates are already set, start a new selection
-      onChange([newDate, undefined])
-    }
-  }
-
-  // Handle quick select option
-  const handleQuickSelect = (index: number) => {
-    const [start, end] = quickSelectOptions[index].getValue() as [Date, Date]
-    onChange([start, end])
-    setIsOpen(false)
-  }
-
   // Navigate to previous/next period
   const navigatePeriod = (direction: "prev" | "next") => {
-    if (!startDate) return
+    if (!startDate || !endDate) return
 
-    // Calculate the number of days to move based on the selected range
-    let daysToMove = 1 // Default to 1 day if only start date is selected
+    const daysToMove = differenceInDays(endDate, startDate) + 1
+    const multiplier = direction === "prev" ? -1 : 1
+    
+    const newStart = addDays(startDate, daysToMove * multiplier)
+    const newEnd = addDays(endDate, daysToMove * multiplier)
+    onChange([newStart, newEnd])
+  }
 
-    if (endDate) {
-      // Calculate days between start and end dates (inclusive)
-      daysToMove = differenceInDays(endDate, startDate) + 1
-    }
+  // Handle quick select
+  const handleQuickSelect = (option: { getValue: () => [Date, Date] }) => {
+    const [start, end] = option.getValue()
+    onChange([start, end])
+  }
 
-    if (direction === "prev") {
-      const newStart = addDays(startDate, -daysToMove)
-      const newEnd = endDate ? addDays(endDate, -daysToMove) : undefined
-      onChange([newStart, newEnd])
-    } else {
-      const newStart = addDays(startDate, daysToMove)
-      const newEnd = endDate ? addDays(endDate, daysToMove) : undefined
-      onChange([newStart, newEnd])
+  // Handle custom date input changes (temporary state)
+  const handleTempStartDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.value) {
+      setTempStartDate(new Date(e.target.value))
     }
   }
 
-  // Toggle the calendar popover
-  const toggleCalendar = () => {
-    setIsOpen(!isOpen)
+  const handleTempEndDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.value) {
+      setTempEndDate(new Date(e.target.value))
+    }
+  }
+
+  // Apply the custom date range
+  const applyCustomDates = () => {
+    if (tempStartDate) {
+      const newStart = startOfDay(tempStartDate)
+      const newEnd = tempEndDate ? endOfDay(tempEndDate) : endOfDay(tempStartDate)
+      onChange([newStart, newEnd])
+      setIsCustomOpen(false)
+    }
+  }
+
+  // Initialize temp dates when opening custom picker
+  const handleCustomOpen = () => {
+    setTempStartDate(startDate || startOfDay(getAppTimezoneDate()))
+    setTempEndDate(endDate || startOfDay(getAppTimezoneDate()))
+    setIsCustomOpen(true)
   }
 
   return (
-    <div className={cn("relative", className)}>
-      <div className="flex items-center space-x-2">
-        <Button variant="outline" size="icon" onClick={() => navigatePeriod("prev")} disabled={!startDate}>
-          <ChevronLeft className="h-4 w-4" />
-        </Button>
+    <div className={cn("flex items-center gap-2", className)}>
+      <Button 
+        variant="outline" 
+        size="icon" 
+        onClick={() => navigatePeriod("prev")} 
+        disabled={!startDate || !endDate}
+      >
+        <ChevronLeft className="h-4 w-4" />
+      </Button>
 
-        <Button
-          variant="outline"
-          className={cn(
-            "justify-start text-left font-normal w-[240px]",
-            !startDate && "text-muted-foreground",
-            isOpen && "bg-accent",
-          )}
-          onClick={toggleCalendar}
-        >
-          <CalendarIcon className="mr-2 h-4 w-4" />
-          {startDate ? (
-            endDate ? (
-              <>
-                {format(startDate, "MMM d, yyyy")} - {format(endDate, "MMM d, yyyy")}
-              </>
-            ) : (
-              format(startDate, "MMM d, yyyy")
-            )
-          ) : (
-            "Select date range"
-          )}
-        </Button>
-
-        <Button variant="outline" size="icon" onClick={() => navigatePeriod("next")} disabled={!startDate}>
-          <ChevronRight className="h-4 w-4" />
-        </Button>
-      </div>
-
-      {/* Calendar popover */}
-      {isOpen && (
-        <>
-          {/* Backdrop for closing when clicking outside */}
-          <div className="fixed inset-0 z-40" onClick={() => setIsOpen(false)} />
-
-          <div className="absolute left-0 z-50 mt-1 rounded-md border bg-background shadow-md w-auto">
-            <div className="p-3 border-b">
-              <div className="space-y-2">
-                <h4 className="font-medium text-sm">Quick select</h4>
-                <div className="grid grid-cols-2 gap-2">
-                  {quickSelectOptions.map((option, index) => (
-                    <Button
-                      key={option.label}
-                      variant="outline"
-                      size="sm"
-                      className="w-full"
-                      onClick={() => handleQuickSelect(index)}
-                    >
-                      {option.label}
-                    </Button>
-                  ))}
+      <div className="flex gap-2">
+        {quickSelectOptions.map((option) => (
+          <Button
+            key={option.label}
+            variant="outline"
+            size="sm"
+            onClick={() => handleQuickSelect(option)}
+            className="text-xs"
+          >
+            {option.label}
+          </Button>
+        ))}
+        
+        <Popover open={isCustomOpen} onOpenChange={setIsCustomOpen}>
+          <PopoverTrigger asChild>
+            <Button
+              variant="outline"
+              size="sm"
+              className="text-xs"
+              onClick={handleCustomOpen}
+            >
+              <CalendarIcon className="mr-1 h-3 w-3" />
+              Custom
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-auto p-3" align="start">
+            <div className="space-y-3">
+              <div className="text-sm font-medium">Select Date Range</div>
+              <div className="grid gap-2">
+                <div>
+                  <label className="text-xs text-muted-foreground">Start Date</label>
+                  <Input
+                    type="date"
+                    value={tempStartDate ? format(tempStartDate, "yyyy-MM-dd") : ""}
+                    onChange={handleTempStartDateChange}
+                    className="text-sm"
+                  />
+                </div>
+                <div>
+                  <label className="text-xs text-muted-foreground">End Date</label>
+                  <Input
+                    type="date"
+                    value={tempEndDate ? format(tempEndDate, "yyyy-MM-dd") : ""}
+                    onChange={handleTempEndDateChange}
+                    min={tempStartDate ? format(tempStartDate, "yyyy-MM-dd") : undefined}
+                    className="text-sm"
+                  />
+                </div>
+                <div className="flex gap-2 mt-2">
+                  <Button 
+                    size="sm" 
+                    variant="outline"
+                    onClick={() => setIsCustomOpen(false)}
+                  >
+                    Cancel
+                  </Button>
+                  <Button 
+                    size="sm" 
+                    onClick={applyCustomDates}
+                    disabled={!tempStartDate}
+                  >
+                    Done
+                  </Button>
                 </div>
               </div>
             </div>
-            <div className="p-3">
-              <h4 className="font-medium text-sm mb-2">Custom range</h4>
-              <p className="text-xs text-muted-foreground mb-3">
-                {!startDate ? "Select start date" : !endDate ? "Now select end date" : "Click to start a new selection"}
-              </p>
-              <div className="w-[350px]">
-                <Calendar
-                  mode="single"
-                  selected={startDate}
-                  onSelect={handleSelect}
-                  initialFocus
-                  disabled={(date) => {
-                    // Disable dates before start date if end date is being selected
-                    return startDate && !endDate ? isBefore(date, startDate) : false
-                  }}
-                />
-              </div>
-            </div>
-          </div>
-        </>
+          </PopoverContent>
+        </Popover>
+      </div>
+
+      <Button 
+        variant="outline" 
+        size="icon" 
+        onClick={() => navigatePeriod("next")} 
+        disabled={!startDate || !endDate}
+      >
+        <ChevronRight className="h-4 w-4" />
+      </Button>
+
+      {startDate && endDate && (
+        <span className="text-sm text-muted-foreground ml-2">
+          {format(startDate, "MMM d")} - {format(endDate, "MMM d, yyyy")}
+        </span>
       )}
     </div>
   )

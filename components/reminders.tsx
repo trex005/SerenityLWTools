@@ -18,8 +18,7 @@ import { getAppTimezoneDate, getMinutesUntilNextDay, formatTimeRemaining } from 
 import { Copy, Check, Calendar } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { shouldShowRecurringEvent } from "@/lib/recurrence-utils"
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { Calendar as CalendarComponent } from "@/components/ui/calendar"
+import { Input } from "@/components/ui/input"
 import { cn } from "@/lib/utils"
 
 /**
@@ -35,8 +34,6 @@ export function Reminders() {
     return startOfDay(getAppTimezoneDate())
   })
   
-  // State for calendar popover
-  const [isCalendarOpen, setIsCalendarOpen] = useState(false)
   
   // State for copy button feedback
   const [isCopied, setIsCopied] = useState(false)
@@ -157,34 +154,18 @@ export function Reminders() {
         <CardContent className="space-y-4">
           {/* Date Selector */}
           <div className="grid gap-2">
-            <Label>Select Date</Label>
-            <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
-              <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  className={cn(
-                    "justify-start text-left font-normal w-[240px]",
-                    !selectedDate && "text-muted-foreground"
-                  )}
-                >
-                  <Calendar className="mr-2 h-4 w-4" />
-                  {selectedDate ? format(selectedDate, "MMM d, yyyy") : "Select date"}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0" align="start">
-                <CalendarComponent
-                  mode="single"
-                  selected={selectedDate}
-                  onSelect={(date) => {
-                    if (date) {
-                      setSelectedDate(startOfDay(date))
-                      setIsCalendarOpen(false)
-                    }
-                  }}
-                  initialFocus
-                />
-              </PopoverContent>
-            </Popover>
+            <Label htmlFor="date-input">Select Date</Label>
+            <Input
+              id="date-input"
+              type="date"
+              value={selectedDate ? format(selectedDate, "yyyy-MM-dd") : ""}
+              onChange={(e) => {
+                if (e.target.value) {
+                  setSelectedDate(startOfDay(new Date(e.target.value)))
+                }
+              }}
+              className="w-[240px]"
+            />
           </div>
           
           {/* Reminders Textarea */}

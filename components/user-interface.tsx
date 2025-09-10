@@ -82,7 +82,7 @@ export function UserInterface() {
           <TabsContent value="schedule" className="mt-0">
             {/* Date range selector */}
             <div className="flex justify-center mb-4">
-              <DateRangeSelector value={dateRange} onChange={setDateRange} />
+              <DateRangeSelector value={dateRange} onChange={setDateRange} quickSelectDays={7} />
             </div>
 
             {/* Nested tabs for days in the selected range */}

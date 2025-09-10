@@ -50,6 +50,18 @@ export function AdminPanel() {
   const { tips } = useTips()
   const { toast } = useToast()
 
+  // Function to reset regenerate agenda decision
+  const resetRegenerateDecision = () => {
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("regenerate-agenda-decision")
+      toast({
+        title: "Setting Reset",
+        description: "Regenerate agenda decision has been reset. The dialog will appear again on next date change.",
+        variant: "success",
+      })
+    }
+  }
+
   // State for confirmation dialogs
   const [showRestoreDefaultsDialog, setShowRestoreDefaultsDialog] = useState(false)
   // Add state for cache invalidation
@@ -393,6 +405,13 @@ export function AdminPanel() {
                     <Trash2 className="mr-2 h-4 w-4" /> Restore Default Data
                   </>
                 )}
+              </Button>
+              <Button
+                variant="outline"
+                onClick={resetRegenerateDecision}
+                className="flex items-center"
+              >
+                <RefreshCw className="mr-2 h-4 w-4" /> Reset Regenerate Setting
               </Button>
             </div>
           </div>
