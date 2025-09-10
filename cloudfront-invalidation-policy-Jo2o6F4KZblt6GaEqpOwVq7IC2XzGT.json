@@ -1,0 +1,11 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "AllowCloudFrontInvalidation",
+      "Effect": "Allow",
+      "Action": ["cloudfront:CreateInvalidation", "cloudfront:GetInvalidation"],
+      "Resource": "arn:aws:cloudfront::*:distribution/E2YA1IN0GY7BLP"
+    }
+  ]
+}

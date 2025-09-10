@@ -1,0 +1,16 @@
+The current date/time throughout this app is based on UTC-2
+The only place that I see that referenced is /componants/date-range-selector.tsx in the getUtcMinus2Date function.
+
+Find other places this is handled and then build a unified function that they all use.
+
+
+--------------
+Undone:
+Do not start any modifications to the code at this point.
+If you need futher clarification, ask me one question at a time until we have this fully designed.
+When it is fully designed, please give me the steps you will need to take in order to write and implement it.
+
+I would like to add a Reminder feature to this progam.
+Each Operation should have an optional plain text field called "Reminder"
+
+There will be a reminder tab which will default to the current day

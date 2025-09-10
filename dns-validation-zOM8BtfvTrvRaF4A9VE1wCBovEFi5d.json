@@ -1,0 +1,30 @@
+{
+  "Changes": [
+    {
+      "Action": "UPSERT",
+      "ResourceRecordSet": {
+        "Name": "_e70ac845721eb32c4439fcf2acd1f81b.lwserenity.com",
+        "Type": "CNAME",
+        "TTL": 300,
+        "ResourceRecords": [
+          {
+            "Value": "_8bdb7a65b21697955561447057f3e154.xlfgrmvvlj.acm-validations.aws"
+          }
+        ]
+      }
+    },
+    {
+      "Action": "UPSERT",
+      "ResourceRecordSet": {
+        "Name": "_68a5a46d064c77cc20b5ff6936405be9.www.lwserenity.com",
+        "Type": "CNAME",
+        "TTL": 300,
+        "ResourceRecords": [
+          {
+            "Value": "_a24859aec1bb172b5761f50a2066cafd.xlfgrmvvlj.acm-validations.aws"
+          }
+        ]
+      }
+    }
+  ]
+}

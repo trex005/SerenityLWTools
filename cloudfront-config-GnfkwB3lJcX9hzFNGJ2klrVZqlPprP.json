@@ -1,0 +1,61 @@
+{
+  "CallerReference": "lwserenity-distribution-20250315",
+  "Origins": {
+    "Quantity": 1,
+    "Items": [
+      {
+        "Id": "S3Origin",
+        "DomainName": "lwserenity.com.s3.amazonaws.com",
+        "S3OriginConfig": {
+          "OriginAccessIdentity": ""
+        }
+      }
+    ]
+  },
+  "DefaultCacheBehavior": {
+    "TargetOriginId": "S3Origin",
+    "ForwardedValues": {
+      "QueryString": false,
+      "Cookies": {
+        "Forward": "none"
+      }
+    },
+    "TrustedSigners": {
+      "Enabled": false,
+      "Quantity": 0
+    },
+    "ViewerProtocolPolicy": "redirect-to-https",
+    "MinTTL": 0
+  },
+  "CacheBehaviors": {
+    "Quantity": 0
+  },
+  "CustomErrorResponses": {
+    "Quantity": 0
+  },
+  "Comment": "",
+  "PriceClass": "PriceClass_100",
+  "Enabled": true,
+  "ViewerCertificate": {
+    "ACMCertificateArn": "arn:aws:acm:us-east-1:026799621317:certificate/b5915328-19d8-4c8a-aaaf-66031ef88185",
+    "SSLSupportMethod": "sni-only",
+    "MinimumProtocolVersion": "TLSv1.2_2021",
+    "Certificate": "arn:aws:acm:us-east-1:026799621317:certificate/b5915328-19d8-4c8a-aaaf-66031ef88185",
+    "CertificateSource": "acm"
+  },
+  "Restrictions": {
+    "GeoRestriction": {
+      "RestrictionType": "none",
+      "Quantity": 0
+    }
+  },
+  "WebACLId": "",
+  "HttpVersion": "http2",
+  "IsIPV6Enabled": true,
+  "Aliases": {
+    "Quantity": 2,
+    "Items": ["lwserenity.com", "www.lwserenity.com"]
+  },
+  "DefaultRootObject": "index.html",
+  "Staging": false
+}
