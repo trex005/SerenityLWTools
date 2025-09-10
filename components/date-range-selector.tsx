@@ -6,6 +6,7 @@ import { Calendar } from "@/components/ui/calendar"
 import { CalendarIcon, ChevronLeft, ChevronRight } from "lucide-react"
 import { format, addDays, startOfDay, endOfDay, isBefore, differenceInDays } from "date-fns"
 import { cn } from "@/lib/utils"
+import { getAppTimezoneDate } from "@/lib/date-utils"
 
 interface DateRangeSelectorProps {
   value: [Date | undefined, Date | undefined]
@@ -17,34 +18,27 @@ export function DateRangeSelector({ value, onChange, className }: DateRangeSelec
   const [isOpen, setIsOpen] = useState(false)
   const [startDate, endDate] = value
 
-  // Helper function to get current date in UTC-2
-  const getUtcMinus2Date = () => {
-    const now = new Date()
-    // First convert to UTC by adding the timezone offset
-    // Then subtract 2 hours (120 minutes) to get UTC-2
-    return new Date(now.getTime() + now.getTimezoneOffset() * 60000 - 120 * 60000)
-  }
 
   // Quick select options
   const quickSelectOptions = [
     {
       label: "Today",
       getValue: () => {
-        const today = startOfDay(getUtcMinus2Date())
+        const today = startOfDay(getAppTimezoneDate())
         return [today, endOfDay(today)]
       },
     },
     {
       label: "Next 7 days",
       getValue: () => {
-        const today = startOfDay(getUtcMinus2Date())
+        const today = startOfDay(getAppTimezoneDate())
         return [today, endOfDay(addDays(today, 6))]
       },
     },
     {
       label: "This week",
       getValue: () => {
-        const today = getUtcMinus2Date()
+        const today = getAppTimezoneDate()
         const day = today.getDay() || 7 // Convert Sunday (0) to 7
         const startOfWeek = startOfDay(addDays(today, 1 - day)) // Monday
         const endOfWeek = endOfDay(addDays(startOfWeek, 6)) // Sunday
@@ -54,7 +48,7 @@ export function DateRangeSelector({ value, onChange, className }: DateRangeSelec
     {
       label: "Today & Tomorrow",
       getValue: () => {
-        const today = startOfDay(getUtcMinus2Date())
+        const today = startOfDay(getAppTimezoneDate())
         return [today, endOfDay(addDays(today, 1))]
       },
     },

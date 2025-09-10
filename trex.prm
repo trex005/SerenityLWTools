@@ -13,4 +13,14 @@ When it is fully designed, please give me the steps you will need to take in ord
 I would like to add a Reminder feature to this progam.
 Each Operation should have an optional plain text field called "Reminder"
 
-There will be a reminder tab which will default to the current day
+Add a reminder tab which will default to the current day but have a date selector to change the day.
+
+In that tab, have an editable textarea with the selected days reminders.  The text area should start with "Reset in X minutes!" followed by two newlines, and then "Reminders:" followed by a newline and then a list of the reminders for that day, each prefixed with "• "
+
+The reminders should be listed in the same order as the operations are listed for that day.
+
+-------------------
+The debug information is correct e.g. the following is what it shows the day before Marshal, however, the previous day reminders are not listed in the textarea.
+
+Debug: 42 total events, 3 with remindOnPreviousDay, 1 with reminders
+Tomorrow (Wednesday): 1 matching events

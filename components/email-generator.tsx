@@ -17,6 +17,7 @@ import { DateRangeSelector } from "@/components/date-range-selector"
 import { useEvents } from "@/hooks/use-events"
 import { useTips } from "@/hooks/use-tips"
 import { addDays, startOfDay, endOfDay, format } from "date-fns"
+import { getAppTimezoneDate } from "@/lib/date-utils"
 import { Copy, Check, RefreshCw } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -58,11 +59,7 @@ export function EmailGenerator({ initialDateRange }: EmailGeneratorProps) {
 
   // State for date range - ALWAYS default to today and tomorrow in UTC-2
   const [dateRange, setDateRange] = useState<[Date | undefined, Date | undefined]>(() => {
-    // Get current date in UTC-2
-    const now = new Date()
-    // First convert to UTC by adding the timezone offset
-    // Then subtract 2 hours (120 minutes) to get UTC-2
-    const utcMinus2 = new Date(now.getTime() + now.getTimezoneOffset() * 60000 - 120 * 60000)
+    const utcMinus2 = getAppTimezoneDate()
     const today = startOfDay(utcMinus2)
     const tomorrow = endOfDay(addDays(today, 1))
     return [today, tomorrow] // Default to today and tomorrow in UTC-2
@@ -295,10 +292,7 @@ export function EmailGenerator({ initialDateRange }: EmailGeneratorProps) {
     const endDate = new Date(dateRange[1]!.getTime())
 
     // Get current date in UTC-2 for "Today" and "Tomorrow" labels
-    const now = new Date()
-    // First convert to UTC by adding the timezone offset
-    // Then subtract 2 hours (120 minutes) to get UTC-2
-    const utcMinus2 = new Date(now.getTime() + now.getTimezoneOffset() * 60000 - 120 * 60000)
+    const utcMinus2 = getAppTimezoneDate()
     const utcMinus2Today = startOfDay(utcMinus2)
     const utcMinus2Tomorrow = startOfDay(addDays(utcMinus2Today, 1))
 

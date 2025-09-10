@@ -5,6 +5,7 @@ import { useState, useEffect } from "react"
 import { DateRangeSelector } from "@/components/date-range-selector"
 import { addDays, startOfDay, endOfDay, format } from "date-fns"
 import { getDayOfWeek } from "@/lib/recurrence-utils"
+import { getAppTimezoneDate } from "@/lib/date-utils"
 import { ReadOnlyDayAgenda } from "@/components/read-only-day-agenda"
 import { ReadOnlyTips } from "@/components/read-only-tips"
 import { setupTipHashNavigation } from "@/lib/hash-navigation"
@@ -23,21 +24,14 @@ export function UserInterface() {
 
   // State for date range - defaults to next 7 days for schedule view in UTC-2
   const [dateRange, setDateRange] = useState<[Date | undefined, Date | undefined]>(() => {
-    // Get current date in UTC-2
-    const now = new Date()
-    // First convert to UTC by adding the timezone offset
-    // Then subtract 2 hours (120 minutes) to get UTC-2
-    const utcMinus2 = new Date(now.getTime() + now.getTimezoneOffset() * 60000 - 120 * 60000)
+    const utcMinus2 = getAppTimezoneDate()
     const today = startOfDay(utcMinus2)
     return [today, endOfDay(addDays(today, 6))] // Default to next 7 days from UTC-2 today
   })
 
   // State for active day - set to UTC-2 today
   const [activeDay, setActiveDay] = useState<string>(() => {
-    const now = new Date()
-    // First convert to UTC by adding the timezone offset
-    // Then subtract 2 hours (120 minutes) to get UTC-2
-    const utcMinus2 = new Date(now.getTime() + now.getTimezoneOffset() * 60000 - 120 * 60000)
+    const utcMinus2 = getAppTimezoneDate()
     return format(utcMinus2, "yyyy-MM-dd")
   })
 

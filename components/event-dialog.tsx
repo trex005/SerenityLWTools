@@ -61,6 +61,8 @@ export function EventDialog({ event, open, onOpenChange, initialDay = "monday", 
     id: "",
     title: "",
     description: "",
+    remindTomorrow: false,
+    remindEndOfDay: false,
     isAllDay: true,
     startTime: "09:00",
     endTime: "",
@@ -182,6 +184,8 @@ export function EventDialog({ event, open, onOpenChange, initialDay = "monday", 
         id: uuidv4(),
         title: "",
         description: "",
+        remindTomorrow: false,
+        remindEndOfDay: false,
         isAllDay: true,
         startTime: "09:00",
         endTime: "",
@@ -420,7 +424,6 @@ export function EventDialog({ event, open, onOpenChange, initialDay = "monday", 
       recurrence,
     }
 
-    // Submitting form data
 
     if (isEditing) {
       // Updating event
@@ -671,6 +674,40 @@ export function EventDialog({ event, open, onOpenChange, initialDay = "monday", 
                         }
                       }}
                     />
+                  </div>
+
+                  {/* Reminder Settings */}
+                  <div className="grid gap-2">
+                    <Label>Reminders</Label>
+                    <div className="space-y-2">
+                      <div className="flex items-center space-x-2">
+                        <Checkbox
+                          id="remindPreviousDay"
+                          checked={formData.remindTomorrow}
+                          onCheckedChange={(checked) => {
+                            setFormData(prev => ({
+                              ...prev,
+                              remindTomorrow: !!checked
+                            }))
+                          }}
+                        />
+                        <Label htmlFor="remindPreviousDay">Remind previous day</Label>
+                      </div>
+                      
+                      <div className="flex items-center space-x-2">
+                        <Checkbox
+                          id="remindEndOfDay"
+                          checked={formData.remindEndOfDay}
+                          onCheckedChange={(checked) => {
+                            setFormData(prev => ({
+                              ...prev,
+                              remindEndOfDay: !!checked
+                            }))
+                          }}
+                        />
+                        <Label htmlFor="remindEndOfDay">Remind at end of day</Label>
+                      </div>
+                    </div>
                   </div>
 
                   {/* Include in Export Default Setting */}

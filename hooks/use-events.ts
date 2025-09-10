@@ -19,6 +19,8 @@ interface Event {
   endTime: string
   description?: string
   color?: string
+  remindTomorrow?: boolean
+  remindEndOfDay?: boolean
   recurrence?: {
     pattern: "daily" | "weekly" | "monthly" | "yearly"
     interval: number

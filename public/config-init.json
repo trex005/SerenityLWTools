@@ -45,10 +45,10 @@
     {
       "id": "ev-3",
       "title": "Zombie Siege",
-      "description": "• Place your strongest squad on the wall beforehand!",
+      "description": "",
       "isAllDay": false,
-      "startTime": "22:25",
-      "endTime": "",
+      "startTime": "22:20",
+      "endTime": "22:55",
       "days": [
         "monday",
         "tuesday",
@@ -67,7 +67,14 @@
         "saturday": true,
         "sunday": true
       },
-      "variations": {},
+      "variations": {
+        "sunday": {
+          "description": "** Note the different time ** so we can gather for VS",
+          "isAllDay": false,
+          "startTime": "00:50",
+          "endTime": ""
+        }
+      },
       "order": {},
       "archived": false,
       "recurrence": {
@@ -81,8 +88,8 @@
           "saturday",
           "sunday"
         ],
-        "interval": 4,
-        "startDate": "2025-04-01T04:00:00.000Z"
+        "interval": 3,
+        "startDate": "2025-09-11T04:00:00.000Z"
       }
     },
     {
@@ -92,9 +99,7 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "10:00",
-      "days": [
-        "sunday"
-      ],
+      "days": ["sunday"],
       "includeInExport": {
         "sunday": true,
         "monday": true,
@@ -106,29 +111,23 @@
       },
       "variations": {},
       "order": {
-        "sunday": 2
+        "sunday": 3
       },
       "archived": false,
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": [
-          "sunday"
-        ],
+        "daysOfWeek": ["sunday"],
         "interval": 1
       }
     },
     {
       "id": "ev-6",
       "title": "Register for Desert Storm!",
-      "description": "• Desert Storm has incredible rewards for participating, win or lose!",
+      "description": "• To register:\n   Events → Desert Storm → Select Participants → Request to Fight",
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "10:00",
-      "days": [
-        "monday",
-        "tuesday",
-        "wednesday"
-      ],
+      "days": ["monday", "tuesday", "wednesday"],
       "includeInExport": {
         "monday": true,
         "tuesday": true,
@@ -136,7 +135,7 @@
       },
       "variations": {
         "wednesday": {
-          "description": "Registration must be in at least an hour before reset.",
+          "description": "• To register:\n   Events → Desert Storm → Select Participants → Request to Fight\n• Registration must be in at least an hour before reset.",
           "isAllDay": true,
           "startTime": "09:00",
           "endTime": "10:00"
@@ -144,29 +143,24 @@
       },
       "order": {
         "monday": 0,
-        "wednesday": 3
+        "wednesday": 1,
+        "tuesday": 0
       },
       "archived": false,
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": [
-          "monday",
-          "tuesday",
-          "wednesday"
-        ],
+        "daysOfWeek": ["monday", "tuesday", "wednesday"],
         "interval": 1
       }
     },
     {
       "id": "ev-7",
       "title": "Desert Storm - Task Force A",
-      "description": "• Be online 15 minutes before battle\n• Starters can join battle 5 minutes early\n• Battle starts on the hour subs join then if space is available.",
+      "description": "",
       "isAllDay": false,
-      "startTime": "17:45",
+      "startTime": "17:50",
       "endTime": "18:30",
-      "days": [
-        "friday"
-      ],
+      "days": ["friday"],
       "includeInExport": {
         "friday": true,
         "monday": true,
@@ -180,9 +174,7 @@
       "archived": false,
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": [
-          "friday"
-        ],
+        "daysOfWeek": ["friday"],
         "interval": 1
       }
     },
@@ -193,11 +185,7 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "10:00",
-      "days": [
-        "sunday",
-        "tuesday",
-        "thursday"
-      ],
+      "days": ["sunday", "tuesday", "thursday"],
       "includeInExport": {
         "sunday": true,
         "tuesday": true,
@@ -205,17 +193,14 @@
       },
       "variations": {},
       "order": {
-        "sunday": 1,
-        "thursday": 1
+        "sunday": 2,
+        "thursday": 4,
+        "tuesday": 3
       },
       "archived": false,
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": [
-          "sunday",
-          "tuesday",
-          "thursday"
-        ],
+        "daysOfWeek": ["sunday", "tuesday", "thursday"],
         "interval": 1
       }
     },
@@ -226,17 +211,12 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "10:00",
-      "days": [
-        "sunday",
-        "monday",
-        "thursday",
-        "friday"
-      ],
+      "days": ["monday", "thursday", "friday"],
       "includeInExport": {
         "sunday": false,
-        "monday": false,
-        "thursday": false,
-        "friday": false
+        "monday": true,
+        "thursday": true,
+        "friday": true
       },
       "variations": {},
       "order": {
@@ -248,13 +228,9 @@
       "archived": false,
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": [
-          "sunday",
-          "monday",
-          "thursday",
-          "friday"
-        ],
-        "interval": 1
+        "daysOfWeek": ["monday", "thursday", "friday"],
+        "interval": 3,
+        "startDate": "2025-06-30T04:00:00.000Z"
       }
     },
     {
@@ -264,11 +240,7 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "10:00",
-      "days": [
-        "monday",
-        "wednesday",
-        "friday"
-      ],
+      "days": ["monday", "wednesday", "friday"],
       "includeInExport": {
         "monday": true,
         "wednesday": true,
@@ -276,18 +248,14 @@
       },
       "variations": {},
       "order": {
-        "monday": 2,
-        "wednesday": 0,
-        "friday": 0
+        "monday": 5,
+        "wednesday": 3,
+        "friday": 1
       },
       "archived": false,
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": [
-          "monday",
-          "wednesday",
-          "friday"
-        ],
+        "daysOfWeek": ["monday", "wednesday", "friday"],
         "interval": 1
       }
     },
@@ -298,9 +266,7 @@
       "isAllDay": false,
       "startTime": "12:00",
       "endTime": "",
-      "days": [
-        "sunday"
-      ],
+      "days": ["sunday"],
       "includeInExport": {
         "sunday": true,
         "monday": true,
@@ -315,9 +281,7 @@
       "archived": false,
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": [
-          "sunday"
-        ],
+        "daysOfWeek": ["sunday"],
         "interval": 1
       }
     },
@@ -328,25 +292,20 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "10:00",
-      "days": [
-        "tuesday",
-        "saturday"
-      ],
+      "days": ["tuesday", "saturday"],
       "includeInExport": {
         "tuesday": true,
         "saturday": true
       },
       "variations": {},
       "order": {
-        "saturday": 1
+        "saturday": 4,
+        "tuesday": 4
       },
       "archived": false,
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": [
-          "tuesday",
-          "saturday"
-        ],
+        "daysOfWeek": ["tuesday", "saturday"],
         "interval": 1
       }
     },
@@ -357,9 +316,7 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "10:00",
-      "days": [
-        "monday"
-      ],
+      "days": ["monday"],
       "includeInExport": {
         "monday": true,
         "tuesday": true,
@@ -371,14 +328,12 @@
       },
       "variations": {},
       "order": {
-        "monday": 3
+        "monday": 6
       },
       "archived": false,
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": [
-          "monday"
-        ],
+        "daysOfWeek": ["monday"],
         "interval": 1
       }
     },
@@ -389,9 +344,7 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "10:00",
-      "days": [
-        "tuesday"
-      ],
+      "days": ["tuesday"],
       "includeInExport": {
         "tuesday": true,
         "monday": true,
@@ -402,13 +355,13 @@
         "sunday": true
       },
       "variations": {},
-      "order": {},
+      "order": {
+        "tuesday": 5
+      },
       "archived": false,
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": [
-          "tuesday"
-        ],
+        "daysOfWeek": ["tuesday"],
         "interval": 1
       }
     },
@@ -419,22 +372,18 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "10:00",
-      "days": [
-        "wednesday"
-      ],
+      "days": ["wednesday"],
       "includeInExport": {
         "wednesday": true
       },
       "variations": {},
       "order": {
-        "wednesday": 1
+        "wednesday": 4
       },
       "archived": false,
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": [
-          "wednesday"
-        ],
+        "daysOfWeek": ["wednesday"],
         "interval": 1
       }
     },
@@ -445,9 +394,7 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "10:00",
-      "days": [
-        "thursday"
-      ],
+      "days": ["thursday"],
       "includeInExport": {
         "thursday": true,
         "monday": true,
@@ -459,14 +406,12 @@
       },
       "variations": {},
       "order": {
-        "thursday": 0
+        "thursday": 2
       },
       "archived": false,
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": [
-          "thursday"
-        ],
+        "daysOfWeek": ["thursday"],
         "interval": 1
       }
     },
@@ -477,9 +422,7 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "10:00",
-      "days": [
-        "friday"
-      ],
+      "days": ["friday"],
       "includeInExport": {
         "friday": true,
         "monday": true,
@@ -491,14 +434,12 @@
       },
       "variations": {},
       "order": {
-        "friday": 1
+        "friday": 2
       },
       "archived": false,
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": [
-          "friday"
-        ],
+        "daysOfWeek": ["friday"],
         "interval": 1
       }
     },
@@ -509,9 +450,7 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "10:00",
-      "days": [
-        "saturday"
-      ],
+      "days": ["saturday"],
       "includeInExport": {
         "saturday": true,
         "monday": true,
@@ -523,14 +462,12 @@
       "variations": {},
       "order": {
         "friday": 2,
-        "saturday": 0
+        "saturday": 3
       },
       "archived": false,
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": [
-          "saturday"
-        ],
+        "daysOfWeek": ["saturday"],
         "interval": 1
       }
     },
@@ -541,9 +478,7 @@
       "isAllDay": false,
       "startTime": "00:00",
       "endTime": "",
-      "days": [
-        "saturday"
-      ],
+      "days": ["saturday"],
       "includeInExport": {
         "saturday": true,
         "monday": true,
@@ -558,9 +493,7 @@
       "archived": false,
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": [
-          "saturday"
-        ],
+        "daysOfWeek": ["saturday"],
         "interval": 1
       },
       "dateIncludeOverrides": {
@@ -574,11 +507,7 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "10:00",
-      "days": [
-        "tuesday",
-        "thursday",
-        "sunday"
-      ],
+      "days": ["tuesday", "thursday", "sunday"],
       "includeInExport": {
         "sunday": true,
         "tuesday": true,
@@ -591,16 +520,13 @@
       "variations": {},
       "order": {
         "sunday": 6,
-        "thursday": 5
+        "thursday": 6,
+        "tuesday": 7
       },
       "archived": false,
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": [
-          "tuesday",
-          "thursday",
-          "sunday"
-        ],
+        "daysOfWeek": ["tuesday", "thursday", "sunday"],
         "interval": 1
       }
     },
@@ -611,11 +537,7 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "10:00",
-      "days": [
-        "monday",
-        "wednesday",
-        "friday"
-      ],
+      "days": ["monday", "wednesday", "friday"],
       "includeInExport": {
         "monday": true,
         "wednesday": true,
@@ -627,18 +549,14 @@
       },
       "variations": {},
       "order": {
-        "monday": 4,
-        "wednesday": 2,
+        "monday": 7,
+        "wednesday": 5,
         "friday": 5
       },
       "archived": false,
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": [
-          "monday",
-          "wednesday",
-          "friday"
-        ],
+        "daysOfWeek": ["monday", "wednesday", "friday"],
         "interval": 1
       }
     },
@@ -649,234 +567,7 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "10:00",
-      "days": [
-        "sunday"
-      ],
-      "includeInExport": {
-        "sunday": true,
-        "monday": true,
-        "tuesday": true,
-        "wednesday": true,
-        "thursday": true,
-        "friday": true,
-        "saturday": true
-      },
-      "variations": {},
-      "order": {
-        "sunday": 5
-      },
-      "archived": false,
-      "recurrence": {
-        "type": "weekly",
-        "daysOfWeek": [
-          "sunday"
-        ],
-        "interval": 1
-      }
-    },
-    {
-      "id": "ev-1739556688004",
-      "title": "Zombie Invasion! (Loot goblins!)",
-      "description": "• Spend all available stamina on loot goblins/bosses!\n• No extra Doom Walker or Doom Elite rallies.",
-      "isAllDay": true,
-      "startTime": "09:00",
-      "endTime": "10:00",
-      "days": [
-        "wednesday",
-        "thursday",
-        "friday"
-      ],
-      "includeInExport": {
-        "wednesday": true,
-        "thursday": true,
-        "friday": true
-      },
-      "variations": {},
-      "order": {
-        "wednesday": 3
-      },
-      "archived": false,
-      "recurrence": {
-        "type": "weekly",
-        "daysOfWeek": [
-          "wednesday",
-          "thursday",
-          "friday"
-        ],
-        "interval": 2,
-        "startDate": "2025-03-02T05:00:00.000Z"
-      }
-    },
-    {
-      "id": "ev-1739556818565",
-      "title": "Doomsday event - Kill Doomwalkers",
-      "description": "",
-      "isAllDay": true,
-      "startTime": "09:00",
-      "endTime": "10:00",
-      "days": [
-        "sunday"
-      ],
-      "includeInExport": {
-        "monday": false,
-        "tuesday": false,
-        "wednesday": false,
-        "thursday": false,
-        "friday": false,
-        "saturday": false,
-        "sunday": true
-      },
-      "variations": {},
-      "order": {
-        "sunday": 3
-      },
-      "archived": false,
-      "recurrence": {
-        "type": "weekly",
-        "daysOfWeek": [
-          "sunday"
-        ],
-        "interval": 2,
-        "startDate": "2025-03-02T05:00:00.000Z"
-      }
-    },
-    {
-      "id": "ev-1739556987954",
-      "title": "General's Trial - Solo Event",
-      "description": "• Select one level after what you know you can do solo\n• Attack until you are unable to defeat on your own\n• Then start rallies. Ask in chat if you need help.",
-      "isAllDay": true,
-      "startTime": "09:00",
-      "endTime": "10:00",
-      "days": [
-        "wednesday",
-        "thursday",
-        "friday"
-      ],
-      "includeInExport": {
-        "wednesday": true,
-        "thursday": true,
-        "friday": true
-      },
-      "variations": {},
-      "order": {
-        "wednesday": 2,
-        "friday": 4,
-        "thursday": 3
-      },
-      "archived": false,
-      "recurrence": {
-        "type": "weekly",
-        "daysOfWeek": [
-          "wednesday",
-          "thursday",
-          "friday"
-        ],
-        "interval": 2,
-        "startDate": "2025-03-09T05:00:00.000Z"
-      }
-    },
-    {
-      "id": "ev-1739558845321",
-      "title": "Winter Storm",
-      "description": "• Matching is open for two hours starting at 02:00, 09:00, 19:00\n• Rewards are fantastic. Play until you win 3 times.\n• Remember that the matchmaking is horrible. You'll lose a lot but don't let it phase you.",
-      "isAllDay": true,
-      "startTime": "09:00",
-      "endTime": "10:00",
-      "days": [
-        "saturday",
-        "monday"
-      ],
-      "includeInExport": {
-        "saturday": true,
-        "monday": true,
-        "tuesday": true,
-        "wednesday": true,
-        "thursday": true,
-        "friday": true,
-        "sunday": true
-      },
-      "variations": {},
-      "order": {
-        "saturday": 2,
-        "monday": 12
-      },
-      "archived": false,
-      "recurrence": {
-        "type": "weekly",
-        "daysOfWeek": [
-          "saturday",
-          "monday"
-        ],
-        "interval": 1
-      }
-    },
-    {
-      "id": "ev-1739559151491",
-      "title": "Crimson Legion",
-      "description": "• Set your strongest squad to garrison before signing off the night before\n• R4s will kick the lowest power garrisons to make room as needed\n• Arrive for the event and garrison/heal like a cryptid should!",
-      "isAllDay": false,
-      "startTime": "12:00",
-      "endTime": "13:00",
-      "days": [
-        "tuesday",
-        "friday"
-      ],
-      "includeInExport": {
-        "tuesday": false,
-        "friday": false
-      },
-      "variations": {},
-      "order": {},
-      "archived": true,
-      "recurrence": {
-        "type": "weekly",
-        "daysOfWeek": [
-          "tuesday",
-          "friday"
-        ],
-        "interval": 1
-      }
-    },
-    {
-      "id": "ev-1740123329685",
-      "title": "Desert Storm - Task Force B",
-      "description": "",
-      "isAllDay": false,
-      "startTime": "22:45",
-      "endTime": "23:30",
-      "days": [
-        "friday"
-      ],
-      "includeInExport": {
-        "monday": false,
-        "tuesday": false,
-        "wednesday": false,
-        "thursday": false,
-        "friday": true,
-        "saturday": false,
-        "sunday": false
-      },
-      "variations": {},
-      "order": {},
-      "archived": false,
-      "recurrence": {
-        "type": "weekly",
-        "daysOfWeek": [
-          "friday"
-        ],
-        "interval": 1
-      }
-    },
-    {
-      "id": "ev-1740278810425",
-      "title": "Rampage Bosses",
-      "description": "• Spawn at 0:00, 6:00, and 12:00\n• Attacking doesn't cost stamina or troops\n• Take three shots on each and try to get as much damage as you can!\n• If the server manages to do enough damage, they'll drop rewards you can grab over the next few hours",
-      "isAllDay": true,
-      "startTime": "09:00",
-      "endTime": "10:00",
-      "days": [
-        "sunday"
-      ],
+      "days": ["sunday"],
       "includeInExport": {
         "sunday": true,
         "monday": true,
@@ -893,9 +584,194 @@
       "archived": false,
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": [
-          "sunday"
-        ],
+        "daysOfWeek": ["sunday"],
+        "interval": 1
+      }
+    },
+    {
+      "id": "ev-1739556688004",
+      "title": "Zombie Invasion! (Loot goblins!)",
+      "description": "",
+      "isAllDay": true,
+      "startTime": "09:00",
+      "endTime": "10:00",
+      "days": ["wednesday", "thursday", "friday"],
+      "includeInExport": {
+        "wednesday": true,
+        "thursday": true,
+        "friday": true
+      },
+      "variations": {},
+      "order": {
+        "wednesday": 6,
+        "thursday": 7,
+        "friday": 6
+      },
+      "archived": false,
+      "recurrence": {
+        "type": "weekly",
+        "daysOfWeek": ["wednesday", "thursday", "friday"],
+        "interval": 2,
+        "startDate": "2025-03-02T05:00:00.000Z"
+      }
+    },
+    {
+      "id": "ev-1739556818565",
+      "title": "Doomsday event - Kill Doomwalkers",
+      "description": "",
+      "isAllDay": true,
+      "startTime": "09:00",
+      "endTime": "10:00",
+      "days": ["sunday"],
+      "includeInExport": {
+        "monday": false,
+        "tuesday": false,
+        "wednesday": false,
+        "thursday": false,
+        "friday": false,
+        "saturday": false,
+        "sunday": true
+      },
+      "variations": {},
+      "order": {
+        "sunday": 1
+      },
+      "archived": false,
+      "recurrence": {
+        "type": "weekly",
+        "daysOfWeek": ["sunday"],
+        "interval": 2,
+        "startDate": "2025-03-02T05:00:00.000Z"
+      }
+    },
+    {
+      "id": "ev-1739556987954",
+      "title": "General's Trial - Solo Event",
+      "description": "• Select Level 8, unless you can solo level 8, in which case you should select level 9.",
+      "isAllDay": true,
+      "startTime": "09:00",
+      "endTime": "10:00",
+      "days": ["wednesday", "thursday", "friday"],
+      "includeInExport": {
+        "wednesday": true,
+        "thursday": true,
+        "friday": true
+      },
+      "variations": {},
+      "order": {
+        "wednesday": 2,
+        "friday": 6,
+        "thursday": 3
+      },
+      "archived": false,
+      "recurrence": {
+        "type": "weekly",
+        "daysOfWeek": ["wednesday", "thursday", "friday"],
+        "interval": 2,
+        "startDate": "2025-03-09T05:00:00.000Z"
+      }
+    },
+    {
+      "id": "ev-1739558845321",
+      "title": "Winter Storm",
+      "description": "• Matching is open for two hours starting at 02:00, 09:00, 19:00",
+      "isAllDay": true,
+      "startTime": "09:00",
+      "endTime": "10:00",
+      "days": ["saturday"],
+      "includeInExport": {
+        "saturday": true,
+        "monday": true,
+        "tuesday": true,
+        "wednesday": true,
+        "thursday": true,
+        "friday": true,
+        "sunday": true
+      },
+      "variations": {},
+      "order": {
+        "saturday": 2,
+        "monday": 3
+      },
+      "archived": false,
+      "recurrence": {
+        "type": "weekly",
+        "daysOfWeek": ["saturday"],
+        "interval": 1
+      }
+    },
+    {
+      "id": "ev-1739559151491",
+      "title": "Crimson Legion",
+      "description": "• Set your strongest squad to garrison before signing off the night before\n• R4s will kick the lowest power garrisons to make room as needed\n• Arrive for the event and garrison/heal like a cryptid should!",
+      "isAllDay": false,
+      "startTime": "12:00",
+      "endTime": "13:00",
+      "days": ["tuesday", "friday"],
+      "includeInExport": {
+        "tuesday": false,
+        "friday": false
+      },
+      "variations": {},
+      "order": {},
+      "archived": true,
+      "recurrence": {
+        "type": "weekly",
+        "daysOfWeek": ["tuesday", "friday"],
+        "interval": 1
+      }
+    },
+    {
+      "id": "ev-1740123329685",
+      "title": "Desert Storm - Task Force B",
+      "description": "",
+      "isAllDay": false,
+      "startTime": "22:50",
+      "endTime": "23:30",
+      "days": ["friday"],
+      "includeInExport": {
+        "monday": false,
+        "tuesday": false,
+        "wednesday": false,
+        "thursday": false,
+        "friday": true,
+        "saturday": false,
+        "sunday": false
+      },
+      "variations": {},
+      "order": {},
+      "archived": false,
+      "recurrence": {
+        "type": "weekly",
+        "daysOfWeek": ["friday"],
+        "interval": 1
+      }
+    },
+    {
+      "id": "ev-1740278810425",
+      "title": "Rampage Bosses",
+      "description": "• Spawn at 0:00, 6:00, and 12:00\n• Attacking doesn't cost stamina or troops\n• Take three shots on each and try to get as much damage as you can!\n• If the server manages to do enough damage, they'll drop rewards you can grab over the next few hours",
+      "isAllDay": true,
+      "startTime": "09:00",
+      "endTime": "10:00",
+      "days": ["sunday"],
+      "includeInExport": {
+        "sunday": true,
+        "monday": true,
+        "tuesday": true,
+        "wednesday": true,
+        "thursday": true,
+        "friday": true,
+        "saturday": true
+      },
+      "variations": {},
+      "order": {
+        "sunday": 5
+      },
+      "archived": false,
+      "recurrence": {
+        "type": "weekly",
+        "daysOfWeek": ["sunday"],
         "interval": 2,
         "startDate": "2025-03-09T05:00:00.000Z"
       }
@@ -905,8 +781,8 @@
       "title": "Marshal (Alliance Exercise)",
       "description": "",
       "isAllDay": false,
-      "startTime": "21:45",
-      "endTime": "",
+      "startTime": "21:40",
+      "endTime": "22:10",
       "days": [
         "monday",
         "sunday",
@@ -926,10 +802,11 @@
         "wednesday": true
       },
       "variations": {
-        "saturday": {
-          "isAllDay": true,
-          "description": "Time will be announced at 30 minutes ahead of time by urgent notification.",
-          "endTime": ""
+        "sunday": {
+          "description": "• NOTE the different time so that we can gather resources!",
+          "isAllDay": false,
+          "startTime": "00:15",
+          "endTime": "00:45"
         }
       },
       "order": {},
@@ -952,7 +829,7 @@
     {
       "id": "4329a998-b697-4b0d-ae72-c629390328b4",
       "title": "Storm Arena",
-      "description": "• You get great rewards for challenging 5 times even if you don't win",
+      "description": "",
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "10:00",
@@ -1003,48 +880,6 @@
       }
     },
     {
-      "id": "d28a7173-7977-48a9-a40f-3cabcf8f1051",
-      "title": "Hot Deals→Summon Supplies",
-      "description": "• Remember to grab the free key and summon every day\n• Keys remain between events, so only use them if you see a great deal\n• On the last day, for 500 diamonds you can get 5 UR shards\n• ... for an additional 4000 diamonds you can get a UR decoration chest",
-      "isAllDay": true,
-      "startTime": "09:00",
-      "endTime": "10:00",
-      "days": [
-        "monday",
-        "tuesday",
-        "wednesday",
-        "thursday",
-        "friday",
-        "saturday",
-        "sunday"
-      ],
-      "includeInExport": {
-        "monday": false,
-        "tuesday": false,
-        "wednesday": false,
-        "thursday": false,
-        "friday": false,
-        "saturday": false,
-        "sunday": false
-      },
-      "variations": {},
-      "order": {},
-      "archived": true,
-      "recurrence": {
-        "type": "weekly",
-        "daysOfWeek": [
-          "monday",
-          "tuesday",
-          "wednesday",
-          "thursday",
-          "friday",
-          "saturday",
-          "sunday"
-        ],
-        "interval": 1
-      }
-    },
-    {
       "id": "5c1804c1-eae9-48f9-a94d-495eea6eb156",
       "title": "3v3 Brawl - Minimum 5 wins",
       "description": "",
@@ -1071,8 +906,13 @@
       },
       "variations": {},
       "order": {
-        "monday": 6,
-        "saturday": 4
+        "monday": 8,
+        "saturday": 6,
+        "tuesday": 9,
+        "sunday": 7,
+        "wednesday": 7,
+        "thursday": 8,
+        "friday": 8
       },
       "archived": false,
       "recurrence": {
@@ -1102,10 +942,7 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "10:00",
-      "days": [
-        "monday",
-        "thursday"
-      ],
+      "days": ["monday", "thursday"],
       "includeInExport": {
         "wednesday": true,
         "sunday": true,
@@ -1117,16 +954,13 @@
       },
       "variations": {},
       "order": {
-        "thursday": 4,
-        "monday": 7
+        "thursday": 5,
+        "monday": 9
       },
       "archived": false,
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": [
-          "monday",
-          "thursday"
-        ],
+        "daysOfWeek": ["monday", "thursday"],
         "interval": 1,
         "startDate": "2025-03-12T00:00:00.000-04:00"
       }
@@ -1138,10 +972,7 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "10:00",
-      "days": [
-        "tuesday",
-        "friday"
-      ],
+      "days": ["tuesday", "friday"],
       "includeInExport": {
         "wednesday": true,
         "sunday": true,
@@ -1153,15 +984,13 @@
       },
       "variations": {},
       "order": {
-        "friday": 7
+        "friday": 7,
+        "tuesday": 10
       },
       "archived": false,
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": [
-          "tuesday",
-          "friday"
-        ],
+        "daysOfWeek": ["tuesday", "friday"],
         "interval": 1,
         "startDate": "2025-03-12T00:00:00.000-04:00"
       }
@@ -1173,10 +1002,7 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "10:00",
-      "days": [
-        "wednesday",
-        "saturday"
-      ],
+      "days": ["wednesday", "saturday"],
       "includeInExport": {
         "wednesday": true,
         "sunday": true,
@@ -1188,15 +1014,13 @@
       },
       "variations": {},
       "order": {
-        "saturday": 3
+        "saturday": 5,
+        "wednesday": 8
       },
       "archived": false,
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": [
-          "wednesday",
-          "saturday"
-        ],
+        "daysOfWeek": ["wednesday", "saturday"],
         "interval": 1,
         "startDate": "2025-03-12T00:00:00.000-04:00"
       }
@@ -1208,9 +1032,7 @@
       "isAllDay": false,
       "startTime": "12:00",
       "endTime": "",
-      "days": [
-        "saturday"
-      ],
+      "days": ["saturday"],
       "includeInExport": {
         "wednesday": true,
         "sunday": true,
@@ -1222,19 +1044,20 @@
       },
       "variations": {},
       "order": {},
-      "archived": false,
+      "archived": true,
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": [
-          "saturday"
-        ],
+        "daysOfWeek": ["saturday"],
         "interval": 1,
         "startDate": "2025-03-12T00:00:00.000-04:00"
+      },
+      "dateIncludeOverrides": {
+        "2025-05-03": false
       }
     },
     {
       "id": "dfb867b9-9ffc-4a60-baf2-bd89a1d18681",
-      "title": "SHINYs in 982-986, 994 & 995",
+      "title": "SHINYs in 969-972, 982-986, 994 & 995",
       "description": "",
       "isAllDay": true,
       "startTime": "09:00",
@@ -1259,7 +1082,10 @@
       },
       "variations": {},
       "order": {
-        "monday": 8
+        "monday": 8,
+        "sunday": 8,
+        "wednesday": 10,
+        "saturday": 7
       },
       "archived": false,
       "recurrence": {
@@ -1280,8 +1106,8 @@
     },
     {
       "id": "7662a10a-144e-4dc5-8ae7-4c8af78b9e12",
-      "title": "SHINYs in 987-989",
-      "description": "• 988 & 989 SHINYs are easy to find because their big alliances cluster around the capitol\n• 987 SHINYs are harder to find but often easier to grab because there is less competition.",
+      "title": "SHINYs in 974-975, 987-989",
+      "description": "",
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "",
@@ -1306,7 +1132,10 @@
       "variations": {},
       "order": {
         "saturday": 5,
-        "monday": 9
+        "monday": 10,
+        "tuesday": 8,
+        "thursday": 10,
+        "sunday": 8
       },
       "archived": false,
       "recurrence": {
@@ -1327,7 +1156,7 @@
     },
     {
       "id": "e5263084-2b0f-4289-9ed1-ede774a62176",
-      "title": "SHINYs in 990-993",
+      "title": "SHINYs in 966-969, 990-993",
       "description": "",
       "isAllDay": true,
       "startTime": "09:00",
@@ -1353,7 +1182,9 @@
       "variations": {},
       "order": {
         "monday": 10,
-        "saturday": 7
+        "saturday": 6,
+        "tuesday": 11,
+        "friday": 9
       },
       "archived": false,
       "recurrence": {
@@ -1370,7 +1201,9 @@
         "interval": 3,
         "startDate": "2025-03-13T04:00:00.000Z"
       },
-      "dateIncludeOverrides": {}
+      "dateIncludeOverrides": {
+        "2025-07-05": true
+      }
     },
     {
       "id": "0cdd036c-c5fc-4bb6-8c4a-85bcec205e61",
@@ -1379,10 +1212,7 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "",
-      "days": [
-        "tuesday",
-        "monday"
-      ],
+      "days": ["tuesday", "monday"],
       "includeInExport": {
         "monday": true,
         "sunday": true,
@@ -1394,15 +1224,13 @@
       },
       "variations": {},
       "order": {
-        "monday": 11
+        "monday": 11,
+        "tuesday": 9
       },
-      "archived": false,
+      "archived": true,
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": [
-          "tuesday",
-          "monday"
-        ],
+        "daysOfWeek": ["tuesday", "monday"],
         "interval": 2
       },
       "dateIncludeOverrides": {}
@@ -1414,13 +1242,7 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "",
-      "days": [
-        "tuesday",
-        "wednesday",
-        "thursday",
-        "friday",
-        "saturday"
-      ],
+      "days": ["tuesday", "wednesday", "thursday", "friday", "saturday"],
       "includeInExport": {
         "monday": true,
         "sunday": true,
@@ -1431,7 +1253,11 @@
         "saturday": true
       },
       "variations": {},
-      "order": {},
+      "order": {
+        "tuesday": 2,
+        "wednesday": 9,
+        "friday": 9
+      },
       "archived": false,
       "recurrence": {
         "type": "weekly",
@@ -1442,9 +1268,12 @@
           "friday",
           "saturday"
         ],
-        "interval": 4
+        "interval": 4,
+        "startDate": "2025-07-22T04:00:00.000Z"
       },
-      "dateIncludeOverrides": {}
+      "dateIncludeOverrides": {
+        "2025-07-08": false
+      }
     },
     {
       "id": "ff6b9bd0-e2e6-49fd-9fa6-7cea574f8d47",
@@ -1453,13 +1282,7 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "",
-      "days": [
-        "tuesday",
-        "wednesday",
-        "thursday",
-        "friday",
-        "saturday"
-      ],
+      "days": ["tuesday", "wednesday", "thursday", "friday", "saturday"],
       "includeInExport": {
         "monday": true,
         "sunday": true,
@@ -1470,7 +1293,9 @@
         "saturday": true
       },
       "variations": {},
-      "order": {},
+      "order": {
+        "tuesday": 2
+      },
       "archived": false,
       "recurrence": {
         "type": "weekly",
@@ -1482,7 +1307,7 @@
           "saturday"
         ],
         "interval": 3,
-        "startDate": "2025-03-02T05:00:00.000Z"
+        "startDate": "2025-09-02T04:00:00.000Z"
       },
       "dateIncludeOverrides": {
         "2025-03-28": false
@@ -1495,9 +1320,7 @@
       "isAllDay": false,
       "startTime": "12:00",
       "endTime": "16:00",
-      "days": [
-        "saturday"
-      ],
+      "days": ["friday"],
       "includeInExport": {
         "monday": true,
         "sunday": true,
@@ -1512,9 +1335,7 @@
       "archived": true,
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": [
-          "saturday"
-        ],
+        "daysOfWeek": ["friday"],
         "interval": 1
       }
     },
@@ -1525,9 +1346,7 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "",
-      "days": [
-        "tuesday"
-      ],
+      "days": ["tuesday"],
       "includeInExport": {
         "sunday": true,
         "monday": true,
@@ -1538,13 +1357,13 @@
         "saturday": true
       },
       "variations": {},
-      "order": {},
+      "order": {
+        "tuesday": 6
+      },
       "archived": false,
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": [
-          "tuesday"
-        ],
+        "daysOfWeek": ["tuesday"],
         "interval": 1,
         "startDate": "2025-03-30T00:00:00.000-04:00"
       }
@@ -1575,7 +1394,7 @@
       },
       "variations": {},
       "order": {},
-      "archived": false,
+      "archived": true,
       "recurrence": {
         "type": "weekly",
         "daysOfWeek": [
@@ -1599,12 +1418,7 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "",
-      "days": [
-        "monday",
-        "tuesday",
-        "wednesday",
-        "thursday"
-      ],
+      "days": ["monday", "tuesday", "wednesday", "thursday"],
       "includeInExport": {
         "monday": false,
         "sunday": true,
@@ -1618,15 +1432,10 @@
       "order": {
         "monday": 13
       },
-      "archived": false,
+      "archived": true,
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": [
-          "monday",
-          "tuesday",
-          "wednesday",
-          "thursday"
-        ],
+        "daysOfWeek": ["monday", "tuesday", "wednesday", "thursday"],
         "interval": 1
       },
       "dateIncludeOverrides": {
@@ -1636,8 +1445,8 @@
     },
     {
       "id": "1d5cdb18-023b-4511-a73e-0ed1d300b76f",
-      "title": "Season I Celebration → Black Market",
-      "description": "• Use all of your refreshes every day\n• Always buy the free item\n• Free/Cheap players:\n   • Only buy from the top row\n   • Always buy the decorations\n   • If you do not have all three exclusive weapons buy the exclusive weapon choice shard\n   • If you can afford it buy blueprints\n   • If you can afford it buy the UR (gold) decoration chests",
+      "title": "Season II Celebration → Black Market",
+      "description": "• Use all of your refreshes every day\n• Always buy the free items\n• Free/Cheap players recommendation:\n   • Top Row\n      • Decorations\n      • Weapon Shards (until you have enough to unlock all Heroes)\n      • if you have plenty of cash, UR Skill Chips, UR decorations\n   • Bottom Row:\n      • Exclusive Weapons (until enough)",
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "",
@@ -1651,20 +1460,25 @@
         "saturday"
       ],
       "includeInExport": {
-        "tuesday": false,
-        "sunday": false,
-        "monday": false,
-        "wednesday": false,
-        "thursday": false,
-        "friday": false,
-        "saturday": false
+        "tuesday": true,
+        "sunday": true,
+        "monday": true,
+        "wednesday": true,
+        "thursday": true,
+        "friday": true,
+        "saturday": true
       },
       "variations": {},
       "order": {
-        "monday": 14,
-        "saturday": 5
+        "monday": 1,
+        "saturday": 0,
+        "sunday": 0,
+        "tuesday": 1,
+        "wednesday": 0,
+        "thursday": 0,
+        "friday": 0
       },
-      "archived": false,
+      "archived": true,
       "recurrence": {
         "type": "daily",
         "daysOfWeek": [
@@ -1677,7 +1491,12 @@
           "saturday"
         ],
         "interval": 1,
-        "startDate": "2025-04-08T00:00:00.000-04:00"
+        "startDate": "2025-04-08T00:00:00.000-04:00",
+        "pattern": {
+          "onWeeks": 1,
+          "offWeeks": 1,
+          "phaseStartDate": "2025-07-05T00:06:18.516Z"
+        }
       },
       "dateIncludeOverrides": {
         "2025-04-07": true,
@@ -1686,13 +1505,23 @@
         "2025-04-10": true,
         "2025-04-11": true,
         "2025-04-12": true,
-        "2025-04-13": true
+        "2025-04-13": true,
+        "2025-07-04": false,
+        "2025-07-06": false,
+        "2025-07-03": false,
+        "2025-07-02": false,
+        "2025-07-01": false,
+        "2025-06-30": false,
+        "2025-06-29": false,
+        "2025-06-28": false,
+        "2025-06-27": false,
+        "2025-07-05": true
       }
     },
     {
       "id": "fe4d455d-6f36-45b2-92c2-24c32521473f",
       "title": "Hot Deals → Glittering Market",
-      "description": "• Click the blue plus icon next to the coins\n   • Collect 100 diamonds\n   • Buy 60 coins for 500 diamonds (worth it!)\n• You can get UR heroes you don't have FOR FREE\n• Save up during the week for a mythic blueprint\n• AND MORE!",
+      "description": "• At minimum, collect 100 diamonds / Buy 60 coins for 500 diamonds",
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "",
@@ -1729,7 +1558,426 @@
           "sunday"
         ],
         "interval": 5,
-        "startDate": "2025-04-08T04:00:00.000Z"
+        "startDate": "2025-09-09T04:00:00.000Z"
+      }
+    },
+    {
+      "id": "8c78efe1-5b5c-427c-b5e1-7249a7922606",
+      "title": "Ghost Ops",
+      "description": "• Missions can be initiated from 00:00-03:00, 06:00-09:00, 12:00-15:00, 18:00-21:00",
+      "isAllDay": true,
+      "startTime": "09:00",
+      "endTime": "",
+      "days": ["thursday"],
+      "includeInExport": {
+        "monday": true,
+        "sunday": true,
+        "tuesday": true,
+        "wednesday": true,
+        "thursday": true,
+        "friday": true,
+        "saturday": true
+      },
+      "variations": {},
+      "order": {
+        "thursday": 9
+      },
+      "archived": false,
+      "recurrence": {
+        "type": "weekly",
+        "daysOfWeek": ["thursday"],
+        "interval": 1
+      }
+    },
+    {
+      "id": "5870d28b-5d10-4dd9-83fb-612e4c28e0b0",
+      "title": "Meteorite Iron War - Round 1",
+      "description": "",
+      "isAllDay": false,
+      "startTime": "00:10",
+      "endTime": "00:40",
+      "days": ["saturday"],
+      "includeInExport": {
+        "monday": false,
+        "sunday": false,
+        "tuesday": false,
+        "wednesday": false,
+        "thursday": false,
+        "friday": false,
+        "saturday": true
+      },
+      "variations": {},
+      "order": {},
+      "archived": true,
+      "recurrence": {
+        "type": "weekly",
+        "daysOfWeek": ["saturday"],
+        "interval": 1
+      },
+      "dateIncludeOverrides": {
+        "2025-05-03": true,
+        "2025-07-05": true
+      }
+    },
+    {
+      "id": "a061f2df-34c9-4bdd-9fa2-a95e11470268",
+      "title": "Meteorite Iron War - Round 2",
+      "description": "",
+      "isAllDay": false,
+      "startTime": "12:30",
+      "endTime": "13:00",
+      "days": ["saturday"],
+      "includeInExport": {
+        "saturday": true,
+        "sunday": true,
+        "monday": true,
+        "tuesday": true,
+        "wednesday": true,
+        "thursday": true,
+        "friday": true
+      },
+      "variations": {},
+      "order": {},
+      "archived": true,
+      "recurrence": {
+        "type": "weekly",
+        "daysOfWeek": ["saturday"],
+        "interval": 1,
+        "startDate": "2025-05-03T00:00:00.000-04:00"
+      },
+      "dateIncludeOverrides": {
+        "2025-05-03": true,
+        "2025-07-19": true
+      }
+    },
+    {
+      "id": "5a015825-f2c7-44ce-81c6-c09bcff682e2",
+      "title": "Beast Crisis",
+      "description": "",
+      "isAllDay": false,
+      "startTime": "12:00",
+      "endTime": "12:35",
+      "days": ["tuesday", "friday"],
+      "includeInExport": {
+        "thursday": true,
+        "sunday": true,
+        "monday": true,
+        "tuesday": true,
+        "wednesday": true,
+        "friday": true,
+        "saturday": true
+      },
+      "variations": {},
+      "order": {},
+      "archived": true,
+      "recurrence": {
+        "type": "weekly",
+        "daysOfWeek": ["tuesday", "friday"],
+        "interval": 1,
+        "startDate": "2025-05-22T00:00:00.000-04:00"
+      }
+    },
+    {
+      "id": "1f65fd3a-b31b-4d67-9d46-0a53606e79a4",
+      "title": "Rare Soil War",
+      "description": "",
+      "isAllDay": false,
+      "startTime": "12:30",
+      "endTime": "13:10",
+      "days": ["wednesday", "saturday"],
+      "includeInExport": {
+        "thursday": true,
+        "sunday": true,
+        "monday": true,
+        "tuesday": true,
+        "wednesday": true,
+        "friday": true,
+        "saturday": true
+      },
+      "variations": {},
+      "order": {},
+      "archived": true,
+      "recurrence": {
+        "type": "weekly",
+        "daysOfWeek": ["wednesday", "saturday"],
+        "interval": 1,
+        "startDate": "2025-05-22T00:00:00.000-04:00"
+      }
+    },
+    {
+      "id": "5831a6ec-244d-40d2-88dc-81a7173ecffd",
+      "title": "VS: Save SHINYs (Starred secret tasks)",
+      "description": "",
+      "isAllDay": true,
+      "startTime": "09:00",
+      "endTime": "",
+      "days": ["sunday", "monday", "thursday", "friday"],
+      "includeInExport": {
+        "friday": true,
+        "sunday": true,
+        "monday": true,
+        "tuesday": true,
+        "wednesday": true,
+        "thursday": true,
+        "saturday": true
+      },
+      "variations": {},
+      "order": {
+        "sunday": 4,
+        "monday": 4,
+        "thursday": 3,
+        "friday": 0
+      },
+      "archived": false,
+      "recurrence": {
+        "type": "weekly",
+        "daysOfWeek": ["sunday", "monday", "thursday", "friday"],
+        "interval": 3,
+        "startDate": "2025-07-06T04:00:00.000Z"
+      },
+      "dateIncludeOverrides": {
+        "2025-07-10": false,
+        "2025-07-11": false
+      }
+    },
+    {
+      "id": "89b95f35-ae1a-485b-8aee-f012c758fa7b",
+      "title": "VS: Save SHINYs (Starred secret tasks)",
+      "description": "",
+      "isAllDay": true,
+      "startTime": "09:00",
+      "endTime": "",
+      "days": ["friday"],
+      "includeInExport": {
+        "friday": true,
+        "sunday": true,
+        "monday": true,
+        "tuesday": true,
+        "wednesday": true,
+        "thursday": true,
+        "saturday": true
+      },
+      "variations": {},
+      "order": {},
+      "archived": false,
+      "recurrence": {
+        "type": "weekly",
+        "daysOfWeek": ["friday"],
+        "interval": 3,
+        "startDate": "2025-07-13T04:00:00.000Z"
+      }
+    },
+    {
+      "id": "fecdeae1-1d56-493c-9e92-d3103bc39910",
+      "title": "Golden Melody",
+      "description": "• Use at minimum 1 ticket, score at least 5,000 points then collect your tasks",
+      "isAllDay": true,
+      "startTime": "09:00",
+      "endTime": "",
+      "days": [
+        "monday",
+        "tuesday",
+        "wednesday",
+        "thursday",
+        "friday",
+        "saturday"
+      ],
+      "includeInExport": {
+        "monday": true,
+        "sunday": true,
+        "tuesday": true,
+        "wednesday": true,
+        "thursday": true,
+        "friday": true,
+        "saturday": true
+      },
+      "variations": {},
+      "order": {
+        "monday": 2,
+        "tuesday": 3,
+        "wednesday": 2,
+        "thursday": 1,
+        "friday": 1,
+        "saturday": 1
+      },
+      "archived": true,
+      "recurrence": {
+        "type": "custom",
+        "daysOfWeek": [
+          "monday",
+          "tuesday",
+          "wednesday",
+          "thursday",
+          "friday",
+          "saturday"
+        ],
+        "interval": 1,
+        "startDate": "2025-07-07T00:00:00.000-04:00",
+        "pattern": {
+          "onWeeks": 1,
+          "offWeeks": 99,
+          "phaseStartDate": "2025-07-07T08:19:54.884Z"
+        }
+      }
+    },
+    {
+      "id": "3c1c7552-cfbc-479d-a42c-2dc8476d0e1b",
+      "title": "Golden Melody - FINAL DAY",
+      "description": "",
+      "isAllDay": true,
+      "startTime": "09:00",
+      "endTime": "",
+      "days": [
+        "sunday",
+        "monday",
+        "tuesday",
+        "wednesday",
+        "thursday",
+        "friday",
+        "saturday"
+      ],
+      "includeInExport": {
+        "sunday": true,
+        "monday": true,
+        "tuesday": true,
+        "wednesday": true,
+        "thursday": true,
+        "friday": true,
+        "saturday": true
+      },
+      "variations": {},
+      "order": {
+        "sunday": 1
+      },
+      "archived": false,
+      "recurrence": {
+        "type": "daily",
+        "daysOfWeek": [
+          "sunday",
+          "monday",
+          "tuesday",
+          "wednesday",
+          "thursday",
+          "friday",
+          "saturday"
+        ],
+        "interval": 99,
+        "startDate": "2025-07-13T00:00:00.000-04:00"
+      }
+    },
+    {
+      "id": "4af5277e-a46b-4407-94cc-66452e907f1d",
+      "title": "Sky Predater - General's Trial Alliance Challenge",
+      "description": "",
+      "isAllDay": false,
+      "startTime": "23:00",
+      "endTime": "23:30",
+      "days": ["thursday"],
+      "includeInExport": {
+        "thursday": true,
+        "sunday": true,
+        "monday": true,
+        "tuesday": true,
+        "wednesday": true,
+        "friday": true,
+        "saturday": true
+      },
+      "variations": {},
+      "order": {},
+      "archived": false,
+      "recurrence": {
+        "type": "weekly",
+        "daysOfWeek": ["thursday"],
+        "interval": 2,
+        "startDate": "2025-07-17T04:00:00.000Z",
+        "pattern": {
+          "onWeeks": 1,
+          "offWeeks": 1,
+          "phaseStartDate": "2025-07-31T01:34:25.719Z"
+        }
+      }
+    },
+    {
+      "id": "e05c1e28-c800-48d1-8d3a-53898d5f2922",
+      "title": "Glacieradon",
+      "description": "",
+      "isAllDay": false,
+      "startTime": "23:00",
+      "endTime": "",
+      "days": ["thursday"],
+      "includeInExport": {
+        "wednesday": true,
+        "sunday": true,
+        "monday": true,
+        "tuesday": true,
+        "thursday": true,
+        "friday": true,
+        "saturday": true
+      },
+      "variations": {},
+      "order": {},
+      "archived": false,
+      "recurrence": {
+        "type": "weekly",
+        "daysOfWeek": ["thursday"],
+        "interval": 2,
+        "startDate": "2025-08-06T00:00:00.000-04:00"
+      }
+    },
+    {
+      "id": "9773fd5b-5070-4f05-b232-f527556751ab",
+      "title": "VS: Promote and Train Overlord",
+      "description": "",
+      "isAllDay": true,
+      "startTime": "09:00",
+      "endTime": "",
+      "days": ["friday"],
+      "includeInExport": {
+        "friday": true,
+        "sunday": true,
+        "monday": true,
+        "tuesday": true,
+        "wednesday": true,
+        "thursday": true,
+        "saturday": true
+      },
+      "variations": {},
+      "order": {
+        "friday": 4
+      },
+      "archived": false,
+      "recurrence": {
+        "type": "weekly",
+        "daysOfWeek": ["friday"],
+        "interval": 1,
+        "startDate": "2025-08-22T00:00:00.000-04:00"
+      }
+    },
+    {
+      "id": "16f2e4b5-58d7-4c14-b409-ef1e3e1b84c6",
+      "title": "Return of the Dead - Defend Alliance Center",
+      "description": "",
+      "isAllDay": false,
+      "startTime": "11:00",
+      "endTime": "11:30",
+      "days": ["tuesday", "friday"],
+      "includeInExport": {
+        "thursday": true,
+        "sunday": true,
+        "monday": true,
+        "tuesday": true,
+        "wednesday": true,
+        "friday": true,
+        "saturday": true
+      },
+      "variations": {},
+      "order": {},
+      "archived": false,
+      "recurrence": {
+        "type": "weekly",
+        "daysOfWeek": ["tuesday", "friday"],
+        "interval": 1,
+        "startDate": "2025-09-04T00:00:00.000-04:00"
       }
     }
   ],
@@ -1745,7 +1993,7 @@
       "id": "8f8053b7-faf0-4de6-9ddb-a0b98dac8b6b",
       "title": "",
       "content": "If you see a Doom Walker attacking, start a rally on it and then cancel to redirect him",
-      "lastUsed": "2025-02-24"
+      "lastUsed": "2025-07-06T03:38:25.544Z"
     },
     {
       "id": "77bb8baa-aa3d-4632-85c1-ffd6acdf1ae1",
@@ -1753,7 +2001,7 @@
       "content": "Make sure to donate to Alliance Tech every time you log in.\nGo to: Alliance→Alliance Techs\nLook for the tech with the red thumbs-up icon, then hold down the donate button until all coin donations are complete.\n\nUpgrading Alliance Tech is crucial for the alliance's growth, but it also benefits you directly. You earn Alliance Points, which are much more valuable than the coins you spend. These points can be used in the Alliance Store to buy a variety of useful items.\n\nYou can also donate using diamonds. The first 10 diamond donations each day only cost a total of 110 diamonds, making them a great deal. After that, the cost increases, so stick to those first 10 if you want the best value.",
       "lastUsed": "2025-03-21T10:48:04.500Z",
       "customId": "alliance-tech",
-      "imageUrl": "http://www.lwserenity.com/tip_images/thumbs-up-tech.png"
+      "imageUrl": "https://www.lwserenity.com/tip_images/thumbs-up-tech.png"
     },
     {
       "id": "cf1051e2-63f5-426a-8c9c-81421a00586e",
@@ -1769,7 +2017,7 @@
       "content": "Every three days, you receive a special task we call a SHINY! These are a type of legendary task and are marked with a star in the upper right corner.\n\nSHINYs can be saved for up to three days. Since VS gives points for completing legendary tasks on Tuesdays and Saturdays, you can save your SHINYs and use on those days... except on Wednesdays since they won't last until Saturday.\n\nImportant: When refreshing tasks, you will see a warning about uncompleted legendary tasks if you have a SHINY. Don’t worry, refreshing will not remove or affect your SHINY.",
       "lastUsed": "2025-03-21T10:58:46.935Z",
       "customId": "save-shinys",
-      "imageUrl": "http://www.lwserenity.com/tip_images/save-shiny.png"
+      "imageUrl": "https://www.lwserenity.com/tip_images/save-shiny.png"
     },
     {
       "id": "f07a5eca-bb4a-406b-ad8b-d8812a25657f",
@@ -1808,11 +2056,13 @@
     {
       "id": "acd198fb-af58-4fe7-ae90-35e7b545e8ff",
       "title": "Capitol Titles",
-      "content": "Capitol titles give major boosts to resource collection, construction, and research - and solid boosts for troop training and healing. Always grab the right title before starting any major action.\n\nHow to Apply:\n• Tap your PFP → #996 Button → Title → Apply\n• Wait a few minutes to get your estimated time slot\n• Slots can shift, so check back often so you don’t miss yours\n\nTitle Benefits:\n• Secretary of Development: +50% construction speed, +25% research (when active at the start)\n• Secretary of Science: +50% research speed, +25% construction\n• Secretary of Interior: +100% Food/Iron/Gold output when collecting or using Rapid Production (collect while holding the title)\n• Secretary of Security: Train/Promote ~20% more troops in the same time (start while holding the title)\n• Secretary of Strategy: +20% hospital capacity and healing speed - great in prolonged PVP",
+      "content": "Capitol titles give major boosts to resource collection, construction, and research - and solid boosts for troop training and healing. Always grab the right title before starting any major action.\n\nHow to Apply:\n• Tap your PFP → #996 Button → Title → Apply\n• When you apply, your name will be added to the bottom of the list and will display your estimated timeslot.\n• Slots can shift, so check back often so you don’t miss yours\n\nTitle Benefits:\n• Secretary of Development: +50% construction speed, +25% research (when active at the start)\n• Secretary of Science: +50% research speed, +25% construction\n• Secretary of Interior: +100% Food/Iron/Gold output when collecting or using Rapid Production (collect while holding the title)\n• Secretary of Security: Train/Promote ~20% more troops in the same time (start while holding the title)\n• Secretary of Strategy: +20% hospital capacity and healing speed - great in prolonged PVP",
       "lastUsed": "2025-03-14T10:50:37.696Z",
       "customId": "capitol-titles",
       "adminOnly": false,
-      "canUseInBriefing": true
+      "canUseInBriefing": true,
+      "unlisted": false,
+      "isHtml": false
     },
     {
       "id": "3e3a3918-ed28-4f7c-9226-b7a3ff46692d",
@@ -1853,33 +2103,46 @@
     },
     {
       "id": "f480f539-a719-4eca-9f39-c2ec85f802d1",
-      "title": "Warzone Duel",
-      "content": "Warzone Duel: Capitol War is the end of a week long battle between servers and is the main event in the game.  Since it is the main event, it has really great rewards.\n\nYou want to get a total of 1.5 million points to max your rewards. You get 10k damage for every successful hit on bases from our opponent except when you ash them which will give you 50-60k. You can tell who is our opponent because their base will be pink on the map. To attack, you will lose your shield, so that is where the strategy starts\n\nThe basics:\n1. Make sure you have a pinned conversation with a link to a 3rd server in it so you can teleport out immediately.\n2. Remove all squads from your wall.\n3. Make sure you have someone strong to garrison you.\n4. Use a resource tile or teleport to get close to an inactive pink base. Try to avoid ones from the top few alliances.\n5. Attack.\n6. If the attack is victorious, check to make sure you didn't lose many (or any) troops and keep hitting until you ash them.\n7. If at any point you hear your attack alarm go off, immediately go to your pinned private message and teleport to the 3rd party server.\n\nOther notes:\n• To get closer to pink bases instead of waiting for your squad to cross the map, teleport to the 3rd server, wait 4.5 minutes and teleport back to 996\n• Every time you teleport, drop your coords in chat so your garrison(s) can follow you.",
+      "title": "Warzone Duel: Capitol War - After Main Event",
+      "content": "<p>Warzone Duel: Capitol War is the end of a week long battle between servers and is the main event in the game.  Since it is the main event, it has really great rewards.<br>\n<br>\nYou want to get a total of 1.5 million points to max your rewards. You get 10k damage for every successful hit on bases from our opponent except when you ash them which will give you 50-60k. You can tell who is our opponent because their base will be pink on the map. To attack, you will lose your shield, so that is where the strategy starts<br>\n<br>\nThe basics:<br>\n1. Make sure you have a pinned conversation with a link to a 3rd server in it so you can teleport out immediately.<br>\n2. Remove all squads from your wall.<br>\n3. Make sure you have someone strong to garrison you.<br>\n4. Use a resource tile or teleport to get close to an inactive pink base. Try to avoid ones from the top few alliances.<br>\n5. Attack.<br>\n6. If the attack is victorious, check to make sure you didn't lose many (or any) troops and keep hitting until you ash them.<br>\n7. If at any point you hear your attack alarm go off, immediately go to your pinned private message and teleport to the 3rd party server.<br>\n<br>\nOther notes:<br>\n• To get closer to pink bases instead of waiting for your squad to cross the map, teleport to the 3rd server, wait 4.5 minutes and teleport back to 996<br>\n• Every time you teleport, drop your coords in chat so your garrison(s) can follow you.</p><br><br><a href=\"/?cw-index#tip-warzone-duel-capitol-war-index\">Back to index</a>",
       "lastUsed": null,
-      "customId": "warzone-duel"
+      "customId": "warzone-duel-after-main-event",
+      "adminOnly": false,
+      "canUseInBriefing": true,
+      "unlisted": false,
+      "isHtml": true
     },
     {
       "id": "f32b0c75-bfc8-4b81-9d62-e691011f3506",
       "title": "Tiered Troops",
       "content": "The best method for this is to Keep your barracks levels tiered and promote them through the levels instead of training them at the max tier. To do this, upgrade one of your barracks as much as possible and check what level troop it can produce. The next barrack, upgrade until the max troop it can produce is one less than the previous barrack. Follow this pattern for each barrack you have.\n\nExample - you have four barracks and the max troop you can produce is level 7\n• 1st Barrack at level 20-23 - Produces up to level 7 troops\n• 2nd at level 17-16 - Produces up to level 6 troops\n• 3rd Barrack at level 14-15 - Produces up to level 5 troops\n• 4th Barrack at level 10-13 - Produces up to level 4 troops.",
       "lastUsed": null,
-      "customId": "tiered-troops"
+      "customId": "tiered-troops",
+      "adminOnly": false,
+      "canUseInBriefing": true,
+      "unlisted": true,
+      "isHtml": false
     },
     {
       "id": "5a2347dc-2720-45fc-bba1-901625435c34",
       "title": "Marshal Instructions",
-      "content": "• No digs or non-Marshal rallies.\n• If needed, to conserve troops, remove all but one hero from SECOND squad.\n• Coordinates will be in chat before it starts.\n• Launch rallies with your SECOND squad.\n• Join rallies with your FIRST squad ONLY.\n• Send squads out again as they return - rally with second, join with first.\n• After the alliance maxes rewards, check individual rewards. If maxed, rally only (either squad).",
+      "content": "Marshal is starting!\n\n• No digs or non-Marshal rallies.\n• If needed, to conserve troops, remove all but one hero from SECOND squad.\n• Coordinates will be in chat before it starts.\n• Launch rallies with your SECOND squad.\n• Join rallies with your FIRST squad ONLY.\n• Send squads out again as they return - rally with second, join with first.\n• After the alliance maxes rewards, check individual rewards. If maxed, rally only (either squad).",
       "lastUsed": null,
       "adminOnly": false,
-      "canUseInBriefing": false
+      "canUseInBriefing": false,
+      "customId": "marshal-instructions",
+      "unlisted": false,
+      "isHtml": false
     },
     {
       "id": "a11285de-dacf-4592-8487-cc4c16eb13e6",
       "title": "Zombie Siege Instructions",
-      "content": "• All squads back to 5 heroes.\n• Only your first squad goes on the wall.\n• Watch battle reports - when your first squad drops below 50%, add another. Repeat until all squads are in use\n• When all squads are defending and your first squad drops below 50% post a **screenshot and coordinates** in chat.\n• If you have power to spare, garrison those with a screenshot showing their first squad below 50%\n• Refresh garrisons after damage using resource tiles to move faster.",
+      "content": "Siege is starting in 10 minutes!\n\n    **No rallies or digs!**\n\n• Recall all squads and ensure 5 heroes\n• Place first squad on wall (more if you need to fill hospital)\n• Watch battle reports: if first squad drops below 50%, add another until all squads are in use\n• When all squads in use and first still below 50%, request garrison\n• If you have power to spare, garrison those who request it\n• Refresh garrisons when damaged. Use resource tiles to move faster if needed",
       "lastUsed": null,
       "adminOnly": false,
-      "canUseInBriefing": false
+      "canUseInBriefing": false,
+      "unlisted": false,
+      "isHtml": false
     },
     {
       "id": "2b1714dc-895a-42a8-908e-39e30426ba27",
@@ -1898,7 +2161,7 @@
       "content": "",
       "lastUsed": null,
       "customId": "vs-cheatsheet",
-      "imageUrl": "http://www.lwserenity.com/tip_images/vs_schedule.jpg",
+      "imageUrl": "https://www.lwserenity.com/tip_images/vs_schedule.jpg",
       "adminOnly": false,
       "canUseInBriefing": false
     },
@@ -1929,7 +2192,7 @@
       "content": "",
       "lastUsed": null,
       "customId": "saving-radar-tasks",
-      "imageUrl": "http://www.lwserenity.com/tip_images/saving-radar-tasks.jpg",
+      "imageUrl": "https://www.lwserenity.com/tip_images/saving-radar-tasks.jpg",
       "adminOnly": false,
       "canUseInBriefing": false
     },
@@ -1939,7 +2202,7 @@
       "content": "",
       "lastUsed": null,
       "customId": "plunder-shinys",
-      "imageUrl": "http://www.lwserenity.com/tip_images/plunder-shinys.jpg",
+      "imageUrl": "https://www.lwserenity.com/tip_images/plunder-shinys.jpg",
       "adminOnly": false,
       "canUseInBriefing": false
     },
@@ -1978,7 +2241,7 @@
       "content": "Please send your Ghost Op that has all the conditions met. To do so, go to Ghost Ops, Click on the pending mission on the map, and then click \"Execute Now\" at the bottom.",
       "lastUsed": null,
       "customId": "send-ghost-op",
-      "imageUrl": "http://lwserenity.com/tip_images/send-ghost-op.jpg",
+      "imageUrl": "https://lwserenity.com/tip_images/send-ghost-op.jpg",
       "adminOnly": false,
       "canUseInBriefing": false,
       "unlisted": true,
@@ -2036,11 +2299,11 @@
     {
       "id": "c94ca3e9-411e-4ef5-8298-4543aeb7a0e3",
       "title": "Ghost Ops Strategy",
-      "content": "<p>• Send SR (purple) right away<br>\n• Post UR/UR⭐ in chat<br>\n• For UR ops, send immediately when Special Award conditions are met<br>\n• For UR⭐ ops, if you have a space open and conditions are met, give chat a 1-2 minute warning before you send so anyone who still needs Join rewards can fill the slot.<br>\n<br>\nTo help others:<br>\n• Join UR/UR⭐ only if you meet or they’ve already met conditions<br>\n• Send reminder to host to start rally if all conditions are met.<br>\n• Hold out for UR⭐ if you’re active<br>\n• If your rally sits 10+ mins and someone else needs those heroes, move on to the next <br>person</p>\n\nHow to send op that is ready:\n<img src=\"http://lwserenity.com/tip_images/send-ghost-op.jpg\" loading=\"lazy\" alt=\"\" data-alt-text=\"\">",
+      "content": "<p>\n• Send purple right away<br>\n• Post UR/UR⭐ in chat and send when conditions are met<br>\n• For UR⭐ ops, if you have a space, give chat a short notice so anyone who still needs those rewards can join.<br>\n<br>\nTo help:<br>\n• Volunteer/Join UR/UR⭐ only if you help or conditions already met<br>\n• You can only \"Join\" 3 times, so use it wisely.<br>\n• If conditions are met, Send reminder to host to start rally<br>\n• If rally sits 10 mins and heroes are needed elsewhere, move on</p>\n\nHow to send op that is ready:\n<img src=\"https://lwserenity.com/tip_images/send-ghost-op.jpg\" loading=\"lazy\" alt=\"\" data-alt-text=\"\">",
       "lastUsed": null,
       "customId": "ghost-ops-strategy",
       "adminOnly": false,
-      "canUseInBriefing": true,
+      "canUseInBriefing": false,
       "unlisted": false,
       "isHtml": true
     },
@@ -2074,7 +2337,7 @@
     {
       "id": "3a76f979-e917-4603-aee8-fe7d28847eae",
       "title": "Tile pulling to hunt loot goblins",
-      "content": "<div>\n  <h2>Hunting Loot Goblins Efficiently</h2>\n  <p>To hunt loot goblins quickly, use a method called <strong>tile pulling</strong>:</p>\n  <p>• Send your squad to gather at a <strong>resource tile near a cluster</strong> of goblins.</p>\n  <p>• When your squad is <strong>approaching the goblins</strong>, <strong>redirect</strong> it to attack one.</p>\n  <p>• If the next goblin is more than a 10–15 second march away, <strong>send your squad to a tile beyond the goblins</strong>, then redirect again as it gets close.</p>\n  <p>This lets you chain attacks quickly without long march times.</p>\n  <p><strong>See this video for an example:</strong><br>\n  <video width=\"800\" height=\"450\" controls=\"\" preload=\"none\" data-alt-text=\"\" poster=\"http://www.lwserenity.com/tip_images/tile_pull_to_loot_goblins.jpg\">\n          <source src=\"http://www.lwserenity.com/tip_images/tile_pull_to_loot_goblins_c.mp4\" type=\"video/mp4\">\n          Your browser does not support the video tag.\n        </video></p>\n</div>\nHere is the video at half speed:<br>\n\n        <video width=\"800\" height=\"450\" controls=\"\" preload=\"none\" data-alt-text=\"\" poster=\"http://lwserenity.com/tip_images/tile_pull_to_loot_goblins.jpg\">\n          <source src=\"http://lwserenity.com/tip_images/tile_pull_to_loot_goblins_0.5_speed.mp4\" type=\"video/mp4\">\n          Your browser does not support the video tag.\n        </video>",
+      "content": "<div>\n  <h2>Hunting Loot Goblins Efficiently</h2>\n  <p>To hunt loot goblins quickly, use a method called <strong>tile pulling</strong>:</p>\n  <p>• Send your squad to gather at a <strong>resource tile near a cluster</strong> of goblins.</p>\n  <p>• When your squad is <strong>approaching the goblins</strong>, <strong>redirect</strong> it to attack one.</p>\n  <p>• If the next goblin is more than a 10–15 second march away, <strong>send your squad to a tile beyond the goblins</strong>, then redirect again as it gets close.</p>\n  <p>This lets you chain attacks quickly without long march times.</p>\n  <p><strong>See this video for an example:</strong><br>\n  <video width=\"800\" height=\"450\" controls=\"\" preload=\"none\" data-alt-text=\"\" poster=\"https://www.lwserenity.com/tip_images/tile_pull_to_loot_goblins.jpg\">\n          <source src=\"https://www.lwserenity.com/tip_images/tile_pull_to_loot_goblins_c.mp4\" type=\"video/mp4\">\n          Your browser does not support the video tag.\n        </video></p>\n</div>\nHere is the video at half speed:<br>\n\n        <video width=\"800\" height=\"450\" controls=\"\" preload=\"none\" data-alt-text=\"\" poster=\"https://lwserenity.com/tip_images/tile_pull_to_loot_goblins.jpg\">\n          <source src=\"https://lwserenity.com/tip_images/tile_pull_to_loot_goblins_0.5_speed.mp4\" type=\"video/mp4\">\n          Your browser does not support the video tag.\n        </video>",
       "lastUsed": null,
       "customId": "tile-pulling-to-hunt-loot-goblins",
       "adminOnly": false,
@@ -2096,7 +2359,7 @@
     {
       "id": "43cd6540-5e6b-493a-b772-dbf661bf8858",
       "title": "NAP7 Sports Analogy",
-      "content": "<p>Imagine we're all in high school.</p>\n\n    <p>The football and soccer teams are full of talented, high-profile students. But for whatever reason, many others in the school <em>perceive</em> them as arrogant or unapproachable. Maybe it's how they carry themselves, maybe it's past behavior, or maybe it's just the dynamic that's developed over time. Either way, they're seen by some as the ones always dominating the space and pushing others around... even kids from the chess club, the debate team, and sometimes even the baseball team.</p>\n\n    <p>As a result, a lot of strong, capable students choose not to participate. They don't want to be part of something they feel is unfair or aggressive. And because of that, the football and soccer teams struggle when it comes time to actually win games.</p>\n\n    <p>But here's the thing: if those teams made a genuine effort to be kind, supportive, and inclusive to everyone in the school district... if they showed respect and created a positive culture, they'd have a massive pool of students eager to join them. People would be excited to be part of that energy. Their games would sell out. They'd attract the best coaches, get the best gear, and build something unstoppable.</p>\n\n    <p>So now, the teams decide to fix that by recruiting, or rather pressuring, the strong kids to join them. When persuasion doesn't work, the message turns into something more like:</p>\n\n    <p><strong>\"If you don't join us, we're going to make your life miserable every day after school.\"</strong></p>\n\n    <p>There's no way for the individual students to stand up to that. No one can take on an entire team.</p>\n\n    <p>The solution isn't to double down on fear or pressure. The solution is to fix the reputation. Be the alliance people admire, not the one they brace against. If you become the heroes of the server... the ones who stand up for fairness, respect, and real leadership, people will want to follow you. You'll have more strength, more loyalty, and more staying power than fear could ever buy.</p>\n\n<a href=\"https://LWSerenity.com/?index#tip-996-moving-forward\">Back to index</a>",
+      "content": "<p>Imagine we're all in high school.</p>\n\n    <p>The football and soccer teams are full of talented, high-profile students. But for whatever reason, many others in the school <em>perceive</em> them as arrogant or unapproachable. Maybe it's how they carry themselves, maybe it's past behavior, or maybe it's just the dynamic that's developed over time. Either way, they're seen by some as the ones always dominating the space and pushing others around... even kids from the chess club, the debate team, and sometimes even the baseball team.</p>\n\n    <p>As a result, a lot of strong, capable students choose not to participate. They don't want to be part of something they feel is unfair or aggressive. And because of that, the football and soccer teams struggle when it comes time to actually win games.</p>\n\n    <p>But here's the thing: if those teams made a genuine effort to be kind, supportive, and inclusive to everyone in the school district... if they showed respect and created a positive culture, they'd have a massive pool of students eager to join them. People would be excited to be part of that energy. Their games would sell out. They'd attract the best coaches, get the best gear, and build something unstoppable.</p>\n\n    <p>So now, the teams decide to fix that by recruiting, or rather pressuring, the strong kids to join them. When persuasion doesn't work, the message turns into something more like:</p>\n\n    <p><strong>\"If you don't join us, we're going to make your life miserable every day after school.\"</strong></p>\n\n    <p>There's no way for the individual students to stand up to that. No one can take on an entire team.</p>\n\n    <p>The solution isn't to double down on fear or pressure. The solution is to fix the reputation. Be the alliance people admire, not the one they brace against. If you become the heroes of the server... the ones who stand up for fairness, respect, and real leadership, people will want to follow you. You'll have more strength, more loyalty, and more staying power than fear could ever buy.</p>\n\n<a href=\"/?index#tip-996-moving-forward\">Back to index</a>",
       "lastUsed": null,
       "customId": "nap7-sports-analogy",
       "adminOnly": false,
@@ -2107,36 +2370,250 @@
     {
       "id": "daa069ef-fccc-43b5-a3aa-17021f2a8e42",
       "title": "Why we need small alliances and players",
-      "content": "• We need the players who quietly sit below level 27 and rack up easy Arms Race wins.\n• We need the low-ranking alliances that sometimes bring in VS wins/mvps because they bottom tiers.\n• We need those Desert Storm squads where only 2 or 3 show up, but because of how matchmaking works, that’s still enough to win.\n• We need lurkers in world chat to pick off 972 trucks we post because it is easier than searching for their own.\n\nAll of these things, even if each has the odds of betting on black in roulette, add up. They generate serious Warzone Duel points. \n\nForcing those alliances to disband or pushing those players to quit guarantees we get zero from them, never earn invasion rights, never get those sweet, sweet invasion buffs again.\n\nIt may already be too late. We’ve lost so many by going down this same path last time, but we have a plan that could at least give us a shot.",
+      "content": "<p>• We need the players who quietly sit below level 27 and rack up easy Arms Race wins.</p>\n<p>•&nbsp;We need the low-ranking alliances that sometimes bring in VS wins/mvps because they bottom tiers.</p>\n<p>•&nbsp;We need those Desert Storm squads where only 2 or 3 show up, but because of how matchmaking works, that’s still enough to win.</p>\n<p>•&nbsp;We need lurkers in world chat to pick off 972 trucks we post because it is easier than searching for their own.</p>\n\n<p>All of these things, even if each has the odds of betting on black in roulette, add up. They generate serious Warzone Duel points.&nbsp;</p>\n\n<p>Forcing those alliances to disband or pushing those players to quit guarantees we get zero from them,&nbsp;never earn invasion rights, never get those sweet, sweet invasion buffs again.</p>\n\n<p>It may already be too late. We’ve lost so many by going down this same path last time, but we have a plan that could at least give us a shot.</p>\n\n<a href=\"/?index#tip-996-moving-forward\">Back to index</a>",
       "lastUsed": null,
       "customId": "why-small-alliances-and-players",
       "adminOnly": false,
       "canUseInBriefing": true,
       "unlisted": false,
-      "isHtml": false
+      "isHtml": true
     },
     {
       "id": "10bb580f-9e35-4fea-9845-a143543d50f5",
-      "title": "999 Plan",
-      "content": "<h1>What Is Our Goal in 996?</h1>\n\n<p>Those of you who know me are probably tired of hearing me say it, but I'll say it again: It's just a game. It should be fun.</p>\n\n<p>For most of us, myself included, \"fun\" includes kicking ass. And for many, getting our asses kicked over and over again drains the fun entirely. That's exactly what happened last season. We got steamrolled, and nobody enjoyed it.</p>\n\n<p>There are also a huge number of players whose idea of fun is, as Lelii put it, \"playing Farmville.\" And we need to recognize just how essential those players are. They're the foundation that supports the rest of us - the ones who enjoy running and gunning. Without their steady production, daily activity, and logistical support, our ability to fight crumbles. Every role matters.</p>\n\n<p>Now, there's a conversation happening about how to make us stronger as a server. That's good. But I want to challenge the assumption behind one of the most vocal solutions: forced mergers backed by threats of removing NAP status.</p>\n\n<p>Yes, we need to grow our top alliances. But forced consolidation isn't strength. It's short-term numbers at the cost of long-term stability. We've already tried it once. It made a few alliances stronger on paper, but it drove away countless active players. Some of our best - Moose, Ballsak, Gunny - all quit because of the drama and pressure that followed. That strategy didn't leave us stronger. It left us hollow.</p>\n\n<p>If we do it again, we'll repeat the same mistake. We'll get a short-term bump and a long-term decline.</p>\n\n<p><strong>So what should we do instead?</strong></p>\n\n<p>First, let's agree on the real opportunity here. It is a power problem - but it's a power problem we've already lost. We're going up against servers that have far more financial investment behind them. Trying to match them head-to-head is like lining up against Red Coats in a traditional battlefield. That's not going to work for us. If we want to win, we have to take the strategic route - the American Revolution approach - popping out from behind trees, striking smart and fast, and vanishing before they can respond. That requires tight coordination, not just brute strength. And right now, our biggest weakness is communication.</p>\n\n<p>We're not losing because our players are bad or because they're in the \"wrong\" alliances. We're losing because we don't communicate well enough to align casual players with daily goals that win us the big server-wide events.</p>\n\n<p>The buffs from Warzone Duel, for example, are massive. But we miss out on them because too many players log in and have no idea what needs doing that day. If they had a simple list every day - in their inbox, or on Discord - we'd be racking up points, not losing ground.</p>\n\n<p><strong>That's not a guess. That's something we can start fixing right now.</strong></p>\n\n<h2>Here's a better plan to build a powerful server:</h2>\n\n<ul>\n  <li><strong>Get our leadership in sync.</strong> Let's bring all willing leaders - big and small - into Discord so we can talk in real time. The in-game chat is simply not built for serious coordination. Messages disappear in seconds, there's no search, no ability to organize by topic, and no easy way to keep track of ongoing discussions. Discord gives us persistent channels, searchable history, threaded conversations, and notifications we can control. It's the only realistic way to maintain strategic, server-wide communication.</li>\n\n  <li><strong>Treat the server like one giant alliance.</strong> Our top alliances should feel like the major leagues - not just powerful, but welcoming, aspirational, and connected to the broader server community. If players see a path to success and recognition, they'll be motivated to grow.\n    <ul>\n      <li>Send a daily mail with an agenda. A quick update with what needs to happen each day, what's coming up next, and why it matters.</li>\n      <li>Mentor our smaller alliances. Not everyone has the time or experience to run a well-oiled team, but some of us are really good at it. If we treat the server as the team - not just our individual alliances - we can help way more players than the 100-member limit. Many leaders and players would thrive with just a little support and encouragement. Let's help them grow into their potential instead of replacing them.</li>\n    </ul>\n  </li>\n\n  <li>\n  <div style=\"display: flex; align-items: flex-start;\">\n    <div style=\"flex: 1; padding-right: 20px;\">\n      <strong>Establish systems that support all playstyles.</strong> Whether someone is a heavy spender or just logs in once a day to harvest, we should have tools, guides, and communities that help them level up. Even in the biggest battle, a level 10 player with a single level 1 troop can ash a whale. There are dozens of ways small players can get involved if we can revitalize communication. When everyone can find a role and grow quickly, they're more likely to invite friends to join them.\n    </div>\n    <img src=\"http://lwserenity.com/tip_images/two-troop-victory.jpg\" width=\"300\" loading=\"lazy\" alt=\"Two Troop Victory\">\n  </div>\n</li>\n\n  <li><strong>Launch an outreach and recruitment push.</strong> Once the above pieces are in place - reputation repaired, communication flowing, and a sense of progress - we can start promoting the server. Let's create Reddit posts, Facebook outreach - maybe we even have someone who'll make TikToks showcasing what makes our server unique. New players are still coming to this game, and many of the old ones might even return. If we become known as the server where community thrives, they'll want to be here.</li>\n\n  <li><strong>(Optional) Build a tool to help coordinate.</strong> While I'm not willing to commit to anything quite yet, I've already started building a tool for my own alliance, Serenity, at <a href=\"https://LWSerenity.com\" target=\"_blank\">LWSerenity.com</a>. If the need is there, I could create something similar for the entire server to help make communication and coordination automatic and sustainable.</li>\n</ul>\n\n<p>And yes, some smaller alliances do need to consolidate. But let's do it through alignment, not coercion. Let's show players that their play style has a home, that their time matters, and that we actually care how they enjoy the game. That's how you keep a server strong: by building a community, not a prison.</p>\n\n<p>I want to win. I want all of us to win. And I believe we'll only get there by fixing the foundation - not by tearing down what little we have left.</p>\n\n<p><strong>I hope you'll consider this seriously. We're all on the same side here. Let's act like it.</strong></p>",
+      "title": "996 Plan",
+      "content": "<h1>What Is Our Goal in 996?</h1>\n\n<p>Those of you who know me are probably tired of hearing me say it, but I'll say it again: It's just a game. It should be fun.</p>\n\n<p>For most of us, myself included, \"fun\" includes kicking ass. And for many, getting our asses kicked over and over again drains the fun entirely. That's exactly what happened last season. We got steamrolled, and nobody enjoyed it.</p>\n\n<p>There are also a huge number of players whose idea of fun is, as Lelii put it, \"playing Farmville.\" And we need to recognize just how essential those players are. They're the foundation that supports the rest of us - the ones who enjoy running and gunning. Without their steady production, daily activity, and logistical support, our ability to fight crumbles. Every role matters.</p>\n\n<p>Now, there's a conversation happening about how to make us stronger as a server. That's good. But I want to challenge the assumption behind one of the most vocal solutions: forced mergers backed by threats of removing NAP status.</p>\n\n<p>Yes, we need to grow our top alliances. But forced consolidation isn't strength. It's short-term numbers at the cost of long-term stability. We've already tried it once. It made a few alliances stronger on paper, but it drove away countless active players. Some of our best - Moose, Ballsak, Gunny - all quit because of the drama and pressure that followed. That strategy didn't leave us stronger. It left us hollow.</p>\n\n<p>If we do it again, we'll repeat the same mistake. We'll get a short-term bump and a long-term decline.</p>\n\n<p><strong>So what should we do instead?</strong></p>\n\n<p>First, let's agree on the real opportunity here. It is a power problem - but it's a power problem we've already lost. We're going up against servers that have far more financial investment behind them. Trying to match them head-to-head is like lining up against Red Coats in a traditional battlefield. That's not going to work for us. If we want to win, we have to take the strategic route - the American Revolution approach - popping out from behind trees, striking smart and fast, and vanishing before they can respond. That requires tight coordination, not just brute strength. And right now, our biggest weakness is communication.</p>\n\n<p>We're not losing because our players are bad or because they're in the \"wrong\" alliances. We're losing because we don't communicate well enough to align casual players with daily goals that win us the big server-wide events.</p>\n\n<p>The buffs from Warzone Duel, for example, are massive. But we miss out on them because too many players log in and have no idea what needs doing that day. If they had a simple list every day - in their inbox, or on Discord - we'd be racking up points, not losing ground.</p>\n\n<p><strong>That's not a guess. That's something we can start fixing right now.</strong></p>\n\n<h2>Here's a better plan to build a powerful server:</h2>\n\n<ul>\n  <li><strong>Get our leadership in sync.</strong> Let's bring all willing leaders - big and small - into Discord so we can talk in real time. The in-game chat is simply not built for serious coordination. Messages disappear in seconds, there's no search, no ability to organize by topic, and no easy way to keep track of ongoing discussions. Discord gives us persistent channels, searchable history, threaded conversations, and notifications we can control. It's the only realistic way to maintain strategic, server-wide communication.</li>\n\n  <li><strong>Treat the server like one giant alliance.</strong> Our top alliances should feel like the major leagues - not just powerful, but welcoming, aspirational, and connected to the broader server community. If players see a path to success and recognition, they'll be motivated to grow.\n    <ul>\n      <li>Send a daily mail with an agenda. A quick update with what needs to happen each day, what's coming up next, and why it matters.</li>\n      <li>Mentor our smaller alliances. Not everyone has the time or experience to run a well-oiled team, but some of us are really good at it. If we treat the server as the team - not just our individual alliances - we can help way more players than the 100-member limit. Many leaders and players would thrive with just a little support and encouragement. Let's help them grow into their potential instead of replacing them.</li>\n    </ul>\n  </li>\n\n  <li>\n  <div style=\"display: flex; align-items: flex-start;\">\n    <div style=\"flex: 1; padding-right: 20px;\">\n      <strong>Establish systems that support all playstyles.</strong> Whether someone is a heavy spender or just logs in once a day to harvest, we should have tools, guides, and communities that help them level up. Even in the biggest battle, a level 10 player with a single level 1 troop can ash a whale. There are dozens of ways small players can get involved if we can revitalize communication. When everyone can find a role and grow quickly, they're more likely to invite friends to join them.\n    </div>\n    <img src=\"https://lwserenity.com/tip_images/two-troop-victory.jpg\" width=\"300\" loading=\"lazy\" alt=\"Two Troop Victory\">\n  </div>\n</li>\n\n  <li><strong>Launch an outreach and recruitment push.</strong> Once the above pieces are in place - reputation repaired, communication flowing, and a sense of progress - we can start promoting the server. Let's create Reddit posts, Facebook outreach - maybe we even have someone who'll make TikToks showcasing what makes our server unique. New players are still coming to this game, and many of the old ones might even return. If we become known as the server where community thrives, they'll want to be here.</li>\n\n  <li><strong>(Optional) Build a tool to help coordinate.</strong> While I'm not willing to commit to anything quite yet, I've already started building a tool for my own alliance, Serenity, at <a href=\"https://LWSerenity.com\" target=\"_blank\">LWSerenity.com</a>. If the need is there, I could create something similar for the entire server to help make communication and coordination automatic and sustainable.</li>\n</ul>\n\n<p>And yes, some smaller alliances do need to consolidate. But let's do it through alignment, not coercion. Let's show players that their play style has a home, that their time matters, and that we actually care how they enjoy the game. That's how you keep a server strong: by building a community, not a prison.</p>\n\n<p>I want to win. I want all of us to win. And I believe we'll only get there by fixing the foundation - not by tearing down what little we have left.</p>\n\n<p><strong>I hope you'll consider this seriously. We're all on the same side here. Let's act like it.</strong></p>\n\n<a href=\"/?index#tip-996-moving-forward\">Back to index</a>",
       "lastUsed": null,
-      "customId": "999-plan",
+      "customId": "996-plan",
       "adminOnly": false,
-      "canUseInBriefing": true,
+      "canUseInBriefing": false,
       "unlisted": true,
       "isHtml": true
     },
     {
       "id": "e010d551-45d9-4fe0-82d5-082c1fa13f52",
       "title": "996 Moving Forward",
-      "content": "<div>\n  <p>To ever win <strong>Warzone Duel</strong>, we need to grow our server - that means strengthening our top alliances <em>and</em> increasing the number of smaller alliances:</p>\n  <p><a href=\"https://LWSerenity.com/#tip-why-small-alliances-and-players\">Why small alliances and players matter</a></p>\n\n  <p>Our main issues are poor communication and the reputation some top alliances have for being bullies:</p>\n  <p><a href=\"https://LWSerenity.com/#tip-nap7-sports-analogy\">NAP-7 Sports Analogy</a></p>\n\n  <p>If we improve communication and commit to the success of the whole server, we can absolutely win:</p>\n  <p><a href=\"https://LWSerenity.com/#tip-999-plan\">The 999 Plan</a></p>\n</div>",
+      "content": "<div>\n  <p>To ever win <strong>Warzone Duel</strong>, we need to grow our server - that means strengthening our top alliances <em>and</em> increasing the number of smaller alliances:</p>\n  <p><a href=\"/?small#tip-why-small-alliances-and-players\">Why small alliances and players matter</a></p>\n\n  <p>Our main issues are poor communication and the reputation some top alliances have for being bullies:</p>\n  <p><a href=\"/?sport#tip-nap7-sports-analogy\">NAP-7 Sports Analogy</a></p>\n\n  <p>If we improve communication and commit to the success of the whole server, we can absolutely win:</p>\n  <p><a href=\"/?plan#tip-996-plan\">The 996 Plan</a></p>\n</div>",
       "lastUsed": null,
       "customId": "996-moving-forward",
       "adminOnly": false,
       "canUseInBriefing": false,
       "unlisted": true,
       "isHtml": true
+    },
+    {
+      "id": "1be59e3e-f655-4e32-be17-09081a5c73cd",
+      "title": "Tiered Troop Training Strategy",
+      "content": "<div>\n\n  <p>To maximize troop production and score high in <strong>Unit Progression (Arms Race)</strong> and <strong>Total Mobilization (Friday VS)</strong>, train low-level troops continuously. Then, during the events, promote them one level at a time through higher-level barracks.</p>\n\n  <p>Barracks can <strong>train</strong> any level troops up to their max, but they can only <strong>promote</strong> to their max and nothing lower. So, train one level below what your <em>lowest</em> barrack supports with all of your barracks, and them promote them step-by-step.</p>\n\n  <p><strong>Example:</strong> If your highest troop level is T9 and you have 4 barracks, train level 5 troops around the clock, then promote them through levels 6, 7, 8, and finally 9 during Unit Progression and Total Mobilization.</p>\n\n  <h3>Barrack Level Guide:</h3>\n  <p>T1: 1–3<br>\n     T2: 4–5<br>\n     T3: 6–9<br>\n     T4: 10–13<br>\n     T5: 14–16<br>\n     T6: 17–19<br>\n     T7: 20–23<br>\n     T8: 24–26<br>\n     T9: 27–29<br>\n     T10: 30</p>\n\n  <h3>During Unit Progression:</h3>\n  <p>• Grab <strong>Secretary of Security</strong> at the start.<br>\n     • Use speedups to finish any troop batches already training.<br>\n     • Begin cycling promotions through each barrack.</p>\n\n  <p>• If There's a Long Line for the Title and you don’t have troops training, promote a small batch in each barrack timed for a few minutes after your expected title time.</p>\n<h3>After you begin the promotions</h3>\n     <p>• If you’ll be available, set a timer for 15 minutes before your next promotion batch ends so you can grab the title and finish under its effect.<br>\n     • If you won’t be available, speed through your first promotion batch once you have the title.</p>\n\n  <h3>Optimizing for Friday’s Total Mobilization:</h3>\n  <p>• If you're close to your goal, queue a new batch in each barrack one level below your promote minimum.<br>\n     • Time them to finish an hour or so after reset on Friday.<br>\n     • All day Friday, set a timer for just before your earliest batch finishes, speed through all the training barracks, and start the next batch.</p>\n\n  <h3>Ongoing Strategy:</h3>\n  <p>• Whenever a batch finishes, immediately start training another one level below your promote minimum.</p>\n\n  <h3>Important Tips:</h3>\n  <p>• Barracks train different troop amounts, so you'll sometimes run low on a specific level. To fix this, either:</p>\n  <p>  - Speed through one promotion batch of that level<br>\n      - Or skip promoting in a higher barrack and train a fresh batch instead</p>\n\n  <p>• To even out batch sizes, <strong>reverse your survivors</strong>: put your best survivors in your lowest-level barrack, working up from there.</p>\n<h3>Notes</h3>\n<p>• Lower level troops use significantly less resources and when your base is breeched troops are killed from the lowest to the highest, so this method gives your more powerful and more expensive troops a buffer.  <em>However, be careful when attacking because if you run out of your highest level troops, your lower level ones will start taking up space in your ER.<br>\n• It takes the exact same amount of time and resources to train low level troops and then promote them to their max, however using speedups on promotions during Unit Progression and Total Mobilization will net you the most points.\n</em></p></div>\n\n        <video width=\"400\" controls=\"\" preload=\"none\" data-alt-text=\"Reversing Barracks Survivors\" poster=\"https://lwserenity.com/tip_images/reverse_barrack_survivors.jpg\">\n          <source src=\"https://lwserenity.com/tip_images/reverse_barrack_survivors.mp4\" type=\"video/mp4\">\n          Your browser does not support the video tag.\n        </video>",
+      "lastUsed": null,
+      "customId": "troop-training-strategy",
+      "adminOnly": false,
+      "canUseInBriefing": true,
+      "unlisted": false,
+      "isHtml": true
+    },
+    {
+      "id": "5d9fd56f-675c-4eb3-a4f3-f27b8889471f",
+      "title": "Protect Troops by stashing them during battle",
+      "content": "<div>\n  <h1>Protecting Your Troops</h1>\n\n  <p>Here are proven strategies to keep your troops safe during high-risk events, wars, or when you're away from the game, all while staying battle-ready.</p>\n\n  <h2>Hospital</h2>\n  <p>Let your hospital fill naturally through events like Marshal, Siege, Loot Goblins, and Doom Walkers. If you need to speed it up, send your weakest squad to a resource tile and have someone with a much stronger squad hit it. As long as your squad lands first, around 60% of your troops will go to the hospital.</p>\n\n  <p>If the hospital is getting close to full or you need some troops back, clear a small portion at a time using <a href=\"https://LWSerenity.com/#tip-moblie-spam-heal\">spam healing</a>. Even in a casual alliance, it's possible to clear around 6,000 troops per minute.</p>\n\n  <p>Before a major battle, or once your hospital is nearly full and you don't expect many incoming losses, clear all the room in your hospital by starting healing the entire batch. Aim to keep at least 3 days' worth of healing speedups available at all times.</p>\n\n  <h2>Emergency Room (ER)</h2>\n  <p>Let your ER fill completely before using the rescue option. Only claim rescued troops when you really need them or once the ER is full again and the cooldown has ended.</p>\n\n  <h2>Troop Promotions</h2>\n  <p>Promote troops in all available barracks. They are completely safe inside and will not be harmed during attacks.</p>\n\n  <h2>Garrisons and Deployment</h2>\n  <p>Squads cannot be harmed while marching or garrisoning shielded allies. If no shielded bases are available, send squads to attack zombies in the furthest corner of the map. If you plan to use Squad 1 for combat, send it first to lock in your highest-tier troops, then send Squads 2 and 3. Afterward, recall Squad 1 for use in battle. This is not an effective method if you are teleporting right into the heat of the battle.</p>\n\n  <h2>Tiered Troop Buffers</h2>\n  <p>While not a perfect defense, using the <a href=\"https://LWSerenity.com/#tip-troop-training-strategy\">tiered troop strategy</a> creates a buffer of lower-tier troops. These are the first to die if your base is breached, helping protect your top-tier units.</p>\n</div>",
+      "lastUsed": null,
+      "customId": "protect-troops",
+      "adminOnly": false,
+      "canUseInBriefing": false,
+      "unlisted": false,
+      "isHtml": true
+    },
+    {
+      "id": "efaef39c-d434-4138-9986-7f753576bdfd",
+      "title": "Warzone Participation Letter",
+      "content": "<div>\n  <h1>Participation Strategy</h1>\n  <p>Hello all!</p>\n<p>While Chris, Lightning and I have polar opposite ideas on how to save the server, one thing we agree on is that we need more participation.</p> \n\n<p>Lightning told me that he used me as an example several times today of someone who didn't have T10s yet managed to place 46th. What he didn't know is that I did much of my damage with two level one troops and <em>almost all of it</em> with troop counts in the double digits or lower. With the exception of some march speed, I didn't have any advantage over a level 10 player.</p>\n<div>\n    <img src=\"/tip_images/two_troop_victory.jpg\" loading=\"lazy\" alt=\"\" data-alt-text=\"\">\n  </div>\n<p>While our smaller alliances don't have the perks and spenders that EviL has, so any representation in the top 100 is impressive, if we share our strategies, we as a server, can do much better on the battlefield, so I'll go first.</p>\n\n  <h2>Prep Before Entering Battle:</h2>\n  <p>1. <strong>Stash as many troops as you can</strong> (see <a href=\"/?protect#tip-protect-troops\">Protecting Troops Guide</a>)<br>\n     2. <strong>Spend down</strong> as many resources as you can<br>\n     3. Set <strong>all squads to one hero</strong><br>\n     4. Train <strong>2 level 1 troops in each barrack</strong>\n  </p>\n\n\n<div style=\"min-width:200px\">\n  <h2>The Battle</h2>\n  <p>1. <strong>Teleport to another server</strong> and set a 4:30 timer (e.g., “Alexa, set a timer for four minutes and 30 seconds”)<br>\n     2. Teleport back into the server near a base you can cross while pulling to a resource tile.<br>\n     3. Pull to the tile, select to attack the base, and <strong>mash the select squad button</strong> until your march time is 0 (or 5 seconds if not directly over the base)<br>\n     4. If your attack fails, go to your barracks, <strong>claim your 2 level 1 troops (and start two more)</strong>, and send out another squad<br>\n     5. Once the base is ashed, move to another tile and <strong>repeat until you are ashed</strong><br>\n     6. When your timer goes off, <strong>start over from Battle step 1</strong>\n  </p>\n<p>I <em>really</em> wish I had a longer video and of a success</p>\n<div>\n  <div>\n    <video width=\"200\" controls=\"\" preload=\"none\" data-alt-text=\"Capitol War Tile Pull\" poster=\"/tip_images/capitol_war_tile_pull.jpg\">\n          <source src=\"/tip_images/capitol_war_tile_pull.mp4\" type=\"video/mp4\">\n          Your browser does not support the video tag.\n        </video>\n  </div>\n<div style=\"clear: both;\"></div>\n  <h2>Extra Tips:</h2>\n  <p>\n    • If you're further from a target, send Squad 1 first, grab two more troops, and send Squad 2 to another resource tile.<br>\n    • Using two troops is better than one — if your first fails, you can reuse the squad with the remaining troop (shown in video)<br>\n    • In the <strong>mud</strong>, exiting battle is slower, giving you a brief window to hit the base again with <strong>zero march time</strong><br>\n    • If you respawn near a pink base, ash it while waiting for your timer<br>\n    • I find this strategy faster using a touchscreen — one of the few cases where mobile is better than PC\n  </p>\n</div></div></div>",
+      "lastUsed": null,
+      "customId": "discord-letter-2025-04-14",
+      "adminOnly": false,
+      "canUseInBriefing": true,
+      "unlisted": true,
+      "isHtml": true
+    },
+    {
+      "id": "1ddf9008-28a1-495b-a3ed-51cd64e413f0",
+      "title": "Warzone Duel: Capitol War - For Average Players/Troop Dead",
+      "content": "<div>\n<p>Capitol war can only be won if we have overwhelming participation. You may feel that not having a strong enough squad, or losing all of their troops means you are not helpful, but even then, you are the force that slows down and even stops the enemy so the heavy hitters can do their job.</p>\n<strong>It only takes a single level 1 troop to ash the enemy!</strong>\n<div>\n    <img src=\"/tip_images/two_troop_victory.jpg\" loading=\"lazy\" alt=\"\" data-alt-text=\"\">\n  </div>\n<p>While our smaller alliances don't have the perks and spenders that EviL has, so any representation in the top 100 is impressive, if we share our strategies, we as a server, can do much better on the battlefield, so I'll go first.</p>\n\n  <h2>Prep Before Entering Battle:</h2>\n  <p>1. <strong>Stash as many troops as you can</strong> (see <a href=\"/?protect#tip-protect-troops\">Protecting Troops Guide</a>)<br>\n     2. <strong>Spend down</strong> as many resources as you can<br>\n     3. Set <strong>all squads to one hero</strong><br>\n     4. Train <strong>2 level 1 troops in each barrack</strong>\n  </p>\n\n\n<div style=\"min-width:200px\">\n  <h2>The Battle</h2>\n  <p>1. <strong>Teleport to another server</strong> and set a 4:30 timer (e.g., “Alexa, set a timer for four minutes and 30 seconds”)<br>\n     2. Teleport back into the server near a base you can cross while pulling to a resource tile.<br>\n     3. Pull to the tile, select to attack the base, and <strong>mash the select squad button</strong> until your march time is 0 (or 5 seconds if not directly over the base)<br>\n     4. If your attack fails, go to your barracks, <strong>claim your 2 level 1 troops (and start two more)</strong>, and send out another squad<br>\n     5. Once the base is ashed, move to another tile and <strong>repeat until you are ashed</strong><br>\n     6. When your timer goes off, <strong>start over from Battle step 1</strong>\n  </p>\n<p>I <em>really</em> wish I had a longer video and of a success</p>\n<div>\n  <div>\n    <video width=\"200\" controls=\"\" preload=\"none\" data-alt-text=\"Capitol War Tile Pull\" poster=\"/tip_images/capitol_war_tile_pull.jpg\">\n          <source src=\"/tip_images/capitol_war_tile_pull.mp4\" type=\"video/mp4\">\n          Your browser does not support the video tag.\n        </video>\n  </div>\n<div style=\"clear: both;\"></div>\n  <h2>Extra Tips:</h2>\n  <p>\n    • If you're further from a target, send Squad 1 first, grab two more troops, and send Squad 2 to another resource tile.<br>\n    • Using two troops is better than one — if your first fails, you can reuse the squad with the remaining troop (shown in video)<br>\n    • In the <strong>mud</strong>, exiting battle is slower, giving you a brief window to hit the base again with <strong>zero march time</strong><br>\n    • If you respawn near a pink base, ash it while waiting for your timer<br>\n    • I find this strategy faster using a touchscreen — one of the few cases where mobile is better than PC\n  </p>\n</div></div></div><br><br><a href=\"/?cw-index#tip-warzone-duel-capitol-war-index\">Back to index</a>",
+      "lastUsed": null,
+      "customId": "warzone-duel-capitol-war-everyone",
+      "adminOnly": false,
+      "canUseInBriefing": true,
+      "unlisted": false,
+      "isHtml": true
+    },
+    {
+      "id": "e7dda9e1-8fad-4cb6-a4b3-5ac70ade3dbf",
+      "title": "Warzone Duel: Capitol War - Blockade Guide",
+      "content": "<div>\n  <p>To block much more space by the capitol with stationary items:</p>\n\n  <h3>Prep:</h3>\n  <p>\n    • <a href=\"/?radar#tip-saving-radar-tasks\">Save Radar Tasks</a> after you've secured your VS win<br>\n    • <strong>Do NOT run Secret Tasks after reset</strong>\n  </p>\n\n  <h3>Your Job: Slow Down the Enemy</h3>\n  <p>The main goal for smaller players is to <strong>delay and block enemy attacks</strong>.</p>\n\n  <h3>1. Block the Capitol Perimeter</h3>\n  <p><em>Start this 1–2 hours before battle:</em></p>\n  <p>\n    • Clear all Radar Tasks <strong>except</strong> Gathering, Doom Legion and Digs<br>\n    • <strong>Do NOT</strong> hit \"Go\" on the radar screen while one is selected (easy mistake if using Quick Perform)<br>\n    • A few people at a time Teleport to the edge of the Capitol in an area not yet filled<br>\n    • NOW Click \"Go\" on each Secret Task. <strong>Do NOT Deploy them</strong> you will have until reset to start these)<br>\n    • NOW Click \"Go\" on each Gather/Doom Legion/Dig Radar Task. <strong>Do NOT start them</strong> (you will have 8 hours to do these)  R4s, make sure your members don't do the digs!<br>\n    • Teleport away - your open tasks will block spots around the Capitol\n  </p>\n\n  <h3>2. Fill the Gaps</h3>\n  <p><em>1 hour before the battle:</em></p>\n  <p>\n    If you're not fighting or are planning to fight from under your shield through garrisons and rallies, teleport near the Capitol:<br>\n    • Fill in open gaps left in the blockade<br>\n    • Be strategic - 1 base placed in the right spot (7x7 area) can block 4 enemy bases<br>\n    • R4s and R5s: use Marshal' Guard to help fill remaining gaps\n  </p>\n  <h3>3. WAR!</h3>\n  <p><a href=\"/?war#tip-warzone-duel-capitol-war-everyone\">How to fight for the average player or when you run out of troops.</a></p></div>\n\n<br><br><a href=\"/?cw-index#tip-warzone-duel-capitol-war-index\">Back to index</a>",
+      "lastUsed": null,
+      "customId": "warzone-duel-capitol-war-blockade",
+      "adminOnly": false,
+      "canUseInBriefing": true,
+      "unlisted": false,
+      "isHtml": true
+    },
+    {
+      "id": "2043ed8e-f0d0-43cc-b771-6b09fcb97bf0",
+      "title": "Warzone Duel: Capitol War - Index",
+      "content": "If we are invaded, we need to <a href=\"/?blockade#tip-warzone-duel-capitol-war-blockade\">Blockade the Capitol</a><br><br>\n<a href=\"/?war#tip-warzone-duel-capitol-war-everyone\">How to fight for the average player or when you run out of troops.</a><br><br>\nIf you are unable to make the main event, <a href=\"/?after#tip-warzone-duel-after-main-event\">you can still easily get all the rewards</a>",
+      "lastUsed": null,
+      "customId": "warzone-duel-capitol-war-index",
+      "adminOnly": false,
+      "canUseInBriefing": true,
+      "unlisted": false,
+      "isHtml": true
+    },
+    {
+      "id": "ea45ee5e-f3f4-485d-9047-ee464d53ec84",
+      "title": "Switching Survivors in Tech Centers",
+      "content": "<div>\n  <p>If you have more than one <strong>Tech Center</strong>, the survivors assigned to each one only apply to the techs started in that specific center.</p>\n  <p>However, survivor boosts are only applied <strong>when you start</strong> a tech - not while it's in progress.</p>\n  <p>This means you can move your best survivors between Tech Centers before starting research to get the <strong>maximum boost</strong> in every center.</p>\n</div>\n\n        <video controls=\"\" preload=\"none\" data-alt-text=\"\" poster=\"/tip_images/switch-suvivors.jpg\">\n          <source src=\"/tip_images/switch-suvivors.mp4\" type=\"video/mp4\">\n          Your browser does not support the video tag.\n        </video>",
+      "lastUsed": null,
+      "customId": "switching-survivors-in-tech-centers",
+      "adminOnly": false,
+      "canUseInBriefing": true,
+      "unlisted": false,
+      "isHtml": true
+    },
+    {
+      "id": "64e5030a-e6af-4a2f-a1fa-e2c568e44626",
+      "title": "Top 20 Proposal",
+      "content": "<div>\n  <h2>Top20 Proposal</h2>\n  <p>\n    To ensure the success of our server, it is crucial for the top 20 alliances to work together. While NAP20 was great for growth, we are now introducing <strong>Top20</strong>—an agreement that goes beyond avoiding conflict to actively supporting one another.\n  </p>\n\n  <h3>Encouraging Support</h3>\n  <p>\n    While not mandatory, alliances in Top20 are encouraged to assist one another when facing attackers, especially powerful alliances from other servers.\n  </p>\n\n  <h3>Key Rules of Top20</h3>\n\n  <ol>\n    <li>\n      <strong>No Attacks Within Top20</strong><br>\n      Members of Top20 may not, unprovoked, attack another alliance’s:<br>\n      • Bases<br>\n      • Resource tiles<br>\n      • Trade trucks<br>\n      • Secret tasks\n    </li>\n\n    <li>\n      <strong>Automatic Membership</strong><br>\n      Any alliance currently ranked in the top 20 by power and has held that position for 24 hours is automatically part of Top20 unless specifically excluded.\n    </li>\n\n    <li>\n      <strong>Dealing with Rogue Members</strong><br>\n      • If a rogue member of an alliance attacks another Top20 member, the individual—not the alliance—will forfeit protection for 24 hours or until they are ashed, whichever comes later.<br>\n      • If the rogue behavior continues, the alliance must remove the offending member.\n    </li>\n\n    <li>\n      <strong>Dealing with Alliance-Wide Violations</strong><br>\n      • If multiple members of an alliance repeatedly violate Top20 rules, or if the alliance intentionally coordinates an attack, the entire alliance will lose protection for 24 hours.<br>\n      • Continued violations will result in permanent exclusion.\n    </li>\n\n    <li>\n      <strong>Accountability</strong><br>\n      • For an entire alliance to be held accountable, there must be agreement among either:<br>\n      * R5s from at least 2 of the top 5 alliances, OR<br>\n      * R4s/R5s from at least 4 of the top 5 alliances.<br>\n      • Members who retaliate after provocation will not be penalized; instead, the original provocateur forfeits protection.\n    </li>\n  </ol>\n\n  <h3>Reporting and Evidence</h3>\n  <p>\n    If attacked, members should collect verifying screenshots to support claims of provocation or rule-breaking.\n  </p>\n\n  <p>\n    Standing together under Top20 will strengthen our server.\n  </p>\n</div>",
+      "lastUsed": null,
+      "customId": "top-20-proposal",
+      "adminOnly": false,
+      "canUseInBriefing": false,
+      "unlisted": true,
+      "isHtml": true
+    },
+    {
+      "id": "729b0379-1321-42c5-9096-df52b26b0038",
+      "title": "Free Furnace Use",
+      "content": "<p>If the furnace in your base is run for under a minute, you get all the benefits without consuming any coal. This means if you need to survive a blizzard, heat up your base for resource collection, give your troops a morale boost, etc., you can turn your furnace, including overdrive, on for just under a minute, turn it off, and turn it back on again.</p>\n<p>\n<strong>⚠️WARNING:</strong> Using automation tools is against the last war Terms of Service</p>\n<p>If you are on Android, you can automate this process using <a href=\"https://play.google.com/store/apps/details?id=com.opautoclicker.autoclicker\">OP Autoclicker</a>. To learn how, watch the following video</p>\n\n        <video width=\"400\" controls=\"\" preload=\"none\" data-alt-text=\"OP Autoclicker demonstration\" poster=\"https://LWSerenity.com/tip_images/free_heat_with_op.jpg\">\n          <source src=\"https://LWSerenity.com/tip_images/free_heat_with_op.mp4\" type=\"video/mp4\">\n          Your browser does not support the video tag.\n        </video>\n\nYou can also use one of many autoclicking options on windows. I personally have a script that I wrote in <a href=\"https://www.autohotkey.com/\">AutoHotKey</a> which, if you ask SUPER nicely, I might be willing to share with you.",
+      "lastUsed": null,
+      "customId": "free-furnace-use",
+      "adminOnly": false,
+      "canUseInBriefing": false,
+      "unlisted": true,
+      "isHtml": true
+    },
+    {
+      "id": "33d6ee99-1d11-44ed-80cf-d1d110d81c3c",
+      "title": "Train Conductor Guide",
+      "content": "As conductor of the train, it is your job to make the train gold and appoint a VIP or defender.\n\nTo make a train gold, you must refresh it 5 times using the refresh button at the bottom of the train platform screen. Each refresh costs 5 tickets, so you'll need 25 total. If you don't have enough, wait a few minutes while others join and gift you tickets.\n\nOnce it's gold, you get all unplundered prizes, so you can keep refreshing until you find a good set. If you see something \"good enough,\" it's best to accept it.\n\nVIP vs Defender:\nThe only difference is that Defenders can use squads to defend. Most trains get robbed no matter who defends, so don't stress the choice too much.\n\nTo assign a VIP or Defender:\n• Click the chair icon in the top left of the platform screen\n• Follow the prompts\n• Wait for them to accept\n• Ask which 2 cars they want rewards from and set the green checkmarks on those cars accordingly",
+      "lastUsed": null,
+      "customId": "train-conductor-guide",
+      "adminOnly": false,
+      "canUseInBriefing": false,
+      "unlisted": false,
+      "isHtml": false
+    },
+    {
+      "id": "63a29bbb-37a0-47ea-be4e-d63df0e23fb1",
+      "title": "Server Birthdays",
+      "content": "972 - 2024-10-04 (Likely)\n981 - 2024-10-06\n982-986 - 2024-10-07\n987-989 - 2024-10-08\n990-993 - 2024-10-09\n994-996 - 2024-10-10\n997-999 - 2024-10-11\n1000-1001 - 2024-10-12",
+      "lastUsed": null,
+      "customId": "server-birthdays",
+      "adminOnly": false,
+      "canUseInBriefing": true,
+      "unlisted": false,
+      "isHtml": false
+    },
+    {
+      "id": "34891a26-01e1-4990-b643-e4291aa5d94c",
+      "title": "New applicant questions",
+      "content": "Thanks for applying!  What has you looking for a new place?  Have you been in an alliance before?  If so why did you leave?",
+      "lastUsed": null,
+      "customId": "new-applicant-questions",
+      "adminOnly": true,
+      "canUseInBriefing": true,
+      "unlisted": false,
+      "isHtml": false
+    },
+    {
+      "id": "c0995503-6a85-4e3d-b43f-fa01a1d966f0",
+      "title": "Decoration Tier Guide",
+      "content": "",
+      "lastUsed": null,
+      "customId": "decoration-tier-guide",
+      "imageUrl": "https://www.lwserenity.com/tip_images/deco_guide.jpg",
+      "adminOnly": false,
+      "canUseInBriefing": true,
+      "unlisted": false,
+      "isHtml": false
+    },
+    {
+      "id": "f03de286-361e-47a8-8d07-3ccc16c55bd5",
+      "title": "Base upgrade level prerequisites",
+      "content": "",
+      "lastUsed": null,
+      "customId": "base-upgrade-level-prerequisites",
+      "imageUrl": "https://www.lwserenity.com/tip_images/base_prereqs.png",
+      "adminOnly": false,
+      "canUseInBriefing": false,
+      "unlisted": false,
+      "isHtml": false
+    },
+    {
+      "id": "5f54e568-2b91-421a-988c-b29a4c764a16",
+      "title": "Quick Equipment Swap",
+      "content": "<p>Quick way to distribute your gear effectively:\n</p><ol>\n<li>Remove all gear from the squad</li>\n<li>from most powerful, to least powerful, do the following:\n<ul>\n    <li>If support: Skip</li>\n    <li>Equip all</li>\n    <li>If attacker (fire icon) remove both items on the right</li>\n    <li>If defender, remove both items on the left</li>\n\n</ul>\n</li><li>starting at most powerful again, go through and Equip all again, making sure support is the last.</li>\n</ol><p></p>\n\n        <video width=\"400\" controls=\"\" preload=\"none\" data-alt-text=\"\" poster=\"https://LWSerenity.com/vid/quick_equipment_change.jpg\">\n          <source src=\"https://LWSerenity.com/vid/quick_equipment_change.mp4\" type=\"video/mp4\">\n          Your browser does not support the video tag.\n        </video>",
+      "lastUsed": null,
+      "customId": "quick-equipment-swap",
+      "imageUrl": "https://LWSerenity.com/vid/quick_equipment_change.mp4",
+      "adminOnly": false,
+      "canUseInBriefing": true,
+      "unlisted": false,
+      "isHtml": true
+    },
+    {
+      "id": "8c4ac57a-1cfd-4e4e-871a-0fe94ea0cb90",
+      "title": "Loot Boss (Invading Zombie Boss) ranges",
+      "content": "<p>This is from the <a href=\"https://lastwardev.aihelp.net/webchatv4/#/appKey/LASTWARDEV_app_3a8bd35be72e471abfaaa5f30971c54d/domain/lastwardev.aihelp.net/appId/lastwardev_platform_342905211d470af49c7bd03dbb6bb026?entranceId=E007&amp;welcomeMessage=How%20can%20we%20assist%20you%3F\">old Last War FAQ</a>.\nThe new FAQ does not have this information.\nSome conclusions you can draw:\n</p><ul>\n<li>If you spawn a certain level, you can assume your top is no higher than 20 above.<br>&nbsp; &nbsp; e.g. if you spawn a 70, you can be sure that you can not spawn above 90.</li>\n<li><strong>* In my experience *</strong>, spawning your lowest and highest is pretty rare<br>&nbsp; &nbsp; e.g if you 70-80, your highest is is likely 85.</li></ul><p></p>\n<p>Additionally, I recommend always going through your intel mail individually. This way you can adjust if you see what you thought was your highest was killed. In addition, it is pretty motivating seeing all that goblin loot!</p>\n<img src=\"https://www.lwserenity.com/tip_images/loot_boss_range.png\" loading=\"lazy\" alt=\"\" data-alt-text=\"\">",
+      "lastUsed": null,
+      "customId": "loot-boss-invading-zombie-boss-ranges",
+      "imageUrl": "https://www.lwserenity.com/tip_images/loot_boss_range.png",
+      "adminOnly": false,
+      "canUseInBriefing": false,
+      "unlisted": false,
+      "isHtml": true
+    },
+    {
+      "id": "5281758d-efed-45f0-91aa-dc447e4a7d8a",
+      "title": "Drone Parts Costs",
+      "content": "",
+      "lastUsed": null,
+      "customId": "drone-costs",
+      "imageUrl": "https://LWSerenity.com/img/drone-costs.png",
+      "adminOnly": false,
+      "canUseInBriefing": false,
+      "unlisted": false,
+      "isHtml": false
+    },
+    {
+      "id": "9373aec3-fde7-4fd0-9f42-c6462d0a55cc",
+      "title": "Sky Predator Instructions",
+      "content": "Sky Predator starts now!\n\n       *** No rallies or digs ***\n\nIce, gets to occasionally use his Warlord Bomb with our help.\nStay on the map screen and when you see a bomb icon on the left or over Ice's Base, click it rapidly to transfer energy and get contribution points\n\nRallies take 3 minutes to send but unlike Marshal, they don't autofill. So rally with your THIRD and join with your first.\n\nIf you see one get down to 30 seconds, feel free to jump in with your second squad.",
+      "lastUsed": null,
+      "customId": "sky-predator",
+      "adminOnly": false,
+      "canUseInBriefing": false,
+      "unlisted": false,
+      "isHtml": false
+    },
+    {
+      "id": "6fe634c7-17e2-4271-b0bd-6063fa13bf10",
+      "title": "Season 3 (S3) Top 6 map",
+      "content": "<p>Light Blue: LGCY<br>\nDark Blue: BLTC<br>\nGreen: Srty<br>\nDark Red: SBS<br>\nYellow: BZRK<br>\nTurquise: PH3X</p><img src=\"https://LWSerenity.com/img/s3-map.png\" loading=\"lazy\" alt=\"\" data-alt-text=\"\">",
+      "lastUsed": null,
+      "customId": "s3-top-6-map",
+      "adminOnly": false,
+      "canUseInBriefing": false,
+      "unlisted": true,
+      "isHtml": true
     }
   ],
-  "exportDate": "2025-04-13T05:38:35.315Z"
+  "exportDate": "2025-09-09T15:51:01.396Z"
 }
