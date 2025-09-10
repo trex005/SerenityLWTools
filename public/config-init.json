@@ -90,7 +90,8 @@
         ],
         "interval": 3,
         "startDate": "2025-09-11T04:00:00.000Z"
-      }
+      },
+      "remindTomorrow": true
     },
     {
       "id": "ev-4",
@@ -176,7 +177,8 @@
         "type": "weekly",
         "daysOfWeek": ["friday"],
         "interval": 1
-      }
+      },
+      "remindTomorrow": true
     },
     {
       "id": "ev-8",
@@ -498,7 +500,8 @@
       },
       "dateIncludeOverrides": {
         "2025-04-12": true
-      }
+      },
+      "remindTomorrow": true
     },
     {
       "id": "ev-1739556183702",
@@ -532,7 +535,7 @@
     },
     {
       "id": "ev-1739556209550",
-      "title": "Honorable campaign - last day",
+      "title": "Honorable campaign - FINAL DAY",
       "description": "",
       "isAllDay": true,
       "startTime": "09:00",
@@ -551,14 +554,15 @@
       "order": {
         "monday": 7,
         "wednesday": 5,
-        "friday": 5
+        "friday": 4
       },
       "archived": false,
       "recurrence": {
         "type": "weekly",
         "daysOfWeek": ["monday", "wednesday", "friday"],
         "interval": 1
-      }
+      },
+      "remindEndOfDay": true
     },
     {
       "id": "ev-1739556307704",
@@ -646,8 +650,8 @@
     },
     {
       "id": "ev-1739556987954",
-      "title": "General's Trial - Solo Event",
-      "description": "• Select Level 8, unless you can solo level 8, in which case you should select level 9.",
+      "title": "General's Trial - Choose ONE level after what you can solo.",
+      "description": "",
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "10:00",
@@ -660,7 +664,7 @@
       "variations": {},
       "order": {
         "wednesday": 2,
-        "friday": 6,
+        "friday": 5,
         "thursday": 3
       },
       "archived": false,
@@ -669,7 +673,8 @@
         "daysOfWeek": ["wednesday", "thursday", "friday"],
         "interval": 2,
         "startDate": "2025-03-09T05:00:00.000Z"
-      }
+      },
+      "remindTomorrow": true
     },
     {
       "id": "ev-1739558845321",
@@ -745,7 +750,8 @@
         "type": "weekly",
         "daysOfWeek": ["friday"],
         "interval": 1
-      }
+      },
+      "remindTomorrow": true
     },
     {
       "id": "ev-1740278810425",
@@ -824,7 +830,8 @@
         ],
         "interval": 2,
         "startDate": "2024-10-13T04:00:00.000Z"
-      }
+      },
+      "remindTomorrow": true
     },
     {
       "id": "4329a998-b697-4b0d-ae72-c629390328b4",
@@ -912,7 +919,7 @@
         "sunday": 7,
         "wednesday": 7,
         "thursday": 8,
-        "friday": 8
+        "friday": 7
       },
       "archived": false,
       "recurrence": {
@@ -933,7 +940,8 @@
           "offWeeks": 1,
           "phaseStartDate": "2025-02-24T05:00:00.000Z"
         }
-      }
+      },
+      "remindEndOfDay": true
     },
     {
       "id": "5aec60d0-4d5f-4299-8f91-cc8590471e7b",
@@ -984,7 +992,7 @@
       },
       "variations": {},
       "order": {
-        "friday": 7,
+        "friday": 6,
         "tuesday": 10
       },
       "archived": false,
@@ -1544,7 +1552,8 @@
       },
       "variations": {},
       "order": {
-        "saturday": 6
+        "saturday": 6,
+        "friday": 8
       },
       "archived": false,
       "recurrence": {
@@ -1559,7 +1568,8 @@
         ],
         "interval": 5,
         "startDate": "2025-09-09T04:00:00.000Z"
-      }
+      },
+      "remindEndOfDay": true
     },
     {
       "id": "8c78efe1-5b5c-427c-b5e1-7249a7922606",
@@ -1895,7 +1905,8 @@
           "offWeeks": 1,
           "phaseStartDate": "2025-07-31T01:34:25.719Z"
         }
-      }
+      },
+      "remindTomorrow": true
     },
     {
       "id": "e05c1e28-c800-48d1-8d3a-53898d5f2922",
@@ -1943,7 +1954,7 @@
       },
       "variations": {},
       "order": {
-        "friday": 4
+        "friday": 3
       },
       "archived": false,
       "recurrence": {
@@ -1978,7 +1989,8 @@
         "daysOfWeek": ["tuesday", "friday"],
         "interval": 1,
         "startDate": "2025-09-04T00:00:00.000-04:00"
-      }
+      },
+      "remindTomorrow": true
     }
   ],
   "tips": [
@@ -2615,5 +2627,5 @@
       "isHtml": true
     }
   ],
-  "exportDate": "2025-09-09T15:51:01.396Z"
+  "exportDate": "2025-09-10T08:23:05.053Z"
 }

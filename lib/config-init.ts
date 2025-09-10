@@ -9,6 +9,8 @@ export const initialConfig = {
       startTime: "09:00",
       endTime: "10:00",
       days: ["monday", "tuesday", "wednesday", "thursday", "friday"],
+      remindTomorrow: false,
+      remindEndOfDay: false,
       includeInExport: {
         monday: true,
         tuesday: true,

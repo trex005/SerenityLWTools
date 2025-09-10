@@ -161,7 +161,9 @@ export function Reminders() {
               value={selectedDate ? format(selectedDate, "yyyy-MM-dd") : ""}
               onChange={(e) => {
                 if (e.target.value) {
-                  setSelectedDate(startOfDay(new Date(e.target.value)))
+                  // Parse date manually to avoid timezone issues
+                  const [year, month, day] = e.target.value.split('-').map(Number)
+                  setSelectedDate(startOfDay(new Date(year, month - 1, day)))
                 }
               }}
               className="w-[240px]"

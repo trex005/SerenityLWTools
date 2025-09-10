@@ -9,6 +9,15 @@ All notable changes to this project will be documented in this file.
   - **Date Range Selector**: Clean button-based interface with native date inputs for custom ranges
     - Streamlined to just "Today", "Next 3 days", and "Custom" options
     - Default view changed from 7 days to 3 days for better focus
+- **Enhanced Regenerate Agenda Dialog**: Added "Remember this decision" functionality
+  - New checkbox to remember user's choice (regenerate or keep current content)
+  - Remembered decisions are automatically applied on future date changes
+  - Reset option available in Command tab to clear the remembered setting
+  - Improves workflow by reducing repetitive dialog confirmations
+- **Fixed Server Import Issue**: Server-loaded events now properly preserve reminder field data
+  - Server initialization now uses the same import logic as manual import
+  - Ensures `remindTomorrow` and `remindEndOfDay` fields are preserved from config-init.json
+  - Fixed inconsistency between manual import (working) and server import (not working)
     - Custom option uses simple date inputs instead of complex calendar widget
     - Navigation arrows work when complete range is selected
     - Clean horizontal layout with date display

@@ -61,13 +61,17 @@ export function DateRangeSelector({ value, onChange, className, quickSelectDays 
   // Handle custom date input changes (temporary state)
   const handleTempStartDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.value) {
-      setTempStartDate(new Date(e.target.value))
+      // Parse date manually to avoid timezone issues
+      const [year, month, day] = e.target.value.split('-').map(Number)
+      setTempStartDate(new Date(year, month - 1, day))
     }
   }
 
   const handleTempEndDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.value) {
-      setTempEndDate(new Date(e.target.value))
+      // Parse date manually to avoid timezone issues
+      const [year, month, day] = e.target.value.split('-').map(Number)
+      setTempEndDate(new Date(year, month - 1, day))
     }
   }
 

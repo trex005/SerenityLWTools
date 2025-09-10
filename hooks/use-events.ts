@@ -189,11 +189,9 @@ export const useEvents = create<EventsState>()(
           const config = await fetchConfig(forceRefresh)
 
           if (config && config.events && Array.isArray(config.events)) {
-            set({
-              events: config.events,
-              filteredEvents: config.events,
-              initialized: true,
-            })
+            // Use setEvents to ensure proper processing of all fields
+            get().setEvents(config.events)
+            set({ initialized: true })
           } else {
             // Mark as initialized even if no events were found
             set({ initialized: true })
