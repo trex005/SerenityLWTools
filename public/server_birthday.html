@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Server Time Calculator (GMT-2)</title>
+<style>
+  :root {
+    --bg: #0b0f14;
+    --card: #121821;
+    --muted: #9fb0c3;
+    --text: #e6eef8;
+    --accent: #7cc0ff;
+    --good: #7bffb9;
+    --warn: #ffd96a;
+  }
+  html, body { height: 100%; }
+  body {
+    margin: 0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+    background: radial-gradient(1200px 800px at 10% 0%, #0e1420 0%, var(--bg) 55%);
+    color: var(--text);
+  }
+  .wrap { max-width: 960px; margin: 24px auto; padding: 0 16px 32px; }
+  h1 { font-size: 24px; letter-spacing: 0.2px; margin: 8px 0 16px; }
+  .card {
+    background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+    border-radius: 16px; padding: 18px; margin: 14px 0;
+  }
+  .grid { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+  label { display: block; font-size: 12px; color: var(--muted); margin: 0 0 6px; }
+  input[type="date"], input[type="datetime-local"], select {
+    width: 100%; background: var(--card); border: 1px solid rgba(255,255,255,0.1); color: var(--text);
+    padding: 10px 12px; border-radius: 10px; outline: none;
+  }
+  select option {
+    background: var(--card); color: var(--text);
+  }
+  .row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  button {
+    background: var(--accent); color: #08121d; border: 0; border-radius: 10px; padding: 10px 14px; font-weight: 700;
+    cursor: pointer; letter-spacing: 0.3px;
+  }
+  .note { font-size: 12px; color: var(--muted); }
+  .list { list-style: none; padding: 0; margin: 0; }
+  .list li { padding: 8px 10px; border-bottom: 1px dashed rgba(255,255,255,0.1); }
+  .pill { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 12px; font-weight: 700; margin-left: 6px; }
+  .ok { background: rgba(123,255,185,0.15); color: var(--good); border: 1px solid rgba(123,255,185,0.25); }
+  .warn { background: rgba(255,217,106,0.15); color: var(--warn); border: 1px solid rgba(255,217,106,0.25); }
+  table { width: 100%; border-collapse: collapse; margin-top: 8px; }
+  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+  th { color: var(--muted); font-weight: 600; }
+  .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Server Time Calculator (fixed GMT-2)</h1>
+
+    <div class="card">
+      <div class="grid">
+        <div>
+          <label>Known Server (optional)</label>
+          <select id="serverSelect">
+            <option value="">Select a server...</option>
+          </select>
+        </div>
+        <div>
+          <label>Server Birthday (date only, GMT-2)</label>
+          <input id="birthday" type="date" />
+        </div>
+        <div>
+          <label>Selected Date and Time (interpreted in GMT-2)</label>
+          <input id="selected" type="datetime-local" />
+        </div>
+      </div>
+      <div class="note" style="margin-top:12px;">Birthday is date only. All inputs are interpreted as GMT-2.</div>
+    </div>
+
+    <div id="results" class="card" aria-live="polite">
+      <div class="note">Enter values to see calculations.</div>
+    </div>
+  </div>
+
+<script>
+(function(){
+  const OFF_HOURS = -2;
+  const MS_HOUR = 3600e3;
+  const MS_DAY = 24 * MS_HOUR;
+
+  // Known server birthdays
+  const KNOWN_SERVERS = [
+    { servers: "966 - 969", birthday: "2024-10-03" },
+    { servers: "972", birthday: "2024-10-04" },
+    { servers: "976", birthday: "2024-10-05" },
+    { servers: "977-981", birthday: "2024-10-06" },
+    { servers: "982-986", birthday: "2024-10-07" },
+    { servers: "987-989", birthday: "2024-10-08" },
+    { servers: "990-993", birthday: "2024-10-09" },
+    { servers: "994-996", birthday: "2024-10-10" },
+    { servers: "997-999", birthday: "2024-10-11" },
+    { servers: "1000-1001", birthday: "2024-10-12" }
+  ];
+
+  function parseDateAsGMTMinus2(val){
+    if(!val) return NaN;
+    const m = val.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+    if(!m) return NaN;
+    const [_, y, mo, d] = m;
+    return Date.UTC(+y, +mo-1, +d, -OFF_HOURS, 0, 0, 0);
+  }
+
+  function parseLocalAsGMTMinus2(val){
+    const dt = val.trim();
+    if(!dt) return NaN;
+    const m = dt.match(/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})$/);
+    if(!m) return NaN;
+    const [_, y, mo, d, h, mi] = m;
+    return Date.UTC(+y, +mo - 1, +d, +h - OFF_HOURS, +mi, 0, 0);
+  }
+
+  function toInputValueInGMTMinus2(ms){
+    const d = new Date(ms + OFF_HOURS * MS_HOUR);
+    const y = d.getUTCFullYear();
+    const m = String(d.getUTCMonth()+1).padStart(2,'0');
+    const dd = String(d.getUTCDate()).padStart(2,'0');
+    const hh = String(d.getUTCHours()).padStart(2,'0');
+    const mm = String(d.getUTCMinutes()).padStart(2,'0');
+    return `${y}-${m}-${dd}T${hh}:${mm}`;
+  }
+
+  function startOfDayGMTMinus2(ms){
+    const d = new Date(ms + OFF_HOURS * MS_HOUR);
+    const y = d.getUTCFullYear();
+    const m = d.getUTCMonth();
+    const day = d.getUTCDate();
+    return Date.UTC(y, m, day, -OFF_HOURS, 0, 0, 0);
+  }
+
+  function diffYMD(birthMs, selMs){
+    if (selMs < birthMs) return {years:0, months:0, days:0};
+    const b = new Date(birthMs + OFF_HOURS * MS_HOUR);
+    const s = new Date(selMs + OFF_HOURS * MS_HOUR);
+    let y = s.getUTCFullYear() - b.getUTCFullYear();
+    let m = s.getUTCMonth() - b.getUTCMonth();
+    let d = s.getUTCDate() - b.getUTCDate();
+    if (d < 0) {
+      const prevMonth = new Date(Date.UTC(s.getUTCFullYear(), s.getUTCMonth(), 0));
+      d += prevMonth.getUTCDate();
+      m -= 1;
+    }
+    if (m < 0) {
+      m += 12;
+      y -= 1;
+    }
+    return {years:y, months:m, days:d};
+  }
+
+  const PHASES = ["Hero Advancement","City Building","Unit Progression","Tech Research","Drone Boost"];
+
+  function arDayAndPhase(birthMs, selMs){
+    const day0 = startOfDayGMTMinus2(birthMs);
+    const selDayStart = startOfDayGMTMinus2(selMs);
+    const daysSince = Math.floor((selDayStart - day0) / MS_DAY);
+    // Age in days excludes the current day
+    const ageDays = Math.max(0, daysSince - 1);
+    // Arms Race Day (1-7), birthday day is Day 1
+    const dayIndex = Math.max(0, daysSince - 1);
+    const arDay = (dayIndex % 7) + 1;
+    // Determine start phase index
+    const startPhaseIndex = (arDay - 1) % PHASES.length;
+    const idx = Math.floor((selMs - selDayStart) / (4 * MS_HOUR));
+    const phase = PHASES[((startPhaseIndex + idx) % PHASES.length + PHASES.length) % PHASES.length];
+    return {ageDays, arDay, phase, selDayStart, startPhaseIndex};
+  }
+
+  function arScheduleForDay(dayStartMs, startPhaseIndex){
+    const blocks = [];
+    for (let i = 0; i < 6; i++) {
+      const from = dayStartMs + i * 4 * MS_HOUR;
+      const to = from + 4 * MS_HOUR;
+      const phase = PHASES[(startPhaseIndex + i) % PHASES.length];
+      blocks.push({from, to, phase});
+    }
+    return blocks;
+  }
+
+  function lootGoblinStatus(birthMs, selMs){
+    const startMs = startOfDayGMTMinus2(birthMs + 11 * MS_DAY);
+    if (selMs < startMs) return {active:false, window:"Not yet begun"};
+    // Base week calculation on birthday, not start date
+    const birthDayStart = startOfDayGMTMinus2(birthMs);
+    const weekIndex = Math.floor((birthDayStart - Date.UTC(2024, 9, 2, 2, 0, 0, 0)) / (7 * MS_DAY));
+    const isActiveWeek = (weekIndex % 2) === 0;
+    const dow = new Date(selMs + OFF_HOURS * MS_HOUR).getUTCDay();
+    const isWedToFri = (dow >= 3 && dow <= 5);
+    return {active:isActiveWeek && isWedToFri, window:(isActiveWeek?"Active week":"Inactive week")+", Wed to Fri only"};
+  }
+
+  function shinyStatus(birthMs, selMs){
+    const day0 = startOfDayGMTMinus2(birthMs);
+    const daySel = startOfDayGMTMinus2(selMs);
+    const days = Math.floor((daySel - day0) / MS_DAY);
+    if (days < 2) return {active:false, note:"Starts on day 2"};
+    return {active:((days - 2) % 3) === 0, note:"Every third day"};
+  }
+
+  function fmtTime(ms){
+    const d = new Date(ms + OFF_HOURS * MS_HOUR);
+    const hh = String(d.getUTCHours()).padStart(2,'0');
+    const mm = String(d.getUTCMinutes()).padStart(2,'0');
+    return `${hh}:${mm}`;
+  }
+
+  function fmtDate(ms){
+    const d = new Date(ms + OFF_HOURS * MS_HOUR);
+    const y = d.getUTCFullYear();
+    const m = String(d.getUTCMonth()+1).padStart(2,'0');
+    const dd = String(d.getUTCDate()).padStart(2,'0');
+    return `${y}-${m}-${dd}`;
+  }
+
+  function populateServerDropdown(){
+    const serverSelect = document.getElementById('serverSelect');
+    KNOWN_SERVERS.forEach(server => {
+      const option = document.createElement('option');
+      option.value = server.birthday;
+      option.textContent = server.servers;
+      serverSelect.appendChild(option);
+    });
+  }
+
+  function onServerSelect(){
+    const serverSelect = document.getElementById('serverSelect');
+    const birthdayInput = document.getElementById('birthday');
+    if (serverSelect.value) {
+      birthdayInput.value = serverSelect.value;
+      calculate(); // Auto-calculate when server is selected
+    }
+  }
+
+  function initDefaults(){
+    populateServerDropdown();
+    document.getElementById('selected').value = toInputValueInGMTMinus2(Date.now());
+  }
+
+  function calculate(){
+    const bStr = document.getElementById('birthday').value;
+    const sStr = document.getElementById('selected').value;
+    const out = document.getElementById('results');
+
+    const bMs = parseDateAsGMTMinus2(bStr);
+    const sMs = parseLocalAsGMTMinus2(sStr);
+
+    if (Number.isNaN(bMs) || Number.isNaN(sMs)){
+      out.innerHTML = `<div class="warn pill">Error</div> Please enter Birthday (YYYY-MM-DD) and Selected (YYYY-MM-DDTHH:MM).`;
+      return;
+    }
+
+    const {ageDays, arDay, phase, selDayStart, startPhaseIndex} = arDayAndPhase(bMs, sMs);
+    const ymd = diffYMD(bMs, sMs);
+    const sched = arScheduleForDay(selDayStart, startPhaseIndex);
+
+    const lg = lootGoblinStatus(bMs, sMs);
+    const shiny = shinyStatus(bMs, sMs);
+
+    const list = [];
+    list.push(`<li><strong>Age in Days:</strong> <span class="mono">${ageDays}</span></li>`);
+    list.push(`<li><strong>Age in Y M D:</strong> <span class="mono">${ymd.years}y ${ymd.months}m ${ymd.days}d</span></li>`);
+    list.push(`<li><strong>Arms Race Day:</strong> <span class="mono">${arDay}</span></li>`);
+    list.push(`<li><strong>Arms Race Phase (now):</strong> ${phase}</li>`);
+
+    let schedHtml = `<table><thead><tr><th>From</th><th>To</th><th>Phase</th></tr></thead><tbody>`;
+    for (const b of sched){
+      schedHtml += `<tr><td>${fmtTime(b.from)}</td><td>${fmtTime(b.to)}</td><td>${b.phase}</td></tr>`;
+    }
+    schedHtml += `</tbody></table>`;
+
+    const lgBadge = lg.active ? `<span class="pill ok">Active</span>` : `<span class="pill warn">Inactive</span>`;
+    const shinyBadge = shiny.active ? `<span class="pill ok">Active</span>` : `<span class="pill warn">Inactive</span>`;
+
+    out.innerHTML = `
+      <div class="note">All calculations use a fixed GMT-2 timezone. Day starts at 00:00 GMT-2. Birthday day is Day 1. Age in Days excludes the current day.</div>
+      <ul class="list" style="margin-top:8px;">
+        ${list.join("\n")}
+        <li><strong>Arms Race schedule for ${fmtDate(selDayStart)}:</strong>${schedHtml}</li>
+        <li><strong>Loot Goblin Status:</strong> ${lgBadge} <span class="note">${lg.window}</span></li>
+        <li><strong>SHINY Status:</strong> ${shinyBadge} <span class="note">${shiny.note}</span></li>
+      </ul>
+    `;
+  }
+
+  document.getElementById('serverSelect').addEventListener('change', onServerSelect);
+  window.addEventListener('load', initDefaults);
+  document.getElementById('birthday').addEventListener('change', calculate);
+  document.getElementById('selected').addEventListener('change', calculate);
+  document.getElementById('birthday').addEventListener('input', calculate);
+  document.getElementById('selected').addEventListener('input', calculate);
+})();
+</script>
+</body>
+</html>
