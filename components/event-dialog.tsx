@@ -646,7 +646,7 @@ export function EventDialog({ event, open, onOpenChange, initialDay = "monday", 
                 <div className="space-y-4">
                   <h3 className="text-lg font-medium">Frequency</h3>
                   <div className="grid gap-2">
-                    <RecurrenceEditor value={formData.recurrence} onChange={handleRecurrenceChange} />
+                    <RecurrenceEditor value={formData.recurrence} onChange={handleRecurrenceChange} isNewEvent={!isEditing} />
                   </div>
                 </div>
 

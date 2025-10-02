@@ -47,8 +47,8 @@
       "title": "Zombie Siege",
       "description": "",
       "isAllDay": false,
-      "startTime": "22:20",
-      "endTime": "22:55",
+      "startTime": "22:15",
+      "endTime": "22:50",
       "days": [
         "monday",
         "tuesday",
@@ -78,7 +78,9 @@
       "order": {},
       "archived": false,
       "recurrence": {
-        "type": "daily",
+        "type": "days",
+        "onPeriods": 1,
+        "offPeriods": 2,
         "daysOfWeek": [
           "monday",
           "tuesday",
@@ -88,8 +90,7 @@
           "saturday",
           "sunday"
         ],
-        "interval": 3,
-        "startDate": "2025-09-11T04:00:00.000Z"
+        "startDate": "2025-09-16T04:00:00.000Z"
       },
       "remindTomorrow": true
     },
@@ -100,7 +101,9 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "10:00",
-      "days": ["sunday"],
+      "days": [
+        "sunday"
+      ],
       "includeInExport": {
         "sunday": true,
         "monday": true,
@@ -117,9 +120,12 @@
       "archived": false,
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": ["sunday"],
+        "daysOfWeek": [
+          "sunday"
+        ],
         "interval": 1
-      }
+      },
+      "remindEndOfDay": true
     },
     {
       "id": "ev-6",
@@ -128,20 +134,16 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "10:00",
-      "days": ["monday", "tuesday", "wednesday"],
+      "days": [
+        "monday",
+        "tuesday"
+      ],
       "includeInExport": {
         "monday": true,
         "tuesday": true,
         "wednesday": true
       },
-      "variations": {
-        "wednesday": {
-          "description": "• To register:\n   Events → Desert Storm → Select Participants → Request to Fight\n• Registration must be in at least an hour before reset.",
-          "isAllDay": true,
-          "startTime": "09:00",
-          "endTime": "10:00"
-        }
-      },
+      "variations": {},
       "order": {
         "monday": 0,
         "wednesday": 1,
@@ -149,10 +151,16 @@
       },
       "archived": false,
       "recurrence": {
-        "type": "weekly",
-        "daysOfWeek": ["monday", "tuesday", "wednesday"],
-        "interval": 1
-      }
+        "type": "weeks",
+        "onPeriods": 1,
+        "offPeriods": 0,
+        "daysOfWeek": [
+          "monday",
+          "tuesday"
+        ],
+        "startDate": "2025-01-05T05:00:00.000Z"
+      },
+      "remindEndOfDay": true
     },
     {
       "id": "ev-7",
@@ -161,7 +169,9 @@
       "isAllDay": false,
       "startTime": "17:50",
       "endTime": "18:30",
-      "days": ["friday"],
+      "days": [
+        "friday"
+      ],
       "includeInExport": {
         "friday": true,
         "monday": true,
@@ -175,7 +185,9 @@
       "archived": false,
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": ["friday"],
+        "daysOfWeek": [
+          "friday"
+        ],
         "interval": 1
       },
       "remindTomorrow": true
@@ -187,7 +199,11 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "10:00",
-      "days": ["sunday", "tuesday", "thursday"],
+      "days": [
+        "sunday",
+        "tuesday",
+        "thursday"
+      ],
       "includeInExport": {
         "sunday": true,
         "tuesday": true,
@@ -195,16 +211,21 @@
       },
       "variations": {},
       "order": {
-        "sunday": 2,
+        "sunday": 0,
         "thursday": 4,
-        "tuesday": 3
+        "tuesday": 1
       },
       "archived": false,
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": ["sunday", "tuesday", "thursday"],
+        "daysOfWeek": [
+          "sunday",
+          "tuesday",
+          "thursday"
+        ],
         "interval": 1
-      }
+      },
+      "remindTomorrow": false
     },
     {
       "id": "ev-9",
@@ -213,7 +234,11 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "10:00",
-      "days": ["monday", "thursday", "friday"],
+      "days": [
+        "monday",
+        "thursday",
+        "friday"
+      ],
       "includeInExport": {
         "sunday": false,
         "monday": true,
@@ -230,10 +255,15 @@
       "archived": false,
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": ["monday", "thursday", "friday"],
+        "daysOfWeek": [
+          "monday",
+          "thursday",
+          "friday"
+        ],
         "interval": 3,
         "startDate": "2025-06-30T04:00:00.000Z"
-      }
+      },
+      "remindTomorrow": true
     },
     {
       "id": "ev-10",
@@ -242,7 +272,11 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "10:00",
-      "days": ["monday", "wednesday", "friday"],
+      "days": [
+        "monday",
+        "wednesday",
+        "friday"
+      ],
       "includeInExport": {
         "monday": true,
         "wednesday": true,
@@ -257,7 +291,11 @@
       "archived": false,
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": ["monday", "wednesday", "friday"],
+        "daysOfWeek": [
+          "monday",
+          "wednesday",
+          "friday"
+        ],
         "interval": 1
       }
     },
@@ -268,7 +306,9 @@
       "isAllDay": false,
       "startTime": "12:00",
       "endTime": "",
-      "days": ["sunday"],
+      "days": [
+        "sunday"
+      ],
       "includeInExport": {
         "sunday": true,
         "monday": true,
@@ -283,7 +323,9 @@
       "archived": false,
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": ["sunday"],
+        "daysOfWeek": [
+          "sunday"
+        ],
         "interval": 1
       }
     },
@@ -294,7 +336,10 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "10:00",
-      "days": ["tuesday", "saturday"],
+      "days": [
+        "tuesday",
+        "saturday"
+      ],
       "includeInExport": {
         "tuesday": true,
         "saturday": true
@@ -302,12 +347,15 @@
       "variations": {},
       "order": {
         "saturday": 4,
-        "tuesday": 4
+        "tuesday": 2
       },
       "archived": false,
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": ["tuesday", "saturday"],
+        "daysOfWeek": [
+          "tuesday",
+          "saturday"
+        ],
         "interval": 1
       }
     },
@@ -318,7 +366,9 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "10:00",
-      "days": ["monday"],
+      "days": [
+        "monday"
+      ],
       "includeInExport": {
         "monday": true,
         "tuesday": true,
@@ -335,7 +385,9 @@
       "archived": false,
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": ["monday"],
+        "daysOfWeek": [
+          "monday"
+        ],
         "interval": 1
       }
     },
@@ -346,7 +398,9 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "10:00",
-      "days": ["tuesday"],
+      "days": [
+        "tuesday"
+      ],
       "includeInExport": {
         "tuesday": true,
         "monday": true,
@@ -358,12 +412,14 @@
       },
       "variations": {},
       "order": {
-        "tuesday": 5
+        "tuesday": 3
       },
       "archived": false,
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": ["tuesday"],
+        "daysOfWeek": [
+          "tuesday"
+        ],
         "interval": 1
       }
     },
@@ -374,7 +430,9 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "10:00",
-      "days": ["wednesday"],
+      "days": [
+        "wednesday"
+      ],
       "includeInExport": {
         "wednesday": true
       },
@@ -385,7 +443,9 @@
       "archived": false,
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": ["wednesday"],
+        "daysOfWeek": [
+          "wednesday"
+        ],
         "interval": 1
       }
     },
@@ -396,7 +456,9 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "10:00",
-      "days": ["thursday"],
+      "days": [
+        "thursday"
+      ],
       "includeInExport": {
         "thursday": true,
         "monday": true,
@@ -413,7 +475,9 @@
       "archived": false,
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": ["thursday"],
+        "daysOfWeek": [
+          "thursday"
+        ],
         "interval": 1
       }
     },
@@ -424,7 +488,9 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "10:00",
-      "days": ["friday"],
+      "days": [
+        "friday"
+      ],
       "includeInExport": {
         "friday": true,
         "monday": true,
@@ -441,7 +507,9 @@
       "archived": false,
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": ["friday"],
+        "daysOfWeek": [
+          "friday"
+        ],
         "interval": 1
       }
     },
@@ -452,7 +520,9 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "10:00",
-      "days": ["saturday"],
+      "days": [
+        "saturday"
+      ],
       "includeInExport": {
         "saturday": true,
         "monday": true,
@@ -469,7 +539,9 @@
       "archived": false,
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": ["saturday"],
+        "daysOfWeek": [
+          "saturday"
+        ],
         "interval": 1
       }
     },
@@ -480,7 +552,9 @@
       "isAllDay": false,
       "startTime": "00:00",
       "endTime": "",
-      "days": ["saturday"],
+      "days": [
+        "saturday"
+      ],
       "includeInExport": {
         "saturday": true,
         "monday": true,
@@ -495,7 +569,9 @@
       "archived": false,
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": ["saturday"],
+        "daysOfWeek": [
+          "saturday"
+        ],
         "interval": 1
       },
       "dateIncludeOverrides": {
@@ -510,7 +586,11 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "10:00",
-      "days": ["tuesday", "thursday", "sunday"],
+      "days": [
+        "tuesday",
+        "thursday",
+        "sunday"
+      ],
       "includeInExport": {
         "sunday": true,
         "tuesday": true,
@@ -522,14 +602,18 @@
       },
       "variations": {},
       "order": {
-        "sunday": 6,
+        "sunday": 4,
         "thursday": 6,
-        "tuesday": 7
+        "tuesday": 5
       },
       "archived": false,
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": ["tuesday", "thursday", "sunday"],
+        "daysOfWeek": [
+          "tuesday",
+          "thursday",
+          "sunday"
+        ],
         "interval": 1
       }
     },
@@ -540,7 +624,11 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "10:00",
-      "days": ["monday", "wednesday", "friday"],
+      "days": [
+        "monday",
+        "wednesday",
+        "friday"
+      ],
       "includeInExport": {
         "monday": true,
         "wednesday": true,
@@ -559,7 +647,11 @@
       "archived": false,
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": ["monday", "wednesday", "friday"],
+        "daysOfWeek": [
+          "monday",
+          "wednesday",
+          "friday"
+        ],
         "interval": 1
       },
       "remindEndOfDay": true
@@ -571,7 +663,9 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "10:00",
-      "days": ["sunday"],
+      "days": [
+        "sunday"
+      ],
       "includeInExport": {
         "sunday": true,
         "monday": true,
@@ -583,14 +677,17 @@
       },
       "variations": {},
       "order": {
-        "sunday": 4
+        "sunday": 1
       },
       "archived": false,
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": ["sunday"],
+        "daysOfWeek": [
+          "sunday"
+        ],
         "interval": 1
-      }
+      },
+      "remindEndOfDay": true
     },
     {
       "id": "ev-1739556688004",
@@ -599,7 +696,11 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "10:00",
-      "days": ["wednesday", "thursday", "friday"],
+      "days": [
+        "wednesday",
+        "thursday",
+        "friday"
+      ],
       "includeInExport": {
         "wednesday": true,
         "thursday": true,
@@ -614,19 +715,25 @@
       "archived": false,
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": ["wednesday", "thursday", "friday"],
+        "daysOfWeek": [
+          "wednesday",
+          "thursday",
+          "friday"
+        ],
         "interval": 2,
         "startDate": "2025-03-02T05:00:00.000Z"
       }
     },
     {
       "id": "ev-1739556818565",
-      "title": "Doomsday event - Kill Doomwalkers",
+      "title": "Doomsday event - Don't forget to collect rewards as they are not mailed",
       "description": "",
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "10:00",
-      "days": ["sunday"],
+      "days": [
+        "sunday"
+      ],
       "includeInExport": {
         "monday": false,
         "tuesday": false,
@@ -638,15 +745,19 @@
       },
       "variations": {},
       "order": {
-        "sunday": 1
+        "sunday": 2
       },
       "archived": false,
       "recurrence": {
-        "type": "weekly",
-        "daysOfWeek": ["sunday"],
-        "interval": 2,
-        "startDate": "2025-03-02T05:00:00.000Z"
-      }
+        "type": "weeks",
+        "onPeriods": 1,
+        "offPeriods": 1,
+        "daysOfWeek": [
+          "sunday"
+        ],
+        "startDate": "2025-08-31T04:00:00.000Z"
+      },
+      "remindEndOfDay": true
     },
     {
       "id": "ev-1739556987954",
@@ -655,7 +766,11 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "10:00",
-      "days": ["wednesday", "thursday", "friday"],
+      "days": [
+        "wednesday",
+        "thursday",
+        "friday"
+      ],
       "includeInExport": {
         "wednesday": true,
         "thursday": true,
@@ -670,7 +785,11 @@
       "archived": false,
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": ["wednesday", "thursday", "friday"],
+        "daysOfWeek": [
+          "wednesday",
+          "thursday",
+          "friday"
+        ],
         "interval": 2,
         "startDate": "2025-03-09T05:00:00.000Z"
       },
@@ -683,7 +802,9 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "10:00",
-      "days": ["saturday"],
+      "days": [
+        "saturday"
+      ],
       "includeInExport": {
         "saturday": true,
         "monday": true,
@@ -701,7 +822,9 @@
       "archived": false,
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": ["saturday"],
+        "daysOfWeek": [
+          "saturday"
+        ],
         "interval": 1
       }
     },
@@ -712,7 +835,10 @@
       "isAllDay": false,
       "startTime": "12:00",
       "endTime": "13:00",
-      "days": ["tuesday", "friday"],
+      "days": [
+        "tuesday",
+        "friday"
+      ],
       "includeInExport": {
         "tuesday": false,
         "friday": false
@@ -722,7 +848,10 @@
       "archived": true,
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": ["tuesday", "friday"],
+        "daysOfWeek": [
+          "tuesday",
+          "friday"
+        ],
         "interval": 1
       }
     },
@@ -733,7 +862,9 @@
       "isAllDay": false,
       "startTime": "22:50",
       "endTime": "23:30",
-      "days": ["friday"],
+      "days": [
+        "friday"
+      ],
       "includeInExport": {
         "monday": false,
         "tuesday": false,
@@ -748,7 +879,9 @@
       "archived": false,
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": ["friday"],
+        "daysOfWeek": [
+          "friday"
+        ],
         "interval": 1
       },
       "remindTomorrow": true
@@ -760,7 +893,9 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "10:00",
-      "days": ["sunday"],
+      "days": [
+        "sunday"
+      ],
       "includeInExport": {
         "sunday": true,
         "monday": true,
@@ -776,11 +911,15 @@
       },
       "archived": false,
       "recurrence": {
-        "type": "weekly",
-        "daysOfWeek": ["sunday"],
-        "interval": 2,
-        "startDate": "2025-03-09T05:00:00.000Z"
-      }
+        "type": "weeks",
+        "onPeriods": 1,
+        "offPeriods": 1,
+        "daysOfWeek": [
+          "sunday"
+        ],
+        "startDate": "2025-09-07T04:00:00.000Z"
+      },
+      "remindEndOfDay": true
     },
     {
       "id": "87a66ed0-70ea-4dfc-8519-ced7ef52be6e",
@@ -864,7 +1003,8 @@
         "saturday": 4,
         "friday": 6,
         "thursday": 6,
-        "monday": 5
+        "monday": 5,
+        "tuesday": 8
       },
       "archived": false,
       "recurrence": {
@@ -884,7 +1024,8 @@
           "offWeeks": 2,
           "phaseStartDate": "2025-03-10T04:00:00.000Z"
         }
-      }
+      },
+      "remindEndOfDay": true
     },
     {
       "id": "5c1804c1-eae9-48f9-a94d-495eea6eb156",
@@ -923,7 +1064,9 @@
       },
       "archived": false,
       "recurrence": {
-        "type": "custom",
+        "type": "weeks",
+        "onPeriods": 2,
+        "offPeriods": 1,
         "daysOfWeek": [
           "sunday",
           "monday",
@@ -933,13 +1076,7 @@
           "friday",
           "saturday"
         ],
-        "interval": 1,
-        "startDate": "2025-03-14T00:00:00.000-04:00",
-        "pattern": {
-          "onWeeks": 2,
-          "offWeeks": 1,
-          "phaseStartDate": "2025-02-24T05:00:00.000Z"
-        }
+        "startDate": "2025-09-22T04:00:00.000Z"
       },
       "remindEndOfDay": true
     },
@@ -950,7 +1087,10 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "10:00",
-      "days": ["monday", "thursday"],
+      "days": [
+        "monday",
+        "thursday"
+      ],
       "includeInExport": {
         "wednesday": true,
         "sunday": true,
@@ -968,7 +1108,10 @@
       "archived": false,
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": ["monday", "thursday"],
+        "daysOfWeek": [
+          "monday",
+          "thursday"
+        ],
         "interval": 1,
         "startDate": "2025-03-12T00:00:00.000-04:00"
       }
@@ -980,7 +1123,10 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "10:00",
-      "days": ["tuesday", "friday"],
+      "days": [
+        "tuesday",
+        "friday"
+      ],
       "includeInExport": {
         "wednesday": true,
         "sunday": true,
@@ -993,12 +1139,15 @@
       "variations": {},
       "order": {
         "friday": 6,
-        "tuesday": 10
+        "tuesday": 6
       },
       "archived": false,
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": ["tuesday", "friday"],
+        "daysOfWeek": [
+          "tuesday",
+          "friday"
+        ],
         "interval": 1,
         "startDate": "2025-03-12T00:00:00.000-04:00"
       }
@@ -1010,7 +1159,10 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "10:00",
-      "days": ["wednesday", "saturday"],
+      "days": [
+        "wednesday",
+        "saturday"
+      ],
       "includeInExport": {
         "wednesday": true,
         "sunday": true,
@@ -1028,7 +1180,10 @@
       "archived": false,
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": ["wednesday", "saturday"],
+        "daysOfWeek": [
+          "wednesday",
+          "saturday"
+        ],
         "interval": 1,
         "startDate": "2025-03-12T00:00:00.000-04:00"
       }
@@ -1040,7 +1195,9 @@
       "isAllDay": false,
       "startTime": "12:00",
       "endTime": "",
-      "days": ["saturday"],
+      "days": [
+        "saturday"
+      ],
       "includeInExport": {
         "wednesday": true,
         "sunday": true,
@@ -1055,7 +1212,9 @@
       "archived": true,
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": ["saturday"],
+        "daysOfWeek": [
+          "saturday"
+        ],
         "interval": 1,
         "startDate": "2025-03-12T00:00:00.000-04:00"
       },
@@ -1093,7 +1252,8 @@
         "monday": 8,
         "sunday": 8,
         "wednesday": 10,
-        "saturday": 7
+        "saturday": 7,
+        "tuesday": 9
       },
       "archived": false,
       "recurrence": {
@@ -1114,7 +1274,7 @@
     },
     {
       "id": "7662a10a-144e-4dc5-8ae7-4c8af78b9e12",
-      "title": "SHINYs in 974-975, 987-989",
+      "title": "SHINYs in 974-976, 987-989",
       "description": "",
       "isAllDay": true,
       "startTime": "09:00",
@@ -1143,7 +1303,7 @@
         "monday": 10,
         "tuesday": 8,
         "thursday": 10,
-        "sunday": 8
+        "sunday": 5
       },
       "archived": false,
       "recurrence": {
@@ -1164,7 +1324,7 @@
     },
     {
       "id": "e5263084-2b0f-4289-9ed1-ede774a62176",
-      "title": "SHINYs in 966-969, 990-993",
+      "title": "SHINYs in 966-969, 977-981, 990-993",
       "description": "",
       "isAllDay": true,
       "startTime": "09:00",
@@ -1220,7 +1380,10 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "",
-      "days": ["tuesday", "monday"],
+      "days": [
+        "tuesday",
+        "monday"
+      ],
       "includeInExport": {
         "monday": true,
         "sunday": true,
@@ -1238,7 +1401,10 @@
       "archived": true,
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": ["tuesday", "monday"],
+        "daysOfWeek": [
+          "tuesday",
+          "monday"
+        ],
         "interval": 2
       },
       "dateIncludeOverrides": {}
@@ -1250,7 +1416,13 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "",
-      "days": ["tuesday", "wednesday", "thursday", "friday", "saturday"],
+      "days": [
+        "tuesday",
+        "wednesday",
+        "thursday",
+        "friday",
+        "saturday"
+      ],
       "includeInExport": {
         "monday": true,
         "sunday": true,
@@ -1262,7 +1434,7 @@
       },
       "variations": {},
       "order": {
-        "tuesday": 2,
+        "tuesday": 7,
         "wednesday": 9,
         "friday": 9
       },
@@ -1281,7 +1453,8 @@
       },
       "dateIncludeOverrides": {
         "2025-07-08": false
-      }
+      },
+      "remindEndOfDay": true
     },
     {
       "id": "ff6b9bd0-e2e6-49fd-9fa6-7cea574f8d47",
@@ -1290,7 +1463,13 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "",
-      "days": ["tuesday", "wednesday", "thursday", "friday", "saturday"],
+      "days": [
+        "tuesday",
+        "wednesday",
+        "thursday",
+        "friday",
+        "saturday"
+      ],
       "includeInExport": {
         "monday": true,
         "sunday": true,
@@ -1306,7 +1485,9 @@
       },
       "archived": false,
       "recurrence": {
-        "type": "weekly",
+        "type": "weeks",
+        "onPeriods": 1,
+        "offPeriods": 3,
         "daysOfWeek": [
           "tuesday",
           "wednesday",
@@ -1314,7 +1495,6 @@
           "friday",
           "saturday"
         ],
-        "interval": 3,
         "startDate": "2025-09-02T04:00:00.000Z"
       },
       "dateIncludeOverrides": {
@@ -1328,7 +1508,9 @@
       "isAllDay": false,
       "startTime": "12:00",
       "endTime": "16:00",
-      "days": ["friday"],
+      "days": [
+        "friday"
+      ],
       "includeInExport": {
         "monday": true,
         "sunday": true,
@@ -1343,7 +1525,9 @@
       "archived": true,
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": ["friday"],
+        "daysOfWeek": [
+          "friday"
+        ],
         "interval": 1
       }
     },
@@ -1354,7 +1538,9 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "",
-      "days": ["tuesday"],
+      "days": [
+        "tuesday"
+      ],
       "includeInExport": {
         "sunday": true,
         "monday": true,
@@ -1366,12 +1552,14 @@
       },
       "variations": {},
       "order": {
-        "tuesday": 6
+        "tuesday": 4
       },
       "archived": false,
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": ["tuesday"],
+        "daysOfWeek": [
+          "tuesday"
+        ],
         "interval": 1,
         "startDate": "2025-03-30T00:00:00.000-04:00"
       }
@@ -1426,7 +1614,12 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "",
-      "days": ["monday", "tuesday", "wednesday", "thursday"],
+      "days": [
+        "monday",
+        "tuesday",
+        "wednesday",
+        "thursday"
+      ],
       "includeInExport": {
         "monday": false,
         "sunday": true,
@@ -1443,7 +1636,12 @@
       "archived": true,
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": ["monday", "tuesday", "wednesday", "thursday"],
+        "daysOfWeek": [
+          "monday",
+          "tuesday",
+          "wednesday",
+          "thursday"
+        ],
         "interval": 1
       },
       "dateIncludeOverrides": {
@@ -1553,7 +1751,8 @@
       "variations": {},
       "order": {
         "saturday": 6,
-        "friday": 8
+        "friday": 8,
+        "sunday": 6
       },
       "archived": false,
       "recurrence": {
@@ -1578,7 +1777,9 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "",
-      "days": ["thursday"],
+      "days": [
+        "thursday"
+      ],
       "includeInExport": {
         "monday": true,
         "sunday": true,
@@ -1595,7 +1796,9 @@
       "archived": false,
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": ["thursday"],
+        "daysOfWeek": [
+          "thursday"
+        ],
         "interval": 1
       }
     },
@@ -1606,7 +1809,9 @@
       "isAllDay": false,
       "startTime": "00:10",
       "endTime": "00:40",
-      "days": ["saturday"],
+      "days": [
+        "saturday"
+      ],
       "includeInExport": {
         "monday": false,
         "sunday": false,
@@ -1621,7 +1826,9 @@
       "archived": true,
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": ["saturday"],
+        "daysOfWeek": [
+          "saturday"
+        ],
         "interval": 1
       },
       "dateIncludeOverrides": {
@@ -1636,7 +1843,9 @@
       "isAllDay": false,
       "startTime": "12:30",
       "endTime": "13:00",
-      "days": ["saturday"],
+      "days": [
+        "saturday"
+      ],
       "includeInExport": {
         "saturday": true,
         "sunday": true,
@@ -1651,7 +1860,9 @@
       "archived": true,
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": ["saturday"],
+        "daysOfWeek": [
+          "saturday"
+        ],
         "interval": 1,
         "startDate": "2025-05-03T00:00:00.000-04:00"
       },
@@ -1667,7 +1878,10 @@
       "isAllDay": false,
       "startTime": "12:00",
       "endTime": "12:35",
-      "days": ["tuesday", "friday"],
+      "days": [
+        "tuesday",
+        "friday"
+      ],
       "includeInExport": {
         "thursday": true,
         "sunday": true,
@@ -1682,7 +1896,10 @@
       "archived": true,
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": ["tuesday", "friday"],
+        "daysOfWeek": [
+          "tuesday",
+          "friday"
+        ],
         "interval": 1,
         "startDate": "2025-05-22T00:00:00.000-04:00"
       }
@@ -1694,7 +1911,10 @@
       "isAllDay": false,
       "startTime": "12:30",
       "endTime": "13:10",
-      "days": ["wednesday", "saturday"],
+      "days": [
+        "wednesday",
+        "saturday"
+      ],
       "includeInExport": {
         "thursday": true,
         "sunday": true,
@@ -1709,7 +1929,10 @@
       "archived": true,
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": ["wednesday", "saturday"],
+        "daysOfWeek": [
+          "wednesday",
+          "saturday"
+        ],
         "interval": 1,
         "startDate": "2025-05-22T00:00:00.000-04:00"
       }
@@ -1721,7 +1944,12 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "",
-      "days": ["sunday", "monday", "thursday", "friday"],
+      "days": [
+        "sunday",
+        "monday",
+        "thursday",
+        "friday"
+      ],
       "includeInExport": {
         "friday": true,
         "sunday": true,
@@ -1741,7 +1969,12 @@
       "archived": false,
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": ["sunday", "monday", "thursday", "friday"],
+        "daysOfWeek": [
+          "sunday",
+          "monday",
+          "thursday",
+          "friday"
+        ],
         "interval": 3,
         "startDate": "2025-07-06T04:00:00.000Z"
       },
@@ -1757,7 +1990,9 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "",
-      "days": ["friday"],
+      "days": [
+        "friday"
+      ],
       "includeInExport": {
         "friday": true,
         "sunday": true,
@@ -1772,7 +2007,9 @@
       "archived": false,
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": ["friday"],
+        "daysOfWeek": [
+          "friday"
+        ],
         "interval": 3,
         "startDate": "2025-07-13T04:00:00.000Z"
       }
@@ -1877,12 +2114,14 @@
     },
     {
       "id": "4af5277e-a46b-4407-94cc-66452e907f1d",
-      "title": "Sky Predater - General's Trial Alliance Challenge",
+      "title": "Sky Predator - General's Trial Alliance Challenge",
       "description": "",
       "isAllDay": false,
       "startTime": "23:00",
       "endTime": "23:30",
-      "days": ["thursday"],
+      "days": [
+        "thursday"
+      ],
       "includeInExport": {
         "thursday": true,
         "sunday": true,
@@ -1897,7 +2136,9 @@
       "archived": false,
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": ["thursday"],
+        "daysOfWeek": [
+          "thursday"
+        ],
         "interval": 2,
         "startDate": "2025-07-17T04:00:00.000Z",
         "pattern": {
@@ -1915,7 +2156,9 @@
       "isAllDay": false,
       "startTime": "23:00",
       "endTime": "",
-      "days": ["thursday"],
+      "days": [
+        "thursday"
+      ],
       "includeInExport": {
         "wednesday": true,
         "sunday": true,
@@ -1927,13 +2170,16 @@
       },
       "variations": {},
       "order": {},
-      "archived": false,
+      "archived": true,
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": ["thursday"],
+        "daysOfWeek": [
+          "thursday"
+        ],
         "interval": 2,
         "startDate": "2025-08-06T00:00:00.000-04:00"
-      }
+      },
+      "remindTomorrow": true
     },
     {
       "id": "9773fd5b-5070-4f05-b232-f527556751ab",
@@ -1942,7 +2188,9 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "",
-      "days": ["friday"],
+      "days": [
+        "friday"
+      ],
       "includeInExport": {
         "friday": true,
         "sunday": true,
@@ -1959,7 +2207,9 @@
       "archived": false,
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": ["friday"],
+        "daysOfWeek": [
+          "friday"
+        ],
         "interval": 1,
         "startDate": "2025-08-22T00:00:00.000-04:00"
       }
@@ -1971,7 +2221,10 @@
       "isAllDay": false,
       "startTime": "11:00",
       "endTime": "11:30",
-      "days": ["tuesday", "friday"],
+      "days": [
+        "tuesday",
+        "friday"
+      ],
       "includeInExport": {
         "thursday": true,
         "sunday": true,
@@ -1983,14 +2236,224 @@
       },
       "variations": {},
       "order": {},
-      "archived": false,
+      "archived": true,
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": ["tuesday", "friday"],
+        "daysOfWeek": [
+          "tuesday",
+          "friday"
+        ],
         "interval": 1,
         "startDate": "2025-09-04T00:00:00.000-04:00"
       },
       "remindTomorrow": true
+    },
+    {
+      "id": "e1a61d22-c57e-45aa-ab6c-d648c529bb89",
+      "title": "Buy from Alliance, Campaign and VIP stores before reset.",
+      "description": "",
+      "remindTomorrow": false,
+      "remindEndOfDay": true,
+      "isAllDay": true,
+      "startTime": "09:00",
+      "endTime": "",
+      "days": [
+        "sunday"
+      ],
+      "includeInExport": {
+        "tuesday": true,
+        "sunday": true,
+        "monday": true,
+        "wednesday": true,
+        "thursday": true,
+        "friday": true,
+        "saturday": true
+      },
+      "variations": {},
+      "order": {},
+      "archived": false,
+      "recurrence": {
+        "type": "weeks",
+        "onPeriods": 1,
+        "offPeriods": 0,
+        "daysOfWeek": [
+          "sunday"
+        ],
+        "startDate": "2025-09-16T00:00:00.000-04:00"
+      }
+    },
+    {
+      "id": "e41e6e5f-79c4-4927-9030-ced38b9229b6",
+      "title": "Spice Wars Battle!",
+      "description": "",
+      "remindTomorrow": true,
+      "remindEndOfDay": false,
+      "isAllDay": false,
+      "startTime": "12:30",
+      "endTime": "",
+      "days": [
+        "wednesday",
+        "saturday"
+      ],
+      "includeInExport": {
+        "tuesday": true,
+        "sunday": true,
+        "monday": true,
+        "wednesday": true,
+        "thursday": true,
+        "friday": true,
+        "saturday": true
+      },
+      "variations": {},
+      "order": {},
+      "archived": false,
+      "recurrence": {
+        "type": "weeks",
+        "onPeriods": 1,
+        "offPeriods": 0,
+        "daysOfWeek": [
+          "wednesday",
+          "saturday"
+        ],
+        "startDate": "2025-09-16T00:00:00.000-04:00"
+      }
+    },
+    {
+      "id": "fc3ef9fe-0e81-4a26-b693-448794954e61",
+      "title": "Register for Desert Storm - FINAL DAY (Due 1 hour before reset)",
+      "description": "",
+      "remindTomorrow": false,
+      "remindEndOfDay": false,
+      "isAllDay": true,
+      "startTime": "09:00",
+      "endTime": "",
+      "days": [
+        "wednesday"
+      ],
+      "includeInExport": {
+        "wednesday": true,
+        "monday": true,
+        "tuesday": true,
+        "thursday": true,
+        "friday": true,
+        "saturday": true
+      },
+      "variations": {},
+      "order": {},
+      "archived": false,
+      "recurrence": {
+        "type": "days",
+        "onPeriods": 1,
+        "offPeriods": 0,
+        "daysOfWeek": [
+          "wednesday"
+        ],
+        "startDate": "2025-09-17T00:00:00.000-04:00"
+      }
+    },
+    {
+      "id": "6ea962c6-2e91-4a52-a670-eb4cd3c7d328",
+      "title": "Capitol Event - Garrison the capitol",
+      "description": "",
+      "remindTomorrow": true,
+      "remindEndOfDay": false,
+      "isAllDay": false,
+      "startTime": "13:30",
+      "endTime": "14:00",
+      "days": [
+        "sunday"
+      ],
+      "includeInExport": {
+        "sunday": true,
+        "monday": true,
+        "tuesday": true,
+        "wednesday": true,
+        "thursday": true,
+        "friday": true,
+        "saturday": true
+      },
+      "variations": {},
+      "order": {},
+      "archived": false,
+      "recurrence": {
+        "type": "weeks",
+        "onPeriods": 1,
+        "offPeriods": 99,
+        "daysOfWeek": [
+          "sunday"
+        ],
+        "startDate": "2025-09-21T00:00:00.000-04:00"
+      }
+    },
+    {
+      "id": "4b3d8da0-2fc8-461b-923e-7423a403c28b",
+      "title": "Free/300/500 Stamina (Radar tasks)",
+      "description": "",
+      "remindTomorrow": false,
+      "remindEndOfDay": true,
+      "isAllDay": true,
+      "startTime": "09:00",
+      "endTime": "",
+      "days": [
+        "sunday"
+      ],
+      "includeInExport": {
+        "sunday": false,
+        "tuesday": true,
+        "wednesday": true,
+        "thursday": true,
+        "friday": true,
+        "saturday": true
+      },
+      "variations": {},
+      "order": {},
+      "archived": false,
+      "recurrence": {
+        "type": "days",
+        "onPeriods": 1,
+        "offPeriods": 0,
+        "daysOfWeek": [
+          "sunday"
+        ],
+        "startDate": "2025-09-21T00:00:00.000-04:00"
+      },
+      "dateIncludeOverrides": {
+        "2025-09-21": false
+      }
+    },
+    {
+      "id": "83c5acdd-07b9-4dee-b85c-27ef30fb10bd",
+      "title": "Capture Level 4 Trading Post",
+      "description": "",
+      "remindTomorrow": true,
+      "remindEndOfDay": false,
+      "isAllDay": false,
+      "startTime": "11:00",
+      "endTime": "",
+      "days": [
+        "thursday"
+      ],
+      "includeInExport": {
+        "monday": true,
+        "sunday": true,
+        "tuesday": true,
+        "wednesday": true,
+        "thursday": true,
+        "friday": true,
+        "saturday": true
+      },
+      "variations": {},
+      "order": {},
+      "archived": false,
+      "recurrence": {
+        "type": "weeks",
+        "onPeriods": 1,
+        "offPeriods": 0,
+        "daysOfWeek": [
+          "thursday"
+        ],
+        "startDate": "2025-09-11T04:00:00.000Z"
+      }
     }
   ],
   "tips": [
@@ -2525,7 +2988,7 @@
     {
       "id": "63a29bbb-37a0-47ea-be4e-d63df0e23fb1",
       "title": "Server Birthdays",
-      "content": "972 - 2024-10-04 (Likely)\n981 - 2024-10-06\n982-986 - 2024-10-07\n987-989 - 2024-10-08\n990-993 - 2024-10-09\n994-996 - 2024-10-10\n997-999 - 2024-10-11\n1000-1001 - 2024-10-12",
+      "content": "965\n• Zombies - Week A\n\n972 - 2024-10-04 (Likely)\n   • AR Day 1 - Saturday\n   • Zombies - Week A\n   • SHINYs - Day C\nXXX-976 - 2024-10-05\n   • AR Day 1 - Sunday\n   • Zombies - Week A\n   • SHINYs - Day A\n977-981 - 2024-10-06\n   • AR Day 1 - Monday\n   • Zombies - Week A\n   • SHINYs - Day B\n982-986 - 2024-10-07\n   • AR Day 1 - Tuesday\n   • Zombies - Week A\n   • SHINYs - Day C\n987-989 - 2024-10-08\n   • AR Day 1 - Wednesday\n   • Zombies - Week A\n   • SHINYs - Day A\n990-993 - 2024-10-09\n   • AR Day 1 - Thursday\n   • Zombies - Week B\n   • SHINYs - Day B\n994-996 - 2024-10-10\n   • AR Day 1 - Friday\n   • Zombies - Week B\n   • SHINYs - Day C\n997-999 - 2024-10-11\n1000-1001 - 2024-10-12\n\nDrone Boost Schedule:\nFriday:\n00:00-04:00: XXX-981\n04:00-08:00: 982-986\n08:00-12:00: 987-989\n12:00-16:00: 990-993\n16:00-20:00: 994-996\n20:00-24:00: XXX-981",
       "lastUsed": null,
       "customId": "server-birthdays",
       "adminOnly": false,
@@ -2625,7 +3088,62 @@
       "canUseInBriefing": false,
       "unlisted": true,
       "isHtml": true
+    },
+    {
+      "id": "ef2ed615-58e6-49ca-9d93-dd565381115a",
+      "title": "Sky Predator Instructions",
+      "content": "Sky Predator starts now!\n\n       *** No rallies or digs ***\n\nWarlord, gets to occasionally use his Warlord Bomb with our help.\nStay on the map screen and when you see a bomb icon on the left or over their Base, click it rapidly to transfer energy and get contribution points\n\nRallies take 3 minutes to send but unlike Marshal, they don't autofill. So rally with your THIRD and join with your first.\n\nIf you see one get down to 30 seconds, feel free to jump in with your second squad.",
+      "lastUsed": null,
+      "customId": "sky-predator-instructions",
+      "adminOnly": false,
+      "canUseInBriefing": false,
+      "unlisted": false,
+      "isHtml": false
+    },
+    {
+      "id": "6ee32751-fe0d-41e1-94c2-3ce13d4c2f60",
+      "title": "Spice War Strategy",
+      "content": "<main role=\"main\" aria-labelledby=\"title\" style=\"max-width:820px;margin:24px auto;background:#071021;padding:26px;border-radius:10px;box-shadow:0 8px 30px rgba(2,6,23,.7);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial;color:#e6eef8;line-height:1.55;\">\n  <header style=\"margin-bottom:14px;\">\n    <h1 id=\"title\" style=\"margin:0 0 12px;font-size:1.6rem;color:#ffffff;\">It is a good day for war!</h1>\n    <p style=\"margin:0 0 14px;font-weight:500;color:#dbeaf8;\">\n      Our first Spice War battle is <strong style=\"color:#fff;\">12:30 Server time tomorrow</strong>.\n      We're outmanned and outgunned, but not outwitted. For us to stand a chance, we need every possible person defending.\n    </p>\n    <blockquote style=\"margin:12px 0 18px;padding:14px 16px;border-left:4px solid #1f7aa6;background:linear-gradient(180deg,rgba(15,30,45,0.35),rgba(8,14,22,0.35));color:#d9eefc;border-radius:6px;\">\n      <p style=\"margin:0;color:#d9eefc;\">With a nod to the great mind of Doc Brown: <em style=\"color:#cfeeff;\">Where we're going, we don't need power!</em></p>\n    </blockquote>\n  </header>\n\n  <section id=\"prep\" style=\"margin:16px 0;\">\n    <h2 style=\"margin:0 0 8px;font-size:1.05rem;color:#ffffff;\">*** Prep ***</h2>\n    <p style=\"margin:6px 0 12px;color:#d3e8f8;\">\n      <strong style=\"color:#ffffff;\">Gump squads:</strong> For all squads under <strong style=\"color:#ffffff;\">27 million power</strong>, replace all current heroes with a single hero of the lowest possible level. This is called a <em style=\"color:#cfeeff;\">gump squad</em>.\n    </p>\n    <ul style=\"margin:8px 0 12px 20px;padding:0;color:#c7e3f7;\">\n      <li style=\"margin:6px 0;\">Make sure you have a bookmark handy to server <strong style=\"color:#ffffff;\">994</strong>. <a href=\"?cache-break#tip-bookmarks\">[How to use bookmarks]</a></li>\n    </ul>\n  </section>\n\n  <section id=\"war\" style=\"margin:16px 0;\">\n    <h2 style=\"margin:0 0 8px;font-size:1.05rem;color:#ffffff;\">War</h2>\n    <ul style=\"margin:8px 0 12px 20px;padding:0;color:#c7e3f7;\">\n      <li style=\"margin:6px 0;\">Garrison the alliance center with your first squad.</li>\n      <li style=\"margin:6px 0;\">The moment your squad is knocked out of the alliance center, send the next squad.</li>\n    </ul>\n\n    <h3 style=\"margin:12px 0 8px;font-size:0.98rem;color:#e8f7ff;\">If you are hit with a warlord missile</h3>\n    <ol style=\"margin:8px 0 12px 20px;padding:0;color:#c7e3f7;\">\n      <li style=\"margin:6px 0;\">As quickly as you can, teleport to <strong style=\"color:#ffffff;\">994</strong> using your saved link.</li>\n      <li style=\"margin:6px 0;\">Click the return arrow in the golden bar at the top of your screen and teleport as close to the mud as you can.</li>\n      <li style=\"margin:6px 0;\">Begin garrisoning again.</li>\n    </ol>\n  </section>\n\n  <section id=\"strategy\" style=\"margin:16px 0;\">\n    <h2 style=\"margin:0 0 8px;font-size:1.05rem;color:#ffffff;\">Strategy</h2>\n    <p style=\"margin:6px 0 12px;color:#d3e8f8;\">\n      You might be wondering how a gump squad is going to beat squads of 60 million power. They won't, but we don't have to beat them.\n      A single one of their squads, even the 60M ones, can only fight five of ours, so if we can re-garrison quickly enough, we can slow them down.\n    </p>\n  </section>\n\n  <footer style=\"margin-top:18px;color:#9fb7c9;\">\n    <p style=\"margin:0;color:#9fb7c9;font-size:0.95rem;\">\n      If there is anything in this mail that you don't understand, please ask about it in Alliance Chat.\n      If you are not comfortable asking in Alliance Chat, feel free to message me or your favorite R4 (Unless that is <strong style=\"color:#ffffff;\">Doof</strong>).\n    </p>\n  </footer>\n</main>",
+      "lastUsed": null,
+      "customId": "spice-war-strategy",
+      "adminOnly": false,
+      "canUseInBriefing": false,
+      "unlisted": true,
+      "isHtml": true
+    },
+    {
+      "id": "a1763467-ce4e-4d0f-bee6-89822f7ae78e",
+      "title": "Bookmarks",
+      "content": "<!-- Improved, self-contained HTML. Colors are inherited from the parent. -->\n<style>\n  .bookmark-table {\n    width: 100%;\n    border-collapse: separate;\n    border-spacing: 0;\n    font-family: inherit;\n    font-size: 0.98rem;\n    line-height: 1.4;\n    margin: 0;\n  }\n\n  .bookmark-table thead th {\n    text-align: left;\n    padding: 14px 16px;\n    font-weight: 600;\n    font-size: 1.05rem;\n    letter-spacing: 0.2px;\n    background: transparent;\n    border-bottom: 1px solid currentColor;\n  }\n\n  .bookmark-table tbody tr {\n    vertical-align: top;\n  }\n\n  .bookmark-table td.content {\n    padding: 14px 16px;\n    vertical-align: top;\n  }\n\n  .bookmark-table td.image-cell {\n    width: 140px;\n    padding: 12px;\n    text-align: center;\n    vertical-align: top;\n  }\n\n  .bookmark-table img.thumb {\n    max-width: 100%;\n    height: auto;\n    border-radius: 8px;\n    display: inline-block;\n    box-shadow: 0 6px 18px rgba(0,0,0,0.06);\n  }\n\n  .bookmark-instruction p {\n    margin: 0 0 8px 0;\n  }\n\n  .steps {\n    margin-top: 10px;\n    padding-left: 14px;\n  }\n\n  .steps li {\n    margin: 6px 0;\n  }\n\n  /* Make table more compact on small screens */\n  @media (max-width: 720px) {\n    .bookmark-table td.image-cell { width: 110px; padding: 8px; }\n    .bookmark-table thead th, .bookmark-table td.content { padding: 10px; }\n  }\n</style>\n\n<table class=\"bookmark-table\" role=\"presentation\" aria-label=\"Creating and using bookmarks\">\n  <thead>\n\n  </thead>\n\n  <tbody>\n    <tr>\n      <th colspan=\"4\" style=\"padding-top:18px;\">Creating Bookmarks</th>\n    </tr>    <tr>\n      <td class=\"content bookmark-instruction\">\n        <p>To create a bookmark, tap any object on the map. When the info bubble appears, tap the star icon in the upper right.</p>\n        <ul class=\"steps\">\n          <li>Optionally choose a bookmark type</li>\n          <li>Give the bookmark a memorable name</li>\n        </ul>\n      </td>\n\n      <td class=\"image-cell\" aria-hidden=\"true\">\n        <img class=\"thumb\" src=\"/img/add_bookmark_button.png\" loading=\"lazy\" alt=\"Tap star icon to add bookmark\">\n      </td>\n\n      <td class=\"image-cell\" aria-hidden=\"true\">\n        <img class=\"thumb\" src=\"/img/bookmark_options.png\" loading=\"lazy\" alt=\"Bookmark type and naming options\">\n      </td>\n    </tr>\n\n    <tr>\n      <th colspan=\"4\" style=\"padding-top:18px;\">Using Bookmarks</th>\n    </tr>\n\n    <tr>\n      <td class=\"content bookmark-instruction\">\n        <p>Open the search panel used to locate Doom Elite's. At the top, select the bookmark type you created, locate the bookmark and press \"Go\".</p>\n        <p>If the bookmark is on another server, switch to that server's tab to find it.</p>\n      </td>\n\n      <td class=\"image-cell\" aria-hidden=\"true\">\n        <img class=\"thumb\" src=\"/img/map_search_icon.png\" loading=\"lazy\" alt=\"Map search icon\">\n      </td>\n\n      <td class=\"image-cell\" aria-hidden=\"true\">\n        <img class=\"thumb\" src=\"/img/select_bookmark_type.png\" loading=\"lazy\" alt=\"Select bookmark type\">\n      </td>\n\n      <!-- Extra illustrative image kept in a separate cell for layout balance -->\n      <td class=\"image-cell\" aria-hidden=\"true\">\n        <img class=\"thumb\" src=\"/img/select_bookmark_server.png\" loading=\"lazy\" alt=\"Select bookmark server\">\n      </td>\n    </tr>\n  </tbody>\n</table>",
+      "lastUsed": null,
+      "customId": "bookmarks",
+      "adminOnly": false,
+      "canUseInBriefing": false,
+      "unlisted": false,
+      "isHtml": true
+    },
+    {
+      "id": "057e4d71-09d0-4541-b9c8-1a8d5bc8c23d",
+      "title": "Capitol Garrison Times",
+      "content": "<div class=\"garrison-table\">\n  <h2>Capitol Garrison time to max rewards by squad power (millions)</h2>\n  <div class=\"table-wrapper\">\n    <table>\n      <thead>\n        <tr>\n          <th>squad power</th>\n          <th>time</th>\n          <th class=\"spacer\">&nbsp;</th>\n          <th>squad power</th>\n          <th>time</th>\n          <th class=\"spacer\">&nbsp;</th>\n          <th>squad power</th>\n          <th>time</th>\n          <th class=\"spacer\">&nbsp;</th>\n          <th>squad power</th>\n          <th>time</th>\n        </tr>\n      </thead>\n      <tbody>\n        <tr>\n        </tr>\n        <tr>\n          <td>0.5</td><td>5h 33m</td><td class=\"spacer\"></td>\n          <td>5.5</td><td>30m</td><td class=\"spacer\"></td>\n          <td>10.5</td><td>15m</td><td class=\"spacer\"></td>\n          <td>15.5</td><td>10m</td>\n        </tr>\n        <tr>\n          <td>1.0</td><td>2h 31m</td><td class=\"spacer\"></td>\n          <td>6.0</td><td>27m</td><td class=\"spacer\"></td>\n          <td>11.0</td><td>15m</td><td class=\"spacer\"></td>\n          <td>16.0</td><td>10m</td>\n        </tr>\n        <tr>\n          <td>1.5</td><td>1h 44m</td><td class=\"spacer\"></td>\n          <td>6.5</td><td>25m</td><td class=\"spacer\"></td>\n          <td>11.5</td><td>14m</td><td class=\"spacer\"></td>\n          <td>16.5</td><td>10m</td>\n        </tr>\n        <tr>\n          <td>2.0</td><td>1h 15m</td><td class=\"spacer\"></td>\n          <td>7.0</td><td>23m</td><td class=\"spacer\"></td>\n          <td>12.0</td><td>13m</td><td class=\"spacer\"></td>\n          <td>17.0</td><td>9m</td>\n        </tr>\n        <tr>\n          <td>2.5</td><td>1h 19m</td><td class=\"spacer\"></td>\n          <td>7.5</td><td>22m</td><td class=\"spacer\"></td>\n          <td>12.5</td><td>13m</td><td class=\"spacer\"></td>\n          <td>17.5</td><td>9m</td>\n        </tr>\n        <tr>\n          <td>3.0</td><td>53m</td><td class=\"spacer\"></td>\n          <td>8.0</td><td>20m</td><td class=\"spacer\"></td>\n          <td>13.0</td><td>12m</td><td class=\"spacer\"></td>\n          <td>18.0</td><td>9m</td>\n        </tr>\n        <tr>\n          <td>3.5</td><td>46m</td><td class=\"spacer\"></td>\n          <td>8.5</td><td>19m</td><td class=\"spacer\"></td>\n          <td>13.5</td><td>12m</td><td class=\"spacer\"></td>\n          <td>18.5</td><td>8m</td>\n        </tr>\n        <tr>\n          <td>4.0</td><td>41m</td><td class=\"spacer\"></td>\n          <td>9.0</td><td>18m</td><td class=\"spacer\"></td>\n          <td>14.0</td><td>11m</td><td class=\"spacer\"></td>\n          <td>19.0</td><td>8m</td>\n        </tr>\n        <tr>\n          <td>4.5</td><td>37m</td><td class=\"spacer\"></td>\n          <td>9.5</td><td>17m</td><td class=\"spacer\"></td>\n          <td>14.5</td><td>11m</td><td class=\"spacer\"></td>\n          <td>19.5</td><td>8m</td>\n        </tr>\n        <tr>\n          <td>5.0</td><td>33m</td><td class=\"spacer\"></td>\n          <td>10.0</td><td>16m</td><td class=\"spacer\"></td>\n          <td>15.0</td><td>11m</td><td class=\"spacer\"></td>\n          <td>20.0</td><td>8m</td>\n        </tr>\n      </tbody>\n    </table>\n  </div>\n</div>\n\n<style>\n.garrison-table {\n  width: 100%;\n  font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Helvetica,Arial,sans-serif;\n  line-height: 1.3;\n}\n.garrison-table h2 {\n  margin: 0 0 8px 0;\n  text-align: center;\n  font-weight: bold;\n}\n.garrison-table .table-wrapper {\n  width: 100%;\n  overflow: auto;\n  border: 1px solid currentColor;\n  border-radius: 8px;\n  padding: 4px;\n}\n.garrison-table table {\n  width: 100%;\n  border-collapse: separate;\n  border-spacing: 0;\n  min-width: 720px;\n  font-size: 0.9rem;\n}\n.garrison-table th {\n  padding: 6px;\n  border-bottom: 2px solid currentColor;\n  text-align: left;\n}\n.garrison-table td {\n  padding: 3px 5px;\n  border-bottom: 1px solid currentColor;\n}\n.garrison-table td.spacer,\n.garrison-table th.spacer {\n  width: 6px;\n  border: none;\n  padding: 0;\n}\n</style>",
+      "lastUsed": null,
+      "customId": "capitol-garrison-times",
+      "adminOnly": false,
+      "canUseInBriefing": false,
+      "unlisted": false,
+      "isHtml": true
+    },
+    {
+      "id": "865f5385-0a27-4868-b304-7a82a368f5d5",
+      "title": "Free Teleports",
+      "content": "<style>\n  .teleport-title {\n    grid-column: 1 / -1; /* span full width of grid */\n    clear: both;\n    font-size: 1.2rem;\n    font-weight: 700;\n    margin: 16px 0 8px 0;\n  }\n  .teleport-grid {\n    display: grid;\n    grid-template-columns: repeat(4, minmax(0, 1fr));\n    gap: 12px;\n  }\n  .teleport-step {\n    display: flex;\n    flex-direction: column;\n    border: 1px solid currentColor;\n    border-radius: 8px;\n    padding: 10px;\n  }\n  .teleport-step .text {\n    font-weight: 600;\n    line-height: 1.3;\n    margin-bottom: 8px;\n  }\n  .teleport-step img {\n    margin-top: auto;\n    width: 100%;\n    height: 100%;\n    max-height: calc(var(--card-height, 260px) - 56px);\n    object-fit: contain;\n  }\n  @media (max-width: 1200px) {\n    .teleport-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }\n  }\n  @media (max-width: 900px) {\n    .teleport-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }\n  }\n  @media (max-width: 560px) {\n    .teleport-grid { grid-template-columns: 1fr; }\n  }\n</style>\n\n<div class=\"text\">Teleport for free by visiting any other server, then return. Use a link or access via events.</div>\n<div class=\"teleport-grid\">\n  <!-- 2: Season Play -->\n<div class=\"teleport-title\">Season Play</div>\n  <div class=\"teleport-step\">\n    <div class=\"text\">Tap the season icon (upper right of map/base).</div>\n    <img src=\"/img/free_teleport/season_icon.png\" alt=\"Season icon location\" loading=\"lazy\">\n  </div>\n\n  <div class=\"teleport-step\">\n    <div class=\"text\">Tap the season banner at the top.</div>\n    <img src=\"/img/free_teleport/season_banner.png\" alt=\"Season banner\" loading=\"lazy\">\n  </div>\n\n  <div class=\"teleport-step\">\n    <div class=\"text\">Tap the Grouping icon.</div>\n    <img src=\"/img/free_teleport/grouping.png\" alt=\"Grouping icon\" loading=\"lazy\">\n  </div>\n\n  <div class=\"teleport-step\">\n    <div class=\"text\">Click Go to any server except your current location.</div>\n    <img src=\"/img/free_teleport/server.png\" alt=\"Select another server and Go\" loading=\"lazy\">\n  </div>\n\n  <!-- 3: Enemy Busters -->\n<div class=\"teleport-title\">Enemy Busters</div>\n  <div class=\"teleport-step\">\n    <div class=\"text\">Tap the VS icon (upper right of map/base).</div>\n    <img src=\"/img/free_teleport/vs_icon.png\" alt=\"VS icon location\" loading=\"lazy\">\n  </div>\n\n  <div class=\"teleport-step\">\n    <div class=\"text\">Open the Alliance Assaults tab.</div>\n    <img src=\"/img/free_teleport/alliance_assaults.png\" alt=\"Alliance Assaults tab\" loading=\"lazy\">\n  </div>\n\n  <div class=\"teleport-step\">\n    <div class=\"text\">Click Attack.</div>\n    <img src=\"/img/free_teleport/attack.png\" alt=\"Attack button\" loading=\"lazy\">\n  </div>\n\n  <!-- 4: Other events -->\n<div class=\"teleport-title\">Other Events: Warzone Duel, Meteor, Sky Battlefront, etc.</div>\n\n  <!-- 5: Always -->\n<div class=\"teleport-title\">Always</div>\n\n  <div class=\"teleport-step\">\n    <div class=\"text\">Before confirming, verify it shows 0 teleports and your coordinates are correct.</div>\n    <img src=\"/img/free_teleport/teleport_info.png\" alt=\"Confirm shows 0 teleports and correct coords\" loading=\"lazy\">\n  </div>\n\n  <div class=\"teleport-step\">\n    <div class=\"text\">To return, tap the back arrow on the golden bar at the top.</div>\n    <img src=\"/img/free_teleport/gold_bar.png\" alt=\"Back arrow on golden bar\" loading=\"lazy\">\n  </div>\n</div>\n  <!-- 6: Note -->\n\n    <div class=\"text\">Note: 5-minute cooldown to other servers, but you can go out and immediately back to your own.</div>",
+      "lastUsed": null,
+      "customId": "free-teleports",
+      "adminOnly": false,
+      "canUseInBriefing": true,
+      "unlisted": false,
+      "isHtml": true
     }
   ],
-  "exportDate": "2025-09-10T08:23:05.053Z"
+  "exportDate": "2025-09-26T00:21:05.741Z"
 }

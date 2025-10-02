@@ -1,7 +1,7 @@
 "use client"
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useMemo } from "react"
 import { DateRangeSelector } from "@/components/date-range-selector"
 import { addDays, startOfDay, endOfDay, format } from "date-fns"
 import { getDayOfWeek } from "@/lib/recurrence-utils"
@@ -9,6 +9,7 @@ import { getAppTimezoneDate } from "@/lib/date-utils"
 import { ReadOnlyDayAgenda } from "@/components/read-only-day-agenda"
 import { ReadOnlyTips } from "@/components/read-only-tips"
 import { setupTipHashNavigation } from "@/lib/hash-navigation"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 export function UserInterface() {
   // State to track which main tab is currently active
@@ -64,6 +65,13 @@ export function UserInterface() {
     localStorage.setItem("show-local-time", JSON.stringify(showLocalTime))
   }, [showLocalTime])
 
+  const dayTabs = useMemo(() => {
+    if (!dateRange[0] || !dateRange[1]) {
+      return []
+    }
+    return generateDayTabs(dateRange[0], dateRange[1])
+  }, [dateRange])
+
   return (
     <div className="w-full">
       <div className="w-full">
@@ -87,36 +95,49 @@ export function UserInterface() {
 
             {/* Nested tabs for days in the selected range */}
             <Tabs value={activeDay} onValueChange={setActiveDay} className="w-full">
-              <TabsList className="w-full justify-start mb-4 overflow-x-auto">
-                {dateRange[0] &&
-                  dateRange[1] &&
-                  generateDayTabs(dateRange[0], dateRange[1]).map(({ day, date }) => (
-                    <TabsTrigger
-                      key={format(date, "yyyy-MM-dd")}
-                      value={format(date, "yyyy-MM-dd")}
-                      className="capitalize"
-                    >
-                      {day.substring(0, 3)} {format(date, "M/d")}
-                    </TabsTrigger>
-                  ))}
+              {dayTabs.length > 0 && (
+                <div className="md:hidden mb-4">
+                  <Select value={activeDay} onValueChange={setActiveDay}>
+                    <SelectTrigger aria-label="Select operations day">
+                      <SelectValue placeholder="Select day" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {dayTabs.map(({ day, date }) => (
+                        <SelectItem key={format(date, "yyyy-MM-dd")} value={format(date, "yyyy-MM-dd")}>
+                          {`${day.substring(0, 3)} ${format(date, "M/d")}`}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              )}
+
+              <TabsList className="hidden md:flex w-full justify-start mb-4 overflow-x-auto">
+                {dayTabs.map(({ day, date }) => (
+                  <TabsTrigger
+                    key={format(date, "yyyy-MM-dd")}
+                    value={format(date, "yyyy-MM-dd")}
+                    className="capitalize"
+                  >
+                    {day.substring(0, 3)} {format(date, "M/d")}
+                  </TabsTrigger>
+                ))}
               </TabsList>
 
               {/* Content for each day tab */}
-              {dateRange[0] &&
-                dateRange[1] &&
-                generateDayTabs(dateRange[0], dateRange[1]).map(({ day, date }) => (
-                  <TabsContent key={format(date, "yyyy-MM-dd")} value={format(date, "yyyy-MM-dd")} className="mt-0">
-                    <div className="mb-4">
-                      <h3 className="text-lg font-medium capitalize">{format(date, "EEEE, MMMM d, yyyy")}</h3>
-                    </div>
-                    <ReadOnlyDayAgenda
-                      day={day}
-                      date={date}
-                      showLocalTime={showLocalTime}
-                      setShowLocalTime={setShowLocalTime}
-                    />
-                  </TabsContent>
-                ))}
+              {dayTabs.map(({ day, date }) => (
+                <TabsContent key={format(date, "yyyy-MM-dd")} value={format(date, "yyyy-MM-dd")} className="mt-0">
+                  <div className="mb-4">
+                    <h3 className="text-lg font-medium capitalize">{format(date, "EEEE, MMMM d, yyyy")}</h3>
+                  </div>
+                  <ReadOnlyDayAgenda
+                    day={day}
+                    date={date}
+                    showLocalTime={showLocalTime}
+                    setShowLocalTime={setShowLocalTime}
+                  />
+                </TabsContent>
+              ))}
             </Tabs>
           </TabsContent>
 

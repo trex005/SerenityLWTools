@@ -27,6 +27,8 @@ export interface Tip {
   unlisted?: boolean // Whether this tip is unlisted (only accessible via direct link)
   isHtml?: boolean // Whether the content contains HTML formatting
   altText?: string // Alternative text for the entire tip content when copied
+  type?: "text" | "html" | "image" | "embedded" // Type of content
+  embedUrl?: string // URL for embedded content (when type is "embedded")
 }
 
 // Define the tips store state

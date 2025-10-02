@@ -16,36 +16,94 @@ import { format } from "date-fns"
 import { useState } from "react"
 import { CustomNumberInput } from "./custom-number-input"
 
-// Define the RecurrenceData type for better type safety
+// Define the RecurrenceData type for the new structure
 export interface RecurrenceData {
-  type: "none" | "daily" | "weekly" | "custom"
-  interval?: number
-  daysOfWeek: string[] // Now required
-  startDate?: string // Add start date for controlling which phase of the pattern
-  pattern?: {
-    onWeeks: number
-    offWeeks: number
-    phaseStartDate: string
-  }
+  type: "days" | "weeks" | "none"
+  onPeriods: number
+  offPeriods: number
+  daysOfWeek: string[] // Required for weekday filtering
+  startDate: string // Always required for new system
 }
 
 interface RecurrenceEditorProps {
   value: RecurrenceData | null | undefined
   onChange: (value: RecurrenceData) => void
+  isNewEvent?: boolean // true for new events, false/undefined for existing events
 }
 
-export function RecurrenceEditor({ value, onChange }: RecurrenceEditorProps) {
-  // State to control popover open state
-  const [dailyDatePickerOpen, setDailyDatePickerOpen] = useState(false)
-  const [weeklyDatePickerOpen, setWeeklyDatePickerOpen] = useState(false)
-  const [customDatePickerOpen, setCustomDatePickerOpen] = useState(false)
+// Convert legacy recurrence format to new format for UI
+function convertLegacyToNew(legacyValue: any, isNewEvent: boolean = false): RecurrenceData {
+  // Default start date: today for new events, 2025-01-05 for existing events without a start date
+  const defaultStartDate = isNewEvent ? new Date().toISOString() : new Date(2025, 0, 5).toISOString()
 
-  // Ensure we have a valid value object with daysOfWeek
-  const recurrence: RecurrenceData = value || {
-    type: "daily", // Default to daily instead of none
-    daysOfWeek: ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"], // Default to all days
-    interval: 1,
+  // If it's already in new format, return as is
+  if (legacyValue && (legacyValue.onPeriods !== undefined || legacyValue.offPeriods !== undefined)) {
+    return {
+      type: legacyValue.type || "days",
+      onPeriods: legacyValue.onPeriods ?? 1,
+      offPeriods: legacyValue.offPeriods ?? 0,
+      daysOfWeek: legacyValue.daysOfWeek || ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"],
+      startDate: legacyValue.startDate || defaultStartDate,
+    }
   }
+
+  // Convert legacy format
+  if (legacyValue) {
+    let type: "days" | "weeks" | "none" = "none"
+    let onPeriods = 1
+    let offPeriods = 0
+    let startDate = defaultStartDate
+
+    // Handle legacy types
+    if (legacyValue.type === "daily") {
+      type = "days"
+      onPeriods = 1
+      offPeriods = Math.max(0, (legacyValue.interval || 1) - 1)
+    } else if (legacyValue.type === "weekly") {
+      type = "weeks"
+      onPeriods = 1
+      offPeriods = Math.max(0, (legacyValue.interval || 1) - 1)
+    } else if (legacyValue.type === "custom" && legacyValue.pattern) {
+      type = "weeks"
+      onPeriods = legacyValue.pattern.onWeeks || 1
+      offPeriods = legacyValue.pattern.offWeeks || 0
+      if (legacyValue.pattern.phaseStartDate) {
+        startDate = legacyValue.pattern.phaseStartDate
+      }
+    } else if (legacyValue.type === "none") {
+      type = "none"
+    }
+
+    // Get start date (priority: explicit startDate > pattern.phaseStartDate > default)
+    if (legacyValue.startDate) {
+      startDate = legacyValue.startDate
+    }
+
+    return {
+      type,
+      onPeriods,
+      offPeriods,
+      daysOfWeek: legacyValue.daysOfWeek || ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"],
+      startDate,
+    }
+  }
+
+  // Default new format - use today for new events
+  return {
+    type: "days",
+    onPeriods: 1,
+    offPeriods: 0,
+    daysOfWeek: ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"],
+    startDate: isNewEvent ? new Date().toISOString() : defaultStartDate,
+  }
+}
+
+export function RecurrenceEditor({ value, onChange, isNewEvent = false }: RecurrenceEditorProps) {
+  // State to control popover open state
+  const [datePickerOpen, setDatePickerOpen] = useState(false)
+
+  // Convert legacy format to new format for display
+  const recurrence: RecurrenceData = convertLegacyToNew(value, isNewEvent)
 
   if (!recurrence.daysOfWeek || recurrence.daysOfWeek.length === 0) {
     recurrence.daysOfWeek = ["monday"] // Ensure daysOfWeek is never empty
@@ -55,7 +113,7 @@ export function RecurrenceEditor({ value, onChange }: RecurrenceEditorProps) {
   const days = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"]
 
   // Handle recurrence type change
-  const handleTypeChange = (type: "none" | "daily" | "weekly" | "custom") => {
+  const handleTypeChange = (type: "days" | "weeks" | "none") => {
     // Create a new recurrence object with the updated type
     const newRecurrence: RecurrenceData = {
       ...recurrence,
@@ -65,38 +123,43 @@ export function RecurrenceEditor({ value, onChange }: RecurrenceEditorProps) {
 
     // Set default values based on type
     if (type === "none") {
+      newRecurrence.onPeriods = 1
+      newRecurrence.offPeriods = 0
       // For none, keep the existing days
       if (newRecurrence.daysOfWeek.length === 0) {
         newRecurrence.daysOfWeek = ["monday"]
       }
-    } else if (type === "daily") {
-      newRecurrence.interval = newRecurrence.interval || 1
+    } else if (type === "days") {
+      newRecurrence.onPeriods = newRecurrence.onPeriods || 1
+      newRecurrence.offPeriods = newRecurrence.offPeriods || 0
       // For daily recurrence, automatically select all days
       newRecurrence.daysOfWeek = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"]
-    } else if (type === "weekly") {
-      newRecurrence.interval = newRecurrence.interval || 1
+    } else if (type === "weeks") {
+      newRecurrence.onPeriods = newRecurrence.onPeriods || 1
+      newRecurrence.offPeriods = newRecurrence.offPeriods || 0
       // For weekly, keep the existing days or default to Monday if none
       if (newRecurrence.daysOfWeek.length === 0) {
         newRecurrence.daysOfWeek = ["monday"]
-      }
-    } else if (type === "custom") {
-      if (!newRecurrence.pattern) {
-        newRecurrence.pattern = {
-          onWeeks: 1,
-          offWeeks: 1,
-          phaseStartDate: new Date().toISOString(),
-        }
       }
     }
 
     onChange(newRecurrence)
   }
 
-  // Handle interval change
-  const handleIntervalChange = (interval: number) => {
+  // Handle on periods change
+  const handleOnPeriodsChange = (onPeriods: number) => {
     onChange({
       ...recurrence,
-      interval,
+      onPeriods,
+      daysOfWeek: [...recurrence.daysOfWeek],
+    })
+  }
+
+  // Handle off periods change
+  const handleOffPeriodsChange = (offPeriods: number) => {
+    onChange({
+      ...recurrence,
+      offPeriods,
       daysOfWeek: [...recurrence.daysOfWeek],
     })
   }
@@ -124,19 +187,7 @@ export function RecurrenceEditor({ value, onChange }: RecurrenceEditorProps) {
     })
   }
 
-  // Handle pattern change for custom recurrence
-  const handlePatternChange = (field: keyof RecurrenceData["pattern"], value: any) => {
-    if (!recurrence.pattern) return
-
-    const newPattern = { ...recurrence.pattern, [field]: value }
-    onChange({
-      ...recurrence,
-      pattern: newPattern,
-      daysOfWeek: [...recurrence.daysOfWeek],
-    })
-  }
-
-  // Handle start date change for daily/weekly recurrence
+  // Handle start date change
   const handleStartDateChange = (date: Date | undefined) => {
     if (!date) return
 
@@ -152,22 +203,6 @@ export function RecurrenceEditor({ value, onChange }: RecurrenceEditorProps) {
     }
   }
 
-  // Handle phase start date change for custom recurrence
-  const handlePhaseStartDateChange = (date: Date | undefined) => {
-    if (!date || !recurrence.pattern) return
-
-    try {
-      const newPattern = { ...recurrence.pattern, phaseStartDate: date.toISOString() }
-      onChange({
-        ...recurrence,
-        pattern: newPattern,
-        daysOfWeek: [...recurrence.daysOfWeek],
-      })
-    } catch (error) {
-      console.error("Error updating phase start date:", error)
-    }
-  }
-
   // Safely format a date string
   const formatDateSafe = (dateString: string | undefined) => {
     if (!dateString) return "Pick a date"
@@ -180,16 +215,10 @@ export function RecurrenceEditor({ value, onChange }: RecurrenceEditorProps) {
   }
 
   // Helper function to create a simple date picker
-  const renderDatePicker = (
-    dateValue: string | undefined,
-    onDateChange: (date: Date | undefined) => void,
-    isOpen: boolean,
-    setIsOpen: (open: boolean) => void,
-    label: string,
-  ) => {
+  const renderDatePicker = () => {
     return (
       <div className="space-y-2">
-        <Label>{label}</Label>
+        <Label>Start Date</Label>
         <div className="flex items-center gap-2">
           <div className="relative w-full">
             <Button
@@ -199,14 +228,14 @@ export function RecurrenceEditor({ value, onChange }: RecurrenceEditorProps) {
               onClick={(e) => {
                 e.preventDefault()
                 e.stopPropagation()
-                setIsOpen(!isOpen)
+                setDatePickerOpen(!datePickerOpen)
               }}
             >
               <CalendarIcon className="mr-2 h-4 w-4" />
-              {dateValue ? formatDateSafe(dateValue) : "Pick a date"}
+              {recurrence.startDate ? formatDateSafe(recurrence.startDate) : "Pick a date"}
             </Button>
 
-            {isOpen && (
+            {datePickerOpen && (
               <div
                 className="absolute z-50 mt-1 bg-popover border rounded-md shadow-md p-3"
                 onClick={(e) => e.stopPropagation()}
@@ -214,10 +243,10 @@ export function RecurrenceEditor({ value, onChange }: RecurrenceEditorProps) {
               >
                 <Calendar
                   mode="single"
-                  selected={dateValue ? new Date(dateValue) : undefined}
+                  selected={recurrence.startDate ? new Date(recurrence.startDate) : undefined}
                   onSelect={(date) => {
-                    onDateChange(date)
-                    setIsOpen(false)
+                    handleStartDateChange(date)
+                    setDatePickerOpen(false)
                   }}
                   initialFocus
                   className="rounded-md border"
@@ -227,8 +256,7 @@ export function RecurrenceEditor({ value, onChange }: RecurrenceEditorProps) {
           </div>
         </div>
         <p className="text-xs text-muted-foreground">
-          This date controls which days in the pattern this event appears on. Events with the same interval but
-          different start dates will appear on alternating days.
+          This date controls when the schedule pattern begins. All schedule calculations are based on day offsets from this date.
         </p>
       </div>
     )
@@ -238,65 +266,54 @@ export function RecurrenceEditor({ value, onChange }: RecurrenceEditorProps) {
     <div className="space-y-4">
       {/* Recurrence Type Selection */}
       <div className="space-y-2">
-        <Label className="font-medium">Recurrence Pattern</Label>
+        <Label className="font-medium">Type</Label>
         <RadioGroup
           value={recurrence.type}
-          onValueChange={(value) => handleTypeChange(value as "none" | "daily" | "weekly" | "custom")}
+          onValueChange={(value) => handleTypeChange(value as "days" | "weeks" | "none")}
         >
           <div className="flex items-center space-x-2">
             <RadioGroupItem value="none" id="r-none" />
             <Label htmlFor="r-none">None</Label>
           </div>
           <div className="flex items-center space-x-2">
-            <RadioGroupItem value="daily" id="r-daily" />
-            <Label htmlFor="r-daily">Daily</Label>
+            <RadioGroupItem value="days" id="r-days" />
+            <Label htmlFor="r-days">Days</Label>
           </div>
           <div className="flex items-center space-x-2">
-            <RadioGroupItem value="weekly" id="r-weekly" />
-            <Label htmlFor="r-weekly">Weekly</Label>
-          </div>
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem value="custom" id="r-custom" />
-            <Label htmlFor="r-custom">Custom pattern</Label>
+            <RadioGroupItem value="weeks" id="r-weeks" />
+            <Label htmlFor="r-weeks">Weeks</Label>
           </div>
         </RadioGroup>
       </div>
 
-      {/* Daily Recurrence Options */}
-      {recurrence.type === "daily" && (
-        <div className="pl-6 space-y-4">
-          <div className="flex items-center space-x-2">
-            <Label htmlFor="daily-interval">Every</Label>
-            <CustomNumberInput value={recurrence.interval || 1} onChange={handleIntervalChange} min={1} max={99} />
-            <span>day(s)</span>
+      {/* Period Configuration */}
+      {recurrence.type !== "none" && (
+        <div className="space-y-4">
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="on-periods">{recurrence.type === "days" ? "Days on" : "Weeks on"}</Label>
+              <CustomNumberInput 
+                value={recurrence.onPeriods} 
+                onChange={handleOnPeriodsChange} 
+                min={1} 
+                max={99} 
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="off-periods">{recurrence.type === "days" ? "Days off" : "Weeks off"}</Label>
+              <CustomNumberInput 
+                value={recurrence.offPeriods} 
+                onChange={handleOffPeriodsChange} 
+                min={0} 
+                max={99} 
+              />
+            </div>
           </div>
 
-          {/* Add start date for daily recurrence when interval > 1 */}
-          {recurrence.interval &&
-            recurrence.interval > 1 &&
-            renderDatePicker(
-              recurrence.startDate,
-              handleStartDateChange,
-              dailyDatePickerOpen,
-              setDailyDatePickerOpen,
-              "Pattern start date",
-            )}
-        </div>
-      )}
-
-      {/* Weekly Recurrence Options */}
-      {recurrence.type === "weekly" && (
-        <div className="pl-6 space-y-4">
-          <div className="flex items-center space-x-2">
-            <Label htmlFor="weekly-interval">Every</Label>
-            <CustomNumberInput value={recurrence.interval || 1} onChange={handleIntervalChange} min={1} max={99} />
-            <span>week(s)</span>
-          </div>
-
-          {/* Days of Week Selection - Only visible for Weekly recurrence */}
+          {/* Days of Week Selection */}
           <div className="space-y-2">
             <div className="flex items-center gap-2">
-              <Label className="font-medium">On these days:</Label>
+              <Label className="font-medium">Days of the week:</Label>
               <div className="text-xs text-muted-foreground">(at least one day must be selected)</div>
             </div>
             <div className="flex flex-wrap gap-2">
@@ -315,51 +332,8 @@ export function RecurrenceEditor({ value, onChange }: RecurrenceEditorProps) {
             </div>
           </div>
 
-          {/* Add start date for weekly recurrence when interval > 1 */}
-          {recurrence.interval &&
-            recurrence.interval > 1 &&
-            renderDatePicker(
-              recurrence.startDate,
-              handleStartDateChange,
-              weeklyDatePickerOpen,
-              setWeeklyDatePickerOpen,
-              "Pattern start date",
-            )}
-        </div>
-      )}
-
-      {/* Custom Pattern Options */}
-      {recurrence.type === "custom" && (
-        <div className="pl-6 space-y-4">
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="on-weeks">Weeks on</Label>
-              <CustomNumberInput
-                value={recurrence.pattern?.onWeeks || 1}
-                onChange={(value) => handlePatternChange("onWeeks", value)}
-                min={1}
-                max={99}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="off-weeks">Weeks off</Label>
-              <CustomNumberInput
-                value={recurrence.pattern?.offWeeks || 1}
-                onChange={(value) => handlePatternChange("offWeeks", value)}
-                min={1}
-                max={99}
-              />
-            </div>
-          </div>
-
-          {/* Custom pattern date picker */}
-          {renderDatePicker(
-            recurrence.pattern?.phaseStartDate,
-            handlePhaseStartDateChange,
-            customDatePickerOpen,
-            setCustomDatePickerOpen,
-            "Pattern start date",
-          )}
+          {/* Start Date */}
+          {renderDatePicker()}
         </div>
       )}
     </div>

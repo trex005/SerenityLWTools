@@ -24,7 +24,7 @@ import {
 } from "@/components/ui/alert-dialog"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Badge } from "@/components/ui/badge"
-import { formatRecurrence, shouldShowDaysSeparately } from "@/lib/recurrence-utils"
+import { formatRecurrence } from "@/lib/recurrence-utils"
 import { useDebounce } from "@/hooks/use-debounce"
 import { EventDialog } from "@/components/event-dialog"
 import { AddEventButton } from "@/components/add-event-button"
@@ -298,38 +298,6 @@ function EventCard({
   const endTime = event.endTime
   const description = event.description
 
-  /**
-   * Format the days of the week for display
-   */
-  const formatDays = () => {
-    // Don't show days if they're already shown in the recurrence pattern
-    if (!shouldShowDaysSeparately(event)) return null
-
-    if (!event.days || event.days.length === 0) return null
-
-    // Standard order of days for sorting
-    const dayOrder = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"]
-
-    // Sort the days according to the standard week order
-    const sortedDays = [...event.days].sort((a, b) => dayOrder.indexOf(a) - dayOrder.indexOf(b))
-
-    return (
-      <div className="text-xs text-muted-foreground mt-2 flex flex-wrap gap-1 items-center">
-        <span>Days:</span>
-        <div className="flex flex-wrap gap-1">
-          {sortedDays.map((d) => {
-            const formattedDay = d.charAt(0).toUpperCase() + d.slice(1).substring(0, 2)
-
-            return (
-              <span key={d} className="px-1.5 py-0.5 rounded-md text-xs bg-muted/50 text-muted-foreground">
-                {formattedDay}
-              </span>
-            )
-          })}
-        </div>
-      </div>
-    )
-  }
 
   /**
    * Helper function to check if an event is marked for export
@@ -369,8 +337,6 @@ function EventCard({
                     {endTime ? ` - ${endTime}` : ""}
                   </div>
                 )}
-                {/* Display the days of the week */}
-                {formatDays()}
               </div>
 
               {/* Action Buttons */}

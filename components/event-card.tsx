@@ -22,7 +22,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
-import { formatRecurrence, shouldShowDaysSeparately } from "@/lib/recurrence-utils"
+import { formatRecurrence } from "@/lib/recurrence-utils"
 import { format } from "date-fns"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
@@ -263,46 +263,6 @@ export function EventCard({ event, day, date, showLocalTime = false }: EventCard
     setIsEditingTime(false)
   }
 
-  /**
-   * Format the days of the week for display
-   * Highlights the current day and shows all days the event occurs on
-   */
-  const formatDays = () => {
-    // Don't show days if they're already shown in the recurrence pattern
-    if (!shouldShowDaysSeparately(event)) return null
-
-    if (!event.days || event.days.length === 0) return null
-
-    // If the event only occurs on one day (the current day), don't show the days list
-    if (event.days.length === 1 && event.days[0] === day) return null
-
-    // Sort the days according to the standard week order
-    const sortedDays = [...event.days].sort((a, b) => dayOrder.indexOf(a) - dayOrder.indexOf(b))
-
-    return (
-      <div className="text-xs text-muted-foreground mt-2 flex flex-wrap gap-1 items-center">
-        <span>Days:</span>
-        <div className="flex flex-wrap gap-1">
-          {sortedDays.map((d) => {
-            const formattedDay = d.charAt(0).toUpperCase() + d.slice(1).substring(0, 2)
-            const isCurrentDay = d === day
-
-            return (
-              <span
-                key={d}
-                className={`
-                  px-1.5 py-0.5 rounded-md text-xs
-                  ${isCurrentDay ? "bg-primary/15 text-primary font-medium" : "bg-muted/50 text-muted-foreground"}
-                `}
-              >
-                {formattedDay}
-              </span>
-            )
-          })}
-        </div>
-      </div>
-    )
-  }
 
   // Generate hour and minute options for the dropdowns
   const hourOptions = Array.from({ length: 24 }, (_, i) => {
@@ -521,8 +481,6 @@ export function EventCard({ event, day, date, showLocalTime = false }: EventCard
                       )}
                     </div>
                   )}
-                  {/* Display the days of the week */}
-                  {formatDays()}
                 </div>
 
                 {/* Action Buttons */}

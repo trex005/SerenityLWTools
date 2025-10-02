@@ -15,6 +15,7 @@ import { Dialog, DialogContent } from "@/components/ui/dialog"
 // Add these imports at the top
 import { sanitizeHtml, extractTextFromHtml } from "@/lib/html-utils"
 import { useInView } from "react-intersection-observer"
+import { EmbeddedContent } from "@/components/embedded-content"
 
 // Add a new prop to force the component to check for tip ID in URL
 export function ReadOnlyTips({ forceRefresh }: { forceRefresh?: string }) {
@@ -501,6 +502,11 @@ export function ReadOnlyTips({ forceRefresh }: { forceRefresh?: string }) {
                           </div>
                         </div>
                       )}
+                      {tip.type === "embedded" && tip.embedUrl && (
+                        <div className={`${tip.content ? "mt-2" : ""}`}>
+                          <EmbeddedContent url={tip.embedUrl} />
+                        </div>
+                      )}
                       {tip.altText && (
                         <div className="mt-2 text-xs text-muted-foreground italic">Alt text: {tip.altText}</div>
                       )}
@@ -590,7 +596,6 @@ export function ReadOnlyTips({ forceRefresh }: { forceRefresh?: string }) {
                 alt="Full screen view"
                 className="max-w-full max-h-full object-contain"
                 onLoad={handleImageLoad}
-                onClick={(e) => e.stopPropagation()}
               />
             </div>
           )}
