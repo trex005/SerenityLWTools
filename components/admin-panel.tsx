@@ -190,7 +190,7 @@ export function AdminPanel() {
   ) => {
     switch (selection) {
       case "config": {
-        exportJsonFile(deltas.config, `config_${tag}_${timestamp}.json`)
+        exportJsonFile(deltas.config, `conf_${tag}_${timestamp}.json`)
         break
       }
       case "events": {
@@ -210,7 +210,7 @@ export function AdminPanel() {
 
   const exportAllFiles = async (tag: string, timestamp: string, deltas: DeltaBundle) => {
     const zip = new JSZip()
-    zip.file("config.json", JSON.stringify(deltas.config, null, 2))
+    zip.file("conf.json", JSON.stringify(deltas.config, null, 2))
     zip.file("events.json", JSON.stringify(deltas.events, null, 2))
     zip.file("events_archive.json", JSON.stringify(deltas.eventsArchive, null, 2))
     zip.file("tips.json", JSON.stringify(deltas.tips, null, 2))

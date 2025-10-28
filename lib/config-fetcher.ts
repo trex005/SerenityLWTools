@@ -187,7 +187,7 @@ const resolveTag = (root: RootConfig): string => {
 
 const fetchLayer = async (tag: string): Promise<TagLayer> => {
   const [configPayload, eventsPayload, archivedPayload, tipsPayload] = await Promise.all([
-    fetchJson(`${tag}/config.json`).then((data) => data ?? fetchJson(`${tag}/conf.json`)),
+    fetchJson(`${tag}/conf.json`),
     fetchJson(`${tag}/events.json`),
     fetchJson(`${tag}/events_archive.json`),
     fetchJson(`${tag}/tips.json`),
