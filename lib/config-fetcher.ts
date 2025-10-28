@@ -1,6 +1,7 @@
 "use client"
 
 import { getActiveTag, getTagOverride, sanitizeTag, setActiveTag } from "./config-tag"
+import { arrayToIdMap, deepMerge, idMapToArray, computeDelta } from "./config-merge"
 
 type DomainMapping = {
   tag?: string
@@ -27,6 +28,16 @@ interface TagBundle {
     eventsArchive: string | null
     tips: string | null
   }
+}
+
+type TagLayer = {
+  tag: string
+  config: any | null
+  events: any[]
+  eventsArchived: any[]
+  eventsTombstones: Set<string>
+  tips: any[]
+  tipsTombstones: Set<string>
 }
 
 interface CacheEntry {
@@ -174,7 +185,7 @@ const resolveTag = (root: RootConfig): string => {
   throw new Error("Unable to resolve configuration tag")
 }
 
-const fetchTagBundle = async (tag: string, root: RootConfig): Promise<TagBundle> => {
+const fetchLayer = async (tag: string): Promise<TagLayer> => {
   const [configPayload, eventsPayload, archivedPayload, tipsPayload] = await Promise.all([
     fetchJson(`${tag}/config.json`).then((data) => data ?? fetchJson(`${tag}/conf.json`)),
     fetchJson(`${tag}/events.json`),
@@ -182,37 +193,86 @@ const fetchTagBundle = async (tag: string, root: RootConfig): Promise<TagBundle>
     fetchJson(`${tag}/tips.json`),
   ])
 
-  const tagConfigUpdated = typeof configPayload?.updated === "string" ? configPayload.updated : null
-  const tagConfigData =
-    configPayload && typeof configPayload === "object" ? { ...configPayload } : null
+  const activeObj = extractArray(eventsPayload, "events")
+  const archivedObj = extractArray(archivedPayload, "events")
+  const tipsObj = extractArray(tipsPayload, "tips")
 
-  if (tagConfigData && tagConfigData.updated) {
-    delete tagConfigData.updated
+  const events = normalizeEvents(activeObj.items || [], false)
+  const eventsArchived = normalizeEvents(archivedObj.items || [], true)
+  const tips = Array.isArray(tipsObj.items) ? tipsObj.items : []
+
+  const eventsTombstones = new Set<string>()
+  const tipsTombstones = new Set<string>()
+
+  for (const e of events) {
+    if (e && e.id && e.deleted === true) eventsTombstones.add(e.id)
   }
-
-  const activeEvents = extractArray(eventsPayload, "events")
-  const archivedEvents = extractArray(archivedPayload, "events")
-  const tips = extractArray(tipsPayload, "tips")
-
-  const combinedEvents = [
-    ...normalizeEvents(activeEvents.items, false),
-    ...normalizeEvents(archivedEvents.items, true),
-  ]
+  for (const t of tips) {
+    if (t && t.id && t.deleted === true) tipsTombstones.add(t.id)
+  }
 
   return {
     tag,
-    tagConfig: tagConfigData,
-    events: combinedEvents,
-    archivedEvents: normalizeEvents(archivedEvents.items, true),
-    tips: Array.isArray(tips.items) ? tips.items : [],
-    updated: {
-      root: typeof root.updated === "string" ? root.updated : null,
-      tagConfig: tagConfigUpdated,
-      events: activeEvents.updated,
-      eventsArchive: archivedEvents.updated,
-      tips: tips.updated,
-    },
+    config: configPayload && typeof configPayload === "object" ? { ...configPayload } : null,
+    events,
+    eventsArchived,
+    eventsTombstones,
+    tips,
+    tipsTombstones,
   }
+}
+
+const getParentTag = (layer: TagLayer | null): string | null => {
+  if (!layer || !layer.config) return null
+  const parentVal = layer.config.parent
+  if (typeof parentVal !== "string") return null
+  const p = sanitizeTag(parentVal)
+  return p
+}
+
+const buildAncestry = async (leafTag: string): Promise<string[]> => {
+  const visited = new Set<string>()
+  const chain: string[] = []
+  let current: string | null = leafTag
+  let depth = 0
+  while (current && depth < 16) {
+    if (visited.has(current)) break
+    visited.add(current)
+    const layer = await fetchLayer(current)
+    chain.push(current)
+    const parent = getParentTag(layer)
+    if (parent && !visited.has(parent)) current = parent
+    else current = null
+    depth++
+  }
+  return chain.reverse()
+}
+
+const composeFromLayers = (layers: TagLayer[]) => {
+  let eventsById: Record<string, any> = {}
+  let tipsById: Record<string, any> = {}
+
+  for (const layer of layers) {
+    const layerAllEvents = [...(layer.events || []), ...(layer.eventsArchived || [])]
+    const layerMap = arrayToIdMap(layerAllEvents)
+    for (const id of Object.keys(layerMap)) {
+      const prev = eventsById[id]
+      const merged = deepMerge(prev, layerMap[id])
+      eventsById[id] = merged
+    }
+    for (const id of layer.eventsTombstones) delete eventsById[id]
+
+    const layerTips = layer.tips || []
+    const tipsMap = arrayToIdMap(layerTips)
+    for (const id of Object.keys(tipsMap)) {
+      const prev = tipsById[id]
+      const merged = deepMerge(prev, tipsMap[id])
+      tipsById[id] = merged
+    }
+    for (const id of layer.tipsTombstones) delete tipsById[id]
+  }
+
+  return { events: idMapToArray(eventsById), tips: idMapToArray(tipsById) }
 }
 
 const emptyBundle = (): TagBundle => ({
@@ -251,9 +311,32 @@ export const fetchConfig = async (force = false): Promise<TagBundle> => {
       cacheByTag.delete(resolvedTag)
     }
 
-    const promise = fetchTagBundle(resolvedTag, rootConfig)
-    inFlightByTag.set(resolvedTag, promise)
+    const promise = (async () => {
+      const ancestry = await buildAncestry(resolvedTag)
+      const layers: TagLayer[] = []
+      for (const t of ancestry) {
+        layers.push(await fetchLayer(t))
+      }
+      const composed = composeFromLayers(layers)
+      const tagConfig = layers[layers.length - 1]?.config || null
+      const data: TagBundle = {
+        tag: resolvedTag,
+        tagConfig,
+        events: composed.events,
+        archivedEvents: composed.events.filter((e) => e?.archived === true),
+        tips: composed.tips,
+        updated: {
+          root: typeof rootConfig.updated === "string" ? rootConfig.updated : null,
+          tagConfig: typeof tagConfig?.updated === "string" ? tagConfig.updated : null,
+          events: null,
+          eventsArchive: null,
+          tips: null,
+        },
+      }
+      return data
+    })()
 
+    inFlightByTag.set(resolvedTag, promise)
     const data = await promise
     cacheByTag.set(resolvedTag, { data, timestamp: Date.now() })
     inFlightByTag.delete(resolvedTag)
@@ -279,4 +362,83 @@ if (typeof window !== "undefined") {
       console.error("Error during initial config preload:", error)
     })
   }, 100)
+}
+
+// Build child-only deltas and tombstones vs composed parent chain
+export const buildChildDeltaFiles = async (
+  effectiveEvents: any[],
+  effectiveTips: any[],
+  tag?: string,
+) => {
+  const rootConfig = await fetchRootConfig(false)
+  const resolvedTag = tag || resolveTag(rootConfig)
+  const ancestry = await buildAncestry(resolvedTag)
+  const parentTags = ancestry.slice(0, -1)
+
+  const parentLayers: TagLayer[] = []
+  for (const t of parentTags) parentLayers.push(await fetchLayer(t))
+  const parentComposed = composeFromLayers(parentLayers)
+  // Load leaf layer to capture tag-specific config including parent
+  const leafLayer = await fetchLayer(resolvedTag)
+
+  const parentEventsById = arrayToIdMap(parentComposed.events || [])
+  const parentTipsById = arrayToIdMap(parentComposed.tips || [])
+
+  const childEventsById = arrayToIdMap(effectiveEvents || [])
+  const childTipsById = arrayToIdMap(effectiveTips || [])
+
+  const eventsActive: any[] = []
+  const eventsArchived: any[] = []
+  const eventsTombstones: Set<string> = new Set()
+
+  for (const id of Object.keys(parentEventsById)) {
+    if (!childEventsById[id]) eventsTombstones.add(id)
+  }
+  for (const id of Object.keys(childEventsById)) {
+    const base = parentEventsById[id]
+    const edited = childEventsById[id]
+    const delta = computeDelta(base, edited)
+    if (delta && typeof delta === "object") {
+      const out = { id, ...(delta as any) }
+      const effArchived = (edited && edited.archived) === true
+      if (effArchived) eventsArchived.push(out)
+      else eventsActive.push(out)
+    }
+  }
+
+  const tips: any[] = []
+  const tipsTombstones: Set<string> = new Set()
+  for (const id of Object.keys(parentTipsById)) {
+    if (!childTipsById[id]) tipsTombstones.add(id)
+  }
+  for (const id of Object.keys(childTipsById)) {
+    const base = parentTipsById[id]
+    const edited = childTipsById[id]
+    const delta = computeDelta(base, edited)
+    if (delta && typeof delta === "object") tips.push({ id, ...(delta as any) })
+  }
+
+  const nowIso = new Date().toISOString()
+  return {
+    config: (() => {
+      const cfg: any = { updated: nowIso }
+      if (leafLayer && leafLayer.config && typeof leafLayer.config === "object") {
+        const { updated, ...rest } = leafLayer.config as any
+        Object.assign(cfg, rest)
+      }
+      return cfg
+    })(),
+    events: {
+      updated: nowIso,
+      events: [
+        ...eventsActive,
+        ...Array.from(eventsTombstones).map((id) => ({ id, deleted: true })),
+      ],
+    },
+    eventsArchive: { updated: nowIso, events: eventsArchived },
+    tips: {
+      updated: nowIso,
+      tips: [...tips, ...Array.from(tipsTombstones).map((id) => ({ id, deleted: true }))],
+    },
+  }
 }

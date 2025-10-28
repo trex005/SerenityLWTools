@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2025-10-28
+
+### Added
+- **Tag-Aware Config Loader**: Introduced `lib/config-fetcher` along with `lib/config-tag` and `lib/scoped-storage` to resolve configurations by URL tag or domain, splitting data into `config/events/events_archive/tips` per tag and recording each file's `updated` timestamp.
+- **Scoped Client Storage**: Namespaced all localStorage usage (events, tips, admin state, UI preferences) so data is isolated per configuration tag.
+- **Serenity Config Seed**: Imported the legacy Serenity backup into `public/conf/serenity/` with dedicated `config.json`, `events.json`, `events_archive.json`, and `tips.json` files.
+- **ESLint Baseline**: Added `.eslintrc.json` and installed the Next.js ESLint config to enable `npm run lint`.
+
+### Fixed
+- **Config Export Includes Parent**: Child-delta export now writes the leaf tag's `config.json` with all tag-specific keys including `"parent"` and a fresh `updated` value (`lib/config-fetcher.ts`).
+
+### Changed
+- **Config Layout**: Replaced the monolithic `public/config-init.json` with the new `public/conf/{tag}/` folder structure and root `public/conf/default.json` domain map.
+- **Hooks & Admin Tools**: Updated config and data management hooks plus admin UI components to consume the new bundle format without altering their external APIs.
+
 ## 2025-10-02
 
 ### Added

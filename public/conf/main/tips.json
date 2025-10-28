@@ -1,5 +1,5 @@
 {
-  "updated": "2025-10-28T07:28:53.729441Z",
+  "updated": "2025-10-28T07:44:51.899Z",
   "tips": [
     {
       "id": "7ffc3fb1-56eb-4155-8be1-de25da815e1e",
@@ -17,10 +17,14 @@
     {
       "id": "77bb8baa-aa3d-4632-85c1-ffd6acdf1ae1",
       "title": "Donate to Alliance Tech with thumbs up icon",
-      "content": "Make sure to donate to Alliance Tech every time you log in.\nGo to: Alliance\u2192Alliance Techs\nLook for the tech with the red thumbs-up icon, then hold down the donate button until all coin donations are complete.\n\nUpgrading Alliance Tech is crucial for the alliance's growth, but it also benefits you directly. You earn Alliance Points, which are much more valuable than the coins you spend. These points can be used in the Alliance Store to buy a variety of useful items.\n\nYou can also donate using diamonds. The first 10 diamond donations each day only cost a total of 110 diamonds, making them a great deal. After that, the cost increases, so stick to those first 10 if you want the best value.",
+      "content": "Make sure to donate to Alliance Tech every time you log in.\n\nGo to: Alliance \u2192 Alliance Techs\n\nLook for the tech with the red thumbs-up icon, then hold down the donate button until all coin donations are complete.\n\nUpgrading Alliance Tech is crucial for everyone in the alliance and also gives you points to spend in the alliance store which are incredibly valuable.\n\nYou should also donate, at a minimum, 15 times with diamonds every day. That is a total of 240 diamonds and pays for itself many times over.",
       "lastUsed": "2025-03-21T10:48:04.500Z",
       "customId": "alliance-tech",
-      "imageUrl": "https://www.lwserenity.com/tip_images/thumbs-up-tech.png"
+      "imageUrl": "https://www.lwserenity.com/tip_images/thumbs-up-tech.png",
+      "adminOnly": false,
+      "canUseInBriefing": true,
+      "unlisted": false,
+      "isHtml": false
     },
     {
       "id": "cf1051e2-63f5-426a-8c9c-81421a00586e",
@@ -156,7 +160,7 @@
     {
       "id": "a11285de-dacf-4592-8487-cc4c16eb13e6",
       "title": "Zombie Siege Instructions",
-      "content": "Siege is starting in 10 minutes!\n\n    **No rallies or digs!**\n\n\u2022 Recall all squads and ensure 5 heroes\n\u2022 Place first squad on wall (more if you need to fill hospital)\n\u2022 Watch battle reports: if first squad drops below 50%, add another until all squads are in use\n\u2022 When all squads in use and first still below 50%, request garrison\n\u2022 If you have power to spare, garrison those who request it\n\u2022 Refresh garrisons when damaged. Use resource tiles to move faster if needed",
+      "content": "Siege starts in 10 minutes!\n\n    **No rallies or digs!**\n\n\u2022 Ensure squads are home with 5 heroes each\n\u2022 Place Squad 1 (S1) on wall\n\u2022 Watch battle reports: When S1 falls below 50%, add more squads\n\u2022 When S1 falls below 50% again, request garrison in chat\n\u2022 If possible, garrison those who request it\n\u2022 Refresh garrisons frequently and use resource tiles to move faster",
       "lastUsed": null,
       "adminOnly": false,
       "canUseInBriefing": false,
@@ -590,7 +594,7 @@
     {
       "id": "8c4ac57a-1cfd-4e4e-871a-0fe94ea0cb90",
       "title": "Loot Boss (Invading Zombie Boss) ranges",
-      "content": "<p>This is from the <a href=\"https://lastwardev.aihelp.net/webchatv4/#/appKey/LASTWARDEV_app_3a8bd35be72e471abfaaa5f30971c54d/domain/lastwardev.aihelp.net/appId/lastwardev_platform_342905211d470af49c7bd03dbb6bb026?entranceId=E007&amp;welcomeMessage=How%20can%20we%20assist%20you%3F\">old Last War FAQ</a>.\nThe new FAQ does not have this information.\nSome conclusions you can draw:\n</p><ul>\n<li>If you spawn a certain level, you can assume your top is no higher than 20 above.<br>&nbsp; &nbsp; e.g. if you spawn a 70, you can be sure that you can not spawn above 90.</li>\n<li><strong>* In my experience *</strong>, spawning your lowest and highest is pretty rare<br>&nbsp; &nbsp; e.g if you 70-80, your highest is is likely 85.</li></ul><p></p>\n<p>Additionally, I recommend always going through your intel mail individually. This way you can adjust if you see what you thought was your highest was killed. In addition, it is pretty motivating seeing all that goblin loot!</p>\n<img src=\"https://www.lwserenity.com/tip_images/loot_boss_range.png\" loading=\"lazy\" alt=\"\" data-alt-text=\"\">",
+      "content": "<p>This is from the <a href=\"https://lastwardev.aihelp.net/webchatv4/#/appKey/LASTWARDEV_app_3a8bd35be72e471abfaaa5f30971c54d/domain/lastwardev.aihelp.net/appId/lastwardev_platform_342905211d470af49c7bd03dbb6bb026?entranceId=E007&amp;welcomeMessage=How%20can%20we%20assist%20you%3F\">old Last War FAQ</a>.\nThe new FAQ does not have this information.\nSome conclusions you can draw:\n</p><ul>\n<li>If you spawn a certain level, you can assume your top is no higher than 20 above.<br>&nbsp; &nbsp; e.g. if you spawn a 70, you can be sure that you can not spawn above 90.</li>\n<li><strong>* In my experience *</strong>, spawning your highest level is quite rare<br>&nbsp; &nbsp; e.g. if you are frequently spawning up to 85, your high is probably 90.</li></ul><p></p>\n<p>Additionally, I recommend always going through your intel mail individually. This way you can adjust if you see what you thought was your highest was killed. In addition, it is pretty motivating seeing all that goblin loot!</p>\n<img src=\"https://www.lwserenity.com/tip_images/loot_boss_range.png\" loading=\"lazy\" alt=\"\" data-alt-text=\"\">",
       "lastUsed": null,
       "customId": "loot-boss-invading-zombie-boss-ranges",
       "imageUrl": "https://www.lwserenity.com/tip_images/loot_boss_range.png",
@@ -687,6 +691,28 @@
       "canUseInBriefing": true,
       "unlisted": false,
       "isHtml": true
+    },
+    {
+      "id": "52801e48-8bfb-4f31-afcb-caff431420e8",
+      "title": "S3 Serenity/COCO Spice War Battle",
+      "content": "<style>\n  .battle-wrap {\n    font-family: system-ui, -apple-system, \"Segoe UI\", Roboto, Ubuntu, Cantarell, Helvetica, Arial, sans-serif;\n    line-height: 1.35;\n  }\n\n  /* Header */\n  .battle-header {\n    display: flex;\n    flex-wrap: wrap;\n    align-items: baseline;\n    gap: 8px;\n    margin: 0 0 14px 0;\n    border-bottom: 2px solid currentColor;\n    padding-bottom: 8px;\n  }\n  .battle-title {\n    font-size: 1.25rem;\n    font-weight: 800;\n    letter-spacing: 0.2px;\n  }\n  .battle-meta {\n    font-size: 0.95rem;\n    opacity: 0.85;\n  }\n\n  /* Sections */\n  .section {\n    margin: 16px 0;\n    padding: 4px 0;\n  }\n  .section h3 {\n    margin: 0 0 8px 0;\n    font-size: 1.05rem;\n  }\n\n  /* Lists */\n  .bullets {\n    margin: 6px 0 0 0;\n    padding-left: 1.1em;\n  }\n  .bullets li {\n    margin: 4px 0;\n    list-style: none;\n    position: relative;\n    padding-left: 0.6em;\n  }\n  .bullets li::before {\n    content: \"\u2022\";\n    position: absolute;\n    left: -0.6em;\n  }\n\n  /* Subsections under battle */\n  .battle-sub {\n    margin: 10px 0;\n  }\n  .battle-sub h4 {\n    margin: 0 0 6px 0;\n    font-size: 1rem;\n  }\n  .battle-sub h5 {\n    margin: 4px 0 6px 1em;\n    font-size: 0.95rem;\n  }\n  .battle-sub .indented {\n    margin-left: 1.5em;\n  }\n\n  /* Callouts */\n  .callout {\n    border-left: 4px solid currentColor;\n    padding: 8px 10px;\n    border-radius: 8px;\n    margin: 10px 0 0 0;\n  }\n\n  /* Media & links placeholders */\n  .img-note {\n    font-size: 0.9rem;\n    opacity: 0.85;\n    margin-top: 4px;\n  }\n  .inline-link {\n    text-decoration: underline;\n  }\n</style>\n\n<div class=\"battle-wrap\">\n  <div class=\"battle-header\">\n    <div class=\"battle-title\">COCO/Serenity Spice War Battle</div>\n    <div class=\"battle-meta\">2025-10-03</div>\n  </div>\n\n  <div class=\"section\">\n    <h3>Overview</h3>\n    <p>COCO will win by taking Serenity\u2019s Obelisk first, then the main building.</p>\n  </div>\n\n  <div class=\"section\">\n    <h3>Prep (reset\u201312:00 server / 10am Eastern)</h3>\n    <ul class=\"bullets\">\n      <li>Serenity big hitters: pack on the north side of the Alliance Center.</li>\n      <li>COCO will coordinate with Gentle to fill this area south of Serenity\u2019s Alliance Center.</li>\n      <li>Serenity players: garrison the Obelisk. If you will be offline for the battle, also garrison Main building for some more points.</li>\n    </ul>\n<img src=\"/img/coco_battle.png\">\n  </div>\n\n  <div class=\"section\">\n    <h3>Battle</h3>\n\n    <div class=\"battle-sub\">\n      <h4>Serenity:</h4>\n      <p>Garrison the Obelisk until reaching 500k points (all 3 chests). When the Obelisk falls, if you have not maxed your chests, garrison the main building until you do.</p>\n    </div>\n\n    <div class=\"battle-sub\">\n      <h4>COCO</h4>\n\n      <div class=\"indented\">\n        <h5>Unshielded</h5>\n        <ul class=\"bullets\">\n          <li>Attack directly with Squad 1 and rally with Squad 2 so that those who are staying shielded can join.</li>\n          <li>Attack only the Obelisk until it has fallen and then redirect your efforts to the main building.</li>\n          <li>Keep a link handy to a remote place in server 994 in case you need to exit quickly. Remember that when teleporting to another server you do not need to wait for your squads.</li>\n        </ul>\n      </div>\n\n      <div class=\"indented\">\n        <h5>Shielded</h5>\n        <p>If both your S1 and S2 are of fighting weight, garrison the unshielded bases with S1 and join rallies with S2</p>\n      </div>\n    </div>\n\n    <div class=\"battle-sub\">\n      <h4>Both sides:</h4>\n      <p>Stay alert and ready to pivot in case of interference.</p>\n    </div>\n  </div>\n\n  <div class=\"section\">\n    <h3>After Battle</h3>\n    <ul class=\"bullets\">\n      <li>If more points needed, trade tile hits in the mud using this method: <a href=\"/?cache_bust_ttt#tip-trading-tile-hits\" class=\"inline-link\">Trading Tile Hits</a>.</li>\n      <li>Contact leaders of either alliance if you need a partner for tile trades.</li>\n    </ul>\n  </div>\n</div>",
+      "lastUsed": null,
+      "customId": "s3-sw-2025-10-04",
+      "adminOnly": false,
+      "canUseInBriefing": false,
+      "unlisted": true,
+      "isHtml": true
+    },
+    {
+      "id": "8f46fe24-1d87-4c40-b683-852dd700d5b0",
+      "title": "Trade Trucks",
+      "content": "Sending:\n1. It is best to wait at least 2, but preferably 4 hours after reset to send yours\n2. Unless you have 5 tickets available or plenty of diamonds, accept any purple or gold trucks. otherwise, use the one free refresh and accept whatever you get.\n3. If you have 5 tickets, refresh until you have a purple or gold truck. Your 5th refresh is guaranteed to be gold\n4. If you have plenty of tickets or diamonds, refresh until you have at least 1 universal UR shard.\n5. Once VS starts, on Tuesdays and Saturdays, send all UR trucks if possible.\n\nPlundering:\n1. As soon as we can plunder other servers be absolutely sure that the \"Filter ot trucks from your Warzone\" box is checked\n2. Do not plunder any trucks that are already plundered (on fire)\n3. Ideally, be patient enough to find a gold truck with at least two universal UR shards that you are strong enough to plunder.  If you can not find gold, you will be able to find purple.",
+      "lastUsed": null,
+      "customId": "trade-trucks",
+      "adminOnly": false,
+      "canUseInBriefing": true,
+      "unlisted": false,
+      "isHtml": false
     }
   ]
 }

@@ -250,3 +250,276 @@ Verification
 
 Seed example configs beneath public/conf/{tag}/ and exercise tag resolution (query parameter, domain match, default fallback) to ensure data loads and persists correctly.
 Spot-check localStorage contents to confirm segregation by tag, and run lint/build to ensure the refactor doesn’t introduce regressions.
+----------------------
+Please make the export function in the command center export in this new format. Allow the user to choose which of the config files to export. If simple, allow them to choose "all" and have it download a zip with all of them.
+
+The eport file name should be:
+{type}_{tag}_timestamp.{filetype}
+e.g.
+events_serenity_{timestamp}.json
+or
+all_serenity_{timestamp}.zip
+--------------
+**tools: Config inheretence** 
+Do not start any modifications to the code at this point.
+If you need futher clarification, ask me one question at a time until we have this fully designed.
+When it is fully designed, please give me the steps you will need to take in order to write and implement it.
+
+in conf/{tag}/conf.json add an attribute for a parent tag. This should be recursive with a sanity check.
+
+Both the json files and the localStorage should work in a similar way, merging events and tips based on id
+
+Loading data:
+    If parent is set, load it's scope
+    do this recursively
+Reading Data
+    read field from child if exists
+    if not, read field from parent
+    do this recursively
+Saving/Exporting Data:
+    parent fields should never be overwitten, just overridden with child fields
+    if field is different from parent tag, save
+    if field is same as parent, remove child if exists
+
+
+Notes:
+• json exports will need to be smart about how they store events that do not have the same archived value in parent/child
+• fields should act like a deep merge, with the bottom level key being overwritten
+parent:
+{
+  "events": [
+    {
+      "id": "ev-3",
+      "title": "Zombie Siege",
+      "archived": false,
+      "recurrence": {
+        "type": "days",
+        "onPeriods": 1,
+        "offPeriods": 2,
+        "daysOfWeek": ["monday", "wednesday", "friday"],
+        "startDate": "2025-09-29T04:00:00.000Z"
+      },
+      "remindTomorrow": true,
+      "includeInExport": {
+        "monday": true,
+        "tuesday": true,
+        "wednesday": true,
+        "thursday": true,
+        "friday": true,
+        "saturday": true,
+        "sunday": true
+      }
+    }
+  ]
+}
+child:
+{
+    "events": [
+    {
+      "id": "ev-3",
+      "archived": false,
+      "recurrence": {
+        "daysOfWeek": ["wednesday"]
+      },
+      "includeInExport": {
+        "wednesday": false
+      }
+    }
+  ]
+}
+becomes:
+{
+  "events": [
+    {
+      "id": "ev-3",
+      "title": "Zombie Siege",
+      "archived": false,
+      "recurrence": {
+        "type": "days",
+        "onPeriods": 1,
+        "offPeriods": 2,
+        "daysOfWeek": ["wednesday"],
+        "startDate": "2025-09-29T04:00:00.000Z"
+      },
+      "remindTomorrow": true,
+      "includeInExport": {
+        "monday": true,
+        "tuesday": true,
+        "wednesday": false,
+        "thursday": true,
+        "friday": true,
+        "saturday": true,
+        "sunday": true
+      }
+    }
+  ]
+}
+
+-------------
+Codex Output:
+Here’s the plan I’d follow to implement the inheritance flow:
+
+Extend Tag Metadata
+
+Add a parent field to per-tag config.json (public/conf/{tag}/config.json and typed interfaces).
+Update the config loader to read this field and build a parent chain with cycle detection and missing-parent fallbacks.
+Resolve Config Hierarchy
+
+Enhance fetchConfig to load parent bundles recursively (reusing caches), building an ordered ancestry list (top → child).
+Introduce utility helpers to normalize/merge per-tag data and expose both raw layers and the resolved composite.
+Deep Merge Events/Tips
+
+Implement ID-based merge logic for events and tips:
+• Combine parent and child arrays by id, deep-merging objects recursively.
+• Overwrite primitive fields and arrays entirely; merge nested objects by key.
+• Preserve parent entries untouched when no child override exists.
+Ensure special handling for archived, includeInExport, variations, etc., matches the deep-merge rules.
+LocalStorage Composition
+
+Adjust scoped stores (use-events, use-tips, admin state) to hydrate using the merged view while retaining the ability to store only child-specific overrides.
+When persisting changes, write back only the delta against the parent chain.
+Writers & Exports
+
+Update mutation paths (add/update/delete events/tips) so they compute child deltas before saving.
+Revise the admin export workflow to emit separate files containing just the child-level overrides, and ensure ZIP/export filenames remain unchanged.
+Sanity Checks & Error Messaging
+
+Guard against circular parents and missing tags as specified, surfacing console warnings/toasts as needed when falling back to “top-level” behavior.
+Add diagnostics for conflicting IDs (e.g., mismatched types) during merge.
+Manual Validation
+
+Create sample parent/child tag configs to test overrides (archived flag differences, partial object overrides, array replacement).
+Verify localStorage segregation still works per tag, with inherited data loading correctly and edits affecting only child overrides.
+Re-run lint/build once the dependency issue is addressed.
+----------------
+codex Output:
+Here’s the reviewed design and the concrete implementation plan.
+
+Assumptions
+
+Tags remain normalized (current behavior). If you want case-sensitive tags, we’ll adjust separately.
+Parent chain uses only JSON files; do not consult parent tags’ localStorage.
+Consumers (UI/components) stay unaware of inheritance; all logic is confined to config/storage utilities.
+Merge Semantics
+
+Per-id deep merge across ancestry: parent → … → child.
+Bottom-level rule: primitives (string/number/boolean), null, and arrays are replaced wholesale when present in child; objects merge by key, recursing until bottom-level.
+Arrays (e.g., recurrence.daysOfWeek) replace entirely when present in child.
+Object maps (e.g., includeInExport, variations, dateOverrides, order) merge by key, with child keys overwriting or removing keys explicitly set to null if we support null-removal later.
+Inheritance Rules
+
+Each conf/{tag}/config.json may include "parent": "someTag".
+Build ancestry list top→child by following parent pointers:
+Missing parent tag → stop and treat current tag as top.
+Cycle detected (revisiting a tag) → stop at first repeat; treat that ancestor as top.
+Also enforce a max depth (e.g., 16) as a sanity guard.
+Load all JSON for each ancestor: config.json (optional), events.json, events_archive.json, tips.json.
+Compose data by:
+Start with parent’s arrays (active + archived for events, tips).
+For each descendant layer, apply per-id deep merges on top of accumulated state.
+Apply deletions (tombstones) from the layer, which remove the item from the composed view (see below).
+Archived flag follows bottom-level overwrite: if child sets archived, it overrides inherited value; if not set, inherited value stands.
+Deleted Tombstones
+
+Deleted in child fully masks parent: item is removed from the final composed view.
+Represent as minimal tombstones in the child exports:
+Events: write { "id": "...", "deleted": true } into conf/{tag}/events.json (even if parent’s item is archived).
+Tips: write { "id": "...", "deleted": true } into conf/{tag}/tips.json.
+The loader hides deleted items entirely from the app (UI never sees them).
+Archived Handling
+
+During merge, archived is just a boolean field obeying the bottom-level rule.
+“Smart” child exports:
+If child changes archived, the child override for that id goes into:
+events.json if effective archived=false
+events_archive.json if effective archived=true
+If child does not mention archived but overrides other fields, place its override in the file matching the inherited archived state (from composed parent).
+Deleted tombstones always go to events.json (per above), regardless of parent archived state.
+Data Flow
+
+Loading:
+Resolve tag.
+Build ancestry chain (with loop/missing-parent guards).
+Fetch parent→child JSON files for each tag.
+Compose:
+Build maps keyed by id for events (active+archived) and tips for each layer.
+Apply deep merges; arrays replace; objects merge; primitives replace.
+Apply per-layer deletions last for that layer (masking any prior parent/ancestor).
+Return merged arrays: one Events array (with archived flag per item), and Tips array.
+Reading:
+Libraries expose only the composed view; downstream code reads merged values transparently.
+LocalStorage:
+Continue using per-tag scoped storage.
+Store only child-layer overrides (the “delta”) for the current tag, not full copies:
+Per-id override objects with only differing bottom-level fields vs the composed parent.
+Arrays stored only when truly different (full replacement).
+No parent localStorage consulted during merge (only JSON chain).
+Saving/Mutations:
+Compute diff of the new item vs the composed parent result:
+If different → write/update the child override with only minimal fields that differ.
+If same as parent → remove any existing child override for those fields; if empty override remains, remove the whole child override for that id.
+If “delete” → write { id, deleted: true } tombstone in the child data; remove any existing child overrides for that id.
+For events, choose events.json vs events_archive.json file placement for overrides based on the effective archived value in the child; tombstones still go to events.json.
+Exporting:
+Export per-file overrides (child-only deltas and tombstones), not the composed full view.
+“All” export bundles child deltas for config.json (including "parent": "..." when present), events.json, events_archive.json, tips.json into a zip.
+Edge Cases & Diagnostics
+
+Conflicting type shapes on a bottom-level key → child wins (replace); log a console warn for diagnostics.
+Parent missing id: child stands alone (merge just inserts the child item).
+Guard logs for cycles and missing parents; proceed per rules above.
+Implementation Steps
+
+Types & Config
+
+Extend tag config schema to include optional "parent": string.
+Add ancestry resolution with cycle/missing-parent guards (visited set + max depth).
+Loader Enhancements
+
+In lib/config-fetcher, add functions to:
+Load chain of tag bundles (root→leaf).
+Merge per layer with ID-indexed deep-merge for events/tips.
+Apply deletions (filter out from merged view).
+Return: composed events (single array with archived flag), composed tips, plus side-channel metadata for export/diffing.
+Deep Merge Utility
+
+Implement mergeById(parent[], child[], opts) with:
+Key extractor (id).
+Deep object merge (objects merge; arrays replace; primitives replace).
+Preserve archived rules and map-like keys (includeInExport, variations, dateOverrides, order).
+LocalStorage Delta Layer
+
+Introduce “child override cache” structure per tag in scoped storage:
+events_overrides map by id: object with only differing leaf fields.
+events_tombstones set of ids (or embed {id, deleted: true} in overrides array).
+tips_overrides, tips_tombstones similarly.
+Apply local overrides as the final layer on top of JSON ancestry during composition.
+Writers update only the overrides/tombstones; do not duplicate parent state.
+Save & Export Plumbing
+
+Add diffing helpers: computeDelta(mergedParentItem, childEditedItem) → minimal override.
+On delete: write tombstone and remove any existing overrides for that id.
+Update admin export to generate per-file child deltas + tombstones following archived-placement rules and filenames you specified.
+Validation
+
+Create small parent/child fixtures demonstrating:
+Deep object merges (includeInExport and variations per-key).
+Array replacement (daysOfWeek).
+Archived flips and placement logic.
+Deletions masking parents; tips deletions.
+Verify UI sees composed view only; ensure toggling archived and delete behaves as expected.
+Verify exports contain only child deltas/tombstones.
+If you’re happy with this design, I’ll proceed to implement it in the central config/storage libraries and update the admin export accordingly.
+
+---------
+Getting in line has a 30 min cooldown so assuming there is no one else in line
+00:00 - Get in line/Get title/Co-op
+00:30 - Get in line/Get title again (still have co-op)
+01:00 - Could get in line again, but don't have co-op
+
+Add 10 min line in front of you:
+00:00 - Get in line
+00:10 - Get title/co-op
+00:30 - Get in line/title
+01:00 - Get in line (Still have co-op for 10 min)
+01:05 - hopefully have title by now!

@@ -1,5 +1,5 @@
 {
-  "updated": "2025-10-28T07:28:53.729441Z",
+  "updated": "2025-10-28T07:44:51.899Z",
   "events": [
     {
       "id": "ev-3",
@@ -49,7 +49,7 @@
           "saturday",
           "sunday"
         ],
-        "startDate": "2025-09-16T04:00:00.000Z"
+        "startDate": "2025-09-29T04:00:00.000Z"
       },
       "remindTomorrow": true
     },
@@ -286,7 +286,8 @@
           "sunday"
         ],
         "interval": 1
-      }
+      },
+      "remindTomorrow": true
     },
     {
       "id": "ev-12",
@@ -507,7 +508,7 @@
     {
       "id": "ev-1739555974133",
       "title": "SHIELD!!!",
-      "description": "If you don't plan to hunt in Alliance Assaults or Server wars, put up a 24 hour Shield. Otherwise, use 8 or 12 hours until we see how everything is going.",
+      "description": "\u2022 If not fighting at all, put up a 24 hour Shield\n\u2022 If not fighting immediately at reset, use a buddy shield or and 8/12 hour shield",
       "isAllDay": false,
       "startTime": "00:00",
       "endTime": "",
@@ -716,7 +717,8 @@
         ],
         "startDate": "2025-08-31T04:00:00.000Z"
       },
-      "remindEndOfDay": true
+      "remindEndOfDay": true,
+      "remindTomorrow": true
     },
     {
       "id": "ev-1739556987954",
@@ -1223,7 +1225,7 @@
     {
       "id": "e5263084-2b0f-4289-9ed1-ede774a62176",
       "title": "SHINYs in 966-969, 977-981, 990-993",
-      "description": "",
+      "description": "\u2022 993 seems pretty good!",
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "",
@@ -1701,42 +1703,6 @@
       }
     },
     {
-      "id": "e41e6e5f-79c4-4927-9030-ced38b9229b6",
-      "title": "Spice Wars Battle!",
-      "description": "",
-      "remindTomorrow": true,
-      "remindEndOfDay": false,
-      "isAllDay": false,
-      "startTime": "12:30",
-      "endTime": "",
-      "days": [
-        "wednesday",
-        "saturday"
-      ],
-      "includeInExport": {
-        "tuesday": true,
-        "sunday": true,
-        "monday": true,
-        "wednesday": true,
-        "thursday": true,
-        "friday": true,
-        "saturday": true
-      },
-      "variations": {},
-      "order": {},
-      "archived": false,
-      "recurrence": {
-        "type": "weeks",
-        "onPeriods": 1,
-        "offPeriods": 0,
-        "daysOfWeek": [
-          "wednesday",
-          "saturday"
-        ],
-        "startDate": "2025-09-16T00:00:00.000-04:00"
-      }
-    },
-    {
       "id": "fc3ef9fe-0e81-4a26-b693-448794954e61",
       "title": "Register for Desert Storm - FINAL DAY (Due 1 hour before reset)",
       "description": "",
@@ -1837,40 +1803,6 @@
       },
       "dateIncludeOverrides": {
         "2025-09-21": false
-      }
-    },
-    {
-      "id": "83c5acdd-07b9-4dee-b85c-27ef30fb10bd",
-      "title": "Capture Level 4 Trading Post",
-      "description": "",
-      "remindTomorrow": true,
-      "remindEndOfDay": false,
-      "isAllDay": false,
-      "startTime": "11:00",
-      "endTime": "",
-      "days": [
-        "thursday"
-      ],
-      "includeInExport": {
-        "monday": true,
-        "sunday": true,
-        "tuesday": true,
-        "wednesday": true,
-        "thursday": true,
-        "friday": true,
-        "saturday": true
-      },
-      "variations": {},
-      "order": {},
-      "archived": false,
-      "recurrence": {
-        "type": "weeks",
-        "onPeriods": 1,
-        "offPeriods": 0,
-        "daysOfWeek": [
-          "thursday"
-        ],
-        "startDate": "2025-09-11T04:00:00.000Z"
       }
     }
   ]

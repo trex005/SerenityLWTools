@@ -27,7 +27,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
 import { useToast } from "@/hooks/use-toast"
-import { fetchConfig, clearConfigCache } from "@/lib/config-fetcher"
+import { fetchConfig, clearConfigCache, buildChildDeltaFiles } from "@/lib/config-fetcher"
 import AWS from "aws-sdk"
 import { Label } from "@/components/ui/label"
 import {
@@ -40,6 +40,9 @@ import {
 } from "@/components/ui/dialog"
 import { initialConfig } from "@/lib/config-init"
 import { scopedLocalStorage } from "@/lib/scoped-storage"
+import { getActiveTag } from "@/lib/config-tag"
+import JSZip from "jszip"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 /**
  * AdminPanel component
@@ -108,7 +111,7 @@ export function AdminPanel() {
   /**
    * Prepare data for export by ensuring empty end times are preserved
    */
-  const prepareDataForExport = (events: any[]) => {
+  const prepareDataForExport = (events: any[], options?: { stripArchivedFlag?: boolean }) => {
     return events.map((event) => {
       // Create a deep copy of the event to avoid modifying the original
       const eventCopy = JSON.parse(JSON.stringify(event))
@@ -127,32 +130,128 @@ export function AdminPanel() {
         })
       }
 
+      if (options?.stripArchivedFlag) {
+        delete eventCopy.archived
+      }
+
       return eventCopy
     })
   }
 
   /**
-   * Export all data to a JSON file
-   * Creates a downloadable JSON file with events and tips data
+   * Helper to generate a timestamp suitable for filenames
    */
-  const exportData = () => {
-    // Create a data object with all application data
-    const data = {
-      events: prepareDataForExport(events),
-      tips,
-      exportDate: new Date().toISOString(),
-    }
+  const buildTimestamp = () => new Date().toISOString().replace(/[:.]/g, "-")
 
-    // Create a blob and download link
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" })
+  /**
+   * Download helper that handles blob creation and cleanup
+   */
+  const downloadBlob = (blob: Blob, filename: string) => {
     const url = URL.createObjectURL(blob)
-    const a = document.createElement("a")
-    a.href = url
-    a.download = `daily-agenda-export-${new Date().toISOString()}.json`
-    document.body.appendChild(a)
-    a.click()
-    document.body.removeChild(a)
+    const anchor = document.createElement("a")
+    anchor.href = url
+    anchor.download = filename
+    document.body.appendChild(anchor)
+    anchor.click()
+    document.body.removeChild(anchor)
     URL.revokeObjectURL(url)
+  }
+
+  type ExportOption = "config" | "events" | "events_archive" | "tips" | "all"
+  const exportChoices: Array<{ value: ExportOption; label: string }> = [
+    { value: "events", label: "Events (active)" },
+    { value: "events_archive", label: "Events (archived)" },
+    { value: "tips", label: "Tips" },
+    { value: "config", label: "Config" },
+    { value: "all", label: "All (zip)" },
+  ]
+
+  const [exportOption, setExportOption] = useState<ExportOption>("events")
+  const [isExportingData, setIsExportingData] = useState(false)
+
+  // Child-delta payloads are computed vs parent chain
+  type DeltaBundle = {
+    config: any
+    events: any
+    eventsArchive: any
+    tips: any
+  }
+
+  const exportJsonFile = (data: any, filename: string) => {
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" })
+    downloadBlob(blob, filename)
+  }
+
+  const exportSelectedFile = async (
+    selection: Exclude<ExportOption, "all">,
+    tag: string,
+    timestamp: string,
+    deltas: DeltaBundle,
+  ) => {
+    switch (selection) {
+      case "config": {
+        exportJsonFile(deltas.config, `config_${tag}_${timestamp}.json`)
+        break
+      }
+      case "events": {
+        exportJsonFile(deltas.events, `events_${tag}_${timestamp}.json`)
+        break
+      }
+      case "events_archive": {
+        exportJsonFile(deltas.eventsArchive, `events_archive_${tag}_${timestamp}.json`)
+        break
+      }
+      case "tips": {
+        exportJsonFile(deltas.tips, `tips_${tag}_${timestamp}.json`)
+        break
+      }
+    }
+  }
+
+  const exportAllFiles = async (tag: string, timestamp: string, deltas: DeltaBundle) => {
+    const zip = new JSZip()
+    zip.file("config.json", JSON.stringify(deltas.config, null, 2))
+    zip.file("events.json", JSON.stringify(deltas.events, null, 2))
+    zip.file("events_archive.json", JSON.stringify(deltas.eventsArchive, null, 2))
+    zip.file("tips.json", JSON.stringify(deltas.tips, null, 2))
+
+    const blob = await zip.generateAsync({ type: "blob" })
+    downloadBlob(blob, `all_${tag}_${timestamp}.zip`)
+  }
+
+  const handleExport = async () => {
+    const tag = getActiveTag()
+    const timestamp = buildTimestamp()
+
+    setIsExportingData(true)
+    try {
+      // Build child-only deltas against parent chain
+      const deltas = await buildChildDeltaFiles(events, tips, tag)
+
+      if (exportOption === "all") {
+        await exportAllFiles(tag, timestamp, deltas)
+      } else {
+        await exportSelectedFile(exportOption, tag, timestamp, deltas)
+      }
+      toast({
+        title: "Export complete",
+        description: `Saved ${
+          exportOption === "all"
+            ? "all files"
+            : exportChoices.find((choice) => choice.value === exportOption)?.label ?? exportOption
+        } for ${tag}.`,
+        variant: "success",
+      })
+    } catch (error) {
+      console.error("Export failed:", error)
+      toast({
+        title: "Export failed",
+        description: "Something went wrong while exporting. Please try again.",
+        variant: "destructive",
+      })
+    } finally {
+      setIsExportingData(false)
+    }
   }
 
   /**
@@ -371,9 +470,31 @@ export function AdminPanel() {
         <div className="grid gap-4">
           {/* Import/Export Section */}
           <div className="flex flex-col sm:flex-row gap-2">
-            <Button onClick={exportData} className="flex items-center">
-              <Download className="mr-2 h-4 w-4" /> Export All Data
-            </Button>
+            <div className="flex flex-col sm:flex-row gap-2">
+              <Select
+                value={exportOption}
+                onValueChange={(value) => setExportOption(value as ExportOption)}
+              >
+                <SelectTrigger className="sm:w-48">
+                  <SelectValue placeholder="Choose export" />
+                </SelectTrigger>
+                <SelectContent>
+                  {exportChoices.map((choice) => (
+                    <SelectItem key={choice.value} value={choice.value}>
+                      {choice.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <Button
+                onClick={handleExport}
+                className="flex items-center"
+                disabled={isExportingData}
+              >
+                <Download className="mr-2 h-4 w-4" />
+                {isExportingData ? "Exporting..." : "Export"}
+              </Button>
+            </div>
             <div className="relative">
               <Input
                 type="file"

@@ -1,5 +1,5 @@
 {
-  "updated": "2025-10-28T07:28:53.729441Z",
+  "updated": "2025-10-28T07:44:51.899Z",
   "events": [
     {
       "id": "ev-2",
@@ -583,6 +583,114 @@
         "startDate": "2025-09-04T00:00:00.000-04:00"
       },
       "remindTomorrow": true
+    },
+    {
+      "id": "e41e6e5f-79c4-4927-9030-ced38b9229b6",
+      "title": "Spice Wars Battle!",
+      "description": "",
+      "remindTomorrow": true,
+      "remindEndOfDay": false,
+      "isAllDay": false,
+      "startTime": "12:30",
+      "endTime": "",
+      "days": [
+        "wednesday",
+        "saturday"
+      ],
+      "includeInExport": {
+        "tuesday": true,
+        "sunday": true,
+        "monday": true,
+        "wednesday": true,
+        "thursday": true,
+        "friday": true,
+        "saturday": true
+      },
+      "variations": {},
+      "order": {},
+      "archived": true,
+      "recurrence": {
+        "type": "weeks",
+        "onPeriods": 1,
+        "offPeriods": 0,
+        "daysOfWeek": [
+          "wednesday",
+          "saturday"
+        ],
+        "startDate": "2025-09-16T00:00:00.000-04:00"
+      }
+    },
+    {
+      "id": "83c5acdd-07b9-4dee-b85c-27ef30fb10bd",
+      "title": "Capture Level 4 Trading Post",
+      "description": "",
+      "remindTomorrow": true,
+      "remindEndOfDay": false,
+      "isAllDay": false,
+      "startTime": "11:00",
+      "endTime": "",
+      "days": [
+        "thursday"
+      ],
+      "includeInExport": {
+        "monday": true,
+        "sunday": true,
+        "tuesday": true,
+        "wednesday": true,
+        "thursday": true,
+        "friday": true,
+        "saturday": true
+      },
+      "variations": {},
+      "order": {},
+      "archived": true,
+      "recurrence": {
+        "type": "weeks",
+        "onPeriods": 1,
+        "offPeriods": 0,
+        "daysOfWeek": [
+          "thursday"
+        ],
+        "startDate": "2025-09-11T04:00:00.000Z"
+      }
+    },
+    {
+      "id": "226d3b1b-ce75-444f-ac11-5ee3fe3af4b4",
+      "title": "Hot Deals \u2192 Bounty Hunter",
+      "description": "\u2022 Get daily free/diamond ammo by clicking on the \"+\" sign\n   ($5 deal also decent for pay players)\n\u2022 Use Jammers when only purple zombies are left.\n\u2022 Click on Wandering Merchants for free items",
+      "remindTomorrow": false,
+      "remindEndOfDay": true,
+      "isAllDay": true,
+      "startTime": "09:00",
+      "endTime": "",
+      "days": [
+        "sunday",
+        "monday",
+        "tuesday",
+        "wednesday",
+        "thursday",
+        "friday",
+        "saturday"
+      ],
+      "includeInExport": {
+        "monday": true
+      },
+      "variations": {},
+      "order": {},
+      "archived": true,
+      "recurrence": {
+        "type": "daily",
+        "daysOfWeek": [
+          "sunday",
+          "monday",
+          "tuesday",
+          "wednesday",
+          "thursday",
+          "friday",
+          "saturday"
+        ],
+        "interval": 1
+      }
     }
   ]
 }
