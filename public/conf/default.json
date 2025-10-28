@@ -5,7 +5,22 @@
       "tag": "main"
     },
     "lwserenity.com": {
-      "tag": "Serenity"
+      "tag": "serenity"
+    },
+    "lw1901.com": {
+      "tag": "1901"
+    },
+    "ares.lw1901.com": {
+      "tag": "ares.1901"
+    },
+    "lgcy.lwserenity.com": {
+      "tag": "lgcy.996"
+    },
+    "ph3x.lwserenity.com": {
+      "tag": "ph3x.996"
+    },
+    "bltc.lwserenity.com": {
+      "tag": "bltc.996"
     }
   },
   "defaultTag": "main"
