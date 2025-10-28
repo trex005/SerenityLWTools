@@ -1,0 +1,696 @@
+{
+  "updated": "2025-10-28T07:44:51.899Z",
+  "events": [
+    {
+      "id": "ev-2",
+      "title": "Wanted Boss: Code 87/64/39",
+      "description": "\u2022 Weaknesses - 87:Tanks - 64:Air - 39:Missile\n\u2022 Spawns for 3 hours at 00:00, 06:00, 12:00, 18:00\n\u2022 Hit a minimum of 3 times to max rewards\n\u2022 You can send all three squads at once if you only have 10 seconds to invest",
+      "isAllDay": true,
+      "startTime": "09:00",
+      "endTime": "10:00",
+      "days": [
+        "monday",
+        "thursday",
+        "tuesday",
+        "wednesday",
+        "friday",
+        "saturday"
+      ],
+      "includeInExport": {
+        "monday": true,
+        "thursday": true,
+        "tuesday": true,
+        "wednesday": true,
+        "friday": true,
+        "saturday": true
+      },
+      "variations": {},
+      "order": {
+        "monday": 4,
+        "wednesday": 4
+      },
+      "archived": true,
+      "recurrence": {
+        "type": "weekly",
+        "daysOfWeek": [
+          "monday",
+          "thursday",
+          "tuesday",
+          "wednesday",
+          "friday",
+          "saturday"
+        ],
+        "interval": 1
+      }
+    },
+    {
+      "id": "ev-1739559151491",
+      "title": "Crimson Legion",
+      "description": "\u2022 Set your strongest squad to garrison before signing off the night before\n\u2022 R4s will kick the lowest power garrisons to make room as needed\n\u2022 Arrive for the event and garrison/heal like a cryptid should!",
+      "isAllDay": false,
+      "startTime": "12:00",
+      "endTime": "13:00",
+      "days": [
+        "tuesday",
+        "friday"
+      ],
+      "includeInExport": {
+        "tuesday": false,
+        "friday": false
+      },
+      "variations": {},
+      "order": {},
+      "archived": true,
+      "recurrence": {
+        "type": "weekly",
+        "daysOfWeek": [
+          "tuesday",
+          "friday"
+        ],
+        "interval": 1
+      }
+    },
+    {
+      "id": "0966e2c0-e0d7-41ea-9a8b-16453388e178",
+      "title": "Warzone Duel: Capitol War",
+      "description": "\u2022 This is Last War's main event so the rewards are very, very good\n\u2022 It is fairly easy to max participation rewards starting 1-2 hours after the capitol is contested\n\u2022 You can only earn ranking rewards while the capitol is being contested",
+      "isAllDay": false,
+      "startTime": "12:00",
+      "endTime": "",
+      "days": [
+        "saturday"
+      ],
+      "includeInExport": {
+        "wednesday": true,
+        "sunday": true,
+        "monday": true,
+        "tuesday": true,
+        "thursday": true,
+        "friday": true,
+        "saturday": true
+      },
+      "variations": {},
+      "order": {},
+      "archived": true,
+      "recurrence": {
+        "type": "weekly",
+        "daysOfWeek": [
+          "saturday"
+        ],
+        "interval": 1,
+        "startDate": "2025-03-12T00:00:00.000-04:00"
+      },
+      "dateIncludeOverrides": {
+        "2025-05-03": false
+      }
+    },
+    {
+      "id": "0cdd036c-c5fc-4bb6-8c4a-85bcec205e61",
+      "title": "Mason: Strike Back (Ironclad Vehicle)",
+      "description": "\u2022 Burn any spare stamina on these little guys. The rewards add up to much more than Doom Elites not only for you, but for the entire alliance!",
+      "isAllDay": true,
+      "startTime": "09:00",
+      "endTime": "",
+      "days": [
+        "tuesday",
+        "monday"
+      ],
+      "includeInExport": {
+        "monday": true,
+        "sunday": true,
+        "tuesday": true,
+        "wednesday": true,
+        "thursday": true,
+        "friday": true,
+        "saturday": true
+      },
+      "variations": {},
+      "order": {
+        "monday": 11,
+        "tuesday": 9
+      },
+      "archived": true,
+      "recurrence": {
+        "type": "weekly",
+        "daysOfWeek": [
+          "tuesday",
+          "monday"
+        ],
+        "interval": 2
+      },
+      "dateIncludeOverrides": {}
+    },
+    {
+      "id": "688407f7-8f25-47c9-bcbb-3b97632414d8",
+      "title": "Capitol Conquest (trading tile hits at the capitol)",
+      "description": "\u2022 Every week there is a war to see which alliance will control the capitol but in 996, we have an agreement for peaceful transfer of power, so we do not fight.\n\u2022 To get your rewards:\n   \u2022 Send your squad to gather at a tile in the mud around the capitol\n   \u2022 Post the coordinates in world chat for someone to hit\n     - OR -\n   \u2022 Watch for mud tiles to be posted in WC and after verifying the person who posted it is also the one on the tile, attack.",
+      "isAllDay": false,
+      "startTime": "12:00",
+      "endTime": "16:00",
+      "days": [
+        "friday"
+      ],
+      "includeInExport": {
+        "monday": true,
+        "sunday": true,
+        "tuesday": true,
+        "wednesday": true,
+        "thursday": true,
+        "friday": true,
+        "saturday": true
+      },
+      "variations": {},
+      "order": {},
+      "archived": true,
+      "recurrence": {
+        "type": "weekly",
+        "daysOfWeek": [
+          "friday"
+        ],
+        "interval": 1
+      }
+    },
+    {
+      "id": "9bc76420-1995-4ad4-b83e-0d64ac512f4d",
+      "title": "Scout Tater",
+      "description": "",
+      "isAllDay": false,
+      "startTime": "00:15",
+      "endTime": "",
+      "days": [
+        "sunday",
+        "monday",
+        "tuesday",
+        "wednesday",
+        "thursday",
+        "friday"
+      ],
+      "includeInExport": {
+        "monday": true,
+        "sunday": true,
+        "tuesday": true,
+        "wednesday": true,
+        "thursday": true,
+        "friday": true,
+        "saturday": true
+      },
+      "variations": {},
+      "order": {},
+      "archived": true,
+      "recurrence": {
+        "type": "weekly",
+        "daysOfWeek": [
+          "sunday",
+          "monday",
+          "tuesday",
+          "wednesday",
+          "thursday",
+          "friday"
+        ],
+        "interval": 1
+      },
+      "dateIncludeOverrides": {
+        "2025-04-08": true
+      }
+    },
+    {
+      "id": "c0a5849e-5065-450d-ac67-5dd9f5b138c9",
+      "title": "Season I Celebration \u2192 Championship Duel \u2192 Predicts ",
+      "description": "\u2022 Wager to win Black Market Cash without risking any\n\u2022 More icon \u2192 x4 Elite Match \u2192 Predict \u2192 x100\n\u2022 I'm just picking the favorite since I don't feel like doing research",
+      "isAllDay": true,
+      "startTime": "09:00",
+      "endTime": "",
+      "days": [
+        "monday",
+        "tuesday",
+        "wednesday",
+        "thursday"
+      ],
+      "includeInExport": {
+        "monday": false,
+        "sunday": true,
+        "tuesday": false,
+        "wednesday": false,
+        "thursday": false,
+        "friday": true,
+        "saturday": true
+      },
+      "variations": {},
+      "order": {
+        "monday": 13
+      },
+      "archived": true,
+      "recurrence": {
+        "type": "weekly",
+        "daysOfWeek": [
+          "monday",
+          "tuesday",
+          "wednesday",
+          "thursday"
+        ],
+        "interval": 1
+      },
+      "dateIncludeOverrides": {
+        "2025-04-08": true,
+        "2025-04-09": true
+      }
+    },
+    {
+      "id": "1d5cdb18-023b-4511-a73e-0ed1d300b76f",
+      "title": "Season II Celebration \u2192 Black Market",
+      "description": "\u2022 Use all of your refreshes every day\n\u2022 Always buy the free items\n\u2022 Free/Cheap players recommendation:\n   \u2022 Top Row\n      \u2022 Decorations\n      \u2022 Weapon Shards (until you have enough to unlock all Heroes)\n      \u2022 if you have plenty of cash, UR Skill Chips, UR decorations\n   \u2022 Bottom Row:\n      \u2022 Exclusive Weapons (until enough)",
+      "isAllDay": true,
+      "startTime": "09:00",
+      "endTime": "",
+      "days": [
+        "sunday",
+        "monday",
+        "tuesday",
+        "wednesday",
+        "thursday",
+        "friday",
+        "saturday"
+      ],
+      "includeInExport": {
+        "tuesday": true,
+        "sunday": true,
+        "monday": true,
+        "wednesday": true,
+        "thursday": true,
+        "friday": true,
+        "saturday": true
+      },
+      "variations": {},
+      "order": {
+        "monday": 1,
+        "saturday": 0,
+        "sunday": 0,
+        "tuesday": 1,
+        "wednesday": 0,
+        "thursday": 0,
+        "friday": 0
+      },
+      "archived": true,
+      "recurrence": {
+        "type": "daily",
+        "daysOfWeek": [
+          "sunday",
+          "monday",
+          "tuesday",
+          "wednesday",
+          "thursday",
+          "friday",
+          "saturday"
+        ],
+        "interval": 1,
+        "startDate": "2025-04-08T00:00:00.000-04:00",
+        "pattern": {
+          "onWeeks": 1,
+          "offWeeks": 1,
+          "phaseStartDate": "2025-07-05T00:06:18.516Z"
+        }
+      },
+      "dateIncludeOverrides": {
+        "2025-04-07": true,
+        "2025-04-08": true,
+        "2025-04-09": true,
+        "2025-04-10": true,
+        "2025-04-11": true,
+        "2025-04-12": true,
+        "2025-04-13": true,
+        "2025-07-04": false,
+        "2025-07-06": false,
+        "2025-07-03": false,
+        "2025-07-02": false,
+        "2025-07-01": false,
+        "2025-06-30": false,
+        "2025-06-29": false,
+        "2025-06-28": false,
+        "2025-06-27": false,
+        "2025-07-05": true
+      }
+    },
+    {
+      "id": "5870d28b-5d10-4dd9-83fb-612e4c28e0b0",
+      "title": "Meteorite Iron War - Round 1",
+      "description": "",
+      "isAllDay": false,
+      "startTime": "00:10",
+      "endTime": "00:40",
+      "days": [
+        "saturday"
+      ],
+      "includeInExport": {
+        "monday": false,
+        "sunday": false,
+        "tuesday": false,
+        "wednesday": false,
+        "thursday": false,
+        "friday": false,
+        "saturday": true
+      },
+      "variations": {},
+      "order": {},
+      "archived": true,
+      "recurrence": {
+        "type": "weekly",
+        "daysOfWeek": [
+          "saturday"
+        ],
+        "interval": 1
+      },
+      "dateIncludeOverrides": {
+        "2025-05-03": true,
+        "2025-07-05": true
+      }
+    },
+    {
+      "id": "a061f2df-34c9-4bdd-9fa2-a95e11470268",
+      "title": "Meteorite Iron War - Round 2",
+      "description": "",
+      "isAllDay": false,
+      "startTime": "12:30",
+      "endTime": "13:00",
+      "days": [
+        "saturday"
+      ],
+      "includeInExport": {
+        "saturday": true,
+        "sunday": true,
+        "monday": true,
+        "tuesday": true,
+        "wednesday": true,
+        "thursday": true,
+        "friday": true
+      },
+      "variations": {},
+      "order": {},
+      "archived": true,
+      "recurrence": {
+        "type": "weekly",
+        "daysOfWeek": [
+          "saturday"
+        ],
+        "interval": 1,
+        "startDate": "2025-05-03T00:00:00.000-04:00"
+      },
+      "dateIncludeOverrides": {
+        "2025-05-03": true,
+        "2025-07-19": true
+      }
+    },
+    {
+      "id": "5a015825-f2c7-44ce-81c6-c09bcff682e2",
+      "title": "Beast Crisis",
+      "description": "",
+      "isAllDay": false,
+      "startTime": "12:00",
+      "endTime": "12:35",
+      "days": [
+        "tuesday",
+        "friday"
+      ],
+      "includeInExport": {
+        "thursday": true,
+        "sunday": true,
+        "monday": true,
+        "tuesday": true,
+        "wednesday": true,
+        "friday": true,
+        "saturday": true
+      },
+      "variations": {},
+      "order": {},
+      "archived": true,
+      "recurrence": {
+        "type": "weekly",
+        "daysOfWeek": [
+          "tuesday",
+          "friday"
+        ],
+        "interval": 1,
+        "startDate": "2025-05-22T00:00:00.000-04:00"
+      }
+    },
+    {
+      "id": "1f65fd3a-b31b-4d67-9d46-0a53606e79a4",
+      "title": "Rare Soil War",
+      "description": "",
+      "isAllDay": false,
+      "startTime": "12:30",
+      "endTime": "13:10",
+      "days": [
+        "wednesday",
+        "saturday"
+      ],
+      "includeInExport": {
+        "thursday": true,
+        "sunday": true,
+        "monday": true,
+        "tuesday": true,
+        "wednesday": true,
+        "friday": true,
+        "saturday": true
+      },
+      "variations": {},
+      "order": {},
+      "archived": true,
+      "recurrence": {
+        "type": "weekly",
+        "daysOfWeek": [
+          "wednesday",
+          "saturday"
+        ],
+        "interval": 1,
+        "startDate": "2025-05-22T00:00:00.000-04:00"
+      }
+    },
+    {
+      "id": "fecdeae1-1d56-493c-9e92-d3103bc39910",
+      "title": "Golden Melody",
+      "description": "\u2022 Use at minimum 1 ticket, score at least 5,000 points then collect your tasks",
+      "isAllDay": true,
+      "startTime": "09:00",
+      "endTime": "",
+      "days": [
+        "monday",
+        "tuesday",
+        "wednesday",
+        "thursday",
+        "friday",
+        "saturday"
+      ],
+      "includeInExport": {
+        "monday": true,
+        "sunday": true,
+        "tuesday": true,
+        "wednesday": true,
+        "thursday": true,
+        "friday": true,
+        "saturday": true
+      },
+      "variations": {},
+      "order": {
+        "monday": 2,
+        "tuesday": 3,
+        "wednesday": 2,
+        "thursday": 1,
+        "friday": 1,
+        "saturday": 1
+      },
+      "archived": true,
+      "recurrence": {
+        "type": "custom",
+        "daysOfWeek": [
+          "monday",
+          "tuesday",
+          "wednesday",
+          "thursday",
+          "friday",
+          "saturday"
+        ],
+        "interval": 1,
+        "startDate": "2025-07-07T00:00:00.000-04:00",
+        "pattern": {
+          "onWeeks": 1,
+          "offWeeks": 99,
+          "phaseStartDate": "2025-07-07T08:19:54.884Z"
+        }
+      }
+    },
+    {
+      "id": "e05c1e28-c800-48d1-8d3a-53898d5f2922",
+      "title": "Glacieradon",
+      "description": "",
+      "isAllDay": false,
+      "startTime": "23:00",
+      "endTime": "",
+      "days": [
+        "thursday"
+      ],
+      "includeInExport": {
+        "wednesday": true,
+        "sunday": true,
+        "monday": true,
+        "tuesday": true,
+        "thursday": true,
+        "friday": true,
+        "saturday": true
+      },
+      "variations": {},
+      "order": {},
+      "archived": true,
+      "recurrence": {
+        "type": "weekly",
+        "daysOfWeek": [
+          "thursday"
+        ],
+        "interval": 2,
+        "startDate": "2025-08-06T00:00:00.000-04:00"
+      },
+      "remindTomorrow": true
+    },
+    {
+      "id": "16f2e4b5-58d7-4c14-b409-ef1e3e1b84c6",
+      "title": "Return of the Dead - Defend Alliance Center",
+      "description": "",
+      "isAllDay": false,
+      "startTime": "11:00",
+      "endTime": "11:30",
+      "days": [
+        "tuesday",
+        "friday"
+      ],
+      "includeInExport": {
+        "thursday": true,
+        "sunday": true,
+        "monday": true,
+        "tuesday": true,
+        "wednesday": true,
+        "friday": true,
+        "saturday": true
+      },
+      "variations": {},
+      "order": {},
+      "archived": true,
+      "recurrence": {
+        "type": "weekly",
+        "daysOfWeek": [
+          "tuesday",
+          "friday"
+        ],
+        "interval": 1,
+        "startDate": "2025-09-04T00:00:00.000-04:00"
+      },
+      "remindTomorrow": true
+    },
+    {
+      "id": "e41e6e5f-79c4-4927-9030-ced38b9229b6",
+      "title": "Spice Wars Battle!",
+      "description": "",
+      "remindTomorrow": true,
+      "remindEndOfDay": false,
+      "isAllDay": false,
+      "startTime": "12:30",
+      "endTime": "",
+      "days": [
+        "wednesday",
+        "saturday"
+      ],
+      "includeInExport": {
+        "tuesday": true,
+        "sunday": true,
+        "monday": true,
+        "wednesday": true,
+        "thursday": true,
+        "friday": true,
+        "saturday": true
+      },
+      "variations": {},
+      "order": {},
+      "archived": true,
+      "recurrence": {
+        "type": "weeks",
+        "onPeriods": 1,
+        "offPeriods": 0,
+        "daysOfWeek": [
+          "wednesday",
+          "saturday"
+        ],
+        "startDate": "2025-09-16T00:00:00.000-04:00"
+      }
+    },
+    {
+      "id": "83c5acdd-07b9-4dee-b85c-27ef30fb10bd",
+      "title": "Capture Level 4 Trading Post",
+      "description": "",
+      "remindTomorrow": true,
+      "remindEndOfDay": false,
+      "isAllDay": false,
+      "startTime": "11:00",
+      "endTime": "",
+      "days": [
+        "thursday"
+      ],
+      "includeInExport": {
+        "monday": true,
+        "sunday": true,
+        "tuesday": true,
+        "wednesday": true,
+        "thursday": true,
+        "friday": true,
+        "saturday": true
+      },
+      "variations": {},
+      "order": {},
+      "archived": true,
+      "recurrence": {
+        "type": "weeks",
+        "onPeriods": 1,
+        "offPeriods": 0,
+        "daysOfWeek": [
+          "thursday"
+        ],
+        "startDate": "2025-09-11T04:00:00.000Z"
+      }
+    },
+    {
+      "id": "226d3b1b-ce75-444f-ac11-5ee3fe3af4b4",
+      "title": "Hot Deals \u2192 Bounty Hunter",
+      "description": "\u2022 Get daily free/diamond ammo by clicking on the \"+\" sign\n   ($5 deal also decent for pay players)\n\u2022 Use Jammers when only purple zombies are left.\n\u2022 Click on Wandering Merchants for free items",
+      "remindTomorrow": false,
+      "remindEndOfDay": true,
+      "isAllDay": true,
+      "startTime": "09:00",
+      "endTime": "",
+      "days": [
+        "sunday",
+        "monday",
+        "tuesday",
+        "wednesday",
+        "thursday",
+        "friday",
+        "saturday"
+      ],
+      "includeInExport": {
+        "monday": true
+      },
+      "variations": {},
+      "order": {},
+      "archived": true,
+      "recurrence": {
+        "type": "daily",
+        "daysOfWeek": [
+          "sunday",
+          "monday",
+          "tuesday",
+          "wednesday",
+          "thursday",
+          "friday",
+          "saturday"
+        ],
+        "interval": 1
+      }
+    }
+  ]
+}

@@ -10,17 +10,14 @@ import { ReadOnlyDayAgenda } from "@/components/read-only-day-agenda"
 import { ReadOnlyTips } from "@/components/read-only-tips"
 import { setupTipHashNavigation } from "@/lib/hash-navigation"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { scopedLocalStorage } from "@/lib/scoped-storage"
 
 export function UserInterface() {
   // State to track which main tab is currently active
   const [activeTab, setActiveTab] = useState("schedule")
   const [showLocalTime, setShowLocalTime] = useState(() => {
-    // Load preference from localStorage, default to true
-    if (typeof window !== "undefined") {
-      const saved = localStorage.getItem("show-local-time")
-      return saved ? JSON.parse(saved) : true
-    }
-    return true
+    const saved = scopedLocalStorage.getItem("show-local-time")
+    return saved ? JSON.parse(saved) : true
   })
 
   // State for date range - defaults to next 7 days for schedule view in UTC-2
@@ -62,7 +59,7 @@ export function UserInterface() {
 
   // Add a useEffect to save the preference to localStorage
   useEffect(() => {
-    localStorage.setItem("show-local-time", JSON.stringify(showLocalTime))
+    scopedLocalStorage.setItem("show-local-time", JSON.stringify(showLocalTime))
   }, [showLocalTime])
 
   const dayTabs = useMemo(() => {

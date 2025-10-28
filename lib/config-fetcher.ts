@@ -1,184 +1,282 @@
-/**
- * Fetches the configuration from the public directory or from the CONFIG_URL if available
- * This allows us to update the configuration without rebuilding the app
- */
-import { initialConfig } from "./config-init"
+"use client"
 
-// Module-level cache for the fetched config
-let cachedConfig: any = null
-let lastFetchTime = 0
-const CACHE_TTL = 5 * 60 * 1000 // 5 minutes in milliseconds
-let fetchPromise: Promise<any> | null = null
+import { getActiveTag, getTagOverride, sanitizeTag, setActiveTag } from "./config-tag"
 
-// Get the CONFIG_URL from environment variables if available
-const CONFIG_URL = process.env.CONFIG_URL || null
+type DomainMapping = {
+  tag?: string
+  [key: string]: unknown
+}
 
-/**
- * Fetches the configuration from the public directory or from CONFIG_URL if available
- * @param force If true, bypass cache and fetch a fresh copy
- * @param retryCount Number of retries attempted (for internal use)
- */
-export async function fetchConfig(force = false, retryCount = 0): Promise<any> {
-  console.log(`Fetching config (force=${force}, retryCount=${retryCount})`)
+interface RootConfig {
+  updated?: string
+  domains?: Record<string, DomainMapping>
+  defaultTag?: string
+  [key: string]: unknown
+}
 
-  // Check if we have a valid cached config and we're not forcing a refresh
-  const now = Date.now()
-  if (!force && cachedConfig && now - lastFetchTime < CACHE_TTL) {
-    console.log("Using cached configuration")
-    return cachedConfig
+interface TagBundle {
+  tag: string
+  tagConfig: Record<string, unknown> | null
+  events: any[]
+  archivedEvents: any[]
+  tips: any[]
+  updated: {
+    root: string | null
+    tagConfig: string | null
+    events: string | null
+    eventsArchive: string | null
+    tips: string | null
   }
+}
 
-  // If a fetch is already in progress and we're not forcing a refresh, return the existing promise
-  if (fetchPromise && !force) {
-    console.log("Using existing fetch promise")
-    return fetchPromise
+interface CacheEntry {
+  data: TagBundle
+  timestamp: number
+}
+
+const CONFIG_URL = process.env.CONFIG_URL || ""
+const CACHE_TTL = 5 * 60 * 1000
+
+const cacheByTag = new Map<string, CacheEntry>()
+const inFlightByTag = new Map<string, Promise<TagBundle>>()
+
+let cachedRootConfig: RootConfig | null = null
+let cachedRootTimestamp = 0
+let rootPromise: Promise<RootConfig> | null = null
+
+const withCacheBuster = (url: string) => {
+  const separator = url.includes("?") ? "&" : "?"
+  return `${url}${separator}t=${Date.now()}`
+}
+
+const normalizeBasePath = (path: string): string => {
+  const trimmed = path.replace(/^\//, "").replace(/\/$/, "")
+  return trimmed
+}
+
+const buildUrl = (segment: string): string => {
+  const normalizedSegment = segment.replace(/^\//, "")
+  if (CONFIG_URL) {
+    const base = CONFIG_URL.replace(/\/$/, "")
+    return withCacheBuster(`${base}/${normalizedSegment}`)
   }
+  const prefix = normalizeBasePath("/conf")
+  return withCacheBuster(`/${prefix}/${normalizedSegment}`)
+}
 
-  // If we're forcing a refresh and there's an existing fetch in progress,
-  // cancel it by setting fetchPromise to null
-  if (force && fetchPromise) {
-    console.log("Cancelling existing fetch promise")
-    fetchPromise = null
-  }
+const fetchJson = async (segment: string): Promise<any | null> => {
+  try {
+    const response = await fetch(buildUrl(segment), {
+      cache: "no-store",
+      headers: {
+        "Cache-Control": "no-cache, no-store, must-revalidate",
+        Pragma: "no-cache",
+        Expires: "0",
+      },
+    })
 
-  // Create a new fetch promise
-  fetchPromise = (async () => {
-    try {
-      let data: any = null
-
-      // Try to fetch from CONFIG_URL first if available
-      if (CONFIG_URL) {
-        console.log(`Attempting to fetch from CONFIG_URL: ${CONFIG_URL}`)
-        try {
-          const response = await fetch(`${CONFIG_URL}?t=${Date.now()}`, {
-            cache: "no-store",
-            headers: {
-              "Cache-Control": "no-cache, no-store, must-revalidate",
-              Pragma: "no-cache",
-              Expires: "0",
-            },
-          })
-
-          if (response.ok) {
-            // Check if the response is JSON before trying to parse it
-            const contentType = response.headers.get("content-type")
-            if (contentType && contentType.includes("application/json")) {
-              data = await response.json()
-              console.log("Successfully fetched from CONFIG_URL")
-            } else {
-              console.warn(`CONFIG_URL returned non-JSON content: ${contentType}`)
-            }
-          } else {
-            console.warn(`Failed to fetch from CONFIG_URL: ${response.status} ${response.statusText}`)
-          }
-        } catch (error) {
-          //console.error("Error fetching from CONFIG_URL:", error)
-        }
-      }
-
-      // If CONFIG_URL fetch failed or wasn't available, try the local file
-      if (!data) {
-        console.log("Attempting to fetch from local public directory")
-        const cacheBuster = Date.now()
-
-        // Try both possible paths for the config file
-        const configPaths = [`/config-init.json?t=${cacheBuster}`, `/public/config-init.json?t=${cacheBuster}`]
-
-        let response = null
-        let successPath = null
-
-        // Try each path until one works
-        for (const path of configPaths) {
-          try {
-            console.log(`Trying path: ${path}`)
-            const resp = await fetch(path, {
-              cache: "no-store",
-              headers: {
-                "Cache-Control": "no-cache, no-store, must-revalidate",
-                Pragma: "no-cache",
-                Expires: "0",
-              },
-            })
-
-            if (resp.ok) {
-              response = resp
-              successPath = path
-              break
-            } else {
-              console.warn(`Failed to fetch from ${path}: ${resp.status} ${resp.statusText}`)
-            }
-          } catch (error) {
-            console.warn(`Error fetching from ${path}:`, error)
-          }
-        }
-
-        if (!response) {
-          console.warn("All fetch attempts failed, using initial config")
-          return initialConfig
-        }
-
-        try {
-          // Check if the response is JSON before trying to parse it
-          const contentType = response.headers.get("content-type")
-          if (contentType && contentType.includes("application/json")) {
-            data = await response.json()
-            console.log(`Successfully fetched from ${successPath}`)
-          } else {
-            console.warn(`Response is not JSON (${contentType}), using initial config`)
-            // If we get HTML or other non-JSON content, use the initial config
-            return initialConfig
-          }
-        } catch (parseError) {
-          console.error("Error parsing JSON:", parseError)
-          return initialConfig
-        }
-      }
-
-      // Validate that the data has the expected structure
-      if (!data || !data.events || !Array.isArray(data.events)) {
-        console.warn("Invalid configuration format, falling back to initial config")
-        return initialConfig
-      }
-
-      // Successfully loaded configuration
-      console.log("Configuration loaded successfully")
-
-      // Check if we're in a browser environment and in admin mode
-      const isBrowser = typeof window !== "undefined"
-      const isAdmin = isBrowser && localStorage.getItem("isAdmin") === "true"
-
-      // Only update the cache if in admin mode or not in a browser
-      if (isAdmin || !isBrowser) {
-        cachedConfig = data
-        lastFetchTime = now
-      }
-
-      return data
-    } catch (error) {
-      console.error("Error fetching configuration:", error)
-      return initialConfig
-    } finally {
-      // Clear the promise when done
-      fetchPromise = null
+    if (!response.ok) {
+      return null
     }
+
+    const contentType = response.headers.get("content-type")
+    if (contentType && !contentType.includes("application/json")) {
+      return null
+    }
+
+    return await response.json()
+  } catch (error) {
+    console.warn(`Error fetching ${segment}:`, error)
+    return null
+  }
+}
+
+const fetchRootConfig = async (force = false): Promise<RootConfig> => {
+  const now = Date.now()
+
+  if (!force && cachedRootConfig && now - cachedRootTimestamp < CACHE_TTL) {
+    return cachedRootConfig
+  }
+
+  if (!force && rootPromise) {
+    return rootPromise
+  }
+
+  if (force) {
+    rootPromise = null
+    cachedRootConfig = null
+    cachedRootTimestamp = 0
+  }
+
+  rootPromise = (async () => {
+    const rootConfig = (await fetchJson("default.json")) ?? {}
+    cachedRootConfig = rootConfig
+    cachedRootTimestamp = Date.now()
+    rootPromise = null
+    return rootConfig
   })()
 
-  return fetchPromise
+  return rootPromise
 }
 
-// Function to explicitly clear the cache
-export function clearConfigCache() {
-  console.log("Clearing config cache")
-  cachedConfig = null
-  lastFetchTime = 0
-  fetchPromise = null
+const normalizeEvents = (events: any[], archived: boolean): any[] => {
+  if (!Array.isArray(events)) return []
+  return events.map((event) => {
+    if (archived) {
+      return {
+        ...event,
+        archived: true,
+      }
+    }
+    return {
+      archived: false,
+      ...event,
+      archived: event?.archived ?? false,
+    }
+  })
 }
 
-// Preload the configuration without using hooks
+const extractArray = (payload: any, key: string): { items: any[]; updated: string | null } => {
+  if (!payload) {
+    return { items: [], updated: null }
+  }
+  if (Array.isArray(payload)) {
+    const updated = typeof payload[0]?.updated === "string" ? payload[0].updated : null
+    return { items: payload, updated }
+  }
+  const updated = typeof payload.updated === "string" ? payload.updated : null
+  const items = Array.isArray(payload[key]) ? payload[key] : []
+  return { items, updated }
+}
+
+const sanitizeDomainTag = (value: unknown): string | null => {
+  if (typeof value !== "string") return null
+  return sanitizeTag(value)
+}
+
+const resolveTag = (root: RootConfig): string => {
+  const override = getTagOverride()
+  if (override) {
+    return override
+  }
+
+  const hostname = typeof window !== "undefined" ? window.location.hostname : ""
+  const domainTag = hostname && root.domains ? sanitizeDomainTag(root.domains[hostname]?.tag) : null
+  if (domainTag) {
+    return domainTag
+  }
+
+  const defaultTag = sanitizeDomainTag(root.defaultTag)
+  if (defaultTag) {
+    return defaultTag
+  }
+
+  throw new Error("Unable to resolve configuration tag")
+}
+
+const fetchTagBundle = async (tag: string, root: RootConfig): Promise<TagBundle> => {
+  const [configPayload, eventsPayload, archivedPayload, tipsPayload] = await Promise.all([
+    fetchJson(`${tag}/config.json`).then((data) => data ?? fetchJson(`${tag}/conf.json`)),
+    fetchJson(`${tag}/events.json`),
+    fetchJson(`${tag}/events_archive.json`),
+    fetchJson(`${tag}/tips.json`),
+  ])
+
+  const tagConfigUpdated = typeof configPayload?.updated === "string" ? configPayload.updated : null
+  const tagConfigData =
+    configPayload && typeof configPayload === "object" ? { ...configPayload } : null
+
+  if (tagConfigData && tagConfigData.updated) {
+    delete tagConfigData.updated
+  }
+
+  const activeEvents = extractArray(eventsPayload, "events")
+  const archivedEvents = extractArray(archivedPayload, "events")
+  const tips = extractArray(tipsPayload, "tips")
+
+  const combinedEvents = [
+    ...normalizeEvents(activeEvents.items, false),
+    ...normalizeEvents(archivedEvents.items, true),
+  ]
+
+  return {
+    tag,
+    tagConfig: tagConfigData,
+    events: combinedEvents,
+    archivedEvents: normalizeEvents(archivedEvents.items, true),
+    tips: Array.isArray(tips.items) ? tips.items : [],
+    updated: {
+      root: typeof root.updated === "string" ? root.updated : null,
+      tagConfig: tagConfigUpdated,
+      events: activeEvents.updated,
+      eventsArchive: archivedEvents.updated,
+      tips: tips.updated,
+    },
+  }
+}
+
+const emptyBundle = (): TagBundle => ({
+  tag: getActiveTag(),
+  tagConfig: null,
+  events: [],
+  archivedEvents: [],
+  tips: [],
+  updated: {
+    root: null,
+    tagConfig: null,
+    events: null,
+    eventsArchive: null,
+    tips: null,
+  },
+})
+
+export const fetchConfig = async (force = false): Promise<TagBundle> => {
+  try {
+    const rootConfig = await fetchRootConfig(force)
+    const resolvedTag = resolveTag(rootConfig)
+    setActiveTag(resolvedTag)
+
+    const now = Date.now()
+    if (!force) {
+      const cached = cacheByTag.get(resolvedTag)
+      if (cached && now - cached.timestamp < CACHE_TTL) {
+        return cached.data
+      }
+      const inFlight = inFlightByTag.get(resolvedTag)
+      if (inFlight) {
+        return inFlight
+      }
+    } else {
+      inFlightByTag.delete(resolvedTag)
+      cacheByTag.delete(resolvedTag)
+    }
+
+    const promise = fetchTagBundle(resolvedTag, rootConfig)
+    inFlightByTag.set(resolvedTag, promise)
+
+    const data = await promise
+    cacheByTag.set(resolvedTag, { data, timestamp: Date.now() })
+    inFlightByTag.delete(resolvedTag)
+
+    return data
+  } catch (error) {
+    console.error("Error fetching configuration bundle:", error)
+    return emptyBundle()
+  }
+}
+
+export const clearConfigCache = () => {
+  cacheByTag.clear()
+  inFlightByTag.clear()
+  cachedRootConfig = null
+  cachedRootTimestamp = 0
+  rootPromise = null
+}
+
 if (typeof window !== "undefined") {
   setTimeout(() => {
     fetchConfig().catch((error) => {
-      console.error("Error during initial config fetch:", error)
+      console.error("Error during initial config preload:", error)
     })
   }, 100)
 }

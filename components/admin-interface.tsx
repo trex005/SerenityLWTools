@@ -18,18 +18,15 @@ import { useAdminState } from "@/hooks/use-admin-state"
 import { Button } from "@/components/ui/button"
 import { setupTipHashNavigation } from "@/lib/hash-navigation"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { scopedLocalStorage } from "@/lib/scoped-storage"
 
 export function AdminInterface() {
   // State to track which main tab is currently active
   const [activeTab, setActiveTab] = useState("schedule")
   const { exitAdminMode } = useAdminState()
   const [showLocalTime, setShowLocalTime] = useState(() => {
-    // Load preference from localStorage, default to true
-    if (typeof window !== "undefined") {
-      const saved = localStorage.getItem("show-local-time")
-      return saved ? JSON.parse(saved) : true
-    }
-    return true
+    const saved = scopedLocalStorage.getItem("show-local-time")
+    return saved ? JSON.parse(saved) : true
   })
 
   // Add a state to force refresh of the tips component
@@ -42,7 +39,7 @@ export function AdminInterface() {
 
   // Add a useEffect to save the preference to localStorage
   useEffect(() => {
-    localStorage.setItem("show-local-time", JSON.stringify(showLocalTime))
+    scopedLocalStorage.setItem("show-local-time", JSON.stringify(showLocalTime))
   }, [showLocalTime])
 
   // Set up hash navigation when component mounts

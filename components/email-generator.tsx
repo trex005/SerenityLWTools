@@ -34,6 +34,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
 import { Checkbox } from "@/components/ui/checkbox"
+import { scopedLocalStorage } from "@/lib/scoped-storage"
 
 /**
  * Simple string hashing function to create a unique identifier for description content
@@ -93,7 +94,7 @@ export function EmailGenerator({ initialDateRange }: EmailGeneratorProps) {
   // State for regeneration dialog
   const [showRegenerateDialog, setShowRegenerateDialog] = useState(false)
   const [clearTipOnRegenerate, setClearTipOnRegenerate] = useState(() => {
-    const saved = localStorage.getItem("daily-agenda-clear-tip-preference")
+    const saved = scopedLocalStorage.getItem("daily-agenda-clear-tip-preference")
     return saved ? JSON.parse(saved) : true
   })
   const [rememberDecision, setRememberDecision] = useState(false)
@@ -102,21 +103,21 @@ export function EmailGenerator({ initialDateRange }: EmailGeneratorProps) {
   const prevDateRangeRef = useRef<[Date | undefined, Date | undefined]>(dateRange)
   
   // Check localStorage for remembered decision
-  const rememberedDecision = typeof window !== "undefined" ? localStorage.getItem("regenerate-agenda-decision") : null
+  const rememberedDecision = scopedLocalStorage.getItem("regenerate-agenda-decision")
 
   // Load persisted content from localStorage on initial render
   useEffect(() => {
-    const savedHeader = localStorage.getItem("daily-agenda-email-header")
+    const savedHeader = scopedLocalStorage.getItem("daily-agenda-email-header")
     if (savedHeader) {
       setHeaderContent(savedHeader)
     }
 
-    const savedAgenda = localStorage.getItem("daily-agenda-email-content")
+    const savedAgenda = scopedLocalStorage.getItem("daily-agenda-email-content")
     if (savedAgenda) {
       setEditedAgendaContent(savedAgenda)
     }
 
-    const savedTip = localStorage.getItem("daily-agenda-tip-content")
+    const savedTip = scopedLocalStorage.getItem("daily-agenda-tip-content")
     if (savedTip) {
       setEditedTipContent(savedTip)
     }
@@ -124,22 +125,22 @@ export function EmailGenerator({ initialDateRange }: EmailGeneratorProps) {
 
   // Save header content to localStorage whenever it changes
   useEffect(() => {
-    localStorage.setItem("daily-agenda-email-header", headerContent)
+    scopedLocalStorage.setItem("daily-agenda-email-header", headerContent)
   }, [headerContent])
 
   // Save agenda content to localStorage whenever it changes
   useEffect(() => {
-    localStorage.setItem("daily-agenda-email-content", editedAgendaContent)
+    scopedLocalStorage.setItem("daily-agenda-email-content", editedAgendaContent)
   }, [editedAgendaContent])
 
   // Save tip content to localStorage whenever it changes
   useEffect(() => {
-    localStorage.setItem("daily-agenda-tip-content", editedTipContent)
+    scopedLocalStorage.setItem("daily-agenda-tip-content", editedTipContent)
   }, [editedTipContent])
 
   // Save clear tip preference to localStorage
   useEffect(() => {
-    localStorage.setItem("daily-agenda-clear-tip-preference", JSON.stringify(clearTipOnRegenerate))
+    scopedLocalStorage.setItem("daily-agenda-clear-tip-preference", JSON.stringify(clearTipOnRegenerate))
   }, [clearTipOnRegenerate])
 
   // Check if date range has changed and show regenerate dialog
@@ -687,8 +688,8 @@ export function EmailGenerator({ initialDateRange }: EmailGeneratorProps) {
    * Handle regenerate dialog confirmation
    */
   const handleRegenerateConfirm = () => {
-    if (rememberDecision && typeof window !== "undefined") {
-      localStorage.setItem("regenerate-agenda-decision", "regenerate")
+    if (rememberDecision) {
+      scopedLocalStorage.setItem("regenerate-agenda-decision", "regenerate")
     }
     generateAgendaContent()
     setEditedAgendaContent(agendaContent)
@@ -704,8 +705,8 @@ export function EmailGenerator({ initialDateRange }: EmailGeneratorProps) {
   }
 
   const handleRegenerateCancel = () => {
-    if (rememberDecision && typeof window !== "undefined") {
-      localStorage.setItem("regenerate-agenda-decision", "keep")
+    if (rememberDecision) {
+      scopedLocalStorage.setItem("regenerate-agenda-decision", "keep")
     }
     setShowRegenerateDialog(false)
     setRememberDecision(false)

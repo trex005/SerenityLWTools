@@ -9,6 +9,8 @@
 import { create } from "zustand"
 import { persist } from "zustand/middleware"
 import { fetchConfig } from "@/lib/config-fetcher"
+import { scopedStateStorage } from "@/lib/scoped-storage"
+import { getActiveTag, onTagChange } from "@/lib/config-tag"
 
 // Define the event interface
 interface Event {
@@ -39,6 +41,7 @@ interface Event {
 
 // Define the events store state
 interface EventsState {
+  activeTag: string
   events: Event[]
   initialized: boolean
   searchTerm: string
@@ -71,6 +74,7 @@ const normalizeDayName = (day: string): string => {
 export const useEvents = create<EventsState>()(
   persist(
     (set, get) => ({
+      activeTag: getActiveTag(),
       events: [],
       initialized: false,
       searchTerm: "",
@@ -177,7 +181,7 @@ export const useEvents = create<EventsState>()(
 
       // Initialize events from configuration if not already initialized
       initializeFromConfig: async (forceRefresh = false) => {
-        const { initialized, events } = get()
+        const { initialized, events, activeTag } = get()
 
         // Skip if already initialized and we have events, unless forceRefresh is true
         if (initialized && events.length > 0 && !forceRefresh) {
@@ -191,15 +195,15 @@ export const useEvents = create<EventsState>()(
           if (config && config.events && Array.isArray(config.events)) {
             // Use setEvents to ensure proper processing of all fields
             get().setEvents(config.events)
-            set({ initialized: true })
+            set({ initialized: true, activeTag: config.tag || activeTag })
           } else {
             // Mark as initialized even if no events were found
-            set({ initialized: true })
+            set({ initialized: true, activeTag: config?.tag || activeTag })
           }
         } catch (error) {
           console.error("Error initializing events:", error)
           // Mark as initialized to prevent repeated attempts
-          set({ initialized: true })
+          set({ initialized: true, activeTag })
         }
       },
 
@@ -412,6 +416,7 @@ export const useEvents = create<EventsState>()(
     }),
     {
       name: "daily-agenda-events",
+      storage: scopedStateStorage,
       // Disable automatic rehydration initialization
       onRehydrateStorage: () => () => {
         // Do nothing - let the StorageInitializer handle initialization
@@ -419,3 +424,26 @@ export const useEvents = create<EventsState>()(
     },
   ),
 )
+
+onTagChange((nextTag) => {
+  const { activeTag } = useEvents.getState()
+  if (activeTag === nextTag) {
+    return
+  }
+
+  useEvents.setState({
+    activeTag: nextTag,
+    events: [],
+    filteredEvents: [],
+    initialized: false,
+  })
+
+  setTimeout(() => {
+    useEvents
+      .getState()
+      .initializeFromConfig(true)
+      .catch((error) => {
+        console.error("Failed to reset events after tag change:", error)
+      })
+  }, 0)
+})

@@ -199,6 +199,7 @@ export function EventDialog({ event, open, onOpenChange, initialDay = "monday", 
           daysOfWeek: ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"], // Default to all days
           interval: 1,
           startDate: startDate, // Use the initialDate if provided
+          endDate: undefined,
         },
       })
       setIncludeInExportByDefault(true)

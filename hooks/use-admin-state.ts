@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { create } from "zustand"
+import { scopedLocalStorage } from "@/lib/scoped-storage"
 
 interface AdminState {
   isAdmin: boolean
@@ -26,8 +27,8 @@ export function useAdminState() {
 
   // Check localStorage on component mount
   useEffect(() => {
-    const storedAdminStatus = localStorage.getItem("isAdmin")
-    const storedAdminAccess = localStorage.getItem("hasAdminAccess")
+    const storedAdminStatus = scopedLocalStorage.getItem("isAdmin")
+    const storedAdminAccess = scopedLocalStorage.getItem("hasAdminAccess")
 
     if (storedAdminStatus === "true" && !isAdmin) {
       setIsAdmin(true)
@@ -46,8 +47,8 @@ export function useAdminState() {
     if (isCorrect) {
       setIsAdmin(true)
       setHasAdminAccess(true)
-      localStorage.setItem("isAdmin", "true")
-      localStorage.setItem("hasAdminAccess", "true")
+      scopedLocalStorage.setItem("isAdmin", "true")
+      scopedLocalStorage.setItem("hasAdminAccess", "true")
     }
     return isCorrect
   }
@@ -56,7 +57,7 @@ export function useAdminState() {
   const enterAdminMode = () => {
     if (hasAdminAccess) {
       setIsAdmin(true)
-      localStorage.setItem("isAdmin", "true")
+      scopedLocalStorage.setItem("isAdmin", "true")
       return true
     }
     return false
@@ -65,7 +66,7 @@ export function useAdminState() {
   // Function to exit admin mode
   const exitAdminMode = () => {
     setIsAdmin(false)
-    localStorage.removeItem("isAdmin")
+    scopedLocalStorage.removeItem("isAdmin")
     // Note: We don't remove hasAdminAccess
   }
 

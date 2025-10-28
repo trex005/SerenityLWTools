@@ -7,6 +7,7 @@ import { shouldShowRecurringEvent } from "@/lib/recurrence-utils"
 import { Switch } from "@/components/ui/switch"
 import { Label } from "@/components/ui/label"
 import { format } from "date-fns"
+import { scopedLocalStorage } from "@/lib/scoped-storage"
 
 interface ReadOnlyDayAgendaProps {
   day: string
@@ -26,12 +27,8 @@ export function ReadOnlyDayAgenda({ day, date, showLocalTime = false, setShowLoc
   // If parent provides showLocalTime and setShowLocalTime, use those
   // Otherwise, manage state internally
   const [internalShowLocalTime, setInternalShowLocalTime] = useState(() => {
-    // Load preference from localStorage, default to true
-    if (typeof window !== "undefined") {
-      const saved = localStorage.getItem("show-local-time")
-      return saved ? JSON.parse(saved) : true
-    }
-    return true
+    const saved = scopedLocalStorage.getItem("show-local-time")
+    return saved ? JSON.parse(saved) : true
   })
 
   // Use parent state if provided, otherwise use internal state
@@ -45,7 +42,7 @@ export function ReadOnlyDayAgenda({ day, date, showLocalTime = false, setShowLoc
     } else {
       // Otherwise use internal state
       setInternalShowLocalTime(value)
-      localStorage.setItem("show-local-time", JSON.stringify(value))
+      scopedLocalStorage.setItem("show-local-time", JSON.stringify(value))
     }
   }
 

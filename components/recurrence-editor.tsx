@@ -21,8 +21,9 @@ export interface RecurrenceData {
   type: "days" | "weeks" | "none"
   onPeriods: number
   offPeriods: number
-  daysOfWeek: string[] // Required for weekday filtering
-  startDate: string // Always required for new system
+  daysOfWeek: string[]
+  startDate: string
+  endDate?: string
 }
 
 interface RecurrenceEditorProps {
@@ -33,7 +34,6 @@ interface RecurrenceEditorProps {
 
 // Convert legacy recurrence format to new format for UI
 function convertLegacyToNew(legacyValue: any, isNewEvent: boolean = false): RecurrenceData {
-  // Default start date: today for new events, 2025-01-05 for existing events without a start date
   const defaultStartDate = isNewEvent ? new Date().toISOString() : new Date(2025, 0, 5).toISOString()
 
   // If it's already in new format, return as is
@@ -44,6 +44,7 @@ function convertLegacyToNew(legacyValue: any, isNewEvent: boolean = false): Recu
       offPeriods: legacyValue.offPeriods ?? 0,
       daysOfWeek: legacyValue.daysOfWeek || ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"],
       startDate: legacyValue.startDate || defaultStartDate,
+      endDate: legacyValue.endDate || undefined,
     }
   }
 
@@ -53,6 +54,7 @@ function convertLegacyToNew(legacyValue: any, isNewEvent: boolean = false): Recu
     let onPeriods = 1
     let offPeriods = 0
     let startDate = defaultStartDate
+    let endDate: string | undefined = legacyValue.endDate || undefined
 
     // Handle legacy types
     if (legacyValue.type === "daily") {
@@ -85,6 +87,7 @@ function convertLegacyToNew(legacyValue: any, isNewEvent: boolean = false): Recu
       offPeriods,
       daysOfWeek: legacyValue.daysOfWeek || ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"],
       startDate,
+      endDate,
     }
   }
 
@@ -95,12 +98,14 @@ function convertLegacyToNew(legacyValue: any, isNewEvent: boolean = false): Recu
     offPeriods: 0,
     daysOfWeek: ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"],
     startDate: isNewEvent ? new Date().toISOString() : defaultStartDate,
+    endDate: undefined,
   }
 }
 
 export function RecurrenceEditor({ value, onChange, isNewEvent = false }: RecurrenceEditorProps) {
   // State to control popover open state
-  const [datePickerOpen, setDatePickerOpen] = useState(false)
+  const [startDatePickerOpen, setStartDatePickerOpen] = useState(false)
+  const [endDatePickerOpen, setEndDatePickerOpen] = useState(false)
 
   // Convert legacy format to new format for display
   const recurrence: RecurrenceData = convertLegacyToNew(value, isNewEvent)
@@ -192,15 +197,58 @@ export function RecurrenceEditor({ value, onChange, isNewEvent = false }: Recurr
     if (!date) return
 
     try {
+      const startIso = date.toISOString()
+      let endIso = recurrence.endDate
+
+      if (endIso) {
+        const currentEnd = new Date(endIso)
+        if (!Number.isNaN(currentEnd.getTime()) && date > currentEnd) {
+          endIso = startIso
+        }
+      }
+
       const newRecurrence = {
         ...recurrence,
-        startDate: date.toISOString(),
+        startDate: startIso,
+        endDate: endIso,
         daysOfWeek: [...recurrence.daysOfWeek],
       }
       onChange(newRecurrence)
     } catch (error) {
       console.error("Error updating start date:", error)
     }
+  }
+
+  const handleEndDateChange = (date: Date | undefined) => {
+    if (!date) return
+
+    try {
+      let selectedDate = date
+      if (recurrence.startDate) {
+        const startDate = new Date(recurrence.startDate)
+        if (!Number.isNaN(startDate.getTime()) && selectedDate < startDate) {
+          selectedDate = startDate
+        }
+      }
+
+      const newRecurrence = {
+        ...recurrence,
+        endDate: selectedDate.toISOString(),
+        daysOfWeek: [...recurrence.daysOfWeek],
+      }
+      onChange(newRecurrence)
+    } catch (error) {
+      console.error("Error updating end date:", error)
+    }
+  }
+
+  const handleClearEndDate = () => {
+    setEndDatePickerOpen(false)
+    onChange({
+      ...recurrence,
+      endDate: undefined,
+      daysOfWeek: [...recurrence.daysOfWeek],
+    })
   }
 
   // Safely format a date string
@@ -215,7 +263,7 @@ export function RecurrenceEditor({ value, onChange, isNewEvent = false }: Recurr
   }
 
   // Helper function to create a simple date picker
-  const renderDatePicker = () => {
+  const renderStartDatePicker = () => {
     return (
       <div className="space-y-2">
         <Label>Start Date</Label>
@@ -228,25 +276,25 @@ export function RecurrenceEditor({ value, onChange, isNewEvent = false }: Recurr
               onClick={(e) => {
                 e.preventDefault()
                 e.stopPropagation()
-                setDatePickerOpen(!datePickerOpen)
+                setStartDatePickerOpen(!startDatePickerOpen)
               }}
             >
               <CalendarIcon className="mr-2 h-4 w-4" />
               {recurrence.startDate ? formatDateSafe(recurrence.startDate) : "Pick a date"}
             </Button>
 
-            {datePickerOpen && (
+            {startDatePickerOpen && (
               <div
                 className="absolute z-50 mt-1 bg-popover border rounded-md shadow-md p-3"
-                onClick={(e) => e.stopPropagation()}
-                onMouseDown={(e) => e.stopPropagation()}
+                onClick={(event) => event.stopPropagation()}
+                onMouseDown={(event) => event.stopPropagation()}
               >
                 <Calendar
                   mode="single"
                   selected={recurrence.startDate ? new Date(recurrence.startDate) : undefined}
-                  onSelect={(date) => {
-                    handleStartDateChange(date)
-                    setDatePickerOpen(false)
+                  onSelect={(selected) => {
+                    handleStartDateChange(selected)
+                    setStartDatePickerOpen(false)
                   }}
                   initialFocus
                   className="rounded-md border"
@@ -257,6 +305,77 @@ export function RecurrenceEditor({ value, onChange, isNewEvent = false }: Recurr
         </div>
         <p className="text-xs text-muted-foreground">
           This date controls when the schedule pattern begins. All schedule calculations are based on day offsets from this date.
+        </p>
+      </div>
+    )
+  }
+
+  const renderEndDatePicker = () => {
+    return (
+      <div className="space-y-2">
+        <Label>End Date (optional)</Label>
+        <div className="flex items-center gap-2">
+          <div className="relative w-full">
+            <Button
+              type="button"
+              variant="outline"
+              className="w-full justify-start text-left font-normal"
+              onClick={(e) => {
+                e.preventDefault()
+                e.stopPropagation()
+                setEndDatePickerOpen(!endDatePickerOpen)
+              }}
+            >
+              <CalendarIcon className="mr-2 h-4 w-4" />
+              {recurrence.endDate ? formatDateSafe(recurrence.endDate) : "No end date"}
+            </Button>
+
+            {endDatePickerOpen && (
+              <div
+                className="absolute z-50 mt-1 bg-popover border rounded-md shadow-md p-3"
+                onClick={(event) => event.stopPropagation()}
+                onMouseDown={(event) => event.stopPropagation()}
+              >
+                <Calendar
+                  mode="single"
+                  selected={recurrence.endDate ? new Date(recurrence.endDate) : undefined}
+                  onSelect={(selected) => {
+                    handleEndDateChange(selected)
+                    setEndDatePickerOpen(false)
+                  }}
+                  disabled={(candidate) => {
+                    if (!recurrence.startDate) return false
+                    const startDate = new Date(recurrence.startDate)
+                    if (Number.isNaN(startDate.getTime())) return false
+                    const normalizedStart = new Date(startDate)
+                    normalizedStart.setHours(0, 0, 0, 0)
+                    const normalizedCandidate = new Date(candidate)
+                    normalizedCandidate.setHours(0, 0, 0, 0)
+                    return normalizedCandidate.getTime() < normalizedStart.getTime()
+                  }}
+                  initialFocus
+                  className="rounded-md border"
+                />
+              </div>
+            )}
+          </div>
+          {recurrence.endDate && (
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              onClick={(e) => {
+                e.preventDefault()
+                e.stopPropagation()
+                handleClearEndDate()
+              }}
+            >
+              Clear
+            </Button>
+          )}
+        </div>
+        <p className="text-xs text-muted-foreground">
+          Leave blank to continue indefinitely; the end date is inclusive.
         </p>
       </div>
     )
@@ -332,8 +451,9 @@ export function RecurrenceEditor({ value, onChange, isNewEvent = false }: Recurr
             </div>
           </div>
 
-          {/* Start Date */}
-          {renderDatePicker()}
+          {/* Schedule Bounds */}
+          {renderStartDatePicker()}
+          {renderEndDatePicker()}
         </div>
       )}
     </div>

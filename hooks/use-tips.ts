@@ -9,6 +9,8 @@
 import { create } from "zustand"
 import { persist } from "zustand/middleware"
 import { fetchConfig } from "@/lib/config-fetcher"
+import { scopedStateStorage } from "@/lib/scoped-storage"
+import { getActiveTag, onTagChange } from "@/lib/config-tag"
 
 // Define the tip interface
 export interface Tip {
@@ -33,6 +35,7 @@ export interface Tip {
 
 // Define the tips store state
 interface TipsState {
+  activeTag: string
   tips: Tip[]
   initialized: boolean
   searchTerm: string
@@ -55,6 +58,7 @@ interface TipsState {
 export const useTips = create<TipsState>()(
   persist(
     (set, get) => ({
+      activeTag: getActiveTag(),
       tips: [],
       initialized: false,
       searchTerm: "",
@@ -161,7 +165,7 @@ export const useTips = create<TipsState>()(
 
       // Initialize tips from configuration if not already initialized
       initializeFromConfig: async (forceRefresh = false) => {
-        const { initialized, tips } = get()
+        const { initialized, tips, activeTag } = get()
 
         // Skip if already initialized and we have tips, unless forceRefresh is true
         if (initialized && tips.length > 0 && !forceRefresh) {
@@ -173,19 +177,16 @@ export const useTips = create<TipsState>()(
           const config = await fetchConfig(forceRefresh)
 
           if (config && config.tips && Array.isArray(config.tips)) {
-            set({
-              tips: config.tips,
-              filteredTips: config.tips,
-              initialized: true,
-            })
+            get().setTips(config.tips)
+            set({ initialized: true, activeTag: config.tag || activeTag })
           } else {
             // Mark as initialized even if no tips were found
-            set({ initialized: true })
+            set({ initialized: true, activeTag: config?.tag || activeTag })
           }
         } catch (error) {
           console.error("Error initializing tips:", error)
           // Mark as initialized to prevent repeated attempts
-          set({ initialized: true })
+          set({ initialized: true, activeTag })
         }
       },
 
@@ -302,6 +303,7 @@ export const useTips = create<TipsState>()(
     }),
     {
       name: "daily-agenda-tips",
+      storage: scopedStateStorage,
       // Disable automatic rehydration initialization
       onRehydrateStorage: () => () => {
         // Do nothing - let the StorageInitializer handle initialization
@@ -309,3 +311,26 @@ export const useTips = create<TipsState>()(
     },
   ),
 )
+
+onTagChange((nextTag) => {
+  const { activeTag } = useTips.getState()
+  if (activeTag === nextTag) {
+    return
+  }
+
+  useTips.setState({
+    activeTag: nextTag,
+    tips: [],
+    filteredTips: [],
+    initialized: false,
+  })
+
+  setTimeout(() => {
+    useTips
+      .getState()
+      .initializeFromConfig(true)
+      .catch((error) => {
+        console.error("Failed to reset tips after tag change:", error)
+      })
+  }, 0)
+})

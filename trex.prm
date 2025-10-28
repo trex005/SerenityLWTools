@@ -5,7 +5,6 @@ Find other places this is handled and then build a unified function that they al
 
 
 --------------
-Undone:
 Do not start any modifications to the code at this point.
 If you need futher clarification, ask me one question at a time until we have this fully designed.
 When it is fully designed, please give me the steps you will need to take in order to write and implement it.
@@ -24,3 +23,230 @@ The debug information is correct e.g. the following is what it shows the day bef
 
 Debug: 42 total events, 3 with remindOnPreviousDay, 1 with reminders
 Tomorrow (Wednesday): 1 matching events
+-------------------
+Do not start any modifications to the code at this point.
+If you need futher clarification, ask me one question at a time until we have this fully designed.
+When it is fully designed, please give me the steps you will need to take in order to write and implement it.
+
+There is a bug where schedules are being split at calendar week boundaries. For example, a Friday–Wednesday block becomes Sunday–Wednesday plus Friday–Saturday, instead of a continuous run.
+
+The fix is to base all calculations on integer day offsets from the start_date, not on calendar weeks.
+
+Rule: Treat everything as a repeating cycle of periods, where a period is a number of days (1 for daily, 7 for weekly). Each cycle has on_periods and off_periods. A day is active if it falls in the on block, and if applicable, also matches an allowed weekday filter.
+
+Pseudocode:
+
+d = floor((target_date - start_date) / 1 day)
+if d < 0: return false
+
+cycle_days = period_days * (on_periods + off_periods)
+pos = d % cycle_days
+in_on_block = pos < period_days * on_periods
+
+if has_weekday_filter:
+    return in_on_block and (weekday(target_date) in allowed_weekdays)
+else:
+    return in_on_block
+
+
+Examples:
+
+Every 3rd day: period_days=1, on=1, off=2
+
+5 weeks on, 2 weeks off: period_days=7, on=5, off=2
+
+Mon/Wed/Fri on a 3-weeks-on, 1-week-off cycle: period_days=7, on=3, off=1, weekdays={Mon,Wed,Fri}
+------------
+
+We do not need to keep the current recurrence data structure, but we will need some way to convert our current data.
+
+"interval" and "type" are a fallback if "pattern" doesn't exist.
+in this case:
+if type == weekly: period = 7
+if type == daily: period = 1
+on_periods = 1
+off_periods = interval - on_periods
+
+if "pattern" does exist
+period = 7
+on_periods = onWeeks
+off_periods = offWeeks
+
+------------------
+
+Here is an example:
+
+"pattern": {
+    "onWeeks": 2,
+    "offWeeks": 1,
+    "phaseStartDate": "2025-02-24T05:00:00.000Z"
+}
+
+in this case:
+period = 7
+on_periods = 2
+off_periods = 1
+
+I am uncertain why there are sometimes both a phaseStartDate, and a startDate outside of the pattern. If there is a startDate, use that, if not, fallback to phaseStartDate
+-------------------------
+We will also need to adjust the UI to work with the new structure.
+The edit event form should include:
+
+Type: (Days/Weeks)
+[Selected Type] on:
+[Selected Type] off:
+Days of the week:
+Start Date:
+-------------------------
+The labels have become a bit too confusing. Here is some Pseudocode for a way to simplify them. Can you please read it and, before implementing it, describe to me what it does so I know we are on the same page?
+
+function format_label(period_days, on_periods, off_periods, weekdays, start_date, show_start_date):
+
+    all_days = {Sun, Mon, Tue, Wed, Thu, Fri, Sat}
+    all_weekdays_selected = (weekdays == all_days)
+
+    # Step 1: base phrase from periods
+    if on_periods == 1 and off_periods > 0:
+        unit = "days" if period_days == 1 else "weeks" if period_days == 7 else period_days + "-day periods"
+        label = "Every " + (off_periods + 1) + " " + unit
+    else:
+        if period_days == 1:
+            label = on_periods + " days on, " + off_periods + " off"
+        else if period_days == 7:
+            label = on_periods + " weeks on, " + off_periods + " off"
+        else:
+            label = on_periods + " periods on, " + off_periods + " off (" + period_days + "-day period)"
+
+    # Step 2: add weekday filter if not all selected
+    if not all_weekdays_selected and not weekdays.is_empty():
+        label = label + " on " + format_weekdays_compact(weekdays)
+
+    # Step 3: optionally add start date
+    if show_start_date:
+        label = label + ", starting " + format_date(start_date)
+
+    return label
+
+
+function format_weekdays_compact(weekdays_set):
+    # Collapse consecutive weekdays into ranges, with wraparound allowed
+    names = [Sun, Mon, Tue, Wed, Thu, Fri, Sat]      # index 0..6
+    selected = [ (names[i] in weekdays_set) for i in 0..6 ]
+
+    # If none, return empty
+    if not any(selected):
+        return ""
+
+    ranges = []   # list of (start_index, end_index) inclusive
+    visited = [false]*7
+
+    for i in 0..6:
+        prev = (i + 6) % 7
+        if selected[i] and not selected[prev]:
+            # start of a run
+            j = i
+            while selected[j]:
+                visited[j] = true
+                j = (j + 1) % 7
+                if j == i: break
+            end = (j + 6) % 7
+            ranges.append( (i, end) )
+
+    # Convert ranges to text
+    parts = []
+    for (s, e) in ranges:
+        if s == e:
+            parts.append( names[s] )
+        else:
+            parts.append( names[s] + " to " + names[e] )
+
+    return join(parts, ", ")
+
+---------------------
+Sometimes it is displaying an old days of the week block which I thought was deleted. Can you completely remove that?
+----------------------
+When creating a new event, I wanted you to default the day to today. However, when editing an old event, if it does not have a start date, please use our 2025-01-05 default
+--------------------
+
+The file /public/server_birthday.html is a calculator that gives various information about a server based on the day it started. Most things seem to be working correctly however the Loot Goblin status is not properly calculating.
+
+Test:
+Currently, (2025-09-12) The status should be Active for birthdays 2024-10-02 through 2024-10-08 and inactive for birthdays 2024-10-09 through 2024-10-15
+-----------------------
+To the left of the birthday field, allow a user to optionally select a known server and automatically populate its birthday.
+
+Here is my list of known server birthdays so Far
+972 - 2024-10-04
+976 - 2024-10-05
+977-981 - 2024-10-06
+982-986 - 2024-10-07
+987-989 - 2024-10-08
+990-993 - 2024-10-09
+994-996 - 2024-10-10
+997-999 - 2024-10-11
+1000-1001 - 2024-10-12
+
+------------------------
+Do not start any modifications to the code at this point.
+If you need futher clarification, ask me one question at a time until we have this fully designed.
+When it is fully designed, please give me the steps you will need to take in order to write and implement it.
+
+In this app, there are something called tips. Currently those tips can be text, html or an image URL. Is there a way, without using frames or iframes that I can embed calculators, like server_birthday into the tips?
+-------------------------
+Do not start any modifications to the code until you are 95% certain you understand what the user is looking for. Instead, ask one clarifying question at a time until you are certain.
+If the changes are complex, present the user with a numbered list of the implementation steps for review and feedback.
+
+Add a new feature to events where a optional end date can be specified.
+• The span between start date and end date is inclusive.
+• Update all schedule related functions
+• update the event card used in the admin interface to allow the user to set the end date.
+----------------------
+please always use npm at the following path: "/c/Program Files/nodejs/npm"
+----------------------
+**tools: Config rewrite** 
+Do not start any modifications to the code at this point.
+If you need futher clarification, ask me one question at a time until we have this fully designed.
+When it is fully designed, please give me the steps you will need to take in order to write and implement it.
+
+I would like to update how data storage works\
+• There is no need to maintain backward compatibility with the current config file, config-init.json
+• Configuration files should be determined first by the URL variable tag, and if that does not exist, buy the domain.
+   • We will need some type of root config that maps the domain to a tag
+• Configuration files should be stored in the final project in /conf/{tag}/ This means in our development environment, they should be in public/conf/{tag}/
+
+• Configuration files should be split into:
+config.json
+events.json
+events_archive.json
+tips.json
+
+• Local Storage should also be segrigated by tag
+• All of this must continue to use only client side processing. Meaning that the domain and URL parameters need to be parsed by client side javascript.
+------------------
+you can analyse config-init.json here:
+public/config-init.json
+
+All config management should be contained in
+hooks/use-config-data.ts
+hooks/config-fetcher.ts
+
+I'm not certain if any of this code is no longer in use. That would be a good thing to check before trying to update it.
+-------------------
+Output plan from Codex:
+After a second look, I’m confident the changes can stay confined to the shared config/storage layer while keeping the rest of the app’s API untouched.
+
+Config & Tag Resolution
+
+Inspect lib/config-fetcher.ts, hooks/use-config-data.ts, and related callers to confirm the current public interfaces and spot any unused helpers we can retire.
+Implement a resolver that loads public/conf/default.json, sanitizes and selects the active tag (query param → domain → fallback), and computes the file paths under public/conf/{tag}/.
+Extend the fetch logic so config.json, events.json, events_archive.json, and tips.json are fetched per tag, each returning its data plus the required updated timestamp; treat missing files as empty payloads but still emit an updated timestamp.
+Data Shape & Fallbacks
+
+Assemble the retrieved pieces into the exact structure the existing hooks expect (active and archived events merged when necessary), while dropping the legacy config-init fallback so the transition is clean.
+Scoped Storage
+
+Add a centralized helper for localStorage namespacing that prefixes/suffixes keys with the active tag, and update the storage plumbing inside the shared hooks/utilities so every persisted value (events store, tips store, admin flags, preferences, AWS creds, etc.) is isolated per tag.
+Verification
+
+Seed example configs beneath public/conf/{tag}/ and exercise tag resolution (query parameter, domain match, default fallback) to ensure data loads and persists correctly.
+Spot-check localStorage contents to confirm segregation by tag, and run lint/build to ensure the refactor doesn’t introduce regressions.

@@ -1,4 +1,6 @@
-import { differenceInDays, differenceInWeeks, getWeek, isBefore, parseISO } from "date-fns"
+import { format, parseISO, startOfDay } from "date-fns"
+
+const DAY_IN_MS = 1000 * 60 * 60 * 24
 
 /**
  * New schedule calculation that fixes calendar week boundary splitting bug.
@@ -10,34 +12,40 @@ import { differenceInDays, differenceInWeeks, getWeek, isBefore, parseISO } from
  * @param onPeriods Number of consecutive "on" periods
  * @param offPeriods Number of consecutive "off" periods
  * @param allowedWeekdays Optional array of allowed weekdays (for weekday filtering)
+ * @param endDate Optional inclusive end date for the schedule
  */
 export function shouldShowOnDate(
-  targetDate: Date, 
-  startDate: Date, 
-  periodDays: number, 
-  onPeriods: number, 
-  offPeriods: number, 
-  allowedWeekdays?: string[]
+  targetDate: Date,
+  startDate: Date,
+  periodDays: number,
+  onPeriods: number,
+  offPeriods: number,
+  allowedWeekdays?: string[],
+  endDate?: Date
 ): boolean {
-  // Calculate integer day offset from start date
-  const dayOffset = Math.floor((targetDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24))
-  
-  // If before start date, not active
+  const normalizedTarget = startOfDay(targetDate)
+  const normalizedStart = startOfDay(startDate)
+  const normalizedEnd = endDate ? startOfDay(endDate) : undefined
+
+  const dayOffset = Math.floor((normalizedTarget.getTime() - normalizedStart.getTime()) / DAY_IN_MS)
+
   if (dayOffset < 0) return false
-  
-  // Calculate cycle length and position in cycle
-  const cycleDays = periodDays * (onPeriods + offPeriods)
-  const positionInCycle = dayOffset % cycleDays
-  
-  // Check if in "on" block
-  const inOnBlock = positionInCycle < periodDays * onPeriods
-  
-  // Apply weekday filter if specified
+  if (normalizedEnd && normalizedTarget.getTime() > normalizedEnd.getTime()) return false
+
+  const effectiveOnPeriods = Math.max(onPeriods, 0)
+  const effectiveOffPeriods = Math.max(offPeriods, 0)
+  const cyclePeriods = effectiveOnPeriods + effectiveOffPeriods
+  const safePeriodDays = Math.max(periodDays, 1)
+  const cycleDays = safePeriodDays * (cyclePeriods === 0 ? 1 : cyclePeriods)
+  const positionInCycle = ((dayOffset % cycleDays) + cycleDays) % cycleDays
+
+  const inOnBlock = positionInCycle < safePeriodDays * effectiveOnPeriods
+
   if (allowedWeekdays && allowedWeekdays.length > 0) {
-    const dayOfWeek = getDayOfWeek(targetDate)
+    const dayOfWeek = getDayOfWeek(normalizedTarget)
     return inOnBlock && allowedWeekdays.includes(dayOfWeek)
   }
-  
+
   return inOnBlock
 }
 
@@ -49,9 +57,10 @@ export function shouldShowOnDate(
 export function convertLegacyRecurrence(event: any): {
   startDate: Date,
   periodDays: number,
-  onPeriods: number, 
+  onPeriods: number,
   offPeriods: number,
-  allowedWeekdays?: string[]
+  allowedWeekdays?: string[],
+  endDate?: Date
 } | null {
   if (!event.recurrence) return null
   
@@ -59,6 +68,7 @@ export function convertLegacyRecurrence(event: any): {
   let periodDays: number
   let onPeriods: number
   let offPeriods: number
+  let endDate: Date | undefined
   
   // Determine start date (priority: startDate > pattern.phaseStartDate > fallback)
   if (event.recurrence.startDate) {
@@ -68,6 +78,13 @@ export function convertLegacyRecurrence(event: any): {
   } else {
     // Fallback date: 2025-01-05
     startDate = new Date(2025, 0, 5) // Month is 0-indexed
+  }
+  
+  if (event.recurrence.endDate) {
+    const parsedEnd = parseISO(event.recurrence.endDate)
+    if (!Number.isNaN(parsedEnd.getTime())) {
+      endDate = parsedEnd
+    }
   }
   
   // Convert based on pattern vs interval/type
@@ -100,7 +117,8 @@ export function convertLegacyRecurrence(event: any): {
     periodDays,
     onPeriods,
     offPeriods,
-    allowedWeekdays: allowedWeekdays && allowedWeekdays.length > 0 ? allowedWeekdays : undefined
+    allowedWeekdays: allowedWeekdays && allowedWeekdays.length > 0 ? allowedWeekdays : undefined,
+    endDate,
   }
 }
 
@@ -133,19 +151,37 @@ export function shouldShowRecurringEvent(event: any, date: Date, isAdminView = f
     return event.dateIncludeOverrides[dateString]
   }
 
+  const normalizedTargetDate = startOfDay(date)
+  const recurrenceStartDate = event.recurrence?.startDate ? parseISO(event.recurrence.startDate) : undefined
+  const recurrenceEndDate = event.recurrence?.endDate ? parseISO(event.recurrence.endDate) : undefined
+
+  if (recurrenceStartDate && !Number.isNaN(recurrenceStartDate.getTime())) {
+    const normalizedStart = startOfDay(recurrenceStartDate)
+    if (normalizedTargetDate.getTime() < normalizedStart.getTime()) {
+      return false
+    }
+  }
+
+  if (recurrenceEndDate && !Number.isNaN(recurrenceEndDate.getTime())) {
+    const normalizedEnd = startOfDay(recurrenceEndDate)
+    if (normalizedTargetDate.getTime() > normalizedEnd.getTime()) {
+      return false
+    }
+  }
+
   // Handle new recurrence format
   if (event.recurrence && (event.recurrence.onPeriods !== undefined || event.recurrence.offPeriods !== undefined)) {
     // New format: use the new calculation
     const params = convertNewRecurrenceFormat(event)
     if (!params) return false
     
-    return shouldShowOnDate(date, params.startDate, params.periodDays, params.onPeriods, params.offPeriods, params.allowedWeekdays)
+    return shouldShowOnDate(date, params.startDate, params.periodDays, params.onPeriods, params.offPeriods, params.allowedWeekdays, params.endDate)
   }
 
   // Handle legacy format
   const legacyParams = convertLegacyRecurrence(event)
   if (legacyParams) {
-    return shouldShowOnDate(date, legacyParams.startDate, legacyParams.periodDays, legacyParams.onPeriods, legacyParams.offPeriods, legacyParams.allowedWeekdays)
+    return shouldShowOnDate(date, legacyParams.startDate, legacyParams.periodDays, legacyParams.onPeriods, legacyParams.offPeriods, legacyParams.allowedWeekdays, legacyParams.endDate)
   }
 
   // If no recurrence, check the days array for backward compatibility
@@ -184,9 +220,10 @@ export function shouldShowRecurringEvent(event: any, date: Date, isAdminView = f
 function convertNewRecurrenceFormat(event: any): {
   startDate: Date,
   periodDays: number,
-  onPeriods: number, 
+  onPeriods: number,
   offPeriods: number,
-  allowedWeekdays?: string[]
+  allowedWeekdays?: string[],
+  endDate?: Date
 } | null {
   if (!event.recurrence) return null
   
@@ -204,12 +241,21 @@ function convertNewRecurrenceFormat(event: any): {
     return null // Unsupported type
   }
   
+  let endDate: Date | undefined
+  if (event.recurrence.endDate) {
+    const parsedEnd = parseISO(event.recurrence.endDate)
+    if (!Number.isNaN(parsedEnd.getTime())) {
+      endDate = parsedEnd
+    }
+  }
+  
   return {
     startDate: parseISO(event.recurrence.startDate),
     periodDays,
     onPeriods: event.recurrence.onPeriods,
     offPeriods: event.recurrence.offPeriods,
-    allowedWeekdays: event.recurrence.daysOfWeek && event.recurrence.daysOfWeek.length > 0 ? event.recurrence.daysOfWeek : undefined
+    allowedWeekdays: event.recurrence.daysOfWeek && event.recurrence.daysOfWeek.length > 0 ? event.recurrence.daysOfWeek : undefined,
+    endDate,
   }
 }
 
@@ -353,6 +399,13 @@ export function formatRecurrence(event: any): string | null {
   const weekdayFilter = formatWeekdaysCompact(weekdays)
   if (weekdayFilter) {
     label += ` on ${weekdayFilter}`
+  }
+
+  if (event.recurrence?.endDate) {
+    const parsedEnd = parseISO(event.recurrence.endDate)
+    if (!Number.isNaN(parsedEnd.getTime())) {
+      label += ` (ends ${format(parsedEnd, "MMM d, yyyy")})`
+    }
   }
 
   return label

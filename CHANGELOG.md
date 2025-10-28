@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2025-10-02
+
+### Added
+- **Repository Guidelines**: Documented contributor expectations in `AGENTS.md`, covering structure, tooling, testing, and deployment practices.
+- **Event End Dates**: Added optional inclusive end-date support across scheduling logic and the admin editor.
+- **Documentation Maintenance Rule**: Required every new feature or bug fix to update `AGENTS.md` or explain why no change is needed.
+
+### Changed
+- **Changelog Ordering**: Clarified that entries are grouped by date with newest releases first.
+- **Recurring Schedules**: Updated recurrence calculations and date filtering to respect inclusive start/end spans.
+
 ## 2025-09-10
 
 ### Changed

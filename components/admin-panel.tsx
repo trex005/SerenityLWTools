@@ -39,6 +39,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog"
 import { initialConfig } from "@/lib/config-init"
+import { scopedLocalStorage } from "@/lib/scoped-storage"
 
 /**
  * AdminPanel component
@@ -53,7 +54,7 @@ export function AdminPanel() {
   // Function to reset regenerate agenda decision
   const resetRegenerateDecision = () => {
     if (typeof window !== "undefined") {
-      localStorage.removeItem("regenerate-agenda-decision")
+      scopedLocalStorage.removeItem("regenerate-agenda-decision")
       toast({
         title: "Setting Reset",
         description: "Regenerate agenda decision has been reset. The dialog will appear again on next date change.",
@@ -82,8 +83,8 @@ export function AdminPanel() {
 
   // Check for stored credentials on component mount
   useEffect(() => {
-    const storedAccessKeyId = localStorage.getItem("aws_access_key_id")
-    const storedSecretAccessKey = localStorage.getItem("aws_secret_access_key")
+    const storedAccessKeyId = scopedLocalStorage.getItem("aws_access_key_id")
+    const storedSecretAccessKey = scopedLocalStorage.getItem("aws_secret_access_key")
 
     if (storedAccessKeyId && storedSecretAccessKey) {
       setCredentials({
@@ -98,8 +99,8 @@ export function AdminPanel() {
    * Save AWS credentials to localStorage
    */
   const saveCredentials = () => {
-    localStorage.setItem("aws_access_key_id", credentials.accessKeyId)
-    localStorage.setItem("aws_secret_access_key", credentials.secretAccessKey)
+    scopedLocalStorage.setItem("aws_access_key_id", credentials.accessKeyId)
+    scopedLocalStorage.setItem("aws_secret_access_key", credentials.secretAccessKey)
     setHasStoredCredentials(true)
     setShowCredentialsDialog(false)
   }
