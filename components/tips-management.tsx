@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect } from "react"
 import { v4 as uuidv4 } from "uuid"
 
 import { useTips } from "@/hooks/use-tips"
@@ -11,8 +11,10 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Plus, Edit2, Trash2, Copy, Check, X, Search } from "lucide-react"
+import { Plus, Edit2, Trash2, Copy, Check, X, Search, Link as LinkIcon } from "lucide-react"
 import { EmbeddedContent } from "@/components/embedded-content"
+import { sanitizeHtml, extractTextFromHtml } from "@/lib/html-utils"
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -23,6 +25,15 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
+
+function TipHtmlPreview({ html }: { html: string }) {
+  return (
+    <div
+      className="text-sm break-words [&_*]:max-w-full [&_img]:max-w-full [&_video]:max-w-full [&_iframe]:max-w-full"
+      dangerouslySetInnerHTML={{ __html: sanitizeHtml(html) }}
+    />
+  )
+}
 
 /**
  * TipsManagement component
@@ -52,6 +63,8 @@ export function TipsManagement({ forceRefresh }: { forceRefresh?: string }) {
   const [editingTips, setEditingTips] = useState<Record<string, boolean>>({})
   const [editedContent, setEditedContent] = useState<Record<string, any>>({})
   const [searchTerm, setSearchTerm] = useState("")
+  const [copiedTipId, setCopiedTipId] = useState<string | null>(null)
+  const [copiedLinkId, setCopiedLinkId] = useState<string | null>(null)
 
   // Filter tips based on search
   const filteredTips = tips.filter(tip => {
@@ -64,17 +77,34 @@ export function TipsManagement({ forceRefresh }: { forceRefresh?: string }) {
     )
   })
 
+  useEffect(() => {
+    if (!copiedTipId) return
+    const timer = setTimeout(() => setCopiedTipId(null), 2000)
+    return () => clearTimeout(timer)
+  }, [copiedTipId])
+
+  useEffect(() => {
+    if (!copiedLinkId) return
+    const timer = setTimeout(() => setCopiedLinkId(null), 2000)
+    return () => clearTimeout(timer)
+  }, [copiedLinkId])
+
   // Start editing a tip
   const startEditing = (tip: any) => {
-    setEditingTips(prev => ({ ...prev, [tip.id]: true }))
-    setEditedContent(prev => ({
+    const inferredType = (
+      tip.type ||
+      (tip.embedUrl ? "embedded" : tip.isHtml ? "html" : tip.imageUrl ? "image" : "text")
+    ) as "text" | "html" | "image" | "embedded"
+    setEditingTips((prev) => ({ ...prev, [tip.id]: true }))
+    setEditedContent((prev) => ({
       ...prev,
       [tip.id]: {
         title: tip.title || "",
         content: tip.content || "",
-        type: tip.type || "text",
+        type: inferredType,
         embedUrl: tip.embedUrl || "",
-      }
+        imageUrl: tip.imageUrl || "",
+      },
     }))
   }
 
@@ -82,12 +112,15 @@ export function TipsManagement({ forceRefresh }: { forceRefresh?: string }) {
   const saveEditedTip = (tip: any) => {
     const edited = editedContent[tip.id]
     if (edited && (edited.content.trim() || edited.embedUrl?.trim())) {
+      const nextType = (edited.type || "text") as "text" | "html" | "image" | "embedded"
       updateTip({
         ...tip,
         title: edited.title.trim(),
         content: edited.content.trim(),
-        type: edited.type,
+        type: nextType,
+        isHtml: nextType === "html",
         embedUrl: edited.embedUrl?.trim() || undefined,
+        imageUrl: edited.imageUrl?.trim() || undefined,
       })
       setEditingTips(prev => ({ ...prev, [tip.id]: false }))
     }
@@ -114,6 +147,52 @@ export function TipsManagement({ forceRefresh }: { forceRefresh?: string }) {
     }))
   }
 
+  const handleCopyContent = (tip: any) => {
+    if (typeof navigator === "undefined" || !navigator.clipboard) {
+      return
+    }
+
+    let textToCopy = ""
+
+    if (tip.altText) {
+      textToCopy = tip.altText
+    } else if ((tip.isHtml || tip.type === "html") && tip.content) {
+      textToCopy = extractTextFromHtml(tip.content)
+    } else if (tip.content) {
+      textToCopy = tip.content
+    } else if (tip.imageUrl) {
+      textToCopy = tip.imageUrl
+    } else if (tip.embedUrl) {
+      textToCopy = tip.embedUrl
+    } else if (tip.title) {
+      textToCopy = tip.title
+    }
+
+    if (!textToCopy) {
+      textToCopy = "Tip content"
+    }
+
+    navigator.clipboard.writeText(textToCopy).then(() => {
+      setCopiedTipId(tip.id)
+    })
+  }
+
+  const handleCopyLink = (tip: any) => {
+    if (typeof window === "undefined" || typeof navigator === "undefined" || !navigator.clipboard) {
+      return
+    }
+
+    const baseUrl = window.location.href.split("#")[0]
+    const linkId = tip.customId || tip.id
+
+    let tipUrl = `${baseUrl}#tip-${linkId}`
+    tipUrl = tipUrl.replace(/lwserenity\.com/i, "LWSerenity.com")
+
+    navigator.clipboard.writeText(tipUrl).then(() => {
+      setCopiedLinkId(tip.id)
+    })
+  }
+
   // Handle adding new tip
   const handleAddTip = () => {
     if (newTip.content.trim() || newTip.imageUrl.trim() || newTip.embedUrl.trim()) {
@@ -124,13 +203,13 @@ export function TipsManagement({ forceRefresh }: { forceRefresh?: string }) {
         lastUsed: null,
         customId: newTip.customId.trim() || undefined,
         imageUrl: newTip.imageUrl.trim() || undefined,
-        adminOnly: newTip.adminOnly,
-        canUseInBriefing: newTip.canUseInBriefing,
-        unlisted: newTip.unlisted,
-        isHtml: newTip.isHtml,
-        altText: newTip.altText.trim() || undefined,
-        type: newTip.type,
-        embedUrl: newTip.embedUrl.trim() || undefined,
+      adminOnly: newTip.adminOnly,
+      canUseInBriefing: newTip.canUseInBriefing,
+      unlisted: newTip.unlisted,
+      isHtml: newTip.type === "html",
+      altText: newTip.altText.trim() || undefined,
+      type: newTip.type,
+      embedUrl: newTip.embedUrl.trim() || undefined,
       })
 
       setNewTip({
@@ -182,7 +261,13 @@ export function TipsManagement({ forceRefresh }: { forceRefresh?: string }) {
                 <Label>Content Type</Label>
                 <Select
                   value={newTip.type}
-                  onValueChange={(value) => setNewTip((prev) => ({ ...prev, type: value as "text" | "html" | "image" | "embedded" }))}
+                  onValueChange={(value) =>
+                    setNewTip((prev) => ({
+                      ...prev,
+                      type: value as "text" | "html" | "image" | "embedded",
+                      isHtml: value === "html",
+                    }))
+                  }
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="Select content type" />
@@ -215,6 +300,32 @@ export function TipsManagement({ forceRefresh }: { forceRefresh?: string }) {
                 <div>
                   <Label>Preview</Label>
                   <EmbeddedContent url={newTip.embedUrl} className="mt-2" />
+                </div>
+              )}
+
+              <div>
+                <Label htmlFor="new-tip-image-url">Image URL</Label>
+                <Input
+                  id="new-tip-image-url"
+                  value={newTip.imageUrl}
+                  onChange={(e) => setNewTip((prev) => ({ ...prev, imageUrl: e.target.value }))}
+                  placeholder="https://example.com/image.jpg"
+                />
+              </div>
+
+              {newTip.imageUrl && (
+                <div>
+                  <Label>Image Preview</Label>
+                  <div className="mt-2">
+                    <img
+                      src={newTip.imageUrl}
+                      alt={newTip.title || "Tip preview image"}
+                      className="max-h-48 rounded border border-border object-contain"
+                      onError={(e) => {
+                        ;(e.target as HTMLImageElement).style.display = "none"
+                      }}
+                    />
+                  </div>
                 </div>
               )}
 
@@ -288,11 +399,15 @@ export function TipsManagement({ forceRefresh }: { forceRefresh?: string }) {
       <div className="space-y-2">
         {filteredTips.length > 0 ? (
           <>
-            {filteredTips.map((tip) => (
-              <Card key={tip.id}>
-                <CardContent className="p-4">
-                  <div className="flex justify-between items-start gap-2">
-                    <div className="flex-1">
+            {filteredTips.map((tip) => {
+              const isHtmlContent = tip.type === "html" || tip.isHtml
+              const draft = editedContent[tip.id]
+              const currentImageUrl = draft?.imageUrl ?? tip.imageUrl ?? ""
+              return (
+                <Card key={tip.id}>
+                  <CardContent className="p-4">
+                    <div className="flex justify-between items-start gap-2">
+                      <div className="flex-1">
                       {!editingTips[tip.id] ? (
                         <>
                           {tip.title && <div className="font-medium mb-2">{tip.title}</div>}
@@ -307,8 +422,25 @@ export function TipsManagement({ forceRefresh }: { forceRefresh?: string }) {
                             </div>
                           )}
                           {tip.content && tip.type !== "embedded" && (
-                            <div className="py-1 whitespace-pre-wrap break-words text-sm">
-                              {tip.content}
+                            <div className="py-1">
+                              {isHtmlContent ? (
+                                <TipHtmlPreview html={tip.content} />
+                              ) : (
+                                <div className="whitespace-pre-wrap break-words text-sm">{tip.content}</div>
+                              )}
+                            </div>
+                          )}
+                          {tip.imageUrl && (
+                            <div className={`${tip.content ? "mt-2" : ""}`}>
+                              <img
+                                src={tip.imageUrl}
+                                alt={tip.title || "Tip image"}
+                                className="max-h-48 rounded border border-border object-contain"
+                                loading="lazy"
+                                onError={(e) => {
+                                  ;(e.target as HTMLImageElement).style.display = "none"
+                                }}
+                              />
                             </div>
                           )}
                         </>
@@ -317,7 +449,7 @@ export function TipsManagement({ forceRefresh }: { forceRefresh?: string }) {
                           <div>
                             <Label>Title</Label>
                             <Input
-                              value={editedContent[tip.id]?.title || ""}
+                              value={draft?.title ?? tip.title ?? ""}
                               onChange={(e) => handleEditContentChange(tip.id, "title", e.target.value)}
                               placeholder="Enter title..."
                             />
@@ -326,7 +458,7 @@ export function TipsManagement({ forceRefresh }: { forceRefresh?: string }) {
                           <div>
                             <Label>Content Type</Label>
                             <Select
-                              value={editedContent[tip.id]?.type || "text"}
+                              value={draft?.type ?? tip.type ?? "text"}
                               onValueChange={(value) => handleEditContentChange(tip.id, "type", value)}
                             >
                               <SelectTrigger>
@@ -341,22 +473,44 @@ export function TipsManagement({ forceRefresh }: { forceRefresh?: string }) {
                             </Select>
                           </div>
 
-                          {editedContent[tip.id]?.type === "embedded" && (
+                          <div>
+                            <Label>Image URL</Label>
+                            <Input
+                              value={draft?.imageUrl ?? tip.imageUrl ?? ""}
+                              onChange={(e) => handleEditContentChange(tip.id, "imageUrl", e.target.value)}
+                              placeholder="https://example.com/image.jpg"
+                            />
+                          </div>
+
+                          {currentImageUrl && (
+                            <div>
+                              <Label>Image Preview</Label>
+                              <div className="mt-2">
+                                <img
+                                  src={currentImageUrl}
+                                  alt={draft?.title || tip.title || "Tip image"}
+                                  className="max-h-48 rounded border border-border object-contain"
+                                />
+                              </div>
+                            </div>
+                          )}
+
+                          {(draft?.type ?? tip.type) === "embedded" && (
                             <div>
                               <Label>Embed URL</Label>
                               <Input
-                                value={editedContent[tip.id]?.embedUrl || ""}
+                                value={draft?.embedUrl ?? tip.embedUrl ?? ""}
                                 onChange={(e) => handleEditContentChange(tip.id, "embedUrl", e.target.value)}
                                 placeholder="/server_birthday.html"
                               />
                             </div>
                           )}
 
-                          {editedContent[tip.id]?.type !== "embedded" && (
+                          {(draft?.type ?? tip.type) !== "embedded" && (
                             <div>
                               <Label>Content</Label>
                               <Textarea
-                                value={editedContent[tip.id]?.content || ""}
+                                value={draft?.content ?? tip.content ?? ""}
                                 onChange={(e) => handleEditContentChange(tip.id, "content", e.target.value)}
                                 placeholder="Enter content..."
                                 className="min-h-[100px]"
@@ -377,13 +531,41 @@ export function TipsManagement({ forceRefresh }: { forceRefresh?: string }) {
                     </div>
                     <div className="flex gap-1">
                       {!editingTips[tip.id] && (
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          onClick={() => startEditing(tip)}
-                        >
-                          <Edit2 size={16} />
-                        </Button>
+                        <>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => handleCopyContent(tip)}
+                            className={`${
+                              copiedTipId === tip.id
+                                ? "text-green-600 hover:text-green-600 hover:bg-green-100"
+                                : "text-muted-foreground hover:text-muted-foreground hover:bg-muted/50"
+                            }`}
+                            title="Copy content to clipboard"
+                          >
+                            {copiedTipId === tip.id ? <Check size={16} /> : <Copy size={16} />}
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => handleCopyLink(tip)}
+                            className={`${
+                              copiedLinkId === tip.id
+                                ? "text-green-600 hover:text-green-600 hover:bg-green-100"
+                                : "text-muted-foreground hover:text-muted-foreground hover:bg-muted/50"
+                            }`}
+                            title="Copy link to this tip"
+                          >
+                            {copiedLinkId === tip.id ? <Check size={16} /> : <LinkIcon size={16} />}
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => startEditing(tip)}
+                          >
+                            <Edit2 size={16} />
+                          </Button>
+                        </>
                       )}
                       <Button
                         variant="ghost"
@@ -397,7 +579,8 @@ export function TipsManagement({ forceRefresh }: { forceRefresh?: string }) {
                   </div>
                 </CardContent>
               </Card>
-            ))}
+            )
+          })}
           </>
         ) : (
           <Card>
