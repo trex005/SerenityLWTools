@@ -33,11 +33,36 @@ export interface Tip {
   embedUrl?: string // URL for embedded content (when type is "embedded")
 }
 
+const applyTipSearch = (tips: Tip[], term: string): Tip[] => {
+  const lowerSearchTerm = term.toLowerCase()
+  return term
+    ? tips.filter(
+        (tip) =>
+          tip.title.toLowerCase().includes(lowerSearchTerm) || tip.content.toLowerCase().includes(lowerSearchTerm),
+      )
+    : tips
+}
+
+const TIPS_STORAGE_KEY = "daily-agenda-tips"
+
+const readStoredTips = (): { exists: boolean; tips: Tip[] } => {
+  try {
+    const raw = scopedStateStorage.getItem(TIPS_STORAGE_KEY)
+    if (!raw) return { exists: false, tips: [] }
+    const parsed = JSON.parse(raw)
+    const stored = Array.isArray(parsed?.state?.tips) ? parsed.state.tips : []
+    return { exists: true, tips: stored }
+  } catch {
+    return { exists: false, tips: [] }
+  }
+}
+
 // Define the tips store state
 interface TipsState {
   activeTag: string
   tips: Tip[]
   initialized: boolean
+  hydrated: boolean
   searchTerm: string
   filteredTips: Tip[]
   setSearchTerm: (term: string) => void
@@ -61,45 +86,24 @@ export const useTips = create<TipsState>()(
       activeTag: getActiveTag(),
       tips: [],
       initialized: false,
+      hydrated: false,
       searchTerm: "",
       filteredTips: [],
 
       // Set search term and filter tips
       setSearchTerm: (term: string) => {
-        set((state) => {
-          const lowerSearchTerm = term.toLowerCase()
-          const filtered = term
-            ? state.tips.filter(
-                (tip) =>
-                  tip.title.toLowerCase().includes(lowerSearchTerm) ||
-                  tip.content.toLowerCase().includes(lowerSearchTerm),
-              )
-            : state.tips
-
-          return {
-            searchTerm: term,
-            filteredTips: filtered,
-          }
-        })
+        set((state) => ({
+          searchTerm: term,
+          filteredTips: applyTipSearch(state.tips, term),
+        }))
       },
 
       // Set all tips
       setTips: (tips: Tip[]) => {
-        set((state) => {
-          const lowerSearchTerm = state.searchTerm.toLowerCase()
-          const filtered = state.searchTerm
-            ? tips.filter(
-                (tip) =>
-                  tip.title.toLowerCase().includes(lowerSearchTerm) ||
-                  tip.content.toLowerCase().includes(lowerSearchTerm),
-              )
-            : tips
-
-          return {
-            tips,
-            filteredTips: filtered,
-          }
-        })
+        set((state) => ({
+          tips,
+          filteredTips: applyTipSearch(tips, state.searchTerm),
+        }))
       },
 
       // Add a new tip
@@ -167,9 +171,17 @@ export const useTips = create<TipsState>()(
       initializeFromConfig: async (forceRefresh = false) => {
         const { initialized, tips, activeTag } = get()
 
-        // Skip if already initialized and we have tips, unless forceRefresh is true
-        if (initialized && tips.length > 0 && !forceRefresh) {
-          return
+        if (!forceRefresh) {
+          const stored = readStoredTips()
+          if (stored.exists) {
+            get().setTips(stored.tips)
+            set({ initialized: true, activeTag: getActiveTag() })
+            return
+          }
+
+          if (initialized && tips.length > 0) {
+            return
+          }
         }
 
         try {
@@ -178,7 +190,7 @@ export const useTips = create<TipsState>()(
 
           if (config && config.tips && Array.isArray(config.tips)) {
             get().setTips(config.tips)
-            set({ initialized: true, activeTag: config.tag || activeTag })
+            set({ initialized: true, activeTag: config.tag || getActiveTag() })
           } else {
             // Mark as initialized even if no tips were found
             set({ initialized: true, activeTag: config?.tag || activeTag })
@@ -306,31 +318,37 @@ export const useTips = create<TipsState>()(
       storage: scopedStateStorage,
       // Disable automatic rehydration initialization
       onRehydrateStorage: () => () => {
-        // Do nothing - let the StorageInitializer handle initialization
+        useTips.setState({ hydrated: true })
       },
     },
   ),
 )
 
 onTagChange((nextTag) => {
-  const { activeTag } = useTips.getState()
-  if (activeTag === nextTag) {
-    return
+  const stored = readStoredTips()
+
+  if (stored.exists) {
+    useTips.setState((state) => ({
+      activeTag: nextTag,
+      tips: stored.tips,
+      filteredTips: applyTipSearch(stored.tips, state.searchTerm),
+      initialized: true,
+    }))
+  } else {
+    useTips.setState({
+      activeTag: nextTag,
+      tips: [],
+      filteredTips: [],
+      initialized: false,
+    })
+
+    setTimeout(() => {
+      useTips
+        .getState()
+        .initializeFromConfig(false)
+        .catch((error) => {
+          console.error("Failed to load tips for tag", nextTag, error)
+        })
+    }, 0)
   }
-
-  useTips.setState({
-    activeTag: nextTag,
-    tips: [],
-    filteredTips: [],
-    initialized: false,
-  })
-
-  setTimeout(() => {
-    useTips
-      .getState()
-      .initializeFromConfig(true)
-      .catch((error) => {
-        console.error("Failed to reset tips after tag change:", error)
-      })
-  }, 0)
 })

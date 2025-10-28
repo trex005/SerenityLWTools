@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - **Config Export Includes Parent**: Child-delta export now writes the leaf tag's `config.json` with all tag-specific keys including `"parent"` and a fresh `updated` value (`lib/config-fetcher.ts`).
+- **Admin Local Edits Persist**: Event/tip stores now load from tag-scoped localStorage first and only fall back to config when needed, ensuring admin changes are not overwritten on reload (`hooks/use-events.ts`, `hooks/use-tips.ts`, `components/storage-initializer.tsx`).
 
 ### Changed
 - **Config Layout**: Replaced the monolithic `public/config-init.json` with the new `public/conf/{tag}/` folder structure and root `public/conf/default.json` domain map.

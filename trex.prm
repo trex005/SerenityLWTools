@@ -523,3 +523,57 @@ Add 10 min line in front of you:
 00:30 - Get in line/title
 01:00 - Get in line (Still have co-op for 10 min)
 01:05 - hopefully have title by now!
+--------------------
+I am still having problems:
+
+Test 1:
+• go to http://localhost:3000/?tag=main (well populated tag with no parent)
+  • content loads fine
+• swith to admin mode
+  • No content visible
+  • exports empty config stubs
+• Use "Restore Default Data" function
+  • Expected data is now visible
+  • exports contain data
+• Refresh
+  • No content visible
+  • exports empty config stubs
+
+
+Test 2:
+• go to http://localhost:3000/?tag=996 (tag with minor changes and parent set to "main")
+  • content loads fine
+• swith to admin mode
+  • No content visible
+  • exports DO contain tag data
+• Use "Restore Default Data" function
+  • Expected data is now visible
+  • exports ONLY contain empty stubs
+• Refresh
+  • No content visible
+  • exports DO contain tag data
+
+So it seems that when going into admin mode:
+A tag with a parent does load that tags data, but is not able to access any of the parent's data.
+A tag with no parent does NOT load that tag's data
+
+It is possible that there is some counfounding problem, such as the data from the main tag having some sort of error on inport, but I do not see anything in the console log that would indicate that. The console does have 404 errors from all the config files it looks for that do not exist.
+-----------
+
+tag:main (no parent) in admin:
+• Expected Data visible
+• Data exports
+• On reload, all changes are lost
+
+tag: 996 (parent:main) in admin:
+• Parent data visible
+• Exports only stubs
+• On reload, all changes are lost
+
+The one consisten thing in every single test is that no event/tip data has loaded from localstorage after reload. This seems like it could be due to it never actually being saved to localstorage or perhapse being saved in a different way than is being accessed.
+------------
+
+**Tag data not persisting**
+Changes made to events and tips in the admin interface are not persisting on reload.
+I'm not sure if this is because 
+------------------

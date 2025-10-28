@@ -57,7 +57,15 @@ const notifyListeners = (tag: string) => {
   })
 }
 
-export const getActiveTag = (): string => activeTag
+export const getActiveTag = (): string => {
+  if (typeof window !== "undefined") {
+    const queryTag = readQueryTag()
+    if (queryTag && queryTag !== activeTag) {
+      activeTag = queryTag
+    }
+  }
+  return activeTag
+}
 
 export const setActiveTag = (tagValue: string) => {
   const sanitized = sanitizeTag(tagValue) || DEFAULT_TAG_FALLBACK

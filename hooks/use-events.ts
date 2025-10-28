@@ -44,6 +44,7 @@ interface EventsState {
   activeTag: string
   events: Event[]
   initialized: boolean
+  hydrated: boolean
   searchTerm: string
   filteredEvents: Event[]
   setSearchTerm: (term: string) => void
@@ -70,6 +71,17 @@ const normalizeDayName = (day: string): string => {
   return day.toLowerCase()
 }
 
+const applySearchFilter = (events: Event[], term: string): Event[] => {
+  const lowerSearchTerm = term.toLowerCase()
+  return term
+    ? events.filter(
+        (event) =>
+          event.title.toLowerCase().includes(lowerSearchTerm) ||
+          (event.description && event.description.toLowerCase().includes(lowerSearchTerm)),
+      )
+    : events
+}
+
 // Create the events store with persistence
 export const useEvents = create<EventsState>()(
   persist(
@@ -77,45 +89,24 @@ export const useEvents = create<EventsState>()(
       activeTag: getActiveTag(),
       events: [],
       initialized: false,
+      hydrated: false,
       searchTerm: "",
       filteredEvents: [],
 
       // Set search term and filter events
       setSearchTerm: (term: string) => {
-        set((state) => {
-          const lowerSearchTerm = term.toLowerCase()
-          const filtered = term
-            ? state.events.filter(
-                (event) =>
-                  event.title.toLowerCase().includes(lowerSearchTerm) ||
-                  (event.description && event.description.toLowerCase().includes(lowerSearchTerm)),
-              )
-            : state.events
-
-          return {
-            searchTerm: term,
-            filteredEvents: filtered,
-          }
-        })
+        set((state) => ({
+          searchTerm: term,
+          filteredEvents: applySearchFilter(state.events, term),
+        }))
       },
 
       // Set all events
       setEvents: (events: Event[]) => {
-        set((state) => {
-          const lowerSearchTerm = state.searchTerm.toLowerCase()
-          const filtered = state.searchTerm
-            ? events.filter(
-                (event) =>
-                  event.title.toLowerCase().includes(lowerSearchTerm) ||
-                  (event.description && event.description.toLowerCase().includes(lowerSearchTerm)),
-              )
-            : events
-
-          return {
-            events,
-            filteredEvents: filtered,
-          }
-        })
+        set((state) => ({
+          events,
+          filteredEvents: applySearchFilter(events, state.searchTerm),
+        }))
       },
 
       // Add a new event
@@ -183,26 +174,30 @@ export const useEvents = create<EventsState>()(
       initializeFromConfig: async (forceRefresh = false) => {
         const { initialized, events, activeTag } = get()
 
-        // Skip if already initialized and we have events, unless forceRefresh is true
-        if (initialized && events.length > 0 && !forceRefresh) {
-          return
+        if (!forceRefresh) {
+          const stored = readStoredEvents()
+          if (stored.exists) {
+            get().setEvents(stored.events)
+            set({ initialized: true, activeTag: getActiveTag() })
+            return
+          }
+
+          if (initialized && events.length > 0) {
+            return
+          }
         }
 
         try {
-          // Fetch configuration with forceRefresh flag
           const config = await fetchConfig(forceRefresh)
 
           if (config && config.events && Array.isArray(config.events)) {
-            // Use setEvents to ensure proper processing of all fields
             get().setEvents(config.events)
-            set({ initialized: true, activeTag: config.tag || activeTag })
+            set({ initialized: true, activeTag: config.tag || getActiveTag() })
           } else {
-            // Mark as initialized even if no events were found
-            set({ initialized: true, activeTag: config?.tag || activeTag })
+            set({ initialized: true, activeTag })
           }
         } catch (error) {
           console.error("Error initializing events:", error)
-          // Mark as initialized to prevent repeated attempts
           set({ initialized: true, activeTag })
         }
       },
@@ -419,31 +414,52 @@ export const useEvents = create<EventsState>()(
       storage: scopedStateStorage,
       // Disable automatic rehydration initialization
       onRehydrateStorage: () => () => {
-        // Do nothing - let the StorageInitializer handle initialization
+        // Mark store as hydrated after rehydration completes
+        useEvents.setState({ hydrated: true })
       },
     },
   ),
 )
 
 onTagChange((nextTag) => {
-  const { activeTag } = useEvents.getState()
-  if (activeTag === nextTag) {
-    return
+  const stored = readStoredEvents()
+
+  if (stored.exists) {
+    useEvents.setState((state) => ({
+      activeTag: nextTag,
+      events: stored.events,
+      filteredEvents: applySearchFilter(stored.events, state.searchTerm),
+      initialized: true,
+    }))
+  } else {
+    useEvents.setState({
+      activeTag: nextTag,
+      events: [],
+      filteredEvents: [],
+      initialized: false,
+    })
+
+    setTimeout(() => {
+      useEvents
+        .getState()
+        .initializeFromConfig(false)
+        .catch((error) => {
+          console.error("Failed to load events for tag", nextTag, error)
+        })
+    }, 0)
   }
-
-  useEvents.setState({
-    activeTag: nextTag,
-    events: [],
-    filteredEvents: [],
-    initialized: false,
-  })
-
-  setTimeout(() => {
-    useEvents
-      .getState()
-      .initializeFromConfig(true)
-      .catch((error) => {
-        console.error("Failed to reset events after tag change:", error)
-      })
-  }, 0)
 })
+
+const EVENTS_STORAGE_KEY = "daily-agenda-events"
+
+const readStoredEvents = (): { exists: boolean; events: Event[] } => {
+  try {
+    const raw = scopedStateStorage.getItem(EVENTS_STORAGE_KEY)
+    if (!raw) return { exists: false, events: [] }
+    const parsed = JSON.parse(raw)
+    const stored = Array.isArray(parsed?.state?.events) ? parsed.state.events : []
+    return { exists: true, events: stored }
+  } catch {
+    return { exists: false, events: [] }
+  }
+}

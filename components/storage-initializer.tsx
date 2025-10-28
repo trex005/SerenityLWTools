@@ -18,21 +18,12 @@ export function StorageInitializer() {
   const { isAdmin } = useAdminState()
 
   useEffect(() => {
-    // Only initialize data if in admin mode
-    if (isAdmin) {
-      // Initialize data from configuration
-      const initialize = async () => {
-        try {
-          await Promise.all([initializeEvents(), initializeTips()])
-        } catch (error) {
-          // Error initializing storage
-        }
-      }
+    // In admin mode, ensure local storage has data for the current tag
+    if (!isAdmin) return
 
-      initialize()
-    }
-  }, [initializeEvents, initializeTips, isAdmin])
+    initializeEvents().catch(() => undefined)
+    initializeTips().catch(() => undefined)
+  }, [isAdmin, initializeEvents, initializeTips])
 
-  // This component doesn't render anything
   return null
 }

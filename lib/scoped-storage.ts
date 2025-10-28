@@ -35,7 +35,8 @@ export const scopedStateStorage: StateStorage = {
     if (!storage) return
     const scopedKey = buildScopedKey(key)
     try {
-      storage.setItem(scopedKey, value)
+      const serialized = typeof value === "string" ? value : JSON.stringify(value)
+      storage.setItem(scopedKey, serialized)
     } catch {
       // Ignore storage failures
     }
