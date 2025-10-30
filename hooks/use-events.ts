@@ -11,6 +11,7 @@ import { persist } from "zustand/middleware"
 import { fetchConfig } from "@/lib/config-fetcher"
 import { scopedStateStorage } from "@/lib/scoped-storage"
 import { getActiveTag, onTagChange } from "@/lib/config-tag"
+import { matchesSearchTokens, tokenizeSearchTerm } from "@/lib/search-utils"
 
 // Define the event interface
 interface Event {
@@ -23,6 +24,8 @@ interface Event {
   color?: string
   remindTomorrow?: boolean
   remindEndOfDay?: boolean
+  includeInBriefing?: boolean
+  includeOnWebsite?: boolean
   recurrence?: {
     pattern: "daily" | "weekly" | "monthly" | "yearly"
     interval: number
@@ -72,14 +75,10 @@ const normalizeDayName = (day: string): string => {
 }
 
 const applySearchFilter = (events: Event[], term: string): Event[] => {
-  const lowerSearchTerm = term.toLowerCase()
-  return term
-    ? events.filter(
-        (event) =>
-          event.title.toLowerCase().includes(lowerSearchTerm) ||
-          (event.description && event.description.toLowerCase().includes(lowerSearchTerm)),
-      )
-    : events
+  const tokens = tokenizeSearchTerm(term)
+  if (tokens.length === 0) return events
+
+  return events.filter((event) => matchesSearchTokens(tokens, [event.title, event.description]))
 }
 
 // Create the events store with persistence
@@ -113,14 +112,7 @@ export const useEvents = create<EventsState>()(
       addEvent: (event: Event) => {
         set((state) => {
           const newEvents = [...state.events, event]
-          const lowerSearchTerm = state.searchTerm.toLowerCase()
-          const filtered = state.searchTerm
-            ? newEvents.filter(
-                (event) =>
-                  event.title.toLowerCase().includes(lowerSearchTerm) ||
-                  (event.description && event.description.toLowerCase().includes(lowerSearchTerm)),
-              )
-            : newEvents
+          const filtered = applySearchFilter(newEvents, state.searchTerm)
 
           return {
             events: newEvents,
@@ -133,15 +125,7 @@ export const useEvents = create<EventsState>()(
       updateEvent: (updatedEvent: Event) => {
         set((state) => {
           const updatedEvents = state.events.map((event) => (event.id === updatedEvent.id ? updatedEvent : event))
-
-          const lowerSearchTerm = state.searchTerm.toLowerCase()
-          const filtered = state.searchTerm
-            ? updatedEvents.filter(
-                (event) =>
-                  event.title.toLowerCase().includes(lowerSearchTerm) ||
-                  (event.description && event.description.toLowerCase().includes(lowerSearchTerm)),
-              )
-            : updatedEvents
+          const filtered = applySearchFilter(updatedEvents, state.searchTerm)
 
           return {
             events: updatedEvents,
@@ -154,14 +138,7 @@ export const useEvents = create<EventsState>()(
       deleteEvent: (id: string) => {
         set((state) => {
           const updatedEvents = state.events.filter((event) => event.id !== id)
-          const lowerSearchTerm = state.searchTerm.toLowerCase()
-          const filtered = state.searchTerm
-            ? updatedEvents.filter(
-                (event) =>
-                  event.title.toLowerCase().includes(lowerSearchTerm) ||
-                  (event.description && event.description.toLowerCase().includes(lowerSearchTerm)),
-              )
-            : updatedEvents
+          const filtered = applySearchFilter(updatedEvents, state.searchTerm)
 
           return {
             events: updatedEvents,
@@ -206,15 +183,7 @@ export const useEvents = create<EventsState>()(
       archiveEvent: (id) => {
         set((state) => {
           const updatedEvents = state.events.map((event) => (event.id === id ? { ...event, archived: true } : event))
-
-          const lowerSearchTerm = state.searchTerm.toLowerCase()
-          const filtered = state.searchTerm
-            ? updatedEvents.filter(
-                (event) =>
-                  event.title.toLowerCase().includes(lowerSearchTerm) ||
-                  (event.description && event.description.toLowerCase().includes(lowerSearchTerm)),
-              )
-            : updatedEvents
+          const filtered = applySearchFilter(updatedEvents, state.searchTerm)
 
           return {
             events: updatedEvents,
@@ -226,15 +195,7 @@ export const useEvents = create<EventsState>()(
       restoreEvent: (id) => {
         set((state) => {
           const updatedEvents = state.events.map((event) => (event.id === id ? { ...event, archived: false } : event))
-
-          const lowerSearchTerm = state.searchTerm.toLowerCase()
-          const filtered = state.searchTerm
-            ? updatedEvents.filter(
-                (event) =>
-                  event.title.toLowerCase().includes(lowerSearchTerm) ||
-                  (event.description && event.description.toLowerCase().includes(lowerSearchTerm)),
-              )
-            : updatedEvents
+          const filtered = applySearchFilter(updatedEvents, state.searchTerm)
 
           return {
             events: updatedEvents,
@@ -269,14 +230,7 @@ export const useEvents = create<EventsState>()(
             return event
           })
 
-          const lowerSearchTerm = state.searchTerm.toLowerCase()
-          const filtered = state.searchTerm
-            ? newEvents.filter(
-                (event) =>
-                  event.title.toLowerCase().includes(lowerSearchTerm) ||
-                  (event.description && event.description.toLowerCase().includes(lowerSearchTerm)),
-              )
-            : newEvents
+          const filtered = applySearchFilter(newEvents, state.searchTerm)
 
           return {
             events: newEvents,
@@ -310,18 +264,11 @@ export const useEvents = create<EventsState>()(
                 ...event,
                 dateOverrides,
               }
-            }
-            return event
-          })
+              }
+              return event
+            })
 
-          const lowerSearchTerm = state.searchTerm.toLowerCase()
-          const filtered = state.searchTerm
-            ? updatedEvents.filter(
-                (event) =>
-                  event.title.toLowerCase().includes(lowerSearchTerm) ||
-                  (event.description && event.description.toLowerCase().includes(lowerSearchTerm)),
-              )
-            : updatedEvents
+          const filtered = applySearchFilter(updatedEvents, state.searchTerm)
 
           return {
             events: updatedEvents,
@@ -352,18 +299,11 @@ export const useEvents = create<EventsState>()(
                 ...event,
                 dateIncludeOverrides,
               }
-            }
-            return event
-          })
+              }
+              return event
+            })
 
-          const lowerSearchTerm = state.searchTerm.toLowerCase()
-          const filtered = state.searchTerm
-            ? updatedEvents.filter(
-                (event) =>
-                  event.title.toLowerCase().includes(lowerSearchTerm) ||
-                  (event.description && event.description.toLowerCase().includes(lowerSearchTerm)),
-              )
-            : updatedEvents
+          const filtered = applySearchFilter(updatedEvents, state.searchTerm)
 
           return {
             events: updatedEvents,

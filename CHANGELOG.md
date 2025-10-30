@@ -17,6 +17,8 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - **Config Layout**: Replaced the monolithic `public/config-init.json` with the new `public/conf/{tag}/` folder structure and root `public/conf/default.json` domain map.
 - **Hooks & Admin Tools**: Updated config and data management hooks plus admin UI components to consume the new bundle format without altering their external APIs.
+- **Event Inclusion Controls**: Grouped Scheduled/Website/Briefing/Reminder toggles in the event editor, introduced a dedicated website flag, and kept scheduling as the master gate for all downstream surfaces.
+- **Reminders Admin Tab**: Added a dedicated regenerate control, persisted textarea content to scoped localStorage per day, filtered out archived/hidden events, and ensured tomorrow's times respect per-date overrides.
 
 ## 2025-10-02
 

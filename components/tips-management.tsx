@@ -14,6 +14,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Plus, Edit2, Trash2, Copy, Check, X, Search, Link as LinkIcon } from "lucide-react"
 import { EmbeddedContent } from "@/components/embedded-content"
 import { sanitizeHtml, extractTextFromHtml } from "@/lib/html-utils"
+import { matchesSearchTokens, tokenizeSearchTerm } from "@/lib/search-utils"
 
 import {
   AlertDialog,
@@ -66,16 +67,10 @@ export function TipsManagement({ forceRefresh }: { forceRefresh?: string }) {
   const [copiedTipId, setCopiedTipId] = useState<string | null>(null)
   const [copiedLinkId, setCopiedLinkId] = useState<string | null>(null)
 
+  const searchTokens = tokenizeSearchTerm(searchTerm)
+
   // Filter tips based on search
-  const filteredTips = tips.filter(tip => {
-    if (!searchTerm) return true
-    const lowerSearch = searchTerm.toLowerCase()
-    return (
-      tip.title?.toLowerCase().includes(lowerSearch) ||
-      tip.content?.toLowerCase().includes(lowerSearch) ||
-      tip.customId?.toLowerCase().includes(lowerSearch)
-    )
-  })
+  const filteredTips = tips.filter((tip) => matchesSearchTokens(searchTokens, [tip.title, tip.content, tip.customId]))
 
   useEffect(() => {
     if (!copiedTipId) return

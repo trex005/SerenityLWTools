@@ -75,6 +75,11 @@ export function ReadOnlyDayAgenda({ day, date, showLocalTime = false, setShowLoc
         return false
       }
 
+      // Respect per-event website visibility toggle
+      if (event.includeOnWebsite === false) {
+        return false
+      }
+
       // Check includeInExport property - if it's false for this day, don't show the event
       // This check is ONLY applied in the read-only view
       if (event.includeInExport) {

@@ -11,6 +11,7 @@ import { persist } from "zustand/middleware"
 import { fetchConfig } from "@/lib/config-fetcher"
 import { scopedStateStorage } from "@/lib/scoped-storage"
 import { getActiveTag, onTagChange } from "@/lib/config-tag"
+import { matchesSearchTokens, tokenizeSearchTerm } from "@/lib/search-utils"
 
 // Define the tip interface
 export interface Tip {
@@ -34,13 +35,10 @@ export interface Tip {
 }
 
 const applyTipSearch = (tips: Tip[], term: string): Tip[] => {
-  const lowerSearchTerm = term.toLowerCase()
-  return term
-    ? tips.filter(
-        (tip) =>
-          tip.title.toLowerCase().includes(lowerSearchTerm) || tip.content.toLowerCase().includes(lowerSearchTerm),
-      )
-    : tips
+  const tokens = tokenizeSearchTerm(term)
+  if (tokens.length === 0) return tips
+
+  return tips.filter((tip) => matchesSearchTokens(tokens, [tip.title, tip.content, tip.customId]))
 }
 
 const TIPS_STORAGE_KEY = "daily-agenda-tips"
@@ -110,14 +108,7 @@ export const useTips = create<TipsState>()(
       addTip: (tip: Tip) => {
         set((state) => {
           const newTips = [...state.tips, tip]
-          const lowerSearchTerm = state.searchTerm.toLowerCase()
-          const filtered = state.searchTerm
-            ? newTips.filter(
-                (tip) =>
-                  tip.title.toLowerCase().includes(lowerSearchTerm) ||
-                  tip.content.toLowerCase().includes(lowerSearchTerm),
-              )
-            : newTips
+          const filtered = applyTipSearch(newTips, state.searchTerm)
 
           return {
             tips: newTips,
@@ -130,15 +121,7 @@ export const useTips = create<TipsState>()(
       updateTip: (updatedTip: Tip) => {
         set((state) => {
           const updatedTips = state.tips.map((tip) => (tip.id === updatedTip.id ? updatedTip : tip))
-
-          const lowerSearchTerm = state.searchTerm.toLowerCase()
-          const filtered = state.searchTerm
-            ? updatedTips.filter(
-                (tip) =>
-                  tip.title.toLowerCase().includes(lowerSearchTerm) ||
-                  tip.content.toLowerCase().includes(lowerSearchTerm),
-              )
-            : updatedTips
+          const filtered = applyTipSearch(updatedTips, state.searchTerm)
 
           return {
             tips: updatedTips,
@@ -151,14 +134,7 @@ export const useTips = create<TipsState>()(
       deleteTip: (id: string) => {
         set((state) => {
           const updatedTips = state.tips.filter((tip) => tip.id !== id)
-          const lowerSearchTerm = state.searchTerm.toLowerCase()
-          const filtered = state.searchTerm
-            ? updatedTips.filter(
-                (tip) =>
-                  tip.title.toLowerCase().includes(lowerSearchTerm) ||
-                  tip.content.toLowerCase().includes(lowerSearchTerm),
-              )
-            : updatedTips
+          const filtered = applyTipSearch(updatedTips, state.searchTerm)
 
           return {
             tips: updatedTips,
@@ -216,14 +192,7 @@ export const useTips = create<TipsState>()(
             return tip
           })
 
-          const lowerSearchTerm = state.searchTerm.toLowerCase()
-          const filtered = state.searchTerm
-            ? updatedTips.filter(
-                (tip) =>
-                  tip.title.toLowerCase().includes(lowerSearchTerm) ||
-                  tip.content.toLowerCase().includes(lowerSearchTerm),
-              )
-            : updatedTips
+          const filtered = applyTipSearch(updatedTips, state.searchTerm)
 
           return {
             tips: updatedTips,
@@ -242,14 +211,7 @@ export const useTips = create<TipsState>()(
             return tip
           })
 
-          const lowerSearchTerm = state.searchTerm.toLowerCase()
-          const filtered = state.searchTerm
-            ? updatedTips.filter(
-                (tip) =>
-                  tip.title.toLowerCase().includes(lowerSearchTerm) ||
-                  tip.content.toLowerCase().includes(lowerSearchTerm),
-              )
-            : updatedTips
+          const filtered = applyTipSearch(updatedTips, state.searchTerm)
 
           return {
             tips: updatedTips,
@@ -268,14 +230,7 @@ export const useTips = create<TipsState>()(
             return tip
           })
 
-          const lowerSearchTerm = state.searchTerm.toLowerCase()
-          const filtered = state.searchTerm
-            ? updatedTips.filter(
-                (tip) =>
-                  tip.title.toLowerCase().includes(lowerSearchTerm) ||
-                  tip.content.toLowerCase().includes(lowerSearchTerm),
-              )
-            : updatedTips
+          const filtered = applyTipSearch(updatedTips, state.searchTerm)
 
           return {
             tips: updatedTips,

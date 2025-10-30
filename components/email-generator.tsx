@@ -35,6 +35,7 @@ import {
 } from "@/components/ui/alert-dialog"
 import { Checkbox } from "@/components/ui/checkbox"
 import { scopedLocalStorage } from "@/lib/scoped-storage"
+import { matchesSearchTokens, tokenizeSearchTerm } from "@/lib/search-utils"
 
 /**
  * Simple string hashing function to create a unique identifier for description content
@@ -90,6 +91,7 @@ export function EmailGenerator({ initialDateRange }: EmailGeneratorProps) {
   // State for tip search and filter
   const [tipSearchTerm, setTipSearchTerm] = useState("")
   const [tipFilterOption, setTipFilterOption] = useState<"all" | "used" | "unused">("all")
+  const tipSearchTokens = tokenizeSearchTerm(tipSearchTerm)
 
   // State for regeneration dialog
   const [showRegenerateDialog, setShowRegenerateDialog] = useState(false)
@@ -205,7 +207,7 @@ export function EmailGenerator({ initialDateRange }: EmailGeneratorProps) {
   // Filter tips based on search term and filter option
   const filteredTips = tips.filter((tip) => {
     // First filter by search term
-    if (tipSearchTerm && !tip.content.toLowerCase().includes(tipSearchTerm.toLowerCase())) {
+    if (tipSearchTokens.length > 0 && !matchesSearchTokens(tipSearchTokens, [tip.title, tip.content, tip.customId])) {
       return false
     }
 
@@ -260,6 +262,10 @@ export function EmailGenerator({ initialDateRange }: EmailGeneratorProps) {
    * Check if an event should be included in the export for a specific date
    */
   const shouldIncludeEventForDate = (event: any, date: Date) => {
+    if (event.includeInBriefing === false) {
+      return false
+    }
+
     const dateStr = format(date, "yyyy-MM-dd")
     const dayOfWeek = getDayOfWeek(date)
 

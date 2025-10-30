@@ -63,6 +63,8 @@ export function EventDialog({ event, open, onOpenChange, initialDay = "monday", 
     description: "",
     remindTomorrow: false,
     remindEndOfDay: false,
+    includeInBriefing: true,
+    includeOnWebsite: true,
     isAllDay: true,
     startTime: "09:00",
     endTime: "",
@@ -162,6 +164,8 @@ export function EventDialog({ event, open, onOpenChange, initialDay = "monday", 
       // Set form data last to avoid triggering re-renders
       setFormData({
         ...event,
+        includeInBriefing: event.includeInBriefing ?? true,
+        includeOnWebsite: event.includeOnWebsite ?? true,
         includeInExport,
         // If no end time, set to empty string
         endTime: hasEndTime ? event.endTime : "",
@@ -186,6 +190,8 @@ export function EventDialog({ event, open, onOpenChange, initialDay = "monday", 
         description: "",
         remindTomorrow: false,
         remindEndOfDay: false,
+        includeInBriefing: true,
+        includeOnWebsite: true,
         isAllDay: true,
         startTime: "09:00",
         endTime: "",
@@ -677,49 +683,74 @@ export function EventDialog({ event, open, onOpenChange, initialDay = "monday", 
                     />
                   </div>
 
-                  {/* Reminder Settings */}
+                  {/* Inclusion Settings */}
                   <div className="grid gap-2">
-                    <Label>Reminders</Label>
+                    <Label>Include in</Label>
                     <div className="space-y-2">
                       <div className="flex items-center space-x-2">
                         <Checkbox
-                          id="remindPreviousDay"
-                          checked={formData.remindTomorrow}
-                          onCheckedChange={(checked) => {
-                            setFormData(prev => ({
-                              ...prev,
-                              remindTomorrow: !!checked
-                            }))
-                          }}
+                          id="includeScheduled"
+                          checked={includeInExportByDefault}
+                          onCheckedChange={(checked) => handleIncludeInExportToggle(!!checked)}
                         />
-                        <Label htmlFor="remindPreviousDay">Remind previous day</Label>
+                        <Label htmlFor="includeScheduled">Scheduled</Label>
                       </div>
-                      
+
                       <div className="flex items-center space-x-2">
                         <Checkbox
-                          id="remindEndOfDay"
-                          checked={formData.remindEndOfDay}
-                          onCheckedChange={(checked) => {
-                            setFormData(prev => ({
+                          id="includeWebsite"
+                          checked={formData.includeOnWebsite !== false}
+                          onCheckedChange={(checked) =>
+                            setFormData((prev) => ({
                               ...prev,
-                              remindEndOfDay: !!checked
+                              includeOnWebsite: !!checked,
                             }))
-                          }}
+                          }
                         />
-                        <Label htmlFor="remindEndOfDay">Remind at end of day</Label>
+                        <Label htmlFor="includeWebsite">Website</Label>
                       </div>
-                    </div>
-                  </div>
 
-                  {/* Include in Export Default Setting */}
-                  <div className="grid gap-2">
-                    <div className="flex items-center space-x-2">
-                      <Checkbox
-                        id="includeInExportDefault"
-                        checked={includeInExportByDefault}
-                        onCheckedChange={(checked) => handleIncludeInExportToggle(!!checked)}
-                      />
-                      <Label htmlFor="includeInExportDefault">Auto schedule</Label>
+                      <div className="flex items-center space-x-2">
+                        <Checkbox
+                          id="includeBriefing"
+                          checked={formData.includeInBriefing ?? true}
+                          onCheckedChange={(checked) =>
+                            setFormData((prev) => ({
+                              ...prev,
+                              includeInBriefing: !!checked,
+                            }))
+                          }
+                        />
+                        <Label htmlFor="includeBriefing">Briefing</Label>
+                      </div>
+
+                      <div className="flex items-center space-x-2">
+                        <Checkbox
+                          id="includePreviousDayReminder"
+                          checked={formData.remindTomorrow}
+                          onCheckedChange={(checked) =>
+                            setFormData((prev) => ({
+                              ...prev,
+                              remindTomorrow: !!checked,
+                            }))
+                          }
+                        />
+                        <Label htmlFor="includePreviousDayReminder">Previous day reminders</Label>
+                      </div>
+
+                      <div className="flex items-center space-x-2">
+                        <Checkbox
+                          id="includeEndOfDayReminder"
+                          checked={formData.remindEndOfDay}
+                          onCheckedChange={(checked) =>
+                            setFormData((prev) => ({
+                              ...prev,
+                              remindEndOfDay: !!checked,
+                            }))
+                          }
+                        />
+                        <Label htmlFor="includeEndOfDayReminder">End of day reminders</Label>
+                      </div>
                     </div>
                   </div>
                 </div>

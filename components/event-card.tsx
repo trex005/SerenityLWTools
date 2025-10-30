@@ -8,7 +8,7 @@
 
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Edit, Trash2, Archive, X, Clock, Mail } from "lucide-react"
+import { Edit, Trash2, Archive, X, Clock, Mail, Globe } from "lucide-react"
 import { useEvents } from "@/hooks/use-events"
 import { useState, type MouseEvent, useRef, useEffect } from "react"
 import { EventDialog } from "@/components/event-dialog"
@@ -148,9 +148,9 @@ export function EventCard({ event, day, date, showLocalTime = false }: EventCard
   }, [isEditingTime])
 
   /**
-   * Helper function to check if the event is included in email exports for the current day/date
+   * Helper function to check if the event is scheduled for the current day/date
    */
-  const isIncludedInExport = () => {
+  const isScheduledForDate = () => {
     // First check for date-specific override
     if (event.dateIncludeOverrides && event.dateIncludeOverrides[dateString] !== undefined) {
       return event.dateIncludeOverrides[dateString]
@@ -164,6 +164,26 @@ export function EventCard({ event, day, date, showLocalTime = false }: EventCard
       return event.includeInExport[day] === true || Object.values(event.includeInExport).some((value) => value === true)
     }
     return false
+  }
+
+  /**
+   * Helper function to check if the event is included on the website for the current day/date
+   */
+  const isIncludedOnWebsite = () => {
+    if (event.includeOnWebsite === false) {
+      return false
+    }
+    return isScheduledForDate()
+  }
+
+  /**
+   * Helper to check if the event is included in the briefing for this day/date
+   */
+  const isIncludedInBriefing = () => {
+    if (event.includeInBriefing === false) {
+      return false
+    }
+    return isScheduledForDate()
   }
 
   /**
@@ -321,10 +341,15 @@ export function EventCard({ event, day, date, showLocalTime = false }: EventCard
                 <div>
                   <div className="flex items-center gap-2">
                     <h4 className="font-medium">{event.title}</h4>
+                    <Globe
+                      size={14}
+                      className={`text-muted-foreground ${isIncludedOnWebsite() ? "opacity-100" : "opacity-20"}`}
+                      title={isIncludedOnWebsite() ? "Included on website" : "Hidden from website"}
+                    />
                     <Mail
                       size={14}
-                      className={`text-muted-foreground ${isIncludedInExport() ? "opacity-100" : "opacity-0"}`}
-                      title={isIncludedInExport() ? "Scheduled" : ""}
+                      className={`text-muted-foreground ${isIncludedInBriefing() ? "opacity-100" : "opacity-20"}`}
+                      title={isIncludedInBriefing() ? "Included in briefing" : "Excluded from briefing"}
                     />
                     {hasDateOverride && (
                       <TooltipProvider>
@@ -341,7 +366,7 @@ export function EventCard({ event, day, date, showLocalTime = false }: EventCard
                     <div className="flex items-center gap-2 ml-1">
                       <Switch
                         id={`include-export-${event.id}`}
-                        checked={isIncludedInExport()}
+                        checked={isScheduledForDate()}
                         onCheckedChange={handleIncludeInExportToggle}
                         className="mt-[-2px] data-[state=checked]:bg-primary/40"
                       />

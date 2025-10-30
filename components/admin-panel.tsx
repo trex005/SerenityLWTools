@@ -39,7 +39,13 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog"
 import { initialConfig } from "@/lib/config-init"
-import { scopedLocalStorage } from "@/lib/scoped-storage"
+import {
+  scopedLocalStorage,
+  listTagsWithStoredData,
+  readScopedStateForTag,
+  clearScopedDataForTags,
+  TAG_DATA_STORAGE_KEYS,
+} from "@/lib/scoped-storage"
 import { getActiveTag } from "@/lib/config-tag"
 import JSZip from "jszip"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
@@ -83,6 +89,10 @@ export function AdminPanel() {
   const [invalidationError, setInvalidationError] = useState<string | null>(null)
   const [invalidationResult, setInvalidationResult] = useState<string | null>(null)
   const [invalidationId, setInvalidationId] = useState<string | null>(null)
+  const [availableTags, setAvailableTags] = useState<string[]>([])
+  const [selectedTag, setSelectedTag] = useState<string>(() => getActiveTag())
+  const [isBulkExportingAllTags, setIsBulkExportingAllTags] = useState(false)
+  const [isClearingAllTagData, setIsClearingAllTagData] = useState(false)
 
   // Check for stored credentials on component mount
   useEffect(() => {
@@ -97,6 +107,20 @@ export function AdminPanel() {
       setHasStoredCredentials(true)
     }
   }, [])
+
+  useEffect(() => {
+    if (typeof window === "undefined") return
+    const tags = listTagsWithStoredData()
+    setAvailableTags(tags)
+    const currentTag = getActiveTag()
+    if (tags.length === 0) {
+      setSelectedTag(currentTag)
+    } else if (tags.includes(currentTag)) {
+      setSelectedTag(currentTag)
+    } else {
+      setSelectedTag(tags[0])
+    }
+  }, [events, tips])
 
   /**
    * Save AWS credentials to localStorage
@@ -155,6 +179,120 @@ export function AdminPanel() {
     anchor.click()
     document.body.removeChild(anchor)
     URL.revokeObjectURL(url)
+  }
+
+  const navigateToTag = (tag: string) => {
+    if (typeof window === "undefined") return
+    const currentUrl = new URL(window.location.href)
+    currentUrl.searchParams.set("tag", tag)
+    const query = currentUrl.searchParams.toString()
+    const nextUrl = `${currentUrl.pathname}${query ? `?${query}` : ""}${currentUrl.hash}`
+    window.location.href = nextUrl
+  }
+
+  const getStoredEventsForTag = (tag: string): any[] => {
+    const persisted = readScopedStateForTag<{ state?: { events?: any[] } }>(tag, "daily-agenda-events")
+    const eventsState = persisted?.state
+    return Array.isArray(eventsState?.events) ? eventsState.events : []
+  }
+
+  const getStoredTipsForTag = (tag: string): any[] => {
+    const persisted = readScopedStateForTag<{ state?: { tips?: any[] } }>(tag, "daily-agenda-tips")
+    const tipsState = persisted?.state
+    return Array.isArray(tipsState?.tips) ? tipsState.tips : []
+  }
+
+  const handleExportAllTags = async () => {
+    const tagsToExport = listTagsWithStoredData()
+    if (tagsToExport.length === 0) {
+      toast({
+        title: "No stored tags",
+        description: "There are no tags with stored events or tips to export.",
+      })
+      return
+    }
+
+    setIsBulkExportingAllTags(true)
+    setAvailableTags(tagsToExport)
+
+    try {
+      const timestamp = buildTimestamp()
+      const zip = new JSZip()
+
+      for (const tag of tagsToExport) {
+        const tagFolder = zip.folder(tag)
+        if (!tagFolder) {
+          continue
+        }
+
+        const tagEvents = getStoredEventsForTag(tag)
+        const tagTips = getStoredTipsForTag(tag)
+        const deltas = await buildChildDeltaFiles(tagEvents, tagTips, tag)
+
+        tagFolder.file("conf.json", JSON.stringify(deltas.config, null, 2))
+        tagFolder.file("events.json", JSON.stringify(deltas.events, null, 2))
+        tagFolder.file("events_archive.json", JSON.stringify(deltas.eventsArchive, null, 2))
+        tagFolder.file("tips.json", JSON.stringify(deltas.tips, null, 2))
+      }
+
+      const blob = await zip.generateAsync({ type: "blob" })
+      downloadBlob(blob, `all-tags_${timestamp}.zip`)
+      toast({
+        title: "Bulk export complete",
+        description: `Exported ${tagsToExport.length} ${tagsToExport.length === 1 ? "tag" : "tags"} into a single archive.`,
+        variant: "success",
+      })
+    } catch (error) {
+      console.error("Bulk export failed:", error)
+      toast({
+        title: "Bulk export failed",
+        description: "Could not export all tags. Please try again.",
+        variant: "destructive",
+      })
+    } finally {
+      setIsBulkExportingAllTags(false)
+    }
+  }
+
+  const handleClearAllTagData = () => {
+    const tagsToClear = listTagsWithStoredData()
+    if (tagsToClear.length === 0) {
+      toast({
+        title: "Nothing to clear",
+        description: "No stored events or tips were found for any tags.",
+      })
+      return
+    }
+
+    setIsClearingAllTagData(true)
+
+    try {
+      clearScopedDataForTags(TAG_DATA_STORAGE_KEYS, tagsToClear)
+
+      useEvents.getState().resetToDefaults()
+      useTips.getState().resetToDefaults()
+
+      const updatedTags = listTagsWithStoredData()
+      setAvailableTags(updatedTags)
+      const clearedTagsCount = tagsToClear.length
+
+      toast({
+        title: "Stored data cleared",
+        description: `Removed stored events and tips for ${clearedTagsCount} ${clearedTagsCount === 1 ? "tag" : "tags"}.`,
+        variant: "success",
+      })
+
+      setSelectedTag(getActiveTag())
+    } catch (error) {
+      console.error("Failed to clear stored tag data:", error)
+      toast({
+        title: "Clear failed",
+        description: "Could not clear stored events and tips. Please try again.",
+        variant: "destructive",
+      })
+    } finally {
+      setIsClearingAllTagData(false)
+    }
   }
 
   type ExportOption = "config" | "events" | "events_archive" | "tips" | "all"
@@ -507,6 +645,52 @@ export function AdminPanel() {
               </Button>
             </div>
           </div>
+
+          {availableTags.length > 1 && (
+            <div className="grid gap-2">
+              <h3 className="text-lg font-medium">Multi-Tag Controls</h3>
+              <p className="text-sm text-muted-foreground">
+                Manage stored data across {availableTags.length} tags detected in this browser.
+              </p>
+              <div className="flex flex-col sm:flex-row sm:flex-wrap gap-2">
+                <Select
+                  value={selectedTag}
+                  onValueChange={(value) => {
+                    setSelectedTag(value)
+                    navigateToTag(value)
+                  }}
+                >
+                  <SelectTrigger className="sm:w-56">
+                    <SelectValue placeholder="Select tag" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {availableTags.map((tag) => (
+                      <SelectItem key={tag} value={tag}>
+                        {tag}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <Button
+                  onClick={handleExportAllTags}
+                  className="flex items-center"
+                  disabled={isBulkExportingAllTags}
+                >
+                  <Download className="mr-2 h-4 w-4" />
+                  {isBulkExportingAllTags ? "Exporting all tags..." : "Export All Tags"}
+                </Button>
+                <Button
+                  variant="destructive"
+                  onClick={handleClearAllTagData}
+                  className="flex items-center"
+                  disabled={isClearingAllTagData}
+                >
+                  <Trash2 className="mr-2 h-4 w-4" />
+                  {isClearingAllTagData ? "Clearing..." : "Clear Stored Data"}
+                </Button>
+              </div>
+            </div>
+          )}
 
           {/* Danger Zone Section */}
           <div className="grid gap-2">

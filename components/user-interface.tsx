@@ -77,8 +77,8 @@ export function UserInterface() {
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-4">
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
               <TabsList className="mb-2 sm:mb-0">
-                <TabsTrigger value="schedule">Operations</TabsTrigger>
-                <TabsTrigger value="tips">Intel</TabsTrigger>
+                <TabsTrigger value="schedule">Agenda</TabsTrigger>
+                <TabsTrigger value="tips">Tips</TabsTrigger>
               </TabsList>
             </div>
           </div>

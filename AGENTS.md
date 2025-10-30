@@ -7,6 +7,8 @@
 - `lib/` collects TypeScript helpers (`date-utils.ts`, `config-fetcher.ts`) and should remain framework-agnostic.
 - Styling lives in `styles/` and `app/globals.css`; static assets go in `public/`.
 - Configs live in `next.config.mjs`, `tailwind.config.ts`, `postcss.config.mjs`, and `tsconfig.json`.
+- `lib/scoped-storage.ts` gates persistence behind Command (admin) modeâ€”keep events/tips storage writes aligned with that guard.
+- Event admin dialog consolidates "Include in" toggles (Scheduled, Website, Briefing, Previous Day, End of Day); keep Scheduled on to surface the event anywhere, and use Website to control the public briefing tab while Briefing/Reminder toggles gate their respective outputs.
 
 ## Build, Test, and Development Commands
 

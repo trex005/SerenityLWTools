@@ -2,24 +2,136 @@
  * Reminders Component
  *
  * This component displays reminders for a selected day, allowing users to view
- * and edit reminders in a textarea format with copy functionality.
+ * and edit reminders in a textarea format with copy and regenerate functionality.
  */
 "use client"
 
 import type React from "react"
 
-import { useState, useEffect, useMemo } from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { useEvents } from "@/hooks/use-events"
-import { format, startOfDay, addDays } from "date-fns"
-import { getAppTimezoneDate, getMinutesUntilNextDay, formatTimeRemaining } from "@/lib/date-utils"
-import { Copy, Check, Calendar } from "lucide-react"
+import { addDays, format, startOfDay } from "date-fns"
+import {
+  formatTimeRemaining,
+  getAppTimezoneDate,
+  getDayOfWeek,
+  getMinutesUntilNextDay,
+} from "@/lib/date-utils"
+import { Check, Copy, RefreshCw } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { shouldShowRecurringEvent } from "@/lib/recurrence-utils"
 import { Input } from "@/components/ui/input"
-import { cn } from "@/lib/utils"
+import { scopedLocalStorage } from "@/lib/scoped-storage"
+
+const STORAGE_PREFIX = "daily-reminders-content"
+const BULLET_PREFIX = "\u2022 "
+
+const getDateKey = (date: Date): string => format(date, "yyyy-MM-dd")
+
+const getEffectiveValue = (event: any, date: Date, dayKey: string, property: string) => {
+  const dateKey = getDateKey(date)
+
+  if (
+    event?.dateOverrides &&
+    event.dateOverrides[dateKey] &&
+    event.dateOverrides[dateKey][property] !== undefined
+  ) {
+    return event.dateOverrides[dateKey][property]
+  }
+
+  if (event?.variations && event.variations[dayKey] && event.variations[dayKey][property] !== undefined) {
+    return event.variations[dayKey][property]
+  }
+
+  return event?.[property]
+}
+
+const isScheduledForDate = (event: any, date: Date, dayKey: string): boolean => {
+  const dateKey = getDateKey(date)
+
+  if (event?.dateIncludeOverrides && event.dateIncludeOverrides[dateKey] !== undefined) {
+    return Boolean(event.dateIncludeOverrides[dateKey])
+  }
+
+  if (typeof event?.includeInExport === "boolean") {
+    return event.includeInExport
+  }
+
+  if (event?.includeInExport && event.includeInExport[dayKey] !== undefined) {
+    return Boolean(event.includeInExport[dayKey])
+  }
+
+  if (event?.includeInExport && typeof event.includeInExport === "object") {
+    return Object.values(event.includeInExport).some((value) => value === true)
+  }
+
+  return false
+}
+
+const shouldIncludeEventOnDate = (event: any, date: Date, dayKey: string): boolean => {
+  if (!event || event.archived) return false
+
+  if (!isScheduledForDate(event, date, dayKey)) {
+    return false
+  }
+
+  if (!shouldShowRecurringEvent(event, date, false)) {
+    return false
+  }
+
+  const dateKey = getDateKey(date)
+
+  if (event.dateOverrides && event.dateOverrides[dateKey]?.hidden === true) {
+    return false
+  }
+
+  if (event.variations && event.variations[dayKey]?.hidden === true) {
+    return false
+  }
+
+  if (
+    event.dateIncludeOverrides &&
+    event.dateIncludeOverrides[dateKey] !== undefined &&
+    event.dateIncludeOverrides[dateKey] === false
+  ) {
+    return false
+  }
+
+  return true
+}
+
+const formatReminderLine = (event: any, date: Date, dayKey: string): { line: string; sortKey: string } => {
+  const titleValue = getEffectiveValue(event, date, dayKey, "title") ?? event.title ?? "Untitled event"
+  const title = typeof titleValue === "string" ? titleValue.trim() || "Untitled event" : "Untitled event"
+
+  const startTimeValue = getEffectiveValue(event, date, dayKey, "startTime")
+  const startTime =
+    typeof startTimeValue === "string"
+      ? startTimeValue.trim()
+      : typeof event.startTime === "string"
+        ? event.startTime.trim()
+        : ""
+
+  const isAllDayValue = getEffectiveValue(event, date, dayKey, "isAllDay")
+  const isAllDay =
+    typeof isAllDayValue === "boolean"
+      ? isAllDayValue
+      : typeof event.isAllDay === "boolean"
+        ? event.isAllDay
+        : false
+
+  const hasTimedStart = Boolean(startTime) && !isAllDay
+  const prefix = hasTimedStart ? `${startTime} - ` : BULLET_PREFIX
+  const sortKey = hasTimedStart ? `a-${startTime}` : `z-${title.toLowerCase()}`
+
+  return {
+    line: `${prefix}${title}`,
+    sortKey,
+  }
+}
 
 /**
  * Reminders component
@@ -27,113 +139,108 @@ import { cn } from "@/lib/utils"
  */
 export function Reminders() {
   // Access events from store
-  const { events } = useEvents()
-  
+  const { events, hydrated } = useEvents()
+
   // State for selected date (defaults to current day in app timezone)
-  const [selectedDate, setSelectedDate] = useState<Date>(() => {
-    return startOfDay(getAppTimezoneDate())
-  })
-  
-  
+  const [selectedDate, setSelectedDate] = useState<Date>(() => startOfDay(getAppTimezoneDate()))
+
   // State for copy button feedback
   const [isCopied, setIsCopied] = useState(false)
-  
+
   // State for editable textarea content
   const [textareaContent, setTextareaContent] = useState("")
-  
+  const [initializedKey, setInitializedKey] = useState<string | null>(null)
+
   // Calculate minutes until next day
   const minutesUntilNextDay = getMinutesUntilNextDay()
-  
+
+  const storageKey = useMemo(() => `${STORAGE_PREFIX}:${getDateKey(selectedDate)}`, [selectedDate])
+  const tomorrowDate = useMemo(() => addDays(selectedDate, 1), [selectedDate])
+
   // Get events for the selected day and generate reminders
-  const { dayReminders, tomorrowReminders } = useMemo(() => {
-    const selectedDayStr = format(selectedDate, "yyyy-MM-dd")
-    const dayOfWeek = format(selectedDate, "EEEE").toLowerCase()
-    
-    // Calculate tomorrow's date and day of week
-    const tomorrow = addDays(selectedDate, 1)
-    const tomorrowDayOfWeek = format(tomorrow, "EEEE").toLowerCase()
-    
-    // Filter events for this day
-    const dayEvents = events.filter(event => {
-      // Check if event is scheduled for this day of week
-      if (event.days.includes(dayOfWeek)) {
-        // Check if it's a recurring event and should show on this date
-        if (event.recurrence) {
-          return shouldShowRecurringEvent(event, selectedDate)
-        }
-        return true
-      }
-      return false
-    })
-    
-    // Filter events for tomorrow that should be reminded today
-    const tomorrowEvents = events.filter(event => {
-      // Only include events with remindTomorrow checked
-      if (!event.remindTomorrow) return false
-      
-      // Check if event is scheduled for tomorrow's day of week
-      if (event.days.includes(tomorrowDayOfWeek)) {
-        // Check if it's a recurring event and should show on tomorrow's date
-        if (event.recurrence) {
-          return shouldShowRecurringEvent(event, tomorrow)
-        }
-        return true
-      }
-      return false
-    })
-    
-    // Process today's end-of-day reminders
+  const { dayReminders, tomorrowReminders, todayEventCount, tomorrowEventCount } = useMemo(() => {
+    const dayKey = getDayOfWeek(selectedDate)
+    const tomorrowKey = getDayOfWeek(tomorrowDate)
+
+    const dayEvents = events.filter((event) => shouldIncludeEventOnDate(event, selectedDate, dayKey))
+    const tomorrowEvents = events.filter((event) => shouldIncludeEventOnDate(event, tomorrowDate, tomorrowKey))
+
     const todayReminders = dayEvents
-      .filter(event => event.remindEndOfDay)
-      .sort((a, b) => {
-        // Sort by start time
-        return a.startTime.localeCompare(b.startTime)
+      .filter((event) => {
+        const override = getEffectiveValue(event, selectedDate, dayKey, "remindEndOfDay")
+        if (override !== undefined) {
+          return Boolean(override)
+        }
+        return Boolean(event.remindEndOfDay)
       })
-      .map(event => {
-        const timePrefix = event.startTime && event.startTime.trim() !== "" && !event.isAllDay
-          ? `${event.startTime}-` 
-          : "• "
-        return `${timePrefix}${event.title}`
-      })
-    
-    // Process tomorrow's reminders - these will be displayed differently
+      .map((event) => formatReminderLine(event, selectedDate, dayKey))
+      .sort((a, b) => a.sortKey.localeCompare(b.sortKey))
+      .map((item) => item.line)
+
     const tomorrowReminderList = tomorrowEvents
-      .sort((a, b) => {
-        // Sort by start time, but put events without start time at the end (or isAllDay events)
-        const aTime = a.startTime && a.startTime.trim() !== "" && !a.isAllDay ? a.startTime : "99:99"
-        const bTime = b.startTime && b.startTime.trim() !== "" && !b.isAllDay ? b.startTime : "99:99"
-        return aTime.localeCompare(bTime)
+      .filter((event) => {
+        const override = getEffectiveValue(event, tomorrowDate, tomorrowKey, "remindTomorrow")
+        if (override !== undefined) {
+          return Boolean(override)
+        }
+        return Boolean(event.remindTomorrow)
       })
-      .map(event => {
-        const timePrefix = event.startTime && event.startTime.trim() !== "" && !event.isAllDay
-          ? `${event.startTime}-` 
-          : "• "
-        return `${timePrefix}${event.title}`
-      })
-    
-    return { dayReminders: todayReminders, tomorrowReminders: tomorrowReminderList }
-  }, [events, selectedDate])
-  
-  // Generate formatted content for textarea
-  useEffect(() => {
+      .map((event) => formatReminderLine(event, tomorrowDate, tomorrowKey))
+      .sort((a, b) => a.sortKey.localeCompare(b.sortKey))
+      .map((item) => item.line)
+
+    return {
+      dayReminders: todayReminders,
+      tomorrowReminders: tomorrowReminderList,
+      todayEventCount: dayEvents.length,
+      tomorrowEventCount: tomorrowEvents.length,
+    }
+  }, [events, selectedDate, tomorrowDate])
+
+  const buildReminderContent = useCallback(() => {
     const resetText = `Reset in ${formatTimeRemaining(minutesUntilNextDay)}!`
-    
-    let content = `${resetText}\n\n`
-    
-    // Add tomorrow's reminders if any exist
+    const sections: string[] = [resetText]
+
     if (tomorrowReminders.length > 0) {
-      content += `Tomorrow:\n${tomorrowReminders.join('\n')}\n\n`
+      sections.push(`Tomorrow:\n${tomorrowReminders.join("\n")}`)
     }
-    
-    // Add today's reminders only if there are any
+
     if (dayReminders.length > 0) {
-      content += 'Reminders:\n'
-      content += dayReminders.join('\n')
+      sections.push(`Reminders:\n${dayReminders.join("\n")}`)
     }
-    
-    setTextareaContent(content)
+
+    return sections.join("\n\n")
   }, [minutesUntilNextDay, dayReminders, tomorrowReminders])
-  
+
+  // Initialize or regenerate content when date changes or storage is empty
+  useEffect(() => {
+    if (initializedKey === storageKey) {
+      return
+    }
+
+    const stored = scopedLocalStorage.getItem(storageKey)
+    if (stored !== null) {
+      setTextareaContent(stored)
+      setInitializedKey(storageKey)
+      return
+    }
+
+    if (!hydrated) {
+      return
+    }
+
+    const generated = buildReminderContent()
+    setTextareaContent(generated)
+    setInitializedKey(storageKey)
+    scopedLocalStorage.setItem(storageKey, generated)
+  }, [storageKey, hydrated, initializedKey, buildReminderContent])
+
+  // Persist content changes after initialization
+  useEffect(() => {
+    if (initializedKey !== storageKey) return
+    scopedLocalStorage.setItem(storageKey, textareaContent)
+  }, [textareaContent, storageKey, initializedKey])
+
   // Handle copy to clipboard
   const handleCopy = async () => {
     try {
@@ -144,7 +251,14 @@ export function Reminders() {
       console.error("Failed to copy to clipboard:", error)
     }
   }
-  
+
+  const handleRegenerate = () => {
+    const content = buildReminderContent()
+    setTextareaContent(content)
+    setInitializedKey(storageKey)
+    scopedLocalStorage.setItem(storageKey, content)
+  }
+
   return (
     <div className="space-y-6">
       <Card>
@@ -162,38 +276,47 @@ export function Reminders() {
               onChange={(e) => {
                 if (e.target.value) {
                   // Parse date manually to avoid timezone issues
-                  const [year, month, day] = e.target.value.split('-').map(Number)
+                  const [year, month, day] = e.target.value.split("-").map(Number)
                   setSelectedDate(startOfDay(new Date(year, month - 1, day)))
+                  setTextareaContent("")
+                  setInitializedKey(null)
                 }
               }}
               className="w-[240px]"
             />
           </div>
-          
+
           {/* Reminders Textarea */}
           <div className="grid gap-2">
             <div className="flex items-center justify-between">
               <Label htmlFor="reminders-textarea">Reminders</Label>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handleCopy}
-                className="flex items-center gap-2"
-              >
-                {isCopied ? (
-                  <>
-                    <Check className="h-4 w-4" />
-                    Copied!
-                  </>
-                ) : (
-                  <>
-                    <Copy className="h-4 w-4" />
-                    Copy
-                  </>
-                )}
-              </Button>
+              <div className="flex gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleRegenerate}
+                  className="flex items-center gap-1"
+                  title="Regenerate reminders"
+                >
+                  <RefreshCw className="h-4 w-4" />
+                  <span className="sr-only">Regenerate</span>
+                </Button>
+                <Button variant="outline" size="sm" onClick={handleCopy} className="flex items-center gap-2">
+                  {isCopied ? (
+                    <>
+                      <Check className="h-4 w-4" />
+                      Copied!
+                    </>
+                  ) : (
+                    <>
+                      <Copy className="h-4 w-4" />
+                      Copy
+                    </>
+                  )}
+                </Button>
+              </div>
             </div>
-            
+
             {/* Character Counter */}
             <div className="flex justify-between items-center">
               <div
@@ -215,26 +338,31 @@ export function Reminders() {
             <Textarea
               id="reminders-textarea"
               value={textareaContent}
-              onChange={(e) => setTextareaContent(e.target.value)}
+              onChange={(e) => {
+                if (initializedKey !== storageKey) {
+                  setInitializedKey(storageKey)
+                }
+                setTextareaContent(e.target.value)
+              }}
               placeholder="No reminders for this day"
               className="min-h-[200px] font-mono text-sm"
               spellCheck={false}
             />
           </div>
-          
+
           {/* Status Info */}
           <div className="text-sm text-muted-foreground">
-            Found {dayReminders.length} reminder{dayReminders.length !== 1 ? 's' : ''} for {format(selectedDate, "EEEE, MMM d")}
+            Found {dayReminders.length} reminder{dayReminders.length !== 1 ? "s" : ""} for{" "}
+            {format(selectedDate, "EEEE, MMM d")}
             {tomorrowReminders.length > 0 && (
-              <span> • {tomorrowReminders.length} tomorrow reminder{tomorrowReminders.length !== 1 ? 's' : ''}</span>
+              <span> • {tomorrowReminders.length} tomorrow reminder{tomorrowReminders.length !== 1 ? "s" : ""}</span>
             )}
           </div>
-          
+
           {/* Debug Info */}
           <div className="text-xs text-muted-foreground mt-2 p-2 bg-gray-100 rounded">
-            <strong>Debug:</strong> {events.length} total events, {events.filter(e => e.remindTomorrow).length} with remindTomorrow, {events.filter(e => e.remindEndOfDay).length} with remindEndOfDay
-            <br />
-            Tomorrow ({format(addDays(selectedDate, 1), 'EEEE')}): {events.filter(e => e.remindTomorrow && e.days.includes(format(addDays(selectedDate, 1), 'EEEE').toLowerCase())).length} matching events
+            <strong>Debug:</strong> {events.length} total events • {todayEventCount} active on{" "}
+            {format(selectedDate, "EEEE")} • {tomorrowEventCount} active on {format(tomorrowDate, "EEEE")}
           </div>
         </CardContent>
       </Card>

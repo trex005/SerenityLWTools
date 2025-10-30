@@ -577,3 +577,27 @@ The one consisten thing in every single test is that no event/tip data has loade
 Changes made to events and tips in the admin interface are not persisting on reload.
 I'm not sure if this is because 
 ------------------
+**Reminders**
+Please make the following changes to the reminders tab in the admin section:
+• Make the text persist using localstorage
+• Add a regenerate button above the upper right corner of the textarea just like is above the textarea in the Briefing section
+• Do not overwrite the textarea unless the regenerate button is pressed or a date is manually selected.
+• Do not include archived events
+• When displaying times (in the Tomorrow section) make sure to use the correct time for that specific day. (The day after the selected date)
+-----------------
+** Event Inclusion **
+We currently have various options about where events are to appear.  I would like to group those options in one place in the event admin area and add one more option:
+
+Include in:
+Website (new)
+Briefing
+Previous Day Reminders
+End of Day Reminders
+-----------
+** Bulk Export **
+I would like an additional contol panel section to show up in Command Section when localStorage has content for multiple tags
+It should include:
+• dropdown box that will redirect you to each of those tags using ?tag=
+• An export button that will export all tags' config as a zip (each within a folder with it's tags name)
+• The ability to clear the local storage for all events/tips across all tags
+-----------

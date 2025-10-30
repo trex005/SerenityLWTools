@@ -10,7 +10,7 @@ import { useState, type MouseEvent } from "react"
 import { useEvents } from "@/hooks/use-events"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { ArchiveRestore, Archive, Trash2, Search, X, Edit, Mail } from "lucide-react"
+import { ArchiveRestore, Archive, Trash2, Search, X, Edit, Mail, Globe } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import {
   AlertDialog,
@@ -28,6 +28,7 @@ import { formatRecurrence } from "@/lib/recurrence-utils"
 import { useDebounce } from "@/hooks/use-debounce"
 import { EventDialog } from "@/components/event-dialog"
 import { AddEventButton } from "@/components/add-event-button"
+import { matchesSearchTokens, tokenizeSearchTerm } from "@/lib/search-utils"
 
 /**
  * EventsView component
@@ -51,6 +52,7 @@ export function EventsView() {
 
   // Filter events based on search term and sort alphabetically
   const filterAndSortEvents = (allEvents: any[], filter: string, archived?: boolean) => {
+    const searchTokens = tokenizeSearchTerm(filter)
     return (
       allEvents
         .filter((event) => {
@@ -60,13 +62,11 @@ export function EventsView() {
           }
 
           // Filter by search term if provided
-          if (!filter) return true
+          if (searchTokens.length > 0 && !matchesSearchTokens(searchTokens, [event.title, event.description])) {
+            return false
+          }
 
-          const searchTerm = filter.toLowerCase()
-          const titleMatch = event.title.toLowerCase().includes(searchTerm)
-          const descriptionMatch = event.description.toLowerCase().includes(searchTerm)
-
-          return titleMatch || descriptionMatch
+          return true
         })
         // Sort alphabetically by title
         .sort((a, b) => a.title.localeCompare(b.title))
@@ -300,9 +300,9 @@ function EventCard({
 
 
   /**
-   * Helper function to check if an event is marked for export
+   * Helper function to check if an event is scheduled at all
    */
-  function isMarkedForExport(event: any) {
+  function isScheduled(event: any) {
     // Handle both boolean and object formats
     if (typeof event.includeInExport === "boolean") {
       return event.includeInExport
@@ -311,6 +311,20 @@ function EventCard({
       return Object.values(event.includeInExport).some((value) => value === true)
     }
     return false
+  }
+
+  function isWebsiteEnabled(event: any) {
+    if (event.includeOnWebsite === false) {
+      return false
+    }
+    return isScheduled(event)
+  }
+
+  function isBriefingEnabled(event: any) {
+    if (event.includeInBriefing === false) {
+      return false
+    }
+    return isScheduled(event)
   }
 
   return (
@@ -327,9 +341,18 @@ function EventCard({
                       Archived
                     </Badge>
                   )}
-                  {isMarkedForExport(event) && (
-                    <Mail size={14} className="text-muted-foreground" title="Included in email export" />
-                  )}
+                  <div className="flex items-center gap-1">
+                    <Globe
+                      size={14}
+                      className={`text-muted-foreground ${isWebsiteEnabled(event) ? "opacity-100" : "opacity-20"}`}
+                      title={isWebsiteEnabled(event) ? "Included on website" : "Hidden from website"}
+                    />
+                    <Mail
+                      size={14}
+                      className={`text-muted-foreground ${isBriefingEnabled(event) ? "opacity-100" : "opacity-20"}`}
+                      title={isBriefingEnabled(event) ? "Included in briefing" : "Excluded from briefing"}
+                    />
+                  </div>
                 </div>
                 {!isAllDay && startTime && (
                   <div className="text-sm text-muted-foreground">

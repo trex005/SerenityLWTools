@@ -16,6 +16,7 @@ import { Dialog, DialogContent } from "@/components/ui/dialog"
 import { sanitizeHtml, extractTextFromHtml } from "@/lib/html-utils"
 import { useInView } from "react-intersection-observer"
 import { EmbeddedContent } from "@/components/embedded-content"
+import { matchesSearchTokens, tokenizeSearchTerm } from "@/lib/search-utils"
 
 // Add a new prop to force the component to check for tip ID in URL
 export function ReadOnlyTips({ forceRefresh }: { forceRefresh?: string }) {
@@ -58,6 +59,8 @@ export function ReadOnlyTips({ forceRefresh }: { forceRefresh?: string }) {
 
   const [filterOption, setFilterOption] = useState<"all" | "used" | "unused">("all")
 
+  const searchTokens = tokenizeSearchTerm(debouncedSearchTerm)
+
   // Filter tips based on search term and filter option
   const filteredTips = tips.filter((tip) => {
     // First filter out admin-only tips if not admin
@@ -71,19 +74,8 @@ export function ReadOnlyTips({ forceRefresh }: { forceRefresh?: string }) {
     }
 
     // Then filter by search term
-    if (debouncedSearchTerm) {
-      const searchLower = debouncedSearchTerm.toLowerCase()
-      // Check title (with null/undefined protection)
-      const titleMatch = tip.title ? tip.title.toLowerCase().includes(searchLower) : false
-      // Check content (with null/undefined protection)
-      const contentMatch = tip.content ? tip.content.toLowerCase().includes(searchLower) : false
-      // Check customId (with null/undefined protection)
-      const customIdMatch = tip.customId ? tip.customId.toLowerCase().includes(searchLower) : false
-
-      // Return false if no matches found
-      if (!(titleMatch || contentMatch || customIdMatch)) {
-        return false
-      }
+    if (searchTokens.length > 0 && !matchesSearchTokens(searchTokens, [tip.title, tip.content, tip.customId])) {
+      return false
     }
 
     // Then filter by usage status
