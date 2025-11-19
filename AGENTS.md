@@ -1,4 +1,4 @@
-# Repository Guidelines
+﻿# Repository Guidelines
 
 ## Project Structure & Module Organization
 
@@ -7,7 +7,8 @@
 - `lib/` collects TypeScript helpers (`date-utils.ts`, `config-fetcher.ts`) and should remain framework-agnostic.
 - Styling lives in `styles/` and `app/globals.css`; static assets go in `public/`.
 - Configs live in `next.config.mjs`, `tailwind.config.ts`, `postcss.config.mjs`, and `tsconfig.json`.
-- `lib/scoped-storage.ts` gates persistence behind Command (admin) modeâ€”keep events/tips storage writes aligned with that guard.
+- `lib/scoped-storage.ts` gates persistence behind Command (admin) modeÃ¢â‚¬â€keep events/tips storage writes aligned with that guard.
+- Tag configs under `public/conf/{tag}/` now only ship `config.json`, `events.json`, and `tips.json`; archived entries stay in `events.json` via `archived: true`.
 - Event admin dialog consolidates "Include in" toggles (Scheduled, Website, Briefing, Previous Day, End of Day); keep Scheduled on to surface the event anywhere, and use Website to control the public briefing tab while Briefing/Reminder toggles gate their respective outputs.
 
 ## Build, Test, and Development Commands
@@ -16,7 +17,7 @@
 - `pnpm dev` launches the local server at `http://localhost:3000`.
 - `pnpm build` compiles production assets consumed by `deploy-static.js`.
 - `pnpm start` serves the compiled build for QA.
-- `pnpm lint` runs `next lint` and Tailwind rules—run it before opening a PR.
+- `pnpm lint` runs `next lint` and Tailwind rulesâ€”run it before opening a PR.
 
 ## Coding Style & Naming Conventions
 
@@ -46,3 +47,5 @@
 - Read `DEPLOYMENT.md` and helper scripts (`deploy-static.js`, `build-static.js`) before releasing; they expect bundles in `out/`.
 - Update S3/CloudFront JSON policies in-repo first, then apply them through the deployment pipeline.
 - Document new env keys beside the code that needs them.
+
+

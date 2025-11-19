@@ -10,7 +10,7 @@ import { useState, type MouseEvent } from "react"
 import { useEvents } from "@/hooks/use-events"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { ArchiveRestore, Archive, Trash2, Search, X, Edit, Mail, Globe } from "lucide-react"
+import { ArchiveRestore, Archive, Trash2, Search, X, Edit, Mail, Globe, Undo2 } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import {
   AlertDialog,
@@ -29,6 +29,10 @@ import { useDebounce } from "@/hooks/use-debounce"
 import { EventDialog } from "@/components/event-dialog"
 import { AddEventButton } from "@/components/add-event-button"
 import { matchesSearchTokens, tokenizeSearchTerm } from "@/lib/search-utils"
+import { useOverrideDiff } from "@/hooks/use-override-diff"
+import type { DiffInfo } from "@/lib/config-diff"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
+import { useToast } from "@/hooks/use-toast"
 
 /**
  * EventsView component
@@ -36,7 +40,9 @@ import { matchesSearchTokens, tokenizeSearchTerm } from "@/lib/search-utils"
  */
 export function EventsView() {
   // Access events store
-  const { events, archiveEvent, restoreEvent, deleteEvent } = useEvents()
+  const { events, archiveEvent, restoreEvent, deleteEvent, resetEventOverrides } = useEvents()
+  const { diffIndex } = useOverrideDiff()
+  const { toast } = useToast()
 
   // State for filter input
   const [filterInput, setFilterInput] = useState("")
@@ -49,6 +55,10 @@ export function EventsView() {
 
   // State for edit dialog
   const [eventToEdit, setEventToEdit] = useState<any | null>(null)
+
+  // State for reset confirmation dialog
+  const [eventToReset, setEventToReset] = useState<any | null>(null)
+  const [isResetting, setIsResetting] = useState(false)
 
   // Filter events based on search term and sort alphabetically
   const filterAndSortEvents = (allEvents: any[], filter: string, archived?: boolean) => {
@@ -77,6 +87,7 @@ export function EventsView() {
   const allFilteredEvents = filterAndSortEvents(events, debouncedFilter)
   const activeEvents = filterAndSortEvents(events, debouncedFilter, false)
   const archivedEvents = filterAndSortEvents(events, debouncedFilter, true)
+  const eventOverrideIndex = diffIndex?.events ?? {}
 
   /**
    * Handle archive button click
@@ -100,6 +111,45 @@ export function EventsView() {
    */
   const handleEdit = (event: any) => {
     setEventToEdit(event)
+  }
+
+  /**
+   * Handle reset button click
+   * Prompts user to confirm resetting local overrides
+   */
+  const handleResetClick = (event: any) => {
+    setEventToReset(event)
+  }
+
+  const confirmReset = async () => {
+    if (!eventToReset) return
+    setIsResetting(true)
+    try {
+      const success = await resetEventOverrides(eventToReset.id)
+      if (success) {
+        toast({
+          title: "Overrides cleared",
+          description: `Reverted "${eventToReset.title}" to its parent data.`,
+          variant: "success",
+        })
+      } else {
+        toast({
+          title: "Nothing to reset",
+          description: "This event does not inherit from a parent tag.",
+          variant: "destructive",
+        })
+      }
+    } catch (error) {
+      console.error("Failed to reset event overrides", error)
+      toast({
+        title: "Reset failed",
+        description: "Could not reset this event. Please try again.",
+        variant: "destructive",
+      })
+    } finally {
+      setIsResetting(false)
+      setEventToReset(null)
+    }
   }
 
   /**
@@ -182,6 +232,8 @@ export function EventsView() {
                 onRestore={handleRestore}
                 onEdit={handleEdit}
                 onDelete={handleDeleteClick}
+                onReset={handleResetClick}
+                overrideInfo={eventOverrideIndex[event.id]}
               />
             ))}
           </div>
@@ -206,6 +258,8 @@ export function EventsView() {
                 onRestore={handleRestore}
                 onEdit={handleEdit}
                 onDelete={handleDeleteClick}
+                onReset={handleResetClick}
+                overrideInfo={eventOverrideIndex[event.id]}
               />
             ))}
           </div>
@@ -225,6 +279,8 @@ export function EventsView() {
                 onRestore={handleRestore}
                 onEdit={handleEdit}
                 onDelete={handleDeleteClick}
+                onReset={handleResetClick}
+                overrideInfo={eventOverrideIndex[event.id]}
               />
             ))}
           </div>
@@ -271,6 +327,29 @@ export function EventsView() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      {/* Reset overrides confirmation dialog */}
+      <AlertDialog open={eventToReset !== null} onOpenChange={(open) => !open && !isResetting && setEventToReset(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Reset Overrides</AlertDialogTitle>
+            <AlertDialogDescription>
+              This will discard all changes made to <strong>{eventToReset?.title}</strong> in this tag and revert it to
+              the parent configuration. Continue?
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={isResetting}>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={confirmReset}
+              disabled={isResetting}
+              className="bg-primary text-primary-foreground hover:bg-primary/90"
+            >
+              {isResetting ? "Resetting..." : "Reset event"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   )
 }
@@ -285,18 +364,25 @@ function EventCard({
   onRestore,
   onEdit,
   onDelete,
+  onReset,
+  overrideInfo,
 }: {
   event: any
   onArchive: (id: string) => void
   onRestore: (id: string) => void
   onEdit: (event: any) => void
   onDelete: (id: string, e: MouseEvent) => void
+  onReset?: (event: any) => void
+  overrideInfo?: DiffInfo
 }) {
   // Get effective values
   const isAllDay = event.isAllDay
   const startTime = event.startTime
   const endTime = event.endTime
   const description = event.description
+  const overrideKeys = overrideInfo?.overrideKeys ?? []
+  const hasOverrides = overrideKeys.length > 0
+  const parentExists = overrideInfo?.parentExists ?? false
 
 
   /**
@@ -336,6 +422,22 @@ function EventCard({
               <div>
                 <div className="flex items-center gap-2">
                   <h4 className="font-medium">{event.title}</h4>
+                  {hasOverrides && (
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Badge variant="secondary" className="text-amber-900 bg-amber-100 border-amber-200">
+                            Overrides
+                          </Badge>
+                        </TooltipTrigger>
+                        <TooltipContent className="max-w-xs">
+                          <p className="text-xs">
+                            Overridden fields: {overrideKeys.length ? overrideKeys.join(", ") : "multiple properties"}
+                          </p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  )}
                   {event.archived && (
                     <Badge variant="outline" className="text-muted-foreground border-muted-foreground/50">
                       Archived
@@ -396,6 +498,27 @@ function EventCard({
                   >
                     <Archive size={16} />
                   </Button>
+                )}
+                {hasOverrides && parentExists && onReset && (
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => onReset(event)}
+                          aria-label="Reset overrides"
+                          title="Reset overrides"
+                          className="text-muted-foreground hover:text-muted-foreground hover:bg-muted/50"
+                        >
+                          <Undo2 size={16} />
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p className="text-xs">Revert changes for this tag back to the parent data.</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
                 )}
                 <Button
                   variant="ghost"

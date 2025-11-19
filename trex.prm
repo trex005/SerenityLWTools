@@ -601,3 +601,59 @@ It should include:
 • An export button that will export all tags' config as a zip (each within a folder with it's tags name)
 • The ability to clear the local storage for all events/tips across all tags
 -----------
+Pending:
+
+** Rebuild Inheritance **
+It seems somewhere along the way, the inheretence structure for tips/events was broken.
+
+Please read the following psudocode and evaluate it for any logical flaws.
+
+If you feel it is logically sound, explain it back to me in your own words.
+
+Only after we agree on how it should work, please compare this flow to the existing flow and make the needed updates.
+
+
+current_tag = [the key as determined by ?tag= or domain]
+
+tag_data_cache(tag):
+  return tag_cache[tag] if exists
+  tag_data = {}
+  if isAdmin(current_tag) and hasHadmin(tag) and LocalStorage(tag):
+    tag_data = data from localStorage
+  if json for tag exists:
+    tag_data = deep merge tag_data on top of json data
+  tag_cache[tag] = tag_data
+  return tag_cache[tag]
+
+data_cache(tag):
+  return cache[tag] if exists
+  data = tag_data_cache(tag):
+  data = deep merge tag_data on top of data
+  if data has parent:
+    parent_data = data_cache(parent)
+    data = deep merge parent_data on top of parent_data
+  
+  cache[tag] = data
+  return cache[tag]
+
+get_data(tag,key):
+  override = false
+  set = false
+  if tag_data_cache(tag)[key]:
+    override = true
+  data = data_cache(tag)[key]
+  if data:
+    set = true
+  
+  if data:
+  return {
+    override:override,
+    set:true,
+    data:data
+  }
+
+
+-----------
+** Merge Event Files **
+Remove all logic for archived events being in their own json files (import/export). Use only the archived attribute in the json.
+Do not add any functionality to maintain backward compatibility

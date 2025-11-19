@@ -9,6 +9,7 @@
 import { create } from "zustand"
 import { persist } from "zustand/middleware"
 import { fetchConfig } from "@/lib/config-fetcher"
+import { fetchParentEvent } from "@/lib/config-diff"
 import { scopedStateStorage } from "@/lib/scoped-storage"
 import { getActiveTag, onTagChange } from "@/lib/config-tag"
 import { matchesSearchTokens, tokenizeSearchTerm } from "@/lib/search-utils"
@@ -62,6 +63,7 @@ interface EventsState {
   clearEvents: () => void // Clear all events
   deleteAllEvents: () => void // Delete all events without reinitialization
   resetToDefaults: () => void // Reset to default data
+  resetEventOverrides: (eventId: string) => Promise<boolean> // Reset overrides by reverting to parent data
   updateDateOverride: (eventId: string, date: string, override: Partial<Event> | null) => void // Add or update a date override
   updateDateIncludeOverride: (eventId: string, date: string, include: boolean | null) => void // Add or update a date include override
 }
@@ -310,6 +312,34 @@ export const useEvents = create<EventsState>()(
             filteredEvents: filtered,
           }
         })
+      },
+
+      /**
+       * Reset an event back to its parent data, removing local overrides for the current tag.
+       * Returns true if a parent version was applied.
+       */
+      resetEventOverrides: async (eventId: string) => {
+        try {
+          const parent = await fetchParentEvent(get().activeTag, eventId)
+          if (!parent) {
+            return false
+          }
+
+          set((state) => {
+            const updatedEvents = state.events.map((event) => (event.id === eventId ? parent : event))
+            const filtered = applySearchFilter(updatedEvents, state.searchTerm)
+
+            return {
+              events: updatedEvents,
+              filteredEvents: filtered,
+            }
+          })
+
+          return true
+        } catch (error) {
+          console.error("Failed to reset event overrides", error)
+          return false
+        }
       },
 
       /**

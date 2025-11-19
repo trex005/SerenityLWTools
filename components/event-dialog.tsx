@@ -24,12 +24,14 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { Switch } from "@/components/ui/switch"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useMemo } from "react"
 import { useEvents } from "@/hooks/use-events"
 import { v4 as uuidv4 } from "uuid"
 // Add import for RecurrenceEditor at the top of the file
 import { RecurrenceEditor } from "@/components/recurrence-editor"
 import { format } from "date-fns"
+import { useOverrideDiff } from "@/hooks/use-override-diff"
+import { useToast } from "@/hooks/use-toast"
 
 // Add this at the top of the file, right after the imports
 // Only prevent default for specific events, don't stop propagation
@@ -48,13 +50,37 @@ interface EventDialogProps {
  */
 export function EventDialog({ event, open, onOpenChange, initialDay = "monday", initialDate }: EventDialogProps) {
   // Access event store functions
-  const { addEvent, updateEvent } = useEvents()
+  const { addEvent, updateEvent, resetEventOverrides } = useEvents()
+  const { diffIndex } = useOverrideDiff()
+  const { toast } = useToast()
 
   // Check if we're editing an existing event
   const isEditing = !!event
 
   // Days of the week
   const days = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"]
+  const overrideInfo = event?.id ? diffIndex?.events[event.id] : null
+  const overrideKeys = overrideInfo?.overrideKeys ?? []
+  const overrideKeySet = useMemo(() => new Set(overrideKeys), [overrideKeys])
+  const hasOverrides = overrideKeys.length > 0
+  const parentHasData = overrideInfo?.parentExists ?? false
+
+  const formatOverrideKey = (key: string) =>
+    key
+      .replace(/([A-Z])/g, " $1")
+      .replace(/_/g, " ")
+      .replace(/\s+/g, " ")
+      .trim()
+      .replace(/\b\w/g, (char) => char.toUpperCase())
+
+  const renderOverridePill = (keys: string | string[]) => {
+    const list = Array.isArray(keys) ? keys : [keys]
+    return list.some((key) => overrideKeySet.has(key)) ? (
+      <span className="rounded bg-amber-100 px-2 py-0.5 text-[10px] font-semibold uppercase text-amber-800">
+        Override
+      </span>
+    ) : null
+  }
 
   // State for form data
   const [formData, setFormData] = useState({
@@ -82,6 +108,7 @@ export function EventDialog({ event, open, onOpenChange, initialDay = "monday", 
   const [includeInExportByDefault, setIncludeInExportByDefault] = useState(true)
   const [includeEndTime, setIncludeEndTime] = useState(false)
   const [includeEndTimeVariation, setIncludeEndTimeVariation] = useState<Record<string, boolean>>({})
+  const [isResetting, setIsResetting] = useState(false)
 
   // Flag to prevent infinite loops
   const [isInitialized, setIsInitialized] = useState(false)
@@ -488,6 +515,46 @@ export function EventDialog({ event, open, onOpenChange, initialDay = "monday", 
     return includeEndTimeVariation[day] || false
   }
 
+  const handleResetOverrides = async () => {
+    if (!event?.id || !parentHasData) {
+      toast({
+        title: "No parent version",
+        description: "This event does not inherit from another tag.",
+        variant: "destructive",
+      })
+      return
+    }
+
+    setIsResetting(true)
+    try {
+      const success = await resetEventOverrides(event.id)
+      if (success) {
+        toast({
+          title: "Overrides removed",
+          description: "The event now matches the parent configuration.",
+          variant: "success",
+        })
+        setIsInitialized(false)
+        onOpenChange(false)
+      } else {
+        toast({
+          title: "Reset unavailable",
+          description: "Could not find a parent version to restore.",
+          variant: "destructive",
+        })
+      }
+    } catch (error) {
+      console.error("Failed to reset overrides", error)
+      toast({
+        title: "Reset failed",
+        description: "An unexpected error occurred while resetting this event.",
+        variant: "destructive",
+      })
+    } finally {
+      setIsResetting(false)
+    }
+  }
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
@@ -501,10 +568,24 @@ export function EventDialog({ event, open, onOpenChange, initialDay = "monday", 
             </DialogDescription>
           </DialogHeader>
 
+          {hasOverrides && (
+            <div className="mt-4 rounded border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900">
+              <p className="font-medium">Overridden fields for this tag</p>
+              <ul className="mt-1 list-disc space-y-0.5 pl-4 text-xs text-amber-900">
+                {overrideKeys.map((key) => (
+                  <li key={key}>{formatOverrideKey(key)}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+
           <div className="grid gap-4 py-4">
             {/* Event Title */}
             <div className="grid gap-2">
-              <Label htmlFor="title">Event Title</Label>
+              <Label htmlFor="title" className="flex items-center gap-2">
+                Event Title
+                {renderOverridePill("title")}
+              </Label>
               <Input
                 id="title"
                 name="title"
@@ -543,7 +624,10 @@ export function EventDialog({ event, open, onOpenChange, initialDay = "monday", 
                         checked={formData.isAllDay}
                         onCheckedChange={(checked) => handleAllDayToggle(checked)}
                       />
-                      <Label htmlFor="isAllDay">All-day event</Label>
+                      <Label htmlFor="isAllDay" className="flex items-center gap-2">
+                        All-day event
+                        {renderOverridePill("isAllDay")}
+                      </Label>
                     </div>
                   </div>
 
@@ -552,8 +636,9 @@ export function EventDialog({ event, open, onOpenChange, initialDay = "monday", 
                     <div className="grid grid-cols-1 gap-4">
                       <div className="flex items-center gap-4">
                         <div className="w-1/3">
-                          <Label htmlFor="startTime" className="mb-2 block">
+                          <Label htmlFor="startTime" className="mb-2 flex items-center gap-2">
                             Start Time
+                            {renderOverridePill("startTime")}
                           </Label>
                           <div className="flex gap-2">
                             <Select
@@ -601,7 +686,10 @@ export function EventDialog({ event, open, onOpenChange, initialDay = "monday", 
                               checked={includeEndTime}
                               onCheckedChange={(checked) => handleIncludeEndTimeToggle(!!checked)}
                             />
-                            <Label htmlFor="includeEndTime">Include end time</Label>
+                            <Label htmlFor="includeEndTime" className="flex items-center gap-2">
+                              Include end time
+                              {renderOverridePill("endTime")}
+                            </Label>
                           </div>
 
                           {includeEndTime && (
@@ -661,7 +749,10 @@ export function EventDialog({ event, open, onOpenChange, initialDay = "monday", 
                 <div className="space-y-4">
                   <h3 className="text-lg font-medium">Details</h3>
                   <div className="grid gap-2">
-                    <Label htmlFor="description">Description</Label>
+                    <Label htmlFor="description" className="flex items-center gap-2">
+                      Description
+                      {renderOverridePill("description")}
+                    </Label>
                     <Textarea
                       id="description"
                       name="description"
@@ -685,7 +776,10 @@ export function EventDialog({ event, open, onOpenChange, initialDay = "monday", 
 
                   {/* Inclusion Settings */}
                   <div className="grid gap-2">
-                    <Label>Include in</Label>
+                    <Label className="flex items-center gap-2">
+                      Include in
+                      {renderOverridePill(["includeInExport", "includeOnWebsite", "includeInBriefing"])}
+                    </Label>
                     <div className="space-y-2">
                       <div className="flex items-center space-x-2">
                         <Checkbox
@@ -693,7 +787,10 @@ export function EventDialog({ event, open, onOpenChange, initialDay = "monday", 
                           checked={includeInExportByDefault}
                           onCheckedChange={(checked) => handleIncludeInExportToggle(!!checked)}
                         />
-                        <Label htmlFor="includeScheduled">Scheduled</Label>
+                        <Label htmlFor="includeScheduled" className="flex items-center gap-2">
+                          Scheduled
+                          {renderOverridePill("includeInExport")}
+                        </Label>
                       </div>
 
                       <div className="flex items-center space-x-2">
@@ -707,7 +804,10 @@ export function EventDialog({ event, open, onOpenChange, initialDay = "monday", 
                             }))
                           }
                         />
-                        <Label htmlFor="includeWebsite">Website</Label>
+                        <Label htmlFor="includeWebsite" className="flex items-center gap-2">
+                          Website
+                          {renderOverridePill("includeOnWebsite")}
+                        </Label>
                       </div>
 
                       <div className="flex items-center space-x-2">
@@ -721,7 +821,10 @@ export function EventDialog({ event, open, onOpenChange, initialDay = "monday", 
                             }))
                           }
                         />
-                        <Label htmlFor="includeBriefing">Briefing</Label>
+                        <Label htmlFor="includeBriefing" className="flex items-center gap-2">
+                          Briefing
+                          {renderOverridePill("includeInBriefing")}
+                        </Label>
                       </div>
 
                       <div className="flex items-center space-x-2">
@@ -735,7 +838,10 @@ export function EventDialog({ event, open, onOpenChange, initialDay = "monday", 
                             }))
                           }
                         />
-                        <Label htmlFor="includePreviousDayReminder">Previous day reminders</Label>
+                        <Label htmlFor="includePreviousDayReminder" className="flex items-center gap-2">
+                          Previous day reminders
+                          {renderOverridePill("remindTomorrow")}
+                        </Label>
                       </div>
 
                       <div className="flex items-center space-x-2">
@@ -749,7 +855,10 @@ export function EventDialog({ event, open, onOpenChange, initialDay = "monday", 
                             }))
                           }
                         />
-                        <Label htmlFor="includeEndOfDayReminder">End of day reminders</Label>
+                        <Label htmlFor="includeEndOfDayReminder" className="flex items-center gap-2">
+                          End of day reminders
+                          {renderOverridePill("remindEndOfDay")}
+                        </Label>
                       </div>
                     </div>
                   </div>
@@ -766,7 +875,10 @@ export function EventDialog({ event, open, onOpenChange, initialDay = "monday", 
                         checked={!!hasVariation[day]}
                         onCheckedChange={(checked) => handleVariationToggle(day, checked)}
                       />
-                      <Label htmlFor={`variation-${day}`}>Use day-specific settings</Label>
+                      <Label htmlFor={`variation-${day}`} className="flex items-center gap-2">
+                        Use day-specific settings
+                        {renderOverridePill("variations")}
+                      </Label>
                     </div>
                   </div>
 
@@ -789,8 +901,9 @@ export function EventDialog({ event, open, onOpenChange, initialDay = "monday", 
                         <div className="grid grid-cols-1 gap-4">
                           <div className="flex items-center gap-4">
                             <div className="w-1/3">
-                              <Label htmlFor={`startTime-${day}`} className="mb-2 block">
+                              <Label htmlFor={`startTime-${day}`} className="mb-2 flex items-center gap-2">
                                 Start Time
+                                {renderOverridePill("variations")}
                               </Label>
                               <div className="flex gap-2">
                                 <Select
@@ -842,7 +955,10 @@ export function EventDialog({ event, open, onOpenChange, initialDay = "monday", 
                                   checked={hasEndTimeVariation(day)}
                                   onCheckedChange={(checked) => handleIncludeEndTimeToggle(!!checked, day)}
                                 />
-                                <Label htmlFor={`includeEndTime-${day}`}>Include end time</Label>
+                                <Label htmlFor={`includeEndTime-${day}`} className="flex items-center gap-2">
+                                  Include end time
+                                  {renderOverridePill("variations")}
+                                </Label>
                               </div>
 
                               {hasEndTimeVariation(day) && (
@@ -895,7 +1011,10 @@ export function EventDialog({ event, open, onOpenChange, initialDay = "monday", 
 
                       {/* Day-specific Description */}
                       <div className="grid gap-2">
-                        <Label htmlFor={`description-${day}`}>Description</Label>
+                        <Label htmlFor={`description-${day}`} className="flex items-center gap-2">
+                          Description
+                          {renderOverridePill("variations")}
+                        </Label>
                         <Textarea
                           id={`description-${day}`}
                           value={formData.variations[day]?.description ?? formData.description}
@@ -923,6 +1042,17 @@ export function EventDialog({ event, open, onOpenChange, initialDay = "monday", 
           </div>
 
           <DialogFooter>
+            {hasOverrides && parentHasData && (
+              <Button
+                type="button"
+                variant="ghost"
+                onClick={handleResetOverrides}
+                disabled={isResetting}
+                className="mr-auto text-amber-900 hover:bg-amber-100"
+              >
+                {isResetting ? "Resetting..." : "Reset overrides"}
+              </Button>
+            )}
             <Button
               type="button"
               variant="outline"

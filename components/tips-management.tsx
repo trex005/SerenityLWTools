@@ -11,10 +11,12 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Badge } from "@/components/ui/badge"
 import { Plus, Edit2, Trash2, Copy, Check, X, Search, Link as LinkIcon } from "lucide-react"
 import { EmbeddedContent } from "@/components/embedded-content"
 import { sanitizeHtml, extractTextFromHtml } from "@/lib/html-utils"
 import { matchesSearchTokens, tokenizeSearchTerm } from "@/lib/search-utils"
+import { useOverrideDiff } from "@/hooks/use-override-diff"
 
 import {
   AlertDialog,
@@ -66,11 +68,21 @@ export function TipsManagement({ forceRefresh }: { forceRefresh?: string }) {
   const [searchTerm, setSearchTerm] = useState("")
   const [copiedTipId, setCopiedTipId] = useState<string | null>(null)
   const [copiedLinkId, setCopiedLinkId] = useState<string | null>(null)
+  const { diffIndex } = useOverrideDiff()
+  const tipOverrideIndex = diffIndex?.tips ?? {}
 
   const searchTokens = tokenizeSearchTerm(searchTerm)
 
   // Filter tips based on search
   const filteredTips = tips.filter((tip) => matchesSearchTokens(searchTokens, [tip.title, tip.content, tip.customId]))
+
+  const formatOverrideKey = (key: string) =>
+    key
+      .replace(/([A-Z])/g, " $1")
+      .replace(/_/g, " ")
+      .replace(/\s+/g, " ")
+      .trim()
+      .replace(/\b\w/g, (char) => char.toUpperCase())
 
   useEffect(() => {
     if (!copiedTipId) return
@@ -195,7 +207,6 @@ export function TipsManagement({ forceRefresh }: { forceRefresh?: string }) {
         id: uuidv4(),
         title: newTip.title.trim(),
         content: newTip.content.trim(),
-        lastUsed: null,
         customId: newTip.customId.trim() || undefined,
         imageUrl: newTip.imageUrl.trim() || undefined,
       adminOnly: newTip.adminOnly,
@@ -395,6 +406,18 @@ export function TipsManagement({ forceRefresh }: { forceRefresh?: string }) {
         {filteredTips.length > 0 ? (
           <>
             {filteredTips.map((tip) => {
+              const overrideInfo = tipOverrideIndex[tip.id]
+              const overrideKeys = overrideInfo?.overrideKeys ?? []
+              const overrideKeySet = new Set(overrideKeys)
+              const hasOverrides = overrideKeys.length > 0
+              const renderOverridePill = (keys: string | string[]) => {
+                const list = Array.isArray(keys) ? keys : [keys]
+                return list.some((key) => overrideKeySet.has(key)) ? (
+                  <span className="rounded bg-amber-100 px-2 py-0.5 text-[10px] font-semibold uppercase text-amber-800">
+                    Override
+                  </span>
+                ) : null
+              }
               const isHtmlContent = tip.type === "html" || tip.isHtml
               const draft = editedContent[tip.id]
               const currentImageUrl = draft?.imageUrl ?? tip.imageUrl ?? ""
@@ -405,7 +428,16 @@ export function TipsManagement({ forceRefresh }: { forceRefresh?: string }) {
                       <div className="flex-1">
                       {!editingTips[tip.id] ? (
                         <>
-                          {tip.title && <div className="font-medium mb-2">{tip.title}</div>}
+                          {tip.title && (
+                            <div className="font-medium mb-2 flex items-center gap-2">
+                              {tip.title}
+                              {hasOverrides && (
+                                <Badge variant="secondary" className="text-amber-900 bg-amber-100 border-amber-200">
+                                  Overrides
+                                </Badge>
+                              )}
+                            </div>
+                          )}
                           {tip.type === "embedded" && (
                             <span className="px-2 py-0.5 bg-green-100 text-green-800 rounded-full text-xs mb-2 inline-block">
                               Embedded
@@ -441,8 +473,21 @@ export function TipsManagement({ forceRefresh }: { forceRefresh?: string }) {
                         </>
                       ) : (
                         <div className="space-y-2">
+                          {hasOverrides && (
+                            <div className="rounded border border-amber-200 bg-amber-50 p-2 text-xs text-amber-900">
+                              <p className="font-medium">Overridden fields</p>
+                              <ul className="mt-1 list-disc space-y-0.5 pl-4">
+                                {overrideKeys.map((key) => (
+                                  <li key={key}>{formatOverrideKey(key)}</li>
+                                ))}
+                              </ul>
+                            </div>
+                          )}
                           <div>
-                            <Label>Title</Label>
+                            <Label className="flex items-center gap-2">
+                              Title
+                              {renderOverridePill("title")}
+                            </Label>
                             <Input
                               value={draft?.title ?? tip.title ?? ""}
                               onChange={(e) => handleEditContentChange(tip.id, "title", e.target.value)}
@@ -451,7 +496,10 @@ export function TipsManagement({ forceRefresh }: { forceRefresh?: string }) {
                           </div>
                           
                           <div>
-                            <Label>Content Type</Label>
+                            <Label className="flex items-center gap-2">
+                              Content Type
+                              {renderOverridePill("type")}
+                            </Label>
                             <Select
                               value={draft?.type ?? tip.type ?? "text"}
                               onValueChange={(value) => handleEditContentChange(tip.id, "type", value)}
@@ -469,7 +517,10 @@ export function TipsManagement({ forceRefresh }: { forceRefresh?: string }) {
                           </div>
 
                           <div>
-                            <Label>Image URL</Label>
+                            <Label className="flex items-center gap-2">
+                              Image URL
+                              {renderOverridePill("imageUrl")}
+                            </Label>
                             <Input
                               value={draft?.imageUrl ?? tip.imageUrl ?? ""}
                               onChange={(e) => handleEditContentChange(tip.id, "imageUrl", e.target.value)}
@@ -492,7 +543,10 @@ export function TipsManagement({ forceRefresh }: { forceRefresh?: string }) {
 
                           {(draft?.type ?? tip.type) === "embedded" && (
                             <div>
-                              <Label>Embed URL</Label>
+                              <Label className="flex items-center gap-2">
+                                Embed URL
+                                {renderOverridePill("embedUrl")}
+                              </Label>
                               <Input
                                 value={draft?.embedUrl ?? tip.embedUrl ?? ""}
                                 onChange={(e) => handleEditContentChange(tip.id, "embedUrl", e.target.value)}
@@ -503,7 +557,10 @@ export function TipsManagement({ forceRefresh }: { forceRefresh?: string }) {
 
                           {(draft?.type ?? tip.type) !== "embedded" && (
                             <div>
-                              <Label>Content</Label>
+                              <Label className="flex items-center gap-2">
+                                Content
+                                {renderOverridePill("content")}
+                              </Label>
                               <Textarea
                                 value={draft?.content ?? tip.content ?? ""}
                                 onChange={(e) => handleEditContentChange(tip.id, "content", e.target.value)}

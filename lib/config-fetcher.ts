@@ -19,13 +19,11 @@ interface TagBundle {
   tag: string
   tagConfig: Record<string, unknown> | null
   events: any[]
-  archivedEvents: any[]
   tips: any[]
   updated: {
     root: string | null
     tagConfig: string | null
     events: string | null
-    eventsArchive: string | null
     tips: string | null
   }
 }
@@ -34,7 +32,6 @@ type TagLayer = {
   tag: string
   config: any | null
   events: any[]
-  eventsArchived: any[]
   eventsTombstones: Set<string>
   tips: any[]
   tipsTombstones: Set<string>
@@ -130,19 +127,13 @@ const fetchRootConfig = async (force = false): Promise<RootConfig> => {
   return rootPromise
 }
 
-const normalizeEvents = (events: any[], archived: boolean): any[] => {
+const normalizeEvents = (events: any[]): any[] => {
   if (!Array.isArray(events)) return []
   return events.map((event) => {
-    if (archived) {
-      return {
-        ...event,
-        archived: true,
-      }
-    }
+    const normalized = event && typeof event === "object" ? event : {}
     return {
-      archived: false,
-      ...event,
-      archived: event?.archived ?? false,
+      ...normalized,
+      archived: normalized.archived === true,
     }
   })
 }
@@ -186,19 +177,16 @@ const resolveTag = (root: RootConfig): string => {
 }
 
 const fetchLayer = async (tag: string): Promise<TagLayer> => {
-  const [configPayload, eventsPayload, archivedPayload, tipsPayload] = await Promise.all([
+  const [configPayload, eventsPayload, tipsPayload] = await Promise.all([
     fetchJson(`${tag}/conf.json`),
     fetchJson(`${tag}/events.json`),
-    fetchJson(`${tag}/events_archive.json`),
     fetchJson(`${tag}/tips.json`),
   ])
 
-  const activeObj = extractArray(eventsPayload, "events")
-  const archivedObj = extractArray(archivedPayload, "events")
+  const eventsObj = extractArray(eventsPayload, "events")
   const tipsObj = extractArray(tipsPayload, "tips")
 
-  const events = normalizeEvents(activeObj.items || [], false)
-  const eventsArchived = normalizeEvents(archivedObj.items || [], true)
+  const events = normalizeEvents(eventsObj.items || [])
   const tips = Array.isArray(tipsObj.items) ? tipsObj.items : []
 
   const eventsTombstones = new Set<string>()
@@ -215,7 +203,6 @@ const fetchLayer = async (tag: string): Promise<TagLayer> => {
     tag,
     config: configPayload && typeof configPayload === "object" ? { ...configPayload } : null,
     events,
-    eventsArchived,
     eventsTombstones,
     tips,
     tipsTombstones,
@@ -253,8 +240,8 @@ const composeFromLayers = (layers: TagLayer[]) => {
   let tipsById: Record<string, any> = {}
 
   for (const layer of layers) {
-    const layerAllEvents = [...(layer.events || []), ...(layer.eventsArchived || [])]
-    const layerMap = arrayToIdMap(layerAllEvents)
+    const layerEvents = layer.events || []
+    const layerMap = arrayToIdMap(layerEvents)
     for (const id of Object.keys(layerMap)) {
       const prev = eventsById[id]
       const merged = deepMerge(prev, layerMap[id])
@@ -275,17 +262,67 @@ const composeFromLayers = (layers: TagLayer[]) => {
   return { events: idMapToArray(eventsById), tips: idMapToArray(tipsById) }
 }
 
+const fetchBundleForTag = async (tag: string, force = false): Promise<TagBundle> => {
+  const normalizedTag = sanitizeTag(tag) || tag
+  if (!normalizedTag) {
+    throw new Error("Invalid tag provided")
+  }
+
+  const now = Date.now()
+  if (!force) {
+    const cached = cacheByTag.get(normalizedTag)
+    if (cached && now - cached.timestamp < CACHE_TTL) {
+      return cached.data
+    }
+    const inFlight = inFlightByTag.get(normalizedTag)
+    if (inFlight) {
+      return inFlight
+    }
+  } else {
+    inFlightByTag.delete(normalizedTag)
+    cacheByTag.delete(normalizedTag)
+  }
+
+  const promise = (async () => {
+    const ancestry = await buildAncestry(normalizedTag)
+    const layers: TagLayer[] = []
+    for (const t of ancestry) {
+      layers.push(await fetchLayer(t))
+    }
+    const composed = composeFromLayers(layers)
+    const tagConfig = layers[layers.length - 1]?.config || null
+    const data: TagBundle = {
+      tag: normalizedTag,
+      tagConfig,
+      events: composed.events,
+      tips: composed.tips,
+      updated: {
+        root: null,
+        tagConfig: typeof tagConfig?.updated === "string" ? tagConfig.updated : null,
+        events: null,
+        tips: null,
+      },
+    }
+    return data
+  })()
+
+  inFlightByTag.set(normalizedTag, promise)
+  const data = await promise
+  cacheByTag.set(normalizedTag, { data, timestamp: Date.now() })
+  inFlightByTag.delete(normalizedTag)
+
+  return data
+}
+
 const emptyBundle = (): TagBundle => ({
   tag: getActiveTag(),
   tagConfig: null,
   events: [],
-  archivedEvents: [],
   tips: [],
   updated: {
     root: null,
     tagConfig: null,
     events: null,
-    eventsArchive: null,
     tips: null,
   },
 })
@@ -296,54 +333,22 @@ export const fetchConfig = async (force = false): Promise<TagBundle> => {
     const resolvedTag = resolveTag(rootConfig)
     setActiveTag(resolvedTag)
 
-    const now = Date.now()
-    if (!force) {
-      const cached = cacheByTag.get(resolvedTag)
-      if (cached && now - cached.timestamp < CACHE_TTL) {
-        return cached.data
-      }
-      const inFlight = inFlightByTag.get(resolvedTag)
-      if (inFlight) {
-        return inFlight
-      }
-    } else {
-      inFlightByTag.delete(resolvedTag)
-      cacheByTag.delete(resolvedTag)
+    const data = await fetchBundleForTag(resolvedTag, force)
+    if (data.updated.root === null && typeof rootConfig.updated === "string") {
+      data.updated.root = rootConfig.updated
     }
-
-    const promise = (async () => {
-      const ancestry = await buildAncestry(resolvedTag)
-      const layers: TagLayer[] = []
-      for (const t of ancestry) {
-        layers.push(await fetchLayer(t))
-      }
-      const composed = composeFromLayers(layers)
-      const tagConfig = layers[layers.length - 1]?.config || null
-      const data: TagBundle = {
-        tag: resolvedTag,
-        tagConfig,
-        events: composed.events,
-        archivedEvents: composed.events.filter((e) => e?.archived === true),
-        tips: composed.tips,
-        updated: {
-          root: typeof rootConfig.updated === "string" ? rootConfig.updated : null,
-          tagConfig: typeof tagConfig?.updated === "string" ? tagConfig.updated : null,
-          events: null,
-          eventsArchive: null,
-          tips: null,
-        },
-      }
-      return data
-    })()
-
-    inFlightByTag.set(resolvedTag, promise)
-    const data = await promise
-    cacheByTag.set(resolvedTag, { data, timestamp: Date.now() })
-    inFlightByTag.delete(resolvedTag)
-
     return data
   } catch (error) {
     console.error("Error fetching configuration bundle:", error)
+    return emptyBundle()
+  }
+}
+
+export const fetchComposedForTag = async (tag: string, force = false): Promise<TagBundle> => {
+  try {
+    return await fetchBundleForTag(tag, force)
+  } catch (error) {
+    console.error(`Error fetching composed bundle for tag "${tag}":`, error)
     return emptyBundle()
   }
 }
@@ -387,8 +392,7 @@ export const buildChildDeltaFiles = async (
   const childEventsById = arrayToIdMap(effectiveEvents || [])
   const childTipsById = arrayToIdMap(effectiveTips || [])
 
-  const eventsActive: any[] = []
-  const eventsArchived: any[] = []
+  const eventDeltas: any[] = []
   const eventsTombstones: Set<string> = new Set()
 
   for (const id of Object.keys(parentEventsById)) {
@@ -400,9 +404,7 @@ export const buildChildDeltaFiles = async (
     const delta = computeDelta(base, edited)
     if (delta && typeof delta === "object") {
       const out = { id, ...(delta as any) }
-      const effArchived = (edited && edited.archived) === true
-      if (effArchived) eventsArchived.push(out)
-      else eventsActive.push(out)
+      eventDeltas.push(out)
     }
   }
 
@@ -431,11 +433,10 @@ export const buildChildDeltaFiles = async (
     events: {
       updated: nowIso,
       events: [
-        ...eventsActive,
+        ...eventDeltas,
         ...Array.from(eventsTombstones).map((id) => ({ id, deleted: true })),
       ],
     },
-    eventsArchive: { updated: nowIso, events: eventsArchived },
     tips: {
       updated: nowIso,
       tips: [...tips, ...Array.from(tipsTombstones).map((id) => ({ id, deleted: true }))],

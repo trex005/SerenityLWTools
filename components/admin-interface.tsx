@@ -19,6 +19,7 @@ import { Button } from "@/components/ui/button"
 import { setupTipHashNavigation } from "@/lib/hash-navigation"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { scopedLocalStorage } from "@/lib/scoped-storage"
+import { OverrideDiffProvider } from "@/hooks/use-override-diff"
 
 export function AdminInterface() {
   // State to track which main tab is currently active
@@ -79,116 +80,115 @@ export function AdminInterface() {
   }, [dateRange])
 
   return (
-    <div className="w-full">
-      <StorageInitializer />
+    <OverrideDiffProvider>
       <div className="w-full">
-        {/* Main navigation tabs */}
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-4">
-            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-              <TabsList className="mb-2 sm:mb-0">
-                <TabsTrigger value="schedule">Agenda</TabsTrigger>
-                <TabsTrigger value="events">Events</TabsTrigger>
-                <TabsTrigger value="tips">Tips</TabsTrigger>
-                <TabsTrigger value="email">Mail</TabsTrigger>
-                <TabsTrigger value="reminders">Reminders</TabsTrigger>
-                <TabsTrigger value="admin">Command</TabsTrigger>
-              </TabsList>
-            </div>
-            <Button variant="outline" size="sm" onClick={exitAdminMode} className="text-xs">
-              Exit Command Mode
-            </Button>
-          </div>
-
-          {/* Schedule tab content */}
-          <TabsContent value="schedule" className="mt-0">
-            {/* Date range selector */}
-            <div className="flex justify-center mb-4">
-              <DateRangeSelector value={dateRange} onChange={setDateRange} quickSelectDays={3} />
+        <StorageInitializer />
+        <div className="w-full">
+          {/* Main navigation tabs */}
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-4">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                <TabsList className="mb-2 sm:mb-0">
+                  <TabsTrigger value="schedule">Agenda</TabsTrigger>
+                  <TabsTrigger value="events">Events</TabsTrigger>
+                  <TabsTrigger value="tips">Tips</TabsTrigger>
+                  <TabsTrigger value="email">Mail</TabsTrigger>
+                  <TabsTrigger value="reminders">Reminders</TabsTrigger>
+                  <TabsTrigger value="admin">Command</TabsTrigger>
+                </TabsList>
+              </div>
+              <Button variant="outline" size="sm" onClick={exitAdminMode} className="text-xs">
+                Exit Command Mode
+              </Button>
             </div>
 
-            {/* Display date range information */}
-            <div className="mb-4"></div>
+            {/* Schedule tab content */}
+            <TabsContent value="schedule" className="mt-0">
+              {/* Date range selector */}
+              <div className="flex justify-center mb-4">
+                <DateRangeSelector value={dateRange} onChange={setDateRange} quickSelectDays={3} />
+              </div>
 
-            {/* Nested tabs for days in the selected range */}
-            <Tabs value={activeDay} onValueChange={setActiveDay} className="w-full">
-              {dayTabs.length > 0 && (
-                <div className="md:hidden mb-4">
-                  <Select value={activeDay} onValueChange={setActiveDay}>
-                    <SelectTrigger aria-label="Select operations day">
-                      <SelectValue placeholder="Select day" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {dayTabs.map(({ day, date }) => (
-                        <SelectItem
-                          key={format(date, "yyyy-MM-dd")}
-                          value={format(date, "yyyy-MM-dd")}
-                        >
-                          {`${day.substring(0, 3)} ${format(date, "M/d")}`}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-              )}
+              {/* Display date range information */}
+              <div className="mb-4"></div>
 
-              <TabsList className="hidden md:flex w-full justify-start mb-4 overflow-x-auto">
-                {dayTabs.map(({ day, date }) => (
-                  <TabsTrigger
-                    key={format(date, "yyyy-MM-dd")}
-                    value={format(date, "yyyy-MM-dd")}
-                    className="capitalize"
-                  >
-                    {day.substring(0, 3)} {format(date, "M/d")}
-                  </TabsTrigger>
-                ))}
-              </TabsList>
-
-              {/* Content for each day tab */}
-              {dayTabs.map(({ day, date }) => (
-                <TabsContent key={format(date, "yyyy-MM-dd")} value={format(date, "yyyy-MM-dd")} className="mt-0">
-                  <div className="flex justify-between items-center mb-4">
-                    <h3 className="text-lg font-medium capitalize">{format(date, "EEEE, MMMM d, yyyy")}</h3>
-                    <AddEventButton day={day} date={date} />
+              {/* Nested tabs for days in the selected range */}
+              <Tabs value={activeDay} onValueChange={setActiveDay} className="w-full">
+                {dayTabs.length > 0 && (
+                  <div className="md:hidden mb-4">
+                    <Select value={activeDay} onValueChange={setActiveDay}>
+                      <SelectTrigger aria-label="Select operations day">
+                        <SelectValue placeholder="Select day" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {dayTabs.map(({ day, date }) => (
+                          <SelectItem key={format(date, "yyyy-MM-dd")} value={format(date, "yyyy-MM-dd")}>
+                            {`${day.substring(0, 3)} ${format(date, "M/d")}`}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </div>
-                  <DayAgenda
-                    day={day}
-                    date={date}
-                    showLocalTime={showLocalTime}
-                    setShowLocalTime={setShowLocalTime}
-                  />
-                </TabsContent>
-              ))}
-            </Tabs>
-          </TabsContent>
+                )}
 
-          {/* Events tab content (formerly Archive) */}
-          <TabsContent value="events" className="mt-0">
-            <EventsView />
-          </TabsContent>
+                <TabsList className="hidden md:flex w-full justify-start mb-4 overflow-x-auto">
+                  {dayTabs.map(({ day, date }) => (
+                    <TabsTrigger
+                      key={format(date, "yyyy-MM-dd")}
+                      value={format(date, "yyyy-MM-dd")}
+                      className="capitalize"
+                    >
+                      {day.substring(0, 3)} {format(date, "M/d")}
+                    </TabsTrigger>
+                  ))}
+                </TabsList>
 
-          {/* Tips management tab content */}
-          <TabsContent value="tips" className="mt-0">
-            <TipsManagement key={`tips-${tipsRefreshKey}`} forceRefresh={`${tipsRefreshKey}`} />
-          </TabsContent>
+                {/* Content for each day tab */}
+                {dayTabs.map(({ day, date }) => (
+                  <TabsContent key={format(date, "yyyy-MM-dd")} value={format(date, "yyyy-MM-dd")} className="mt-0">
+                    <div className="flex justify-between items-center mb-4">
+                      <h3 className="text-lg font-medium capitalize">{format(date, "EEEE, MMMM d, yyyy")}</h3>
+                      <AddEventButton day={day} date={date} />
+                    </div>
+                    <DayAgenda
+                      day={day}
+                      date={date}
+                      showLocalTime={showLocalTime}
+                      setShowLocalTime={setShowLocalTime}
+                    />
+                  </TabsContent>
+                ))}
+              </Tabs>
+            </TabsContent>
 
-          {/* Email generator tab content */}
-          <TabsContent value="email" className="mt-0">
-            <EmailGenerator />
-          </TabsContent>
+            {/* Events tab content (formerly Archive) */}
+            <TabsContent value="events" className="mt-0">
+              <EventsView />
+            </TabsContent>
 
-          {/* Reminders tab content */}
-          <TabsContent value="reminders" className="mt-0">
-            <Reminders />
-          </TabsContent>
+            {/* Tips management tab content */}
+            <TabsContent value="tips" className="mt-0">
+              <TipsManagement key={`tips-${tipsRefreshKey}`} forceRefresh={`${tipsRefreshKey}`} />
+            </TabsContent>
 
-          {/* Admin panel tab content */}
-          <TabsContent value="admin" className="mt-0">
-            <AdminPanel />
-          </TabsContent>
-        </Tabs>
+            {/* Email generator tab content */}
+            <TabsContent value="email" className="mt-0">
+              <EmailGenerator />
+            </TabsContent>
+
+            {/* Reminders tab content */}
+            <TabsContent value="reminders" className="mt-0">
+              <Reminders />
+            </TabsContent>
+
+            {/* Admin panel tab content */}
+            <TabsContent value="admin" className="mt-0">
+              <AdminPanel />
+            </TabsContent>
+          </Tabs>
+        </div>
       </div>
-    </div>
+    </OverrideDiffProvider>
   )
 }
 

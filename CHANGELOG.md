@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2025-11-19
+
+### Changed
+- **Unified Event Files**: Removed `events_archive.json` handling across config fetching, admin exports, and stored data so archived entries live inside `events.json` with `archived: true`. Migrated all seeded configs to the single-file format.
+
 ## 2025-10-28
 
 ### Added

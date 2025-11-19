@@ -231,7 +231,6 @@ export function AdminPanel() {
 
         tagFolder.file("conf.json", JSON.stringify(deltas.config, null, 2))
         tagFolder.file("events.json", JSON.stringify(deltas.events, null, 2))
-        tagFolder.file("events_archive.json", JSON.stringify(deltas.eventsArchive, null, 2))
         tagFolder.file("tips.json", JSON.stringify(deltas.tips, null, 2))
       }
 
@@ -295,10 +294,9 @@ export function AdminPanel() {
     }
   }
 
-  type ExportOption = "config" | "events" | "events_archive" | "tips" | "all"
+  type ExportOption = "config" | "events" | "tips" | "all"
   const exportChoices: Array<{ value: ExportOption; label: string }> = [
-    { value: "events", label: "Events (active)" },
-    { value: "events_archive", label: "Events (archived)" },
+    { value: "events", label: "Events" },
     { value: "tips", label: "Tips" },
     { value: "config", label: "Config" },
     { value: "all", label: "All (zip)" },
@@ -311,7 +309,6 @@ export function AdminPanel() {
   type DeltaBundle = {
     config: any
     events: any
-    eventsArchive: any
     tips: any
   }
 
@@ -335,10 +332,6 @@ export function AdminPanel() {
         exportJsonFile(deltas.events, `events_${tag}_${timestamp}.json`)
         break
       }
-      case "events_archive": {
-        exportJsonFile(deltas.eventsArchive, `events_archive_${tag}_${timestamp}.json`)
-        break
-      }
       case "tips": {
         exportJsonFile(deltas.tips, `tips_${tag}_${timestamp}.json`)
         break
@@ -350,7 +343,6 @@ export function AdminPanel() {
     const zip = new JSZip()
     zip.file("conf.json", JSON.stringify(deltas.config, null, 2))
     zip.file("events.json", JSON.stringify(deltas.events, null, 2))
-    zip.file("events_archive.json", JSON.stringify(deltas.eventsArchive, null, 2))
     zip.file("tips.json", JSON.stringify(deltas.tips, null, 2))
 
     const blob = await zip.generateAsync({ type: "blob" })
