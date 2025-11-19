@@ -302,7 +302,7 @@ export function AdminPanel() {
     { value: "all", label: "All (zip)" },
   ]
 
-  const [exportOption, setExportOption] = useState<ExportOption>("events")
+  const [exportOption, setExportOption] = useState<ExportOption>("all")
   const [isExportingData, setIsExportingData] = useState(false)
 
   // Child-delta payloads are computed vs parent chain
