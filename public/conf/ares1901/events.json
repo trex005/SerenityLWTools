@@ -1,4 +1,186 @@
 {
-  "updated": "2025-10-28T17:36:51.391Z",
-  "events": []
+  "updated": "2025-11-13T06:05:34.133Z",
+  "events": [
+    {
+      "id": "ev-4",
+      "order": {
+        "sunday": 1
+      },
+      "archived": false
+    },
+    {
+      "id": "ev-1739556183702",
+      "title": "Honorable campaign - First day",
+      "order": {
+        "sunday": 2
+      },
+      "archived": false
+    },
+    {
+      "id": "87a66ed0-70ea-4dfc-8519-ced7ef52be6e",
+      "startTime": "00:30",
+      "recurrence": {
+        "startDate": "2025-10-17T04:00:00.000Z"
+      },
+      "includeInBriefing": true,
+      "includeOnWebsite": true,
+      "archived": false
+    },
+    {
+      "id": "6f0f73b6-24e7-491d-b6fa-39d73bb8711e",
+      "order": {
+        "tuesday": 5
+      },
+      "archived": false
+    },
+    {
+      "id": "e1a61d22-c57e-45aa-ab6c-d648c529bb89",
+      "order": {
+        "sunday": 3
+      },
+      "archived": false
+    },
+    {
+      "id": "4b3d8da0-2fc8-461b-923e-7423a403c28b",
+      "archived": false,
+      "order": {
+        "sunday": 5
+      }
+    },
+    {
+      "id": "18acf2e1-218e-46c2-a9e4-3b21584523c6",
+      "order": {
+        "sunday": 4
+      },
+      "archived": false
+    },
+    {
+      "id": "cbfa1899-1357-4d10-b640-e31c7aeadaac",
+      "order": {
+        "tuesday": 3
+      },
+      "archived": false
+    },
+    {
+      "id": "160a7d34-b724-48de-8e20-0ea5bdef6d20",
+      "archived": false
+    },
+    {
+      "id": "dbe5089f-2f89-4fa5-a8c1-5269fb3d6adf",
+      "archived": false,
+      "title": "Lucky Spin - At min collect FREE spin. Can also spin with diamonds",
+      "description": "",
+      "remindTomorrow": false,
+      "remindEndOfDay": true,
+      "includeInBriefing": false,
+      "includeOnWebsite": true,
+      "isAllDay": true,
+      "startTime": "09:00",
+      "endTime": "",
+      "days": [
+        "monday",
+        "tuesday",
+        "wednesday",
+        "thursday",
+        "friday",
+        "saturday"
+      ],
+      "includeInExport": {
+        "monday": true,
+        "tuesday": true,
+        "wednesday": true,
+        "thursday": true,
+        "friday": true,
+        "saturday": true,
+        "sunday": true
+      },
+      "variations": {},
+      "order": {
+        "tuesday": 4
+      },
+      "recurrence": {
+        "type": "weeks",
+        "onPeriods": 1,
+        "offPeriods": 3,
+        "daysOfWeek": [
+          "monday",
+          "tuesday",
+          "wednesday",
+          "thursday",
+          "friday",
+          "saturday"
+        ],
+        "startDate": "2025-10-27T04:00:00.000Z"
+      }
+    },
+    {
+      "id": "2052ba6a-b506-476f-a7fb-795518a6c69b",
+      "archived": false,
+      "title": "Take (back) our city!",
+      "description": "",
+      "remindTomorrow": true,
+      "remindEndOfDay": false,
+      "includeInBriefing": true,
+      "includeOnWebsite": true,
+      "isAllDay": false,
+      "startTime": "00:00",
+      "endTime": "",
+      "days": [
+        "sunday",
+        "monday",
+        "tuesday",
+        "wednesday",
+        "thursday",
+        "friday",
+        "saturday"
+      ],
+      "includeInExport": {
+        "tuesday": true,
+        "sunday": true,
+        "monday": true,
+        "wednesday": true,
+        "thursday": true,
+        "friday": true,
+        "saturday": true
+      },
+      "variations": {},
+      "order": {},
+      "recurrence": {
+        "type": "days",
+        "onPeriods": 1,
+        "offPeriods": 0,
+        "daysOfWeek": [
+          "sunday",
+          "monday",
+          "tuesday",
+          "wednesday",
+          "thursday",
+          "friday",
+          "saturday"
+        ],
+        "startDate": "2025-10-30T04:00:00.000Z",
+        "endDate": "2025-10-30T04:00:00.000Z"
+      }
+    },
+    {
+      "id": "04434cb7-53c9-4aa5-b7a7-0dac1f6239c1",
+      "archived": true
+    },
+    {
+      "id": "1ae7c08b-29e3-4ef3-a00f-ccc19f155ddb",
+      "archived": true
+    },
+    {
+      "id": "d60cae98-2318-4856-a8e0-b68c567f8306",
+      "archived": true
+    },
+    {
+      "id": "9632b4bd-843c-41af-9282-7dc6d9a50aa0",
+      "archived": true
+    },
+    {
+      "id": "64f6f56b-98d4-46fb-b1cb-cee21e81679f",
+      "archived": true
+    }
+  ]
 }

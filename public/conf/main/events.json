@@ -1,8 +1,9 @@
 {
-  "updated": "2025-10-28T07:44:51.899Z",
+  "updated": "2025-11-13T00:00:06.810Z",
   "events": [
     {
       "id": "ev-3",
+      "archived": false,
       "title": "Zombie Siege",
       "description": "",
       "isAllDay": false,
@@ -26,16 +27,7 @@
         "saturday": true,
         "sunday": true
       },
-      "variations": {
-        "sunday": {
-          "description": "** Note the different time ** so we can gather for VS",
-          "isAllDay": false,
-          "startTime": "00:50",
-          "endTime": ""
-        }
-      },
       "order": {},
-      "archived": false,
       "recurrence": {
         "type": "days",
         "onPeriods": 1,
@@ -55,6 +47,7 @@
     },
     {
       "id": "ev-4",
+      "archived": false,
       "title": "Frontline Breakthrough",
       "description": "Complete at least 3 levels for max rewards. (Can be the first level 3 times)",
       "isAllDay": true,
@@ -76,7 +69,6 @@
       "order": {
         "sunday": 3
       },
-      "archived": false,
       "recurrence": {
         "type": "weekly",
         "daysOfWeek": [
@@ -88,8 +80,9 @@
     },
     {
       "id": "ev-6",
+      "archived": false,
       "title": "Register for Desert Storm!",
-      "description": "\u2022 To register:\n   Events \u2192 Desert Storm \u2192 Select Participants \u2192 Request to Fight",
+      "description": "• To register:\n   Events → Desert Storm → Select Participants → Request to Fight",
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "10:00",
@@ -108,7 +101,6 @@
         "wednesday": 1,
         "tuesday": 0
       },
-      "archived": false,
       "recurrence": {
         "type": "weeks",
         "onPeriods": 1,
@@ -123,6 +115,7 @@
     },
     {
       "id": "ev-7",
+      "archived": false,
       "title": "Desert Storm - Task Force A",
       "description": "",
       "isAllDay": false,
@@ -141,7 +134,6 @@
       },
       "variations": {},
       "order": {},
-      "archived": false,
       "recurrence": {
         "type": "weekly",
         "daysOfWeek": [
@@ -153,6 +145,7 @@
     },
     {
       "id": "ev-8",
+      "archived": false,
       "title": "VS: SAVE Radar Tasks",
       "description": "",
       "isAllDay": true,
@@ -174,7 +167,6 @@
         "thursday": 4,
         "tuesday": 1
       },
-      "archived": false,
       "recurrence": {
         "type": "weekly",
         "daysOfWeek": [
@@ -188,6 +180,7 @@
     },
     {
       "id": "ev-9",
+      "archived": false,
       "title": "VS: Save SHINYs (Starred secret tasks)",
       "description": "",
       "isAllDay": true,
@@ -211,7 +204,6 @@
         "friday": 3,
         "thursday": 2
       },
-      "archived": false,
       "recurrence": {
         "type": "weekly",
         "daysOfWeek": [
@@ -226,7 +218,8 @@
     },
     {
       "id": "ev-10",
-      "title": "VS: Complete Radar Tasks",
+      "archived": false,
+      "title": "VS: Radar Tasks",
       "description": "",
       "isAllDay": true,
       "startTime": "09:00",
@@ -247,7 +240,6 @@
         "wednesday": 3,
         "friday": 1
       },
-      "archived": false,
       "recurrence": {
         "type": "weekly",
         "daysOfWeek": [
@@ -256,10 +248,13 @@
           "friday"
         ],
         "interval": 1
-      }
+      },
+      "includeInBriefing": true,
+      "includeOnWebsite": true
     },
     {
       "id": "ev-11",
+      "archived": false,
       "title": "VS: Start gathering with extra squads",
       "description": "",
       "isAllDay": false,
@@ -279,7 +274,6 @@
       },
       "variations": {},
       "order": {},
-      "archived": false,
       "recurrence": {
         "type": "weekly",
         "daysOfWeek": [
@@ -291,6 +285,7 @@
     },
     {
       "id": "ev-12",
+      "archived": false,
       "title": "VS: Deploy Legendary Trucks and Tasks",
       "description": "",
       "isAllDay": true,
@@ -309,7 +304,6 @@
         "saturday": 4,
         "tuesday": 2
       },
-      "archived": false,
       "recurrence": {
         "type": "weekly",
         "daysOfWeek": [
@@ -321,6 +315,7 @@
     },
     {
       "id": "ev-13",
+      "archived": false,
       "title": "VS: Stamina, Drone data, and drone parts (Double dip with Arms Race 04:00-08:00)",
       "description": "",
       "isAllDay": true,
@@ -342,7 +337,6 @@
       "order": {
         "monday": 6
       },
-      "archived": false,
       "recurrence": {
         "type": "weekly",
         "daysOfWeek": [
@@ -353,6 +347,7 @@
     },
     {
       "id": "ev-14",
+      "archived": false,
       "title": "VS: Unwrap buildings and use construction speedups (Arms Race 08:00-12:00)",
       "description": "",
       "isAllDay": true,
@@ -374,7 +369,6 @@
       "order": {
         "tuesday": 3
       },
-      "archived": false,
       "recurrence": {
         "type": "weekly",
         "daysOfWeek": [
@@ -385,7 +379,8 @@
     },
     {
       "id": "ev-15",
-      "title": "VS: Complete Research and use Research Speedups (Double dip with Arms Race 04:00-08:00)",
+      "archived": false,
+      "title": "VS: Research ,Research Speedups (Double dip with Tech Research)",
       "description": "",
       "isAllDay": true,
       "startTime": "09:00",
@@ -400,17 +395,20 @@
       "order": {
         "wednesday": 4
       },
-      "archived": false,
       "recurrence": {
         "type": "weekly",
         "daysOfWeek": [
           "wednesday"
         ],
         "interval": 1
-      }
+      },
+      "includeInBriefing": true,
+      "includeOnWebsite": true,
+      "remindTomorrow": true
     },
     {
       "id": "ev-16",
+      "archived": false,
       "title": "VS: Spend Hero XP, shards, skill medals, exclusive weapon shards (Arms Race 16:00-20:00)",
       "description": "",
       "isAllDay": true,
@@ -432,7 +430,6 @@
       "order": {
         "thursday": 2
       },
-      "archived": false,
       "recurrence": {
         "type": "weekly",
         "daysOfWeek": [
@@ -443,6 +440,7 @@
     },
     {
       "id": "ev-17",
+      "archived": false,
       "title": "VS: Promote Troops (Arms Race 16:00-20:00), Build/Tech if necessary",
       "description": "",
       "isAllDay": true,
@@ -464,7 +462,6 @@
       "order": {
         "friday": 2
       },
-      "archived": false,
       "recurrence": {
         "type": "weekly",
         "daysOfWeek": [
@@ -475,6 +472,7 @@
     },
     {
       "id": "ev-18",
+      "archived": false,
       "title": "VS: Enemy Busters! Kill troops, preferably our opponent",
       "description": "",
       "isAllDay": true,
@@ -496,7 +494,6 @@
         "friday": 2,
         "saturday": 3
       },
-      "archived": false,
       "recurrence": {
         "type": "weekly",
         "daysOfWeek": [
@@ -507,8 +504,9 @@
     },
     {
       "id": "ev-1739555974133",
+      "archived": false,
       "title": "SHIELD!!!",
-      "description": "\u2022 If not fighting at all, put up a 24 hour Shield\n\u2022 If not fighting immediately at reset, use a buddy shield or and 8/12 hour shield",
+      "description": "• If not fighting at all, put up a 24 hour Shield\n• If not fighting immediately at reset, use a buddy shield or and 8/12 hour shield",
       "isAllDay": false,
       "startTime": "00:00",
       "endTime": "",
@@ -526,7 +524,6 @@
       },
       "variations": {},
       "order": {},
-      "archived": false,
       "recurrence": {
         "type": "weekly",
         "daysOfWeek": [
@@ -541,6 +538,7 @@
     },
     {
       "id": "ev-1739556183702",
+      "archived": false,
       "title": "Honorable campaign - first day",
       "description": "",
       "isAllDay": true,
@@ -566,7 +564,6 @@
         "thursday": 6,
         "tuesday": 5
       },
-      "archived": false,
       "recurrence": {
         "type": "weekly",
         "daysOfWeek": [
@@ -579,6 +576,7 @@
     },
     {
       "id": "ev-1739556209550",
+      "archived": false,
       "title": "Honorable campaign - FINAL DAY",
       "description": "",
       "isAllDay": true,
@@ -604,7 +602,6 @@
         "wednesday": 5,
         "friday": 4
       },
-      "archived": false,
       "recurrence": {
         "type": "weekly",
         "daysOfWeek": [
@@ -618,6 +615,7 @@
     },
     {
       "id": "ev-1739556307704",
+      "archived": false,
       "title": "Buy what you can from Alliance, VIP, and Campaign Stores.",
       "description": "",
       "isAllDay": true,
@@ -639,7 +637,6 @@
       "order": {
         "sunday": 1
       },
-      "archived": false,
       "recurrence": {
         "type": "weekly",
         "daysOfWeek": [
@@ -651,6 +648,7 @@
     },
     {
       "id": "ev-1739556688004",
+      "archived": false,
       "title": "Zombie Invasion! (Loot goblins!)",
       "description": "",
       "isAllDay": true,
@@ -672,7 +670,6 @@
         "thursday": 7,
         "friday": 6
       },
-      "archived": false,
       "recurrence": {
         "type": "weekly",
         "daysOfWeek": [
@@ -686,6 +683,7 @@
     },
     {
       "id": "ev-1739556818565",
+      "archived": false,
       "title": "Doomsday event - Don't forget to collect rewards as they are not mailed",
       "description": "",
       "isAllDay": true,
@@ -707,7 +705,6 @@
       "order": {
         "sunday": 2
       },
-      "archived": false,
       "recurrence": {
         "type": "weeks",
         "onPeriods": 1,
@@ -722,6 +719,7 @@
     },
     {
       "id": "ev-1739556987954",
+      "archived": false,
       "title": "General's Trial - Choose ONE level after what you can solo.",
       "description": "",
       "isAllDay": true,
@@ -743,7 +741,6 @@
         "friday": 5,
         "thursday": 3
       },
-      "archived": false,
       "recurrence": {
         "type": "weekly",
         "daysOfWeek": [
@@ -758,8 +755,9 @@
     },
     {
       "id": "ev-1739558845321",
+      "archived": false,
       "title": "Winter Storm",
-      "description": "\u2022 Matching is open for two hours starting at 02:00, 09:00, 19:00",
+      "description": "• Matching is open for two hours starting at 02:00, 09:00, 19:00",
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "10:00",
@@ -780,7 +778,6 @@
         "saturday": 2,
         "monday": 3
       },
-      "archived": false,
       "recurrence": {
         "type": "weekly",
         "daysOfWeek": [
@@ -791,6 +788,7 @@
     },
     {
       "id": "ev-1740123329685",
+      "archived": false,
       "title": "Desert Storm - Task Force B",
       "description": "",
       "isAllDay": false,
@@ -810,7 +808,6 @@
       },
       "variations": {},
       "order": {},
-      "archived": false,
       "recurrence": {
         "type": "weekly",
         "daysOfWeek": [
@@ -822,8 +819,9 @@
     },
     {
       "id": "ev-1740278810425",
+      "archived": false,
       "title": "Rampage Bosses",
-      "description": "\u2022 Spawn at 0:00, 6:00, and 12:00\n\u2022 Attacking doesn't cost stamina or troops\n\u2022 Take three shots on each and try to get as much damage as you can!\n\u2022 If the server manages to do enough damage, they'll drop rewards you can grab over the next few hours",
+      "description": "• Spawn at 0:00, 6:00, and 12:00\n• Attacking doesn't cost stamina or troops\n• Take three shots on each and try to get as much damage as you can!\n• If the server manages to do enough damage, they'll drop rewards you can grab over the next few hours",
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "10:00",
@@ -843,7 +841,6 @@
       "order": {
         "sunday": 5
       },
-      "archived": false,
       "recurrence": {
         "type": "weeks",
         "onPeriods": 1,
@@ -857,6 +854,7 @@
     },
     {
       "id": "87a66ed0-70ea-4dfc-8519-ced7ef52be6e",
+      "archived": false,
       "title": "Marshal (Alliance Exercise)",
       "description": "",
       "isAllDay": false,
@@ -880,16 +878,7 @@
         "saturday": true,
         "wednesday": true
       },
-      "variations": {
-        "sunday": {
-          "description": "\u2022 NOTE the different time so that we can gather resources!",
-          "isAllDay": false,
-          "startTime": "00:15",
-          "endTime": "00:45"
-        }
-      },
       "order": {},
-      "archived": false,
       "recurrence": {
         "type": "daily",
         "daysOfWeek": [
@@ -908,6 +897,7 @@
     },
     {
       "id": "4329a998-b697-4b0d-ae72-c629390328b4",
+      "archived": false,
       "title": "Storm Arena",
       "description": "",
       "isAllDay": true,
@@ -940,7 +930,6 @@
         "monday": 5,
         "tuesday": 8
       },
-      "archived": false,
       "recurrence": {
         "type": "custom",
         "daysOfWeek": [
@@ -963,6 +952,7 @@
     },
     {
       "id": "5c1804c1-eae9-48f9-a94d-495eea6eb156",
+      "archived": false,
       "title": "3v3 Brawl - Minimum 5 wins",
       "description": "",
       "isAllDay": true,
@@ -996,7 +986,6 @@
         "thursday": 8,
         "friday": 7
       },
-      "archived": false,
       "recurrence": {
         "type": "weeks",
         "onPeriods": 2,
@@ -1016,6 +1005,7 @@
     },
     {
       "id": "5aec60d0-4d5f-4299-8f91-cc8590471e7b",
+      "archived": false,
       "title": "Wanted Boss: Code 87 - Weak Against Tank Heroes",
       "description": "",
       "isAllDay": true,
@@ -1039,7 +1029,6 @@
         "thursday": 5,
         "monday": 9
       },
-      "archived": false,
       "recurrence": {
         "type": "weekly",
         "daysOfWeek": [
@@ -1052,6 +1041,7 @@
     },
     {
       "id": "6f0f73b6-24e7-491d-b6fa-39d73bb8711e",
+      "archived": false,
       "title": "Wanted Boss:  Code 64 - Weak Against Missile Heroes",
       "description": "",
       "isAllDay": true,
@@ -1075,7 +1065,6 @@
         "friday": 6,
         "tuesday": 6
       },
-      "archived": false,
       "recurrence": {
         "type": "weekly",
         "daysOfWeek": [
@@ -1088,6 +1077,7 @@
     },
     {
       "id": "5178bd44-1659-40df-9aa7-c76cf22ee563",
+      "archived": false,
       "title": "Wanted Boss: Code 39 - Weak Against Aircraft Heroes",
       "description": "",
       "isAllDay": true,
@@ -1111,7 +1101,6 @@
         "saturday": 5,
         "wednesday": 8
       },
-      "archived": false,
       "recurrence": {
         "type": "weekly",
         "daysOfWeek": [
@@ -1124,6 +1113,7 @@
     },
     {
       "id": "dfb867b9-9ffc-4a60-baf2-bd89a1d18681",
+      "archived": false,
       "title": "SHINYs in 969-972, 982-986, 994 & 995",
       "description": "",
       "isAllDay": true,
@@ -1155,7 +1145,6 @@
         "saturday": 7,
         "tuesday": 9
       },
-      "archived": false,
       "recurrence": {
         "type": "daily",
         "daysOfWeek": [
@@ -1174,6 +1163,7 @@
     },
     {
       "id": "7662a10a-144e-4dc5-8ae7-4c8af78b9e12",
+      "archived": false,
       "title": "SHINYs in 974-976, 987-989",
       "description": "",
       "isAllDay": true,
@@ -1205,7 +1195,6 @@
         "thursday": 10,
         "sunday": 5
       },
-      "archived": false,
       "recurrence": {
         "type": "daily",
         "daysOfWeek": [
@@ -1224,8 +1213,9 @@
     },
     {
       "id": "e5263084-2b0f-4289-9ed1-ede774a62176",
+      "archived": false,
       "title": "SHINYs in 966-969, 977-981, 990-993",
-      "description": "\u2022 993 seems pretty good!",
+      "description": "• 993 seems pretty good!",
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "",
@@ -1254,7 +1244,6 @@
         "tuesday": 11,
         "friday": 9
       },
-      "archived": false,
       "recurrence": {
         "type": "daily",
         "daysOfWeek": [
@@ -1275,8 +1264,9 @@
     },
     {
       "id": "41b7230f-eac7-478d-8f95-2955050d1da0",
+      "archived": false,
       "title": "Bullseye Loot/Ammo Bonanza",
-      "description": "\u2022 3 very simple daily tasks in Ammo Bonanza\n\u2022 The ammo stays in inventory between events, so you can save up and spend it all at once to get better prizes (Mythic blueprint!)",
+      "description": "• 3 very simple daily tasks in Ammo Bonanza\n• The ammo stays in inventory between events, so you can save up and spend it all at once to get better prizes (Mythic blueprint!)",
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "",
@@ -1302,7 +1292,6 @@
         "wednesday": 9,
         "friday": 9
       },
-      "archived": false,
       "recurrence": {
         "type": "weekly",
         "daysOfWeek": [
@@ -1322,8 +1311,9 @@
     },
     {
       "id": "ff6b9bd0-e2e6-49fd-9fa6-7cea574f8d47",
+      "archived": false,
       "title": "Summon Supplies",
-      "description": "\u2022 Get your free key and do your free summon every day\n\u2022 The keys remain between events so save them until you find a box you really want\n\u2022 If you have done free summons every day, on the last day:\n  \u2022 Spend 500 more diamonds to get 10 UR shards\n  \u2022 Spend 4000 more to get a legendary decoration chest",
+      "description": "• Get your free key and do your free summon every day\n• The keys remain between events so save them until you find a box you really want\n• If you have done free summons every day, on the last day:\n  • Spend 500 more diamonds to get 10 UR shards\n  • Spend 4000 more to get a legendary decoration chest",
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "",
@@ -1347,7 +1337,6 @@
       "order": {
         "tuesday": 2
       },
-      "archived": false,
       "recurrence": {
         "type": "weeks",
         "onPeriods": 1,
@@ -1367,6 +1356,7 @@
     },
     {
       "id": "8d795f4d-e2f0-4194-9152-2163891aa0dc",
+      "archived": false,
       "title": "VS: Recruit Survivors",
       "description": "",
       "isAllDay": true,
@@ -1388,7 +1378,6 @@
       "order": {
         "tuesday": 4
       },
-      "archived": false,
       "recurrence": {
         "type": "weekly",
         "daysOfWeek": [
@@ -1400,8 +1389,9 @@
     },
     {
       "id": "fe4d455d-6f36-45b2-92c2-24c32521473f",
-      "title": "Hot Deals \u2192 Glittering Market",
-      "description": "\u2022 At minimum, collect 100 diamonds / Buy 60 coins for 500 diamonds",
+      "archived": false,
+      "title": "Hot Deals → Glittering Market",
+      "description": "• At minimum, collect 100 diamonds / Buy 60 coins for 500 diamonds",
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "",
@@ -1428,7 +1418,6 @@
         "friday": 8,
         "sunday": 6
       },
-      "archived": false,
       "recurrence": {
         "type": "weekly",
         "daysOfWeek": [
@@ -1446,8 +1435,9 @@
     },
     {
       "id": "8c78efe1-5b5c-427c-b5e1-7249a7922606",
+      "archived": false,
       "title": "Ghost Ops",
-      "description": "\u2022 Missions can be initiated from 00:00-03:00, 06:00-09:00, 12:00-15:00, 18:00-21:00",
+      "description": "• Missions can be initiated from 00:00-03:00, 06:00-09:00, 12:00-15:00, 18:00-21:00",
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "",
@@ -1467,7 +1457,6 @@
       "order": {
         "thursday": 9
       },
-      "archived": false,
       "recurrence": {
         "type": "weekly",
         "daysOfWeek": [
@@ -1478,6 +1467,7 @@
     },
     {
       "id": "5831a6ec-244d-40d2-88dc-81a7173ecffd",
+      "archived": false,
       "title": "VS: Save SHINYs (Starred secret tasks)",
       "description": "",
       "isAllDay": true,
@@ -1505,7 +1495,6 @@
         "thursday": 3,
         "friday": 0
       },
-      "archived": false,
       "recurrence": {
         "type": "weekly",
         "daysOfWeek": [
@@ -1524,6 +1513,7 @@
     },
     {
       "id": "89b95f35-ae1a-485b-8aee-f012c758fa7b",
+      "archived": false,
       "title": "VS: Save SHINYs (Starred secret tasks)",
       "description": "",
       "isAllDay": true,
@@ -1543,7 +1533,6 @@
       },
       "variations": {},
       "order": {},
-      "archived": false,
       "recurrence": {
         "type": "weekly",
         "daysOfWeek": [
@@ -1555,6 +1544,7 @@
     },
     {
       "id": "3c1c7552-cfbc-479d-a42c-2dc8476d0e1b",
+      "archived": false,
       "title": "Golden Melody - FINAL DAY",
       "description": "",
       "isAllDay": true,
@@ -1582,7 +1572,6 @@
       "order": {
         "sunday": 1
       },
-      "archived": false,
       "recurrence": {
         "type": "daily",
         "daysOfWeek": [
@@ -1600,6 +1589,7 @@
     },
     {
       "id": "4af5277e-a46b-4407-94cc-66452e907f1d",
+      "archived": false,
       "title": "Sky Predator - General's Trial Alliance Challenge",
       "description": "",
       "isAllDay": false,
@@ -1619,7 +1609,6 @@
       },
       "variations": {},
       "order": {},
-      "archived": false,
       "recurrence": {
         "type": "weekly",
         "daysOfWeek": [
@@ -1637,6 +1626,7 @@
     },
     {
       "id": "9773fd5b-5070-4f05-b232-f527556751ab",
+      "archived": false,
       "title": "VS: Promote and Train Overlord",
       "description": "",
       "isAllDay": true,
@@ -1658,7 +1648,6 @@
       "order": {
         "friday": 3
       },
-      "archived": false,
       "recurrence": {
         "type": "weekly",
         "daysOfWeek": [
@@ -1670,6 +1659,7 @@
     },
     {
       "id": "e1a61d22-c57e-45aa-ab6c-d648c529bb89",
+      "archived": false,
       "title": "Buy from Alliance, Campaign and VIP stores before reset.",
       "description": "",
       "remindTomorrow": false,
@@ -1691,7 +1681,6 @@
       },
       "variations": {},
       "order": {},
-      "archived": false,
       "recurrence": {
         "type": "weeks",
         "onPeriods": 1,
@@ -1704,10 +1693,11 @@
     },
     {
       "id": "fc3ef9fe-0e81-4a26-b693-448794954e61",
+      "archived": false,
       "title": "Register for Desert Storm - FINAL DAY (Due 1 hour before reset)",
       "description": "",
       "remindTomorrow": false,
-      "remindEndOfDay": false,
+      "remindEndOfDay": true,
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "",
@@ -1724,7 +1714,6 @@
       },
       "variations": {},
       "order": {},
-      "archived": false,
       "recurrence": {
         "type": "days",
         "onPeriods": 1,
@@ -1733,10 +1722,13 @@
           "wednesday"
         ],
         "startDate": "2025-09-17T00:00:00.000-04:00"
-      }
+      },
+      "includeInBriefing": true,
+      "includeOnWebsite": true
     },
     {
       "id": "6ea962c6-2e91-4a52-a670-eb4cd3c7d328",
+      "archived": false,
       "title": "Capitol Event - Garrison the capitol",
       "description": "",
       "remindTomorrow": true,
@@ -1758,7 +1750,6 @@
       },
       "variations": {},
       "order": {},
-      "archived": false,
       "recurrence": {
         "type": "weeks",
         "onPeriods": 1,
@@ -1771,6 +1762,7 @@
     },
     {
       "id": "4b3d8da0-2fc8-461b-923e-7423a403c28b",
+      "archived": false,
       "title": "Free/300/500 Stamina (Radar tasks)",
       "description": "",
       "remindTomorrow": false,
@@ -1782,7 +1774,208 @@
         "sunday"
       ],
       "includeInExport": {
-        "sunday": false,
+        "sunday": true,
+        "tuesday": true,
+        "wednesday": true,
+        "thursday": true,
+        "friday": true,
+        "saturday": true
+      },
+      "variations": {},
+      "order": {},
+      "recurrence": {
+        "type": "weeks",
+        "onPeriods": 1,
+        "offPeriods": 0,
+        "daysOfWeek": [
+          "sunday"
+        ],
+        "startDate": "2023-12-31T05:00:00.000Z"
+      },
+      "dateIncludeOverrides": {
+        "2025-09-21": false
+      },
+      "includeInBriefing": false,
+      "includeOnWebsite": false
+    },
+    {
+      "id": "18acf2e1-218e-46c2-a9e4-3b21584523c6",
+      "title": "Gale Arena - Minimum 5 attempts - 3 likes",
+      "description": "",
+      "remindTomorrow": false,
+      "remindEndOfDay": true,
+      "includeInBriefing": true,
+      "includeOnWebsite": true,
+      "isAllDay": true,
+      "startTime": "09:00",
+      "endTime": "",
+      "days": [
+        "sunday",
+        "monday",
+        "tuesday",
+        "wednesday",
+        "thursday",
+        "friday",
+        "saturday"
+      ],
+      "includeInExport": {
+        "tuesday": true,
+        "sunday": true,
+        "monday": true,
+        "wednesday": true,
+        "thursday": true,
+        "friday": true,
+        "saturday": true
+      },
+      "variations": {},
+      "order": {},
+      "archived": false,
+      "recurrence": {
+        "type": "weeks",
+        "onPeriods": 1,
+        "offPeriods": 0,
+        "daysOfWeek": [
+          "sunday",
+          "monday",
+          "tuesday",
+          "wednesday",
+          "thursday",
+          "friday",
+          "saturday"
+        ],
+        "startDate": "2024-01-01T05:00:00.000Z"
+      }
+    },
+    {
+      "id": "8be87ab4-5f71-47a4-b29a-54058a4c4aac",
+      "title": "Free/300 Stamina",
+      "description": "",
+      "remindTomorrow": false,
+      "remindEndOfDay": true,
+      "includeInBriefing": false,
+      "includeOnWebsite": false,
+      "isAllDay": true,
+      "startTime": "09:00",
+      "endTime": "",
+      "days": [
+        "monday"
+      ],
+      "includeInExport": {
+        "monday": true,
+        "tuesday": true,
+        "wednesday": true,
+        "thursday": true,
+        "friday": true,
+        "saturday": true
+      },
+      "variations": {},
+      "order": {},
+      "archived": false,
+      "recurrence": {
+        "type": "weeks",
+        "onPeriods": 1,
+        "offPeriods": 1,
+        "daysOfWeek": [
+          "monday"
+        ],
+        "startDate": "2023-12-31T05:00:00.000Z"
+      }
+    },
+    {
+      "id": "151805d5-5c6a-4cc0-a62b-9ab90c54d5a0",
+      "title": "Free/300/500 Stamina - Radar & Loot Goblins",
+      "description": "",
+      "remindTomorrow": false,
+      "remindEndOfDay": true,
+      "includeInBriefing": false,
+      "includeOnWebsite": false,
+      "isAllDay": true,
+      "startTime": "09:00",
+      "endTime": "",
+      "days": [
+        "tuesday"
+      ],
+      "includeInExport": {
+        "monday": true,
+        "sunday": true,
+        "tuesday": true,
+        "wednesday": true,
+        "thursday": true,
+        "friday": true,
+        "saturday": true
+      },
+      "variations": {},
+      "order": {},
+      "archived": false,
+      "recurrence": {
+        "type": "weeks",
+        "onPeriods": 1,
+        "offPeriods": 1,
+        "daysOfWeek": [
+          "tuesday"
+        ],
+        "startDate": "2024-01-07T05:00:00.000Z"
+      }
+    },
+    {
+      "id": "04434cb7-53c9-4aa5-b7a7-0dac1f6239c1",
+      "title": "Canyon Storm",
+      "description": "",
+      "remindTomorrow": true,
+      "remindEndOfDay": false,
+      "includeInBriefing": true,
+      "includeOnWebsite": true,
+      "isAllDay": false,
+      "startTime": "12:00",
+      "endTime": "",
+      "days": [
+        "thursday"
+      ],
+      "includeInExport": {
+        "wednesday": true,
+        "sunday": true,
+        "monday": true,
+        "tuesday": true,
+        "thursday": true,
+        "friday": true,
+        "saturday": true
+      },
+      "variations": {},
+      "order": {},
+      "archived": false,
+      "recurrence": {
+        "type": "weeks",
+        "onPeriods": 1,
+        "offPeriods": 0,
+        "daysOfWeek": [
+          "thursday"
+        ],
+        "startDate": "2023-12-31T05:00:00.000Z"
+      }
+    },
+    {
+      "id": "1ae7c08b-29e3-4ef3-a00f-ccc19f155ddb",
+      "title": "Sandworm (Alliance Exercise)",
+      "description": "",
+      "remindTomorrow": true,
+      "remindEndOfDay": false,
+      "includeInBriefing": true,
+      "includeOnWebsite": true,
+      "isAllDay": false,
+      "startTime": "21:40",
+      "endTime": "",
+      "days": [
+        "sunday",
+        "monday",
+        "tuesday",
+        "wednesday",
+        "thursday",
+        "friday",
+        "saturday"
+      ],
+      "includeInExport": {
+        "monday": true,
+        "sunday": true,
         "tuesday": true,
         "wednesday": true,
         "thursday": true,
@@ -1795,14 +1988,780 @@
       "recurrence": {
         "type": "days",
         "onPeriods": 1,
+        "offPeriods": 1,
+        "daysOfWeek": [
+          "sunday",
+          "monday",
+          "tuesday",
+          "wednesday",
+          "thursday",
+          "friday",
+          "saturday"
+        ],
+        "startDate": "2023-12-31T05:00:00.000Z"
+      }
+    },
+    {
+      "id": "aef21a44-6c6d-4d0d-8370-0053190f21b5",
+      "title": "Capitol Conquest",
+      "description": "",
+      "remindTomorrow": true,
+      "remindEndOfDay": false,
+      "includeInBriefing": true,
+      "includeOnWebsite": true,
+      "isAllDay": false,
+      "startTime": "12:00",
+      "endTime": "",
+      "days": [
+        "friday"
+      ],
+      "includeInExport": {
+        "monday": true,
+        "sunday": true,
+        "tuesday": true,
+        "wednesday": true,
+        "thursday": true,
+        "friday": true,
+        "saturday": true
+      },
+      "variations": {},
+      "order": {},
+      "archived": false,
+      "recurrence": {
+        "type": "weeks",
+        "onPeriods": 1,
         "offPeriods": 0,
         "daysOfWeek": [
-          "sunday"
+          "friday"
         ],
-        "startDate": "2025-09-21T00:00:00.000-04:00"
+        "startDate": "2025-11-12T23:54:00.355Z"
+      }
+    },
+    {
+      "id": "d60cae98-2318-4856-a8e0-b68c567f8306",
+      "title": "Canyon Storm",
+      "description": "",
+      "remindTomorrow": true,
+      "remindEndOfDay": false,
+      "includeInBriefing": true,
+      "includeOnWebsite": true,
+      "isAllDay": false,
+      "startTime": "23:00",
+      "endTime": "",
+      "days": [
+        "thursday"
+      ],
+      "includeInExport": {
+        "thursday": true,
+        "sunday": true,
+        "monday": true,
+        "tuesday": true,
+        "wednesday": true,
+        "friday": true,
+        "saturday": true
+      },
+      "variations": {},
+      "order": {},
+      "archived": false,
+      "recurrence": {
+        "type": "weeks",
+        "onPeriods": 1,
+        "offPeriods": 0,
+        "daysOfWeek": [
+          "thursday"
+        ],
+        "startDate": "2023-12-31T05:00:00.000Z"
+      }
+    },
+    {
+      "id": "ev-2",
+      "title": "Wanted Boss: Code 87/64/39",
+      "description": "• Weaknesses - 87:Tanks - 64:Air - 39:Missile\n• Spawns for 3 hours at 00:00, 06:00, 12:00, 18:00\n• Hit a minimum of 3 times to max rewards\n• You can send all three squads at once if you only have 10 seconds to invest",
+      "isAllDay": true,
+      "startTime": "09:00",
+      "endTime": "10:00",
+      "days": [
+        "monday",
+        "thursday",
+        "tuesday",
+        "wednesday",
+        "friday",
+        "saturday"
+      ],
+      "includeInExport": {
+        "monday": true,
+        "thursday": true,
+        "tuesday": true,
+        "wednesday": true,
+        "friday": true,
+        "saturday": true
+      },
+      "variations": {},
+      "order": {
+        "monday": 4,
+        "wednesday": 4
+      },
+      "archived": true,
+      "recurrence": {
+        "type": "weekly",
+        "daysOfWeek": [
+          "monday",
+          "thursday",
+          "tuesday",
+          "wednesday",
+          "friday",
+          "saturday"
+        ],
+        "interval": 1
+      }
+    },
+    {
+      "id": "ev-1739559151491",
+      "title": "Crimson Legion",
+      "description": "• Set your strongest squad to garrison before signing off the night before\n• R4s will kick the lowest power garrisons to make room as needed\n• Arrive for the event and garrison/heal like a cryptid should!",
+      "isAllDay": false,
+      "startTime": "12:00",
+      "endTime": "13:00",
+      "days": [
+        "tuesday",
+        "friday"
+      ],
+      "includeInExport": {
+        "tuesday": false,
+        "friday": false
+      },
+      "variations": {},
+      "order": {},
+      "archived": true,
+      "recurrence": {
+        "type": "weekly",
+        "daysOfWeek": [
+          "tuesday",
+          "friday"
+        ],
+        "interval": 1
+      }
+    },
+    {
+      "id": "0966e2c0-e0d7-41ea-9a8b-16453388e178",
+      "title": "Warzone Duel: Capitol War",
+      "description": "• This is Last War's main event so the rewards are very, very good\n• It is fairly easy to max participation rewards starting 1-2 hours after the capitol is contested\n• You can only earn ranking rewards while the capitol is being contested",
+      "isAllDay": false,
+      "startTime": "12:00",
+      "endTime": "",
+      "days": [
+        "saturday"
+      ],
+      "includeInExport": {
+        "wednesday": true,
+        "sunday": true,
+        "monday": true,
+        "tuesday": true,
+        "thursday": true,
+        "friday": true,
+        "saturday": true
+      },
+      "variations": {},
+      "order": {},
+      "archived": true,
+      "recurrence": {
+        "type": "weekly",
+        "daysOfWeek": [
+          "saturday"
+        ],
+        "interval": 1,
+        "startDate": "2025-03-12T00:00:00.000-04:00"
       },
       "dateIncludeOverrides": {
-        "2025-09-21": false
+        "2025-05-03": false
+      }
+    },
+    {
+      "id": "0cdd036c-c5fc-4bb6-8c4a-85bcec205e61",
+      "title": "Mason: Strike Back (Ironclad Vehicle)",
+      "description": "• Burn any spare stamina on these little guys. The rewards add up to much more than Doom Elites not only for you, but for the entire alliance!",
+      "isAllDay": true,
+      "startTime": "09:00",
+      "endTime": "",
+      "days": [
+        "tuesday",
+        "monday"
+      ],
+      "includeInExport": {
+        "monday": true,
+        "sunday": true,
+        "tuesday": true,
+        "wednesday": true,
+        "thursday": true,
+        "friday": true,
+        "saturday": true
+      },
+      "variations": {},
+      "order": {
+        "monday": 11,
+        "tuesday": 9
+      },
+      "archived": true,
+      "recurrence": {
+        "type": "weekly",
+        "daysOfWeek": [
+          "tuesday",
+          "monday"
+        ],
+        "interval": 2
+      },
+      "dateIncludeOverrides": {}
+    },
+    {
+      "id": "688407f7-8f25-47c9-bcbb-3b97632414d8",
+      "title": "Capitol Conquest (trading tile hits at the capitol)",
+      "description": "• Every week there is a war to see which alliance will control the capitol but in 996, we have an agreement for peaceful transfer of power, so we do not fight.\n• To get your rewards:\n   • Send your squad to gather at a tile in the mud around the capitol\n   • Post the coordinates in world chat for someone to hit\n     - OR -\n   • Watch for mud tiles to be posted in WC and after verifying the person who posted it is also the one on the tile, attack.",
+      "isAllDay": false,
+      "startTime": "12:00",
+      "endTime": "16:00",
+      "days": [
+        "friday"
+      ],
+      "includeInExport": {
+        "monday": true,
+        "sunday": true,
+        "tuesday": true,
+        "wednesday": true,
+        "thursday": true,
+        "friday": true,
+        "saturday": true
+      },
+      "variations": {},
+      "order": {},
+      "archived": true,
+      "recurrence": {
+        "type": "weekly",
+        "daysOfWeek": [
+          "friday"
+        ],
+        "interval": 1
+      }
+    },
+    {
+      "id": "9bc76420-1995-4ad4-b83e-0d64ac512f4d",
+      "title": "Scout Tater",
+      "description": "",
+      "isAllDay": false,
+      "startTime": "00:15",
+      "endTime": "",
+      "days": [
+        "sunday",
+        "monday",
+        "tuesday",
+        "wednesday",
+        "thursday",
+        "friday"
+      ],
+      "includeInExport": {
+        "monday": true,
+        "sunday": true,
+        "tuesday": true,
+        "wednesday": true,
+        "thursday": true,
+        "friday": true,
+        "saturday": true
+      },
+      "variations": {},
+      "order": {},
+      "archived": true,
+      "recurrence": {
+        "type": "weekly",
+        "daysOfWeek": [
+          "sunday",
+          "monday",
+          "tuesday",
+          "wednesday",
+          "thursday",
+          "friday"
+        ],
+        "interval": 1
+      },
+      "dateIncludeOverrides": {
+        "2025-04-08": true
+      }
+    },
+    {
+      "id": "c0a5849e-5065-450d-ac67-5dd9f5b138c9",
+      "title": "Season I Celebration → Championship Duel → Predicts ",
+      "description": "• Wager to win Black Market Cash without risking any\n• More icon → x4 Elite Match → Predict → x100\n• I'm just picking the favorite since I don't feel like doing research",
+      "isAllDay": true,
+      "startTime": "09:00",
+      "endTime": "",
+      "days": [
+        "monday",
+        "tuesday",
+        "wednesday",
+        "thursday"
+      ],
+      "includeInExport": {
+        "monday": false,
+        "sunday": true,
+        "tuesday": false,
+        "wednesday": false,
+        "thursday": false,
+        "friday": true,
+        "saturday": true
+      },
+      "variations": {},
+      "order": {
+        "monday": 13
+      },
+      "archived": true,
+      "recurrence": {
+        "type": "weekly",
+        "daysOfWeek": [
+          "monday",
+          "tuesday",
+          "wednesday",
+          "thursday"
+        ],
+        "interval": 1
+      },
+      "dateIncludeOverrides": {
+        "2025-04-08": true,
+        "2025-04-09": true
+      }
+    },
+    {
+      "id": "1d5cdb18-023b-4511-a73e-0ed1d300b76f",
+      "title": "Season II Celebration → Black Market",
+      "description": "• Use all of your refreshes every day\n• Always buy the free items\n• Free/Cheap players recommendation:\n   • Top Row\n      • Decorations\n      • Weapon Shards (until you have enough to unlock all Heroes)\n      • if you have plenty of cash, UR Skill Chips, UR decorations\n   • Bottom Row:\n      • Exclusive Weapons (until enough)",
+      "isAllDay": true,
+      "startTime": "09:00",
+      "endTime": "",
+      "days": [
+        "sunday",
+        "monday",
+        "tuesday",
+        "wednesday",
+        "thursday",
+        "friday",
+        "saturday"
+      ],
+      "includeInExport": {
+        "tuesday": true,
+        "sunday": true,
+        "monday": true,
+        "wednesday": true,
+        "thursday": true,
+        "friday": true,
+        "saturday": true
+      },
+      "variations": {},
+      "order": {
+        "monday": 1,
+        "saturday": 0,
+        "sunday": 0,
+        "tuesday": 1,
+        "wednesday": 0,
+        "thursday": 0,
+        "friday": 0
+      },
+      "archived": true,
+      "recurrence": {
+        "type": "daily",
+        "daysOfWeek": [
+          "sunday",
+          "monday",
+          "tuesday",
+          "wednesday",
+          "thursday",
+          "friday",
+          "saturday"
+        ],
+        "interval": 1,
+        "startDate": "2025-04-08T00:00:00.000-04:00",
+        "pattern": {
+          "onWeeks": 1,
+          "offWeeks": 1,
+          "phaseStartDate": "2025-07-05T00:06:18.516Z"
+        }
+      },
+      "dateIncludeOverrides": {
+        "2025-04-07": true,
+        "2025-04-08": true,
+        "2025-04-09": true,
+        "2025-04-10": true,
+        "2025-04-11": true,
+        "2025-04-12": true,
+        "2025-04-13": true,
+        "2025-07-04": false,
+        "2025-07-06": false,
+        "2025-07-03": false,
+        "2025-07-02": false,
+        "2025-07-01": false,
+        "2025-06-30": false,
+        "2025-06-29": false,
+        "2025-06-28": false,
+        "2025-06-27": false,
+        "2025-07-05": true
+      }
+    },
+    {
+      "id": "5870d28b-5d10-4dd9-83fb-612e4c28e0b0",
+      "title": "Meteorite Iron War - Round 1",
+      "description": "",
+      "isAllDay": false,
+      "startTime": "00:10",
+      "endTime": "00:40",
+      "days": [
+        "saturday"
+      ],
+      "includeInExport": {
+        "monday": false,
+        "sunday": false,
+        "tuesday": false,
+        "wednesday": false,
+        "thursday": false,
+        "friday": false,
+        "saturday": true
+      },
+      "variations": {},
+      "order": {},
+      "archived": true,
+      "recurrence": {
+        "type": "weekly",
+        "daysOfWeek": [
+          "saturday"
+        ],
+        "interval": 1
+      },
+      "dateIncludeOverrides": {
+        "2025-05-03": true,
+        "2025-07-05": true
+      }
+    },
+    {
+      "id": "a061f2df-34c9-4bdd-9fa2-a95e11470268",
+      "title": "Meteorite Iron War - Round 2",
+      "description": "",
+      "isAllDay": false,
+      "startTime": "12:30",
+      "endTime": "13:00",
+      "days": [
+        "saturday"
+      ],
+      "includeInExport": {
+        "saturday": true,
+        "sunday": true,
+        "monday": true,
+        "tuesday": true,
+        "wednesday": true,
+        "thursday": true,
+        "friday": true
+      },
+      "variations": {},
+      "order": {},
+      "archived": true,
+      "recurrence": {
+        "type": "weekly",
+        "daysOfWeek": [
+          "saturday"
+        ],
+        "interval": 1,
+        "startDate": "2025-05-03T00:00:00.000-04:00"
+      },
+      "dateIncludeOverrides": {
+        "2025-05-03": true,
+        "2025-07-19": true
+      }
+    },
+    {
+      "id": "5a015825-f2c7-44ce-81c6-c09bcff682e2",
+      "title": "Beast Crisis",
+      "description": "",
+      "isAllDay": false,
+      "startTime": "12:00",
+      "endTime": "12:35",
+      "days": [
+        "tuesday",
+        "friday"
+      ],
+      "includeInExport": {
+        "thursday": true,
+        "sunday": true,
+        "monday": true,
+        "tuesday": true,
+        "wednesday": true,
+        "friday": true,
+        "saturday": true
+      },
+      "variations": {},
+      "order": {},
+      "archived": true,
+      "recurrence": {
+        "type": "weekly",
+        "daysOfWeek": [
+          "tuesday",
+          "friday"
+        ],
+        "interval": 1,
+        "startDate": "2025-05-22T00:00:00.000-04:00"
+      }
+    },
+    {
+      "id": "1f65fd3a-b31b-4d67-9d46-0a53606e79a4",
+      "title": "Rare Soil War",
+      "description": "",
+      "isAllDay": false,
+      "startTime": "12:30",
+      "endTime": "13:10",
+      "days": [
+        "wednesday",
+        "saturday"
+      ],
+      "includeInExport": {
+        "thursday": true,
+        "sunday": true,
+        "monday": true,
+        "tuesday": true,
+        "wednesday": true,
+        "friday": true,
+        "saturday": true
+      },
+      "variations": {},
+      "order": {},
+      "archived": true,
+      "recurrence": {
+        "type": "weekly",
+        "daysOfWeek": [
+          "wednesday",
+          "saturday"
+        ],
+        "interval": 1,
+        "startDate": "2025-05-22T00:00:00.000-04:00"
+      }
+    },
+    {
+      "id": "fecdeae1-1d56-493c-9e92-d3103bc39910",
+      "title": "Golden Melody",
+      "description": "• Use at minimum 1 ticket, score at least 5,000 points then collect your tasks",
+      "isAllDay": true,
+      "startTime": "09:00",
+      "endTime": "",
+      "days": [
+        "monday",
+        "tuesday",
+        "wednesday",
+        "thursday",
+        "friday",
+        "saturday"
+      ],
+      "includeInExport": {
+        "monday": true,
+        "sunday": true,
+        "tuesday": true,
+        "wednesday": true,
+        "thursday": true,
+        "friday": true,
+        "saturday": true
+      },
+      "variations": {},
+      "order": {
+        "monday": 2,
+        "tuesday": 3,
+        "wednesday": 2,
+        "thursday": 1,
+        "friday": 1,
+        "saturday": 1
+      },
+      "archived": true,
+      "recurrence": {
+        "type": "custom",
+        "daysOfWeek": [
+          "monday",
+          "tuesday",
+          "wednesday",
+          "thursday",
+          "friday",
+          "saturday"
+        ],
+        "interval": 1,
+        "startDate": "2025-07-07T00:00:00.000-04:00",
+        "pattern": {
+          "onWeeks": 1,
+          "offWeeks": 99,
+          "phaseStartDate": "2025-07-07T08:19:54.884Z"
+        }
+      }
+    },
+    {
+      "id": "e05c1e28-c800-48d1-8d3a-53898d5f2922",
+      "title": "Glacieradon",
+      "description": "",
+      "isAllDay": false,
+      "startTime": "23:00",
+      "endTime": "",
+      "days": [
+        "thursday"
+      ],
+      "includeInExport": {
+        "wednesday": true,
+        "sunday": true,
+        "monday": true,
+        "tuesday": true,
+        "thursday": true,
+        "friday": true,
+        "saturday": true
+      },
+      "variations": {},
+      "order": {},
+      "archived": true,
+      "recurrence": {
+        "type": "weekly",
+        "daysOfWeek": [
+          "thursday"
+        ],
+        "interval": 2,
+        "startDate": "2025-08-06T00:00:00.000-04:00"
+      },
+      "remindTomorrow": true
+    },
+    {
+      "id": "16f2e4b5-58d7-4c14-b409-ef1e3e1b84c6",
+      "title": "Return of the Dead - Defend Alliance Center",
+      "description": "",
+      "isAllDay": false,
+      "startTime": "11:00",
+      "endTime": "11:30",
+      "days": [
+        "tuesday",
+        "friday"
+      ],
+      "includeInExport": {
+        "thursday": true,
+        "sunday": true,
+        "monday": true,
+        "tuesday": true,
+        "wednesday": true,
+        "friday": true,
+        "saturday": true
+      },
+      "variations": {},
+      "order": {},
+      "archived": true,
+      "recurrence": {
+        "type": "weekly",
+        "daysOfWeek": [
+          "tuesday",
+          "friday"
+        ],
+        "interval": 1,
+        "startDate": "2025-09-04T00:00:00.000-04:00"
+      },
+      "remindTomorrow": true
+    },
+    {
+      "id": "e41e6e5f-79c4-4927-9030-ced38b9229b6",
+      "title": "Spice Wars Battle!",
+      "description": "",
+      "remindTomorrow": true,
+      "remindEndOfDay": false,
+      "isAllDay": false,
+      "startTime": "12:30",
+      "endTime": "",
+      "days": [
+        "wednesday",
+        "saturday"
+      ],
+      "includeInExport": {
+        "tuesday": true,
+        "sunday": true,
+        "monday": true,
+        "wednesday": true,
+        "thursday": true,
+        "friday": true,
+        "saturday": true
+      },
+      "variations": {},
+      "order": {},
+      "archived": true,
+      "recurrence": {
+        "type": "weeks",
+        "onPeriods": 1,
+        "offPeriods": 0,
+        "daysOfWeek": [
+          "wednesday",
+          "saturday"
+        ],
+        "startDate": "2025-09-16T00:00:00.000-04:00"
+      }
+    },
+    {
+      "id": "83c5acdd-07b9-4dee-b85c-27ef30fb10bd",
+      "title": "Capture Level 4 Trading Post",
+      "description": "",
+      "remindTomorrow": true,
+      "remindEndOfDay": false,
+      "isAllDay": false,
+      "startTime": "11:00",
+      "endTime": "",
+      "days": [
+        "thursday"
+      ],
+      "includeInExport": {
+        "monday": true,
+        "sunday": true,
+        "tuesday": true,
+        "wednesday": true,
+        "thursday": true,
+        "friday": true,
+        "saturday": true
+      },
+      "variations": {},
+      "order": {},
+      "archived": true,
+      "recurrence": {
+        "type": "weeks",
+        "onPeriods": 1,
+        "offPeriods": 0,
+        "daysOfWeek": [
+          "thursday"
+        ],
+        "startDate": "2025-09-11T04:00:00.000Z"
+      }
+    },
+    {
+      "id": "226d3b1b-ce75-444f-ac11-5ee3fe3af4b4",
+      "title": "Hot Deals → Bounty Hunter",
+      "description": "• Get daily free/diamond ammo by clicking on the \"+\" sign\n   ($5 deal also decent for pay players)\n• Use Jammers when only purple zombies are left.\n• Click on Wandering Merchants for free items",
+      "remindTomorrow": false,
+      "remindEndOfDay": true,
+      "isAllDay": true,
+      "startTime": "09:00",
+      "endTime": "",
+      "days": [
+        "sunday",
+        "monday",
+        "tuesday",
+        "wednesday",
+        "thursday",
+        "friday",
+        "saturday"
+      ],
+      "includeInExport": {
+        "monday": true
+      },
+      "variations": {},
+      "order": {},
+      "archived": true,
+      "recurrence": {
+        "type": "daily",
+        "daysOfWeek": [
+          "sunday",
+          "monday",
+          "tuesday",
+          "wednesday",
+          "thursday",
+          "friday",
+          "saturday"
+        ],
+        "interval": 1
       }
     }
   ]

@@ -1,4 +1,42 @@
 {
-  "updated": "2025-10-28T17:36:51.391Z",
-  "tips": []
+  "updated": "2025-11-01T16:10:11.774Z",
+  "tips": [
+    {
+      "id": "d7c59f86-06d6-4a11-afda-b7486edbea76",
+      "title": "Heaven's Conductor Plan",
+      "content": "[Lago] Train Scheduled\n\n📜Rules:\n1.) First day starts Sunday (day 1) and last is day is Saturday (day 7)\n2.) In the cycle of 7 days (from Sunday to Saturday) there can’t be repeating conductor.\n3.) If there is a repeating conductor give him the earliest day he qualifies for and the others days give it to the second best but not the same person.\n4.) Check top contributors in VS before Saturday rest.\n5.) Check top donator before Sunday rest.\n6.) Every conductor stats for this week will be taken from last week except for day 7.\n\n🆚Day 1 (Sunday): First place in last weeks VS\n\n🆚 Day 2 (Monday): Second place in last weeks VS\n\n🆚 Day 3 (Tuesday): Third place in last weeks VS\n\n📥Day 4 (Wednesday): Top Donator of last week donations.\n\n🔝Day 5 (Thursday): Best R3 from last week, is up to the R4/R5 criteria.\n\n🔝Day 6 (Friday): Best R4 from last week, is up to the R5 criteria (Try to give it to some different every week).\n\n🏜️Day 7 (Saturday): R5 Day (Typically I made a roulette with all of those so participated in Desert Storm and gave it to the winner)",
+      "lastUsed": null,
+      "adminOnly": false,
+      "canUseInBriefing": true,
+      "unlisted": true,
+      "isHtml": false,
+      "type": "text",
+            "customId": "heavens-conductor-plan"
+
+    },    {
+      "id": "a82fc90f-bca1-43fb-9ff8-c7c83318aabd",
+      "title": "agenda 2025-11-01",
+      "content": "Hello again, ARES!\n\nWe've just wrapped up our second week as a server, and wow! There's a lot to keep track of! Below the agenda, you'll find a quick checklist to help reduce stress and stay on top of things to keep that momentum going.\n\nAs with any big adventure, we've had a few friends move on along the way. For those of us still here: thank you for sticking it out! If you ever decide to take a break or step away, please reach out to a leader first so we can plan ahead. And if you're comfortable with it, consider donating your account to the alliance. Your time and effort have real value and will make a big difference.\n\nSchedule for November 1 - November 2, 2025\n\nToday: Saturday, November 1\n- Wanted Boss: Code 39 - Weak Against Aircraft Heroes\n- Mega Chest - Kill Other's Troops! (UR Tasks/Trucks)\n- Lucky Spin - FINAL DAY\n  • If you haven't unlocked DVA yet, use those tokens you have been collecting and then with diamonds until you unlock DVAs 10 shards!\n\nTomorrow: Sunday, November 2\n- 12:00: VS: Start gathering with extra squads\n- 21:30: Marshal (Alliance Exercise)\n- VS: SAVE Radar Tasks\n- Frontline Breakthrough\n  Complete at least 3 levels for max rewards. (Can be the first level 3 times)\n- Honorable campaign - First day\n- Buy from Alliance, Campaign and VIP stores before reset.\n- Mega Chest - EVERYTHING\n\n\n\n** Checklist **\nalso available at:\nhttps://ares.lw1901.com/#tip-game-checklist\n\nNot everything on here is going to make sense to you. Please ask questions in chat!\n\nEvery 4 Hours:\n • Check build, research, training, and gear queues\n • Read/collect mail\n • Complete Arms Race segment (aim for 18+ chests daily)\n • Use stamina needed to not overflow\n • Collect resources except main 3\n\nEvery 8 Hours:\n • Donate to tech / collect gifts\n • Complete enough radar to not overflow\n • Collect main 3 resources (get Secretary of Interior after 2025-11-14)\n\nDaily:\n • Check VS tasks\n • Hit Code 3x (available at 00:00, 06:00, 12:00, 18:00)\n • Send Secret Tasks & Trade Trucks (04:00–20:00 preferred)\n • Arena Competitions\n • Plunder 5 SHINYs and assist 5 allies\n • Farm bases until orange or red plunder icon\n\nBefore Reset:\n • Collect/buy stamina\n • Check all event icons and daily tasks\n\nSunday:\n • Spend in Alliance, VIP, and Campaign Stores",
+      "lastUsed": null,
+      "adminOnly": false,
+      "canUseInBriefing": true,
+      "unlisted": true,
+      "isHtml": false,
+      "type": "text",
+                  "customId": "agenda-2025-11-01"
+    },
+        {
+      "id": "f3c60017-ff2e-4e8c-86d9-ca26912aa495",
+      "title": "1901 NAP",
+      "content": "# Proposal: Server-Wide NAP Agreement\n\n## Current Phase\n• Encourage all players to create farm accounts and join a dedicated farm alliance.\n• Do not attack tagged bases or resource tiles without provocation.\n• Do not attack in-server trains.\n• In-server tasks and trucks remain fair game.\n• Any alliance-versus-alliance events should be coordinated directly between the participating alliances.\n\n## When Cross-Server Opens\n• In-server tasks and trucks should no longer be plundered.\n\n## Additional Guidelines\n• The actions of a rogue member will not reflect on their alliance unless it becomes a repeated issue that leadership fails to address.\n• Verbal disputes do not count as provocation unless extreme.\n• If you must respond to provocation, please keep screenshots as evidence.\n• Urgent exclusion of an alliance from the NAP requires agreement from at least half of the major alliances (excluding the one in question).\n• Long-term exclusion requires unanimous agreement among the major alliances (excluding the one in question).\n• Scouting is mostly harmless (though the notifications can be annoying), so let's avoid unnecessary conflicts over it.\n\n## Notes\n• NAP is exclusively \"Non Aggression.\" While our major alliances should step up to defend others when possible, they are not obligated to do so, and forming additional alliances for mutual support is encouraged.",
+      "lastUsed": null,
+      "adminOnly": false,
+      "canUseInBriefing": true,
+      "unlisted": false,
+      "isHtml": false,
+      "type": "text",
+                        "customId": "1901-nap"
+    }
+
+  ]
 }
