@@ -171,3 +171,62 @@ export const clearScopedDataForTags = (
 }
 
 export const TAG_DATA_STORAGE_KEYS = DEFAULT_DATA_KEYS
+
+type StoredOverrideSnapshot<T = any> = {
+  overridesById?: Record<string, T>
+  deletedIds?: string[]
+  legacyItems?: T[]
+}
+
+const readPersistedStateForTag = (tag: string, key: string): any | null => {
+  const storage = getClientStorage()
+  if (!storage) return null
+  try {
+    const raw = storage.getItem(buildKeyForTag(tag, key))
+    if (!raw) return null
+    const parsed = JSON.parse(raw)
+    if (parsed && typeof parsed === "object" && "state" in parsed) {
+      return (parsed as any).state
+    }
+    return parsed
+  } catch {
+    return null
+  }
+}
+
+const normalizeOverrideSnapshot = <T = any>(
+  state: any,
+  deletedKey: string,
+  legacyKey: string,
+): StoredOverrideSnapshot<T> | null => {
+  if (!state || typeof state !== "object") return null
+  const overridesById = state.overridesById && typeof state.overridesById === "object" ? state.overridesById : undefined
+  const deletedSource = state[deletedKey]
+  const deletedIds = Array.isArray(deletedSource) ? deletedSource.slice() : undefined
+  const legacySource = state[legacyKey]
+  const legacyItems = Array.isArray(legacySource) ? legacySource.slice() : undefined
+
+  if (!overridesById && !deletedIds && !legacyItems) {
+    return null
+  }
+
+  return {
+    overridesById,
+    deletedIds,
+    legacyItems,
+  }
+}
+
+export const readStoredEventOverrides = (tag: string): StoredOverrideSnapshot | null => {
+  const state = readPersistedStateForTag(tag, "daily-agenda-events")
+  if (!state) return null
+  return normalizeOverrideSnapshot(state, "deletedEventIds", "legacyEvents")
+}
+
+export const readStoredTipOverrides = (tag: string): StoredOverrideSnapshot | null => {
+  const state = readPersistedStateForTag(tag, "daily-agenda-tips")
+  if (!state) return null
+  return normalizeOverrideSnapshot(state, "deletedTipIds", "legacyTips")
+}
+
+export type { StoredOverrideSnapshot }

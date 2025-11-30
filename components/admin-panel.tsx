@@ -11,8 +11,8 @@ import type React from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
-import { useEvents } from "@/hooks/use-events"
-import { useTips } from "@/hooks/use-tips"
+import { useEvents, type Event } from "@/hooks/use-events"
+import { useTips, type Tip } from "@/hooks/use-tips"
 import { Download, Upload, Trash2, AlertTriangle, Key, RefreshCw } from "lucide-react"
 import { useEffect, useState } from "react"
 import { v4 as uuidv4 } from "uuid"
@@ -27,7 +27,13 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
 import { useToast } from "@/hooks/use-toast"
-import { fetchConfig, clearConfigCache, buildChildDeltaFiles } from "@/lib/config-fetcher"
+import {
+  fetchConfig,
+  clearConfigCache,
+  buildChildDeltaFiles,
+  fetchComposedForTag,
+  type TagBundle,
+} from "@/lib/config-fetcher"
 import AWS from "aws-sdk"
 import { Label } from "@/components/ui/label"
 import {
@@ -49,6 +55,56 @@ import {
 import { getActiveTag } from "@/lib/config-tag"
 import JSZip from "jszip"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { buildIdMap, composeWithOverrides, deriveOverridesFromFinal } from "@/lib/override-helpers"
+
+const EVENTS_STORAGE_KEY = "daily-agenda-events"
+const TIPS_STORAGE_KEY = "daily-agenda-tips"
+
+type StoredEventsState = {
+  overridesById?: Record<string, any>
+  deletedEventIds?: string[]
+  legacyEvents?: any[]
+}
+
+type StoredTipsState = {
+  overridesById?: Record<string, any>
+  deletedTipIds?: string[]
+  legacyTips?: any[]
+}
+
+const loadStoredEventsForTag = async (tag: string): Promise<any[]> => {
+  const persisted = readScopedStateForTag<{ state?: StoredEventsState }>(tag, EVENTS_STORAGE_KEY)
+  const stored = persisted?.state
+  if (!stored) return []
+  const bundle = await fetchComposedForTag(tag, false, { includeAncestorLocalOverrides: true })
+  const baseEvents = Array.isArray(bundle?.events) ? bundle.events : []
+  const baseMap = buildIdMap(baseEvents)
+  let overrides = stored.overridesById || {}
+  let deletedIds = Array.isArray(stored.deletedEventIds) ? stored.deletedEventIds : []
+  if (Array.isArray(stored.legacyEvents) && stored.legacyEvents.length > 0) {
+    const derived = deriveOverridesFromFinal(stored.legacyEvents, baseMap)
+    overrides = derived.overridesById
+    deletedIds = derived.deletedIds
+  }
+  return composeWithOverrides(baseEvents, overrides, deletedIds)
+}
+
+const loadStoredTipsForTag = async (tag: string): Promise<any[]> => {
+  const persisted = readScopedStateForTag<{ state?: StoredTipsState }>(tag, TIPS_STORAGE_KEY)
+  const stored = persisted?.state
+  if (!stored) return []
+  const bundle = await fetchComposedForTag(tag, false, { includeAncestorLocalOverrides: true })
+  const baseTips = Array.isArray(bundle?.tips) ? bundle.tips : []
+  const baseMap = buildIdMap(baseTips)
+  let overrides = stored.overridesById || {}
+  let deletedIds = Array.isArray(stored.deletedTipIds) ? stored.deletedTipIds : []
+  if (Array.isArray(stored.legacyTips) && stored.legacyTips.length > 0) {
+    const derived = deriveOverridesFromFinal(stored.legacyTips, baseMap)
+    overrides = derived.overridesById
+    deletedIds = derived.deletedIds
+  }
+  return composeWithOverrides(baseTips, overrides, deletedIds)
+}
 
 /**
  * AdminPanel component
@@ -57,7 +113,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 export function AdminPanel() {
   // Access data stores
   const { events, setEvents } = useEvents()
-  const { tips } = useTips()
+  const { tips, setTips: setTipsStore } = useTips()
   const { toast } = useToast()
 
   // Function to reset regenerate agenda decision
@@ -190,18 +246,6 @@ export function AdminPanel() {
     window.location.href = nextUrl
   }
 
-  const getStoredEventsForTag = (tag: string): any[] => {
-    const persisted = readScopedStateForTag<{ state?: { events?: any[] } }>(tag, "daily-agenda-events")
-    const eventsState = persisted?.state
-    return Array.isArray(eventsState?.events) ? eventsState.events : []
-  }
-
-  const getStoredTipsForTag = (tag: string): any[] => {
-    const persisted = readScopedStateForTag<{ state?: { tips?: any[] } }>(tag, "daily-agenda-tips")
-    const tipsState = persisted?.state
-    return Array.isArray(tipsState?.tips) ? tipsState.tips : []
-  }
-
   const handleExportAllTags = async () => {
     const tagsToExport = listTagsWithStoredData()
     if (tagsToExport.length === 0) {
@@ -225,8 +269,10 @@ export function AdminPanel() {
           continue
         }
 
-        const tagEvents = getStoredEventsForTag(tag)
-        const tagTips = getStoredTipsForTag(tag)
+        const [tagEvents, tagTips] = await Promise.all([
+          loadStoredEventsForTag(tag),
+          loadStoredTipsForTag(tag),
+        ])
         const deltas = await buildChildDeltaFiles(tagEvents, tagTips, tag)
 
         tagFolder.file("conf.json", JSON.stringify(deltas.config, null, 2))
@@ -399,7 +445,7 @@ export function AdminPanel() {
         const importSummary = []
 
         if (data.events) {
-          setEvents(data.events)
+          setEvents(data.events, { fromBase: false })
           importSummary.push(`${data.events.length} events`)
         }
 
@@ -409,7 +455,7 @@ export function AdminPanel() {
             ...tip,
             id: tip.id || uuidv4(),
           }))
-          useTips.setState({ tips: tipsWithIds })
+          setTipsStore(tipsWithIds, { fromBase: false })
           importSummary.push(`${data.tips.length} tips`)
         }
 
@@ -443,34 +489,49 @@ export function AdminPanel() {
       clearConfigCache()
 
       // Clear the data
-      useEvents.setState({ events: [] })
-      useTips.setState({ tips: [] })
-
-      // Reset the initialized flags in the stores to force reinitialization
-      useEvents.setState({ initialized: false })
-      useTips.setState({ initialized: false })
+      useEvents.setState({
+        events: [],
+        filteredEvents: [],
+        baseEvents: [],
+        baseEventsMap: {},
+        overridesById: {},
+        deletedEventIds: [],
+        legacyEvents: null,
+        initialized: false,
+      })
+      useTips.setState({
+        tips: [],
+        filteredTips: [],
+        baseTips: [],
+        baseTipsMap: {},
+        overridesById: {},
+        deletedTipIds: [],
+        legacyTips: null,
+        initialized: false,
+      })
 
       // Try to fetch the config, but use initialConfig as a fallback
-      let config
+      let fetchedConfig: TagBundle | null = null
       try {
-        config = await fetchConfig(true)
+        fetchedConfig = await fetchConfig(true, { includeAncestorLocalOverrides: true })
       } catch (error) {
         console.error("Error fetching config, using initialConfig:", error)
-        config = initialConfig
       }
 
-      // Set the data directly
-      useEvents.setState({
-        events: config.events || initialConfig.events,
-        filteredEvents: config.events || initialConfig.events,
-        initialized: true,
-      })
+      const resolvedTag = fetchedConfig?.tag || getActiveTag()
+      const resolvedEvents: Event[] = Array.isArray(fetchedConfig?.events)
+        ? (fetchedConfig.events as Event[])
+        : (initialConfig.events as Event[])
+      const resolvedTips: Tip[] = Array.isArray(fetchedConfig?.tips)
+        ? (fetchedConfig.tips as Tip[])
+        : (initialConfig.tips as Tip[])
 
-      useTips.setState({
-        tips: config.tips || initialConfig.tips,
-        filteredTips: config.tips || initialConfig.tips,
-        initialized: true,
-      })
+      // Set the data directly
+      useEvents.getState().setEvents(resolvedEvents, { fromBase: true })
+      useEvents.setState({ initialized: true, activeTag: resolvedTag })
+
+      setTipsStore(resolvedTips, { fromBase: true })
+      useTips.setState({ initialized: true, activeTag: resolvedTag })
 
       // Show success toast
       toast({

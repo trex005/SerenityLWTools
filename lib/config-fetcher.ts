@@ -2,6 +2,7 @@
 
 import { getActiveTag, getTagOverride, sanitizeTag, setActiveTag } from "./config-tag"
 import { arrayToIdMap, deepMerge, idMapToArray, computeDelta } from "./config-merge"
+import { readStoredEventOverrides, readStoredTipOverrides, type StoredOverrideSnapshot } from "./scoped-storage"
 
 type DomainMapping = {
   tag?: string
@@ -28,6 +29,10 @@ interface TagBundle {
   }
 }
 
+export type FetchOptions = {
+  includeAncestorLocalOverrides?: boolean
+}
+
 type TagLayer = {
   tag: string
   config: any | null
@@ -41,6 +46,15 @@ interface CacheEntry {
   data: TagBundle
   timestamp: number
 }
+
+type LocalOverrideEntry = {
+  events?: StoredOverrideSnapshot
+  tips?: StoredOverrideSnapshot
+}
+
+type LocalOverridesByTag = Record<string, LocalOverrideEntry>
+
+const cloneJson = <T>(value: T): T => JSON.parse(JSON.stringify(value))
 
 const CONFIG_URL = process.env.CONFIG_URL || ""
 const CACHE_TTL = 5 * 60 * 1000
@@ -235,7 +249,41 @@ const buildAncestry = async (leafTag: string): Promise<string[]> => {
   return chain.reverse()
 }
 
-const composeFromLayers = (layers: TagLayer[]) => {
+const cloneIdMapFromArray = (items: any[]): Record<string, any> => {
+  const map = arrayToIdMap(items || [])
+  for (const id of Object.keys(map)) {
+    map[id] = cloneJson(map[id])
+  }
+  return map
+}
+
+const applyOverrideSnapshotToMap = (
+  current: Record<string, any>,
+  snapshot?: StoredOverrideSnapshot | null,
+): Record<string, any> => {
+  if (!snapshot) return current
+  let working = current
+
+  if (snapshot.legacyItems && snapshot.legacyItems.length > 0) {
+    working = cloneIdMapFromArray(snapshot.legacyItems)
+  }
+
+  if (snapshot.overridesById) {
+    for (const id of Object.keys(snapshot.overridesById)) {
+      working[id] = cloneJson(snapshot.overridesById[id])
+    }
+  }
+
+  if (snapshot.deletedIds) {
+    for (const id of snapshot.deletedIds) {
+      delete working[id]
+    }
+  }
+
+  return working
+}
+
+const composeFromLayers = (layers: TagLayer[], localOverridesByTag?: LocalOverridesByTag | null) => {
   let eventsById: Record<string, any> = {}
   let tipsById: Record<string, any> = {}
 
@@ -257,12 +305,30 @@ const composeFromLayers = (layers: TagLayer[]) => {
       tipsById[id] = merged
     }
     for (const id of layer.tipsTombstones) delete tipsById[id]
+
+    if (localOverridesByTag && localOverridesByTag[layer.tag]) {
+      const overrides = localOverridesByTag[layer.tag]
+      eventsById = applyOverrideSnapshotToMap(eventsById, overrides.events)
+      tipsById = applyOverrideSnapshotToMap(tipsById, overrides.tips)
+    }
   }
 
   return { events: idMapToArray(eventsById), tips: idMapToArray(tipsById) }
 }
 
-const fetchBundleForTag = async (tag: string, force = false): Promise<TagBundle> => {
+const buildLocalOverridesMap = (tags: string[]): LocalOverridesByTag | null => {
+  const overrides: LocalOverridesByTag = {}
+  for (const tag of tags) {
+    const events = readStoredEventOverrides(tag)
+    const tips = readStoredTipOverrides(tag)
+    if (events || tips) {
+      overrides[tag] = { events, tips }
+    }
+  }
+  return Object.keys(overrides).length > 0 ? overrides : null
+}
+
+const fetchBundleForTag = async (tag: string, force = false, options?: FetchOptions): Promise<TagBundle> => {
   const normalizedTag = sanitizeTag(tag) || tag
   if (!normalizedTag) {
     throw new Error("Invalid tag provided")
@@ -289,7 +355,11 @@ const fetchBundleForTag = async (tag: string, force = false): Promise<TagBundle>
     for (const t of ancestry) {
       layers.push(await fetchLayer(t))
     }
-    const composed = composeFromLayers(layers)
+    const includeLocalOverrides = options?.includeAncestorLocalOverrides === true
+    const ancestorTags = ancestry.slice(0, -1)
+    const localOverridesByTag =
+      includeLocalOverrides && ancestorTags.length > 0 ? buildLocalOverridesMap(ancestorTags) : null
+    const composed = composeFromLayers(layers, localOverridesByTag)
     const tagConfig = layers[layers.length - 1]?.config || null
     const data: TagBundle = {
       tag: normalizedTag,
@@ -327,13 +397,13 @@ const emptyBundle = (): TagBundle => ({
   },
 })
 
-export const fetchConfig = async (force = false): Promise<TagBundle> => {
+export const fetchConfig = async (force = false, options?: FetchOptions): Promise<TagBundle> => {
   try {
     const rootConfig = await fetchRootConfig(force)
     const resolvedTag = resolveTag(rootConfig)
     setActiveTag(resolvedTag)
 
-    const data = await fetchBundleForTag(resolvedTag, force)
+    const data = await fetchBundleForTag(resolvedTag, force, options)
     if (data.updated.root === null && typeof rootConfig.updated === "string") {
       data.updated.root = rootConfig.updated
     }
@@ -344,9 +414,13 @@ export const fetchConfig = async (force = false): Promise<TagBundle> => {
   }
 }
 
-export const fetchComposedForTag = async (tag: string, force = false): Promise<TagBundle> => {
+export const fetchComposedForTag = async (
+  tag: string,
+  force = false,
+  options?: FetchOptions,
+): Promise<TagBundle> => {
   try {
-    return await fetchBundleForTag(tag, force)
+    return await fetchBundleForTag(tag, force, options)
   } catch (error) {
     console.error(`Error fetching composed bundle for tag "${tag}":`, error)
     return emptyBundle()

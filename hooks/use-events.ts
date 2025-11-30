@@ -13,6 +13,15 @@ import { fetchParentEvent } from "@/lib/config-diff"
 import { scopedStateStorage } from "@/lib/scoped-storage"
 import { getActiveTag, onTagChange } from "@/lib/config-tag"
 import { matchesSearchTokens, tokenizeSearchTerm } from "@/lib/search-utils"
+import { useAdminStore } from "@/hooks/use-admin-state"
+import {
+  buildIdMap,
+  composeWithOverrides,
+  deriveOverridesFromFinal,
+  upsertOverrideMap,
+  ensureIdAdded,
+  ensureIdRemoved,
+} from "@/lib/override-helpers"
 
 // Define the event interface
 interface Event {
@@ -47,12 +56,17 @@ interface Event {
 interface EventsState {
   activeTag: string
   events: Event[]
+  baseEvents: Event[]
+  baseEventsMap: Record<string, Event>
+  overridesById: Record<string, Event>
+  deletedEventIds: string[]
+  legacyEvents: Event[] | null
   initialized: boolean
   hydrated: boolean
   searchTerm: string
   filteredEvents: Event[]
   setSearchTerm: (term: string) => void
-  setEvents: (events: Event[]) => void
+  setEvents: (events: Event[], options?: { fromBase?: boolean }) => void
   addEvent: (event: Event) => void
   updateEvent: (event: Event) => void
   deleteEvent: (id: string) => void
@@ -89,6 +103,11 @@ export const useEvents = create<EventsState>()(
     (set, get) => ({
       activeTag: getActiveTag(),
       events: [],
+      baseEvents: [],
+      baseEventsMap: {},
+      overridesById: {},
+      deletedEventIds: [],
+      legacyEvents: null,
       initialized: false,
       hydrated: false,
       searchTerm: "",
@@ -102,12 +121,39 @@ export const useEvents = create<EventsState>()(
         }))
       },
 
-      // Set all events
-      setEvents: (events: Event[]) => {
-        set((state) => ({
-          events,
-          filteredEvents: applySearchFilter(events, state.searchTerm),
-        }))
+      // Set all events, optionally treating them as the new base data
+      setEvents: (events: Event[], options?: { fromBase?: boolean }) => {
+        set((state) => {
+          if (options?.fromBase) {
+            const baseMap = buildIdMap(events)
+            let overrides = state.overridesById
+            let deletedIds = state.deletedEventIds
+            if (state.legacyEvents && state.legacyEvents.length > 0) {
+              const reconciled = deriveOverridesFromFinal(state.legacyEvents, baseMap)
+              overrides = reconciled.overridesById
+              deletedIds = reconciled.deletedIds
+            }
+            const composed = composeWithOverrides(events, overrides, deletedIds)
+            return {
+              baseEvents: events,
+              baseEventsMap: baseMap,
+              overridesById: overrides,
+              deletedEventIds: deletedIds,
+              legacyEvents: null,
+              events: composed,
+              filteredEvents: applySearchFilter(composed, state.searchTerm),
+            }
+          }
+
+          const overrideState = deriveOverridesFromFinal(events, state.baseEventsMap)
+          return {
+            events,
+            filteredEvents: applySearchFilter(events, state.searchTerm),
+            overridesById: overrideState.overridesById,
+            deletedEventIds: overrideState.deletedIds,
+            legacyEvents: null,
+          }
+        })
       },
 
       // Add a new event
@@ -115,10 +161,14 @@ export const useEvents = create<EventsState>()(
         set((state) => {
           const newEvents = [...state.events, event]
           const filtered = applySearchFilter(newEvents, state.searchTerm)
+          const overridesById = upsertOverrideMap(state.baseEventsMap, state.overridesById, [event])
+          const deletedEventIds = ensureIdRemoved(state.deletedEventIds, event.id)
 
           return {
             events: newEvents,
             filteredEvents: filtered,
+            overridesById,
+            deletedEventIds,
           }
         })
       },
@@ -128,10 +178,14 @@ export const useEvents = create<EventsState>()(
         set((state) => {
           const updatedEvents = state.events.map((event) => (event.id === updatedEvent.id ? updatedEvent : event))
           const filtered = applySearchFilter(updatedEvents, state.searchTerm)
+          const overridesById = upsertOverrideMap(state.baseEventsMap, state.overridesById, [updatedEvent])
+          const deletedEventIds = ensureIdRemoved(state.deletedEventIds, updatedEvent.id)
 
           return {
             events: updatedEvents,
             filteredEvents: filtered,
+            overridesById,
+            deletedEventIds,
           }
         })
       },
@@ -141,40 +195,59 @@ export const useEvents = create<EventsState>()(
         set((state) => {
           const updatedEvents = state.events.filter((event) => event.id !== id)
           const filtered = applySearchFilter(updatedEvents, state.searchTerm)
+          const overridesById = { ...state.overridesById }
+          delete overridesById[id]
+          const deletedEventIds = state.baseEventsMap[id]
+            ? ensureIdAdded(state.deletedEventIds, id)
+            : ensureIdRemoved(state.deletedEventIds, id)
 
           return {
             events: updatedEvents,
             filteredEvents: filtered,
+            overridesById,
+            deletedEventIds,
           }
         })
       },
 
       // Initialize events from configuration if not already initialized
       initializeFromConfig: async (forceRefresh = false) => {
-        const { initialized, events, activeTag } = get()
-
-        if (!forceRefresh) {
-          const stored = readStoredEvents()
-          if (stored.exists) {
-            get().setEvents(stored.events)
-            set({ initialized: true, activeTag: getActiveTag() })
-            return
-          }
-
-          if (initialized && events.length > 0) {
-            return
-          }
+        const { initialized, baseEvents, activeTag } = get()
+        if (!forceRefresh && initialized && baseEvents.length > 0 && !get().legacyEvents?.length) {
+          return
         }
 
         try {
-          const config = await fetchConfig(forceRefresh)
+          const includeAncestorLocalOverrides = useAdminStore.getState().isAdmin
+          const config = await fetchConfig(forceRefresh, {
+            includeAncestorLocalOverrides,
+          })
+          const resolvedEvents = Array.isArray(config?.events) ? config.events : []
+          const resolvedTag = config?.tag || getActiveTag()
+          const baseMap = buildIdMap(resolvedEvents)
 
-          if (config && config.events && Array.isArray(config.events)) {
-            get().setEvents(config.events)
-            set({ initialized: true, activeTag: config.tag || getActiveTag() })
-          } else {
-            set({ initialized: true, activeTag })
-          }
+          set((state) => {
+            let overrides = state.overridesById
+            let deletedIds = state.deletedEventIds
+            if (state.legacyEvents && state.legacyEvents.length > 0) {
+              const reconciled = deriveOverridesFromFinal(state.legacyEvents, baseMap)
+              overrides = reconciled.overridesById
+              deletedIds = reconciled.deletedIds
+            }
+            const composed = composeWithOverrides(resolvedEvents, overrides, deletedIds)
+
+            return {
+              activeTag: resolvedTag,
+              baseEvents: resolvedEvents,
+              baseEventsMap: baseMap,
+              overridesById: overrides,
+              deletedEventIds: deletedIds,
+              legacyEvents: null,
+              events: composed,
+              filteredEvents: applySearchFilter(composed, state.searchTerm),
+              initialized: true,
+            }
+          })
         } catch (error) {
           console.error("Error initializing events:", error)
           set({ initialized: true, activeTag })
@@ -183,27 +256,15 @@ export const useEvents = create<EventsState>()(
 
       // Add the archive and restore functions to the store
       archiveEvent: (id) => {
-        set((state) => {
-          const updatedEvents = state.events.map((event) => (event.id === id ? { ...event, archived: true } : event))
-          const filtered = applySearchFilter(updatedEvents, state.searchTerm)
-
-          return {
-            events: updatedEvents,
-            filteredEvents: filtered,
-          }
-        })
+        const target = get().events.find((event) => event.id === id)
+        if (!target) return
+        get().updateEvent({ ...target, archived: true })
       },
 
       restoreEvent: (id) => {
-        set((state) => {
-          const updatedEvents = state.events.map((event) => (event.id === id ? { ...event, archived: false } : event))
-          const filtered = applySearchFilter(updatedEvents, state.searchTerm)
-
-          return {
-            events: updatedEvents,
-            filteredEvents: filtered,
-          }
-        })
+        const target = get().events.find((event) => event.id === id)
+        if (!target) return
+        get().updateEvent({ ...target, archived: false })
       },
 
       /**
@@ -218,25 +279,26 @@ export const useEvents = create<EventsState>()(
             orderMap[event.id] = index
           })
 
-          // Update the order property for each event in the original array
+          const changedEvents: Event[] = []
           const newEvents = state.events.map((event) => {
-            if (orderMap[event.id] !== undefined) {
-              return {
-                ...event,
-                order: {
-                  ...event.order,
-                  [day]: orderMap[event.id],
-                },
-              }
-            }
-            return event
+            if (orderMap[event.id] === undefined) return event
+            const nextOrder = { ...(event.order || {}) }
+            nextOrder[day] = orderMap[event.id]
+            const updatedEvent = { ...event, order: nextOrder }
+            changedEvents.push(updatedEvent)
+            return updatedEvent
           })
 
           const filtered = applySearchFilter(newEvents, state.searchTerm)
+          const overridesById = upsertOverrideMap(state.baseEventsMap, state.overridesById, changedEvents)
+          const affectedIds = new Set(changedEvents.map((event) => event.id))
+          const deletedEventIds = state.deletedEventIds.filter((id) => !affectedIds.has(id))
 
           return {
             events: newEvents,
             filteredEvents: filtered,
+            overridesById,
+            deletedEventIds,
           }
         })
       },
@@ -247,34 +309,40 @@ export const useEvents = create<EventsState>()(
        */
       updateDateOverride: (eventId, date, override) => {
         set((state) => {
+          let changedEvent: Event | null = null
           const updatedEvents = state.events.map((event) => {
-            if (event.id === eventId) {
-              const dateOverrides = { ...event.dateOverrides }
+            if (event.id !== eventId) return event
+            const dateOverrides = { ...(event.dateOverrides || {}) }
 
-              if (override === null) {
-                // Remove the override for this date
-                delete dateOverrides[date]
-              } else {
-                // Add or update the override
-                dateOverrides[date] = {
-                  ...dateOverrides[date],
-                  ...override,
-                }
+            if (override === null) {
+              delete dateOverrides[date]
+            } else {
+              dateOverrides[date] = {
+                ...dateOverrides[date],
+                ...override,
               }
+            }
 
-              return {
-                ...event,
-                dateOverrides,
-              }
-              }
-              return event
-            })
+            changedEvent = {
+              ...event,
+              dateOverrides,
+            }
+            return changedEvent
+          })
 
           const filtered = applySearchFilter(updatedEvents, state.searchTerm)
+          const overridesById = changedEvent
+            ? upsertOverrideMap(state.baseEventsMap, state.overridesById, [changedEvent])
+            : state.overridesById
+          const deletedEventIds = changedEvent
+            ? ensureIdRemoved(state.deletedEventIds, changedEvent.id)
+            : state.deletedEventIds
 
           return {
             events: updatedEvents,
             filteredEvents: filtered,
+            overridesById,
+            deletedEventIds,
           }
         })
       },
@@ -285,31 +353,37 @@ export const useEvents = create<EventsState>()(
        */
       updateDateIncludeOverride: (eventId, date: string, include: boolean | null) => {
         set((state) => {
+          let changedEvent: Event | null = null
           const updatedEvents = state.events.map((event) => {
-            if (event.id === eventId) {
-              const dateIncludeOverrides = { ...(event.dateIncludeOverrides || {}) }
+            if (event.id !== eventId) return event
+            const dateIncludeOverrides = { ...(event.dateIncludeOverrides || {}) }
 
-              if (include === null) {
-                // Remove the override for this date
-                delete dateIncludeOverrides[date]
-              } else {
-                // Add or update the override
-                dateIncludeOverrides[date] = include
-              }
+            if (include === null) {
+              delete dateIncludeOverrides[date]
+            } else {
+              dateIncludeOverrides[date] = include
+            }
 
-              return {
-                ...event,
-                dateIncludeOverrides,
-              }
-              }
-              return event
-            })
+            changedEvent = {
+              ...event,
+              dateIncludeOverrides,
+            }
+            return changedEvent
+          })
 
           const filtered = applySearchFilter(updatedEvents, state.searchTerm)
+          const overridesById = changedEvent
+            ? upsertOverrideMap(state.baseEventsMap, state.overridesById, [changedEvent])
+            : state.overridesById
+          const deletedEventIds = changedEvent
+            ? ensureIdRemoved(state.deletedEventIds, changedEvent.id)
+            : state.deletedEventIds
 
           return {
             events: updatedEvents,
             filteredEvents: filtered,
+            overridesById,
+            deletedEventIds,
           }
         })
       },
@@ -326,12 +400,17 @@ export const useEvents = create<EventsState>()(
           }
 
           set((state) => {
-            const updatedEvents = state.events.map((event) => (event.id === eventId ? parent : event))
+            const parentEvent = parent as Event
+            const updatedEvents = state.events.map((event) => (event.id === eventId ? parentEvent : event))
             const filtered = applySearchFilter(updatedEvents, state.searchTerm)
+            const overridesById = upsertOverrideMap(state.baseEventsMap, state.overridesById, [parentEvent])
+            const deletedEventIds = ensureIdRemoved(state.deletedEventIds, eventId)
 
             return {
               events: updatedEvents,
               filteredEvents: filtered,
+              overridesById,
+              deletedEventIds,
             }
           })
 
@@ -361,6 +440,11 @@ export const useEvents = create<EventsState>()(
         set({
           events: [],
           filteredEvents: [],
+          overridesById: {},
+          deletedEventIds: [],
+          baseEvents: [],
+          baseEventsMap: {},
+          legacyEvents: null,
           initialized: true,
         })
       },
@@ -372,6 +456,11 @@ export const useEvents = create<EventsState>()(
         set({
           events: [],
           filteredEvents: [],
+          overridesById: {},
+          deletedEventIds: [],
+          baseEvents: [],
+          baseEventsMap: {},
+          legacyEvents: null,
           initialized: false,
         })
         setTimeout(() => {
@@ -382,6 +471,24 @@ export const useEvents = create<EventsState>()(
     {
       name: "daily-agenda-events",
       storage: scopedStateStorage,
+      partialize: (state) => ({
+        overridesById: state.overridesById,
+        deletedEventIds: state.deletedEventIds,
+        legacyEvents: state.legacyEvents,
+      }),
+      version: 1,
+      migrate: (persisted: any, version) => {
+        if (!persisted) return { overridesById: {}, deletedEventIds: [], legacyEvents: null }
+        if (version === 0) {
+          const legacyEvents = Array.isArray(persisted?.events) ? persisted.events : null
+          return {
+            overridesById: persisted?.overridesById || {},
+            deletedEventIds: persisted?.deletedEventIds || [],
+            legacyEvents,
+          }
+        }
+        return persisted
+      },
       // Disable automatic rehydration initialization
       onRehydrateStorage: () => () => {
         // Mark store as hydrated after rehydration completes
@@ -392,23 +499,19 @@ export const useEvents = create<EventsState>()(
 )
 
 onTagChange((nextTag) => {
-  const stored = readStoredEvents()
+  useEvents.setState({
+    activeTag: nextTag,
+    events: [],
+    filteredEvents: [],
+    baseEvents: [],
+    baseEventsMap: {},
+    overridesById: {},
+    deletedEventIds: [],
+    legacyEvents: null,
+    initialized: false,
+  })
 
-  if (stored.exists) {
-    useEvents.setState((state) => ({
-      activeTag: nextTag,
-      events: stored.events,
-      filteredEvents: applySearchFilter(stored.events, state.searchTerm),
-      initialized: true,
-    }))
-  } else {
-    useEvents.setState({
-      activeTag: nextTag,
-      events: [],
-      filteredEvents: [],
-      initialized: false,
-    })
-
+  const scheduleInit = () => {
     setTimeout(() => {
       useEvents
         .getState()
@@ -418,18 +521,11 @@ onTagChange((nextTag) => {
         })
     }, 0)
   }
-})
 
-const EVENTS_STORAGE_KEY = "daily-agenda-events"
-
-const readStoredEvents = (): { exists: boolean; events: Event[] } => {
-  try {
-    const raw = scopedStateStorage.getItem(EVENTS_STORAGE_KEY)
-    if (!raw) return { exists: false, events: [] }
-    const parsed = JSON.parse(raw)
-    const stored = Array.isArray(parsed?.state?.events) ? parsed.state.events : []
-    return { exists: true, events: stored }
-  } catch {
-    return { exists: false, events: [] }
+  const hydrator = useEvents.persist?.rehydrate?.()
+  if (hydrator && typeof (hydrator as Promise<void>).then === "function") {
+    ;(hydrator as Promise<void>).finally(scheduleInit)
+  } else {
+    scheduleInit()
   }
-}
+})

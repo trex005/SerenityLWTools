@@ -12,6 +12,15 @@ import { fetchConfig } from "@/lib/config-fetcher"
 import { scopedStateStorage } from "@/lib/scoped-storage"
 import { getActiveTag, onTagChange } from "@/lib/config-tag"
 import { matchesSearchTokens, tokenizeSearchTerm } from "@/lib/search-utils"
+import { useAdminStore } from "@/hooks/use-admin-state"
+import {
+  buildIdMap,
+  composeWithOverrides,
+  deriveOverridesFromFinal,
+  upsertOverrideMap,
+  ensureIdAdded,
+  ensureIdRemoved,
+} from "@/lib/override-helpers"
 
 // Define the tip interface
 export interface Tip {
@@ -41,30 +50,21 @@ const applyTipSearch = (tips: Tip[], term: string): Tip[] => {
   return tips.filter((tip) => matchesSearchTokens(tokens, [tip.title, tip.content, tip.customId]))
 }
 
-const TIPS_STORAGE_KEY = "daily-agenda-tips"
-
-const readStoredTips = (): { exists: boolean; tips: Tip[] } => {
-  try {
-    const raw = scopedStateStorage.getItem(TIPS_STORAGE_KEY)
-    if (!raw) return { exists: false, tips: [] }
-    const parsed = JSON.parse(raw)
-    const stored = Array.isArray(parsed?.state?.tips) ? parsed.state.tips : []
-    return { exists: true, tips: stored }
-  } catch {
-    return { exists: false, tips: [] }
-  }
-}
-
 // Define the tips store state
 interface TipsState {
   activeTag: string
   tips: Tip[]
+  baseTips: Tip[]
+  baseTipsMap: Record<string, Tip>
+  overridesById: Record<string, Tip>
+  deletedTipIds: string[]
+  legacyTips: Tip[] | null
   initialized: boolean
   hydrated: boolean
   searchTerm: string
   filteredTips: Tip[]
   setSearchTerm: (term: string) => void
-  setTips: (tips: Tip[]) => void
+  setTips: (tips: Tip[], options?: { fromBase?: boolean }) => void
   addTip: (tip: Tip) => void
   updateTip: (tip: Tip) => void
   deleteTip: (id: string) => void
@@ -83,6 +83,11 @@ export const useTips = create<TipsState>()(
     (set, get) => ({
       activeTag: getActiveTag(),
       tips: [],
+      baseTips: [],
+      baseTipsMap: {},
+      overridesById: {},
+      deletedTipIds: [],
+      legacyTips: null,
       initialized: false,
       hydrated: false,
       searchTerm: "",
@@ -97,11 +102,38 @@ export const useTips = create<TipsState>()(
       },
 
       // Set all tips
-      setTips: (tips: Tip[]) => {
-        set((state) => ({
-          tips,
-          filteredTips: applyTipSearch(tips, state.searchTerm),
-        }))
+      setTips: (tips: Tip[], options?: { fromBase?: boolean }) => {
+        set((state) => {
+          if (options?.fromBase) {
+            const baseMap = buildIdMap(tips)
+            let overrides = state.overridesById
+            let deletedIds = state.deletedTipIds
+            if (state.legacyTips && state.legacyTips.length > 0) {
+              const reconciled = deriveOverridesFromFinal(state.legacyTips, baseMap)
+              overrides = reconciled.overridesById
+              deletedIds = reconciled.deletedIds
+            }
+            const composed = composeWithOverrides(tips, overrides, deletedIds)
+            return {
+              baseTips: tips,
+              baseTipsMap: baseMap,
+              overridesById: overrides,
+              deletedTipIds: deletedIds,
+              legacyTips: null,
+              tips: composed,
+              filteredTips: applyTipSearch(composed, state.searchTerm),
+            }
+          }
+
+          const overrideState = deriveOverridesFromFinal(tips, state.baseTipsMap)
+          return {
+            tips,
+            filteredTips: applyTipSearch(tips, state.searchTerm),
+            overridesById: overrideState.overridesById,
+            deletedTipIds: overrideState.deletedIds,
+            legacyTips: null,
+          }
+        })
       },
 
       // Add a new tip
@@ -109,10 +141,14 @@ export const useTips = create<TipsState>()(
         set((state) => {
           const newTips = [...state.tips, tip]
           const filtered = applyTipSearch(newTips, state.searchTerm)
+          const overridesById = upsertOverrideMap(state.baseTipsMap, state.overridesById, [tip])
+          const deletedTipIds = ensureIdRemoved(state.deletedTipIds, tip.id)
 
           return {
             tips: newTips,
             filteredTips: filtered,
+            overridesById,
+            deletedTipIds,
           }
         })
       },
@@ -122,10 +158,14 @@ export const useTips = create<TipsState>()(
         set((state) => {
           const updatedTips = state.tips.map((tip) => (tip.id === updatedTip.id ? updatedTip : tip))
           const filtered = applyTipSearch(updatedTips, state.searchTerm)
+          const overridesById = upsertOverrideMap(state.baseTipsMap, state.overridesById, [updatedTip])
+          const deletedTipIds = ensureIdRemoved(state.deletedTipIds, updatedTip.id)
 
           return {
             tips: updatedTips,
             filteredTips: filtered,
+            overridesById,
+            deletedTipIds,
           }
         })
       },
@@ -135,42 +175,61 @@ export const useTips = create<TipsState>()(
         set((state) => {
           const updatedTips = state.tips.filter((tip) => tip.id !== id)
           const filtered = applyTipSearch(updatedTips, state.searchTerm)
+          const overridesById = { ...state.overridesById }
+          delete overridesById[id]
+          const deletedTipIds = state.baseTipsMap[id]
+            ? ensureIdAdded(state.deletedTipIds, id)
+            : ensureIdRemoved(state.deletedTipIds, id)
 
           return {
             tips: updatedTips,
             filteredTips: filtered,
+            overridesById,
+            deletedTipIds,
           }
         })
       },
 
       // Initialize tips from configuration if not already initialized
       initializeFromConfig: async (forceRefresh = false) => {
-        const { initialized, tips, activeTag } = get()
-
-        if (!forceRefresh) {
-          const stored = readStoredTips()
-          if (stored.exists) {
-            get().setTips(stored.tips)
-            set({ initialized: true, activeTag: getActiveTag() })
-            return
-          }
-
-          if (initialized && tips.length > 0) {
-            return
-          }
+        const { initialized, baseTips, activeTag } = get()
+        if (!forceRefresh && initialized && baseTips.length > 0 && !get().legacyTips?.length) {
+          return
         }
 
         try {
+          const includeAncestorLocalOverrides = useAdminStore.getState().isAdmin
           // Fetch configuration with forceRefresh flag
-          const config = await fetchConfig(forceRefresh)
+          const config = await fetchConfig(forceRefresh, {
+            includeAncestorLocalOverrides,
+          })
 
-          if (config && config.tips && Array.isArray(config.tips)) {
-            get().setTips(config.tips)
-            set({ initialized: true, activeTag: config.tag || getActiveTag() })
-          } else {
-            // Mark as initialized even if no tips were found
-            set({ initialized: true, activeTag: config?.tag || activeTag })
-          }
+          const resolvedTips = Array.isArray(config?.tips) ? config.tips : []
+          const resolvedTag = config?.tag || getActiveTag()
+          const baseMap = buildIdMap(resolvedTips)
+
+          set((state) => {
+            let overrides = state.overridesById
+            let deletedIds = state.deletedTipIds
+            if (state.legacyTips && state.legacyTips.length > 0) {
+              const reconciled = deriveOverridesFromFinal(state.legacyTips, baseMap)
+              overrides = reconciled.overridesById
+              deletedIds = reconciled.deletedIds
+            }
+
+            const composed = composeWithOverrides(resolvedTips, overrides, deletedIds)
+            return {
+              activeTag: resolvedTag,
+              baseTips: resolvedTips,
+              baseTipsMap: baseMap,
+              overridesById: overrides,
+              deletedTipIds: deletedIds,
+              legacyTips: null,
+              tips: composed,
+              filteredTips: applyTipSearch(composed, state.searchTerm),
+              initialized: true,
+            }
+          })
         } catch (error) {
           console.error("Error initializing tips:", error)
           // Mark as initialized to prevent repeated attempts
@@ -180,63 +239,27 @@ export const useTips = create<TipsState>()(
 
       // Mark a tip as used
       markTipAsUsed: (id: string) => {
-        set((state) => {
-          const updatedTips = state.tips.map((tip) => {
-            if (tip.id === id) {
-              return {
-                ...tip,
-                lastUsed: new Date().toISOString(),
-                useCount: (tip.useCount || 0) + 1,
-              }
-            }
-            return tip
-          })
-
-          const filtered = applyTipSearch(updatedTips, state.searchTerm)
-
-          return {
-            tips: updatedTips,
-            filteredTips: filtered,
-          }
+        const target = get().tips.find((tip) => tip.id === id)
+        if (!target) return
+        get().updateTip({
+          ...target,
+          lastUsed: new Date().toISOString(),
+          useCount: (target.useCount || 0) + 1,
         })
       },
 
       // Archive a tip
       archiveTip: (id: string) => {
-        set((state) => {
-          const updatedTips = state.tips.map((tip) => {
-            if (tip.id === id) {
-              return { ...tip, archived: true }
-            }
-            return tip
-          })
-
-          const filtered = applyTipSearch(updatedTips, state.searchTerm)
-
-          return {
-            tips: updatedTips,
-            filteredTips: filtered,
-          }
-        })
+        const target = get().tips.find((tip) => tip.id === id)
+        if (!target) return
+        get().updateTip({ ...target, archived: true })
       },
 
       // Restore a tip from archive
       restoreTip: (id: string) => {
-        set((state) => {
-          const updatedTips = state.tips.map((tip) => {
-            if (tip.id === id) {
-              return { ...tip, archived: false }
-            }
-            return tip
-          })
-
-          const filtered = applyTipSearch(updatedTips, state.searchTerm)
-
-          return {
-            tips: updatedTips,
-            filteredTips: filtered,
-          }
-        })
+        const target = get().tips.find((tip) => tip.id === id)
+        if (!target) return
+        get().updateTip({ ...target, archived: false })
       },
 
       // Clear all tips
@@ -252,6 +275,11 @@ export const useTips = create<TipsState>()(
         set({
           tips: [],
           filteredTips: [],
+          overridesById: {},
+          deletedTipIds: [],
+          baseTips: [],
+          baseTipsMap: {},
+          legacyTips: null,
           initialized: true,
         })
       },
@@ -261,6 +289,11 @@ export const useTips = create<TipsState>()(
         set({
           tips: [],
           filteredTips: [],
+          overridesById: {},
+          deletedTipIds: [],
+          baseTips: [],
+          baseTipsMap: {},
+          legacyTips: null,
           initialized: false,
         })
         setTimeout(() => {
@@ -271,6 +304,24 @@ export const useTips = create<TipsState>()(
     {
       name: "daily-agenda-tips",
       storage: scopedStateStorage,
+      partialize: (state) => ({
+        overridesById: state.overridesById,
+        deletedTipIds: state.deletedTipIds,
+        legacyTips: state.legacyTips,
+      }),
+      version: 1,
+      migrate: (persisted: any, version) => {
+        if (!persisted) return { overridesById: {}, deletedTipIds: [], legacyTips: null }
+        if (version === 0) {
+          const legacyTips = Array.isArray(persisted?.tips) ? persisted.tips : null
+          return {
+            overridesById: persisted?.overridesById || {},
+            deletedTipIds: persisted?.deletedTipIds || [],
+            legacyTips,
+          }
+        }
+        return persisted
+      },
       // Disable automatic rehydration initialization
       onRehydrateStorage: () => () => {
         useTips.setState({ hydrated: true })
@@ -280,23 +331,19 @@ export const useTips = create<TipsState>()(
 )
 
 onTagChange((nextTag) => {
-  const stored = readStoredTips()
+  useTips.setState({
+    activeTag: nextTag,
+    tips: [],
+    filteredTips: [],
+    baseTips: [],
+    baseTipsMap: {},
+    overridesById: {},
+    deletedTipIds: [],
+    legacyTips: null,
+    initialized: false,
+  })
 
-  if (stored.exists) {
-    useTips.setState((state) => ({
-      activeTag: nextTag,
-      tips: stored.tips,
-      filteredTips: applyTipSearch(stored.tips, state.searchTerm),
-      initialized: true,
-    }))
-  } else {
-    useTips.setState({
-      activeTag: nextTag,
-      tips: [],
-      filteredTips: [],
-      initialized: false,
-    })
-
+  const scheduleInit = () => {
     setTimeout(() => {
       useTips
         .getState()
@@ -305,5 +352,12 @@ onTagChange((nextTag) => {
           console.error("Failed to load tips for tag", nextTag, error)
         })
     }, 0)
+  }
+
+  const hydrator = useTips.persist?.rehydrate?.()
+  if (hydrator && typeof (hydrator as Promise<void>).then === "function") {
+    ;(hydrator as Promise<void>).finally(scheduleInit)
+  } else {
+    scheduleInit()
   }
 })

@@ -601,7 +601,6 @@ It should include:
 • An export button that will export all tags' config as a zip (each within a folder with it's tags name)
 • The ability to clear the local storage for all events/tips across all tags
 -----------
-Pending:
 
 ** Rebuild Inheritance **
 It seems somewhere along the way, the inheretence structure for tips/events was broken.

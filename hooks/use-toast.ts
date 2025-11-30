@@ -9,6 +9,8 @@ type ToastActionProps = React.ComponentPropsWithoutRef<typeof Toast> & {
   altText?: string
   variant?: ToastVariants
   action?: ToastActionElement
+  title?: React.ReactNode
+  description?: React.ReactNode
 }
 
 export const useToast = () => {
