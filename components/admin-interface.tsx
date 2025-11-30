@@ -6,12 +6,10 @@ import { AddEventButton } from "@/components/add-event-button"
 import { AdminPanel } from "@/components/admin-panel"
 import { TipsManagement } from "@/components/tips-management"
 import { useState, useEffect, useMemo } from "react"
-import { StorageInitializer } from "@/components/storage-initializer"
 import { EventsView } from "@/components/events-view"
 import { DateRangeSelector } from "@/components/date-range-selector"
-import { addDays, startOfDay, endOfDay, format } from "date-fns"
 import { getDayOfWeek } from "@/lib/recurrence-utils"
-import { getAppTimezoneDate } from "@/lib/date-utils"
+import { addAppDays, formatInAppTimezone, getAppToday, getAppTodayKey, getEndOfAppDay } from "@/lib/date-utils"
 import { EmailGenerator } from "@/components/email-generator"
 import { Reminders } from "@/components/reminders"
 import { useAdminState } from "@/hooks/use-admin-state"
@@ -54,15 +52,13 @@ export function AdminInterface() {
 
   // State for date range - now defaults to next 3 days for briefing in UTC-2
   const [dateRange, setDateRange] = useState<[Date | undefined, Date | undefined]>(() => {
-    const utcMinus2 = getAppTimezoneDate()
-    const today = startOfDay(utcMinus2)
-    return [today, endOfDay(addDays(today, 2))] // Default to next 3 days from UTC-2 today
+    const today = getAppToday()
+    return [today, getEndOfAppDay(addAppDays(today, 2))] // Default to next 3 days from UTC-2 today
   })
 
   // State for active day - set to UTC-2 today
   const [activeDay, setActiveDay] = useState<string>(() => {
-    const utcMinus2 = getAppTimezoneDate()
-    return format(utcMinus2, "yyyy-MM-dd")
+    return getAppTodayKey()
   })
 
   const dayTabs = useMemo(() => {
@@ -75,14 +71,13 @@ export function AdminInterface() {
   // Update active day when date range changes
   useEffect(() => {
     if (dateRange[0]) {
-      setActiveDay(format(dateRange[0], "yyyy-MM-dd"))
+      setActiveDay(formatInAppTimezone(dateRange[0], "yyyy-MM-dd"))
     }
   }, [dateRange])
 
   return (
     <OverrideDiffProvider>
       <div className="w-full">
-        <StorageInitializer />
         <div className="w-full">
           {/* Main navigation tabs */}
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
@@ -122,8 +117,11 @@ export function AdminInterface() {
                       </SelectTrigger>
                       <SelectContent>
                         {dayTabs.map(({ day, date }) => (
-                          <SelectItem key={format(date, "yyyy-MM-dd")} value={format(date, "yyyy-MM-dd")}>
-                            {`${day.substring(0, 3)} ${format(date, "M/d")}`}
+                          <SelectItem
+                            key={formatInAppTimezone(date, "yyyy-MM-dd")}
+                            value={formatInAppTimezone(date, "yyyy-MM-dd")}
+                          >
+                            {`${day.substring(0, 3)} ${formatInAppTimezone(date, "M/d")}`}
                           </SelectItem>
                         ))}
                       </SelectContent>
@@ -134,20 +132,26 @@ export function AdminInterface() {
                 <TabsList className="hidden md:flex w-full justify-start mb-4 overflow-x-auto">
                   {dayTabs.map(({ day, date }) => (
                     <TabsTrigger
-                      key={format(date, "yyyy-MM-dd")}
-                      value={format(date, "yyyy-MM-dd")}
+                      key={formatInAppTimezone(date, "yyyy-MM-dd")}
+                      value={formatInAppTimezone(date, "yyyy-MM-dd")}
                       className="capitalize"
                     >
-                      {day.substring(0, 3)} {format(date, "M/d")}
+                      {day.substring(0, 3)} {formatInAppTimezone(date, "M/d")}
                     </TabsTrigger>
                   ))}
                 </TabsList>
 
                 {/* Content for each day tab */}
                 {dayTabs.map(({ day, date }) => (
-                  <TabsContent key={format(date, "yyyy-MM-dd")} value={format(date, "yyyy-MM-dd")} className="mt-0">
+                  <TabsContent
+                    key={formatInAppTimezone(date, "yyyy-MM-dd")}
+                    value={formatInAppTimezone(date, "yyyy-MM-dd")}
+                    className="mt-0"
+                  >
                     <div className="flex justify-between items-center mb-4">
-                      <h3 className="text-lg font-medium capitalize">{format(date, "EEEE, MMMM d, yyyy")}</h3>
+                      <h3 className="text-lg font-medium capitalize">
+                        {formatInAppTimezone(date, "EEEE, MMMM d, yyyy")}
+                      </h3>
                       <AddEventButton day={day} date={date} />
                     </div>
                     <DayAgenda
@@ -205,7 +209,7 @@ function generateDayTabs(startDate: Date, endDate: Date) {
       day,
       date: new Date(currentDate),
     })
-    currentDate = addDays(currentDate, 1)
+    currentDate = addAppDays(currentDate, 1)
   }
 
   return days

@@ -24,14 +24,17 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { Switch } from "@/components/ui/switch"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { useState, useEffect, useMemo } from "react"
+import { useState, useEffect, useMemo, useRef, useCallback } from "react"
 import { useEvents } from "@/hooks/use-events"
 import { v4 as uuidv4 } from "uuid"
 // Add import for RecurrenceEditor at the top of the file
 import { RecurrenceEditor } from "@/components/recurrence-editor"
-import { format } from "date-fns"
+import { formatInAppTimezone } from "@/lib/date-utils"
 import { useOverrideDiff } from "@/hooks/use-override-diff"
 import { useToast } from "@/hooks/use-toast"
+import { listAdminEnabledTags } from "@/lib/scoped-storage"
+import { loadEventForTag, saveEventForTag } from "@/lib/tag-overrides"
+import { clearConfigCache } from "@/lib/config-fetcher"
 
 // Add this at the top of the file, right after the imports
 // Only prevent default for specific events, don't stop propagation
@@ -50,7 +53,7 @@ interface EventDialogProps {
  */
 export function EventDialog({ event, open, onOpenChange, initialDay = "monday", initialDate }: EventDialogProps) {
   // Access event store functions
-  const { addEvent, updateEvent, resetEventOverrides } = useEvents()
+  const { addEvent, updateEvent, resetEventOverrides, activeTag } = useEvents()
   const { diffIndex } = useOverrideDiff()
   const { toast } = useToast()
 
@@ -76,11 +79,106 @@ export function EventDialog({ event, open, onOpenChange, initialDay = "monday", 
   const renderOverridePill = (keys: string | string[]) => {
     const list = Array.isArray(keys) ? keys : [keys]
     return list.some((key) => overrideKeySet.has(key)) ? (
-      <span className="rounded bg-amber-100 px-2 py-0.5 text-[10px] font-semibold uppercase text-amber-800">
-        Override
+      <span className="rounded border border-border bg-muted/60 px-2 py-0.5 text-[10px] font-semibold uppercase text-muted-foreground dark:bg-muted/40">
+        Overridden
       </span>
     ) : null
   }
+
+  const initializeFormFromEvent = useCallback(
+    (sourceEvent: any) => {
+      if (!sourceEvent) return
+      let includeInExport: Record<string, boolean> = {}
+
+      if (typeof sourceEvent.includeInExport === "object" && sourceEvent.includeInExport !== null) {
+        includeInExport = { ...sourceEvent.includeInExport }
+      } else {
+        const boolValue = !!sourceEvent.includeInExport
+        sourceEvent.days.forEach((d: string) => {
+          includeInExport[d] = boolValue
+        })
+      }
+
+      const hasEndTimeValue = !!(sourceEvent.endTime && sourceEvent.endTime.trim() !== "")
+      setIncludeEndTime(hasEndTimeValue)
+
+      const endTimeVariations: Record<string, boolean> = {}
+      days.forEach((day) => {
+        if (sourceEvent.variations && sourceEvent.variations[day]) {
+          endTimeVariations[day] =
+            !!(sourceEvent.variations[day].endTime && sourceEvent.variations[day].endTime.trim() !== "")
+        } else {
+          endTimeVariations[day] = hasEndTimeValue
+        }
+      })
+      setIncludeEndTimeVariation(endTimeVariations)
+
+      const variationFlags: Record<string, boolean> = {}
+      days.forEach((day) => {
+        variationFlags[day] = !!(sourceEvent.variations && sourceEvent.variations[day])
+      })
+      setHasVariation(variationFlags)
+
+      setIncludeInExportByDefault(Object.values(includeInExport).length > 0 ? Object.values(includeInExport)[0] : true)
+
+      const recurrence = sourceEvent.recurrence || {
+        type: "daily",
+        daysOfWeek: [...sourceEvent.days],
+        interval: 1,
+      }
+
+      if (!recurrence.daysOfWeek || recurrence.daysOfWeek.length === 0) {
+        recurrence.daysOfWeek = [...sourceEvent.days]
+      }
+
+      setFormData({
+        ...sourceEvent,
+        includeInBriefing: sourceEvent.includeInBriefing ?? true,
+        includeOnWebsite: sourceEvent.includeOnWebsite ?? true,
+        includeInExport,
+        endTime: hasEndTimeValue ? sourceEvent.endTime : "",
+        archived: sourceEvent.archived ?? false,
+        recurrence,
+      })
+    },
+    [days],
+  )
+
+  const initializeFormForNewEvent = useCallback(() => {
+    const initialIncludeInExport: Record<string, boolean> = {}
+    initialIncludeInExport[initialDay] = true
+
+    const startDate = initialDate ? formatInAppTimezone(initialDate, "yyyy-MM-dd'T'HH:mm:ss.SSSxxx") : undefined
+
+    setFormData({
+      id: uuidv4(),
+      title: "",
+      description: "",
+      remindTomorrow: false,
+      remindEndOfDay: false,
+      includeInBriefing: true,
+      includeOnWebsite: true,
+      isAllDay: true,
+      startTime: "09:00",
+      endTime: "",
+      days: [initialDay],
+      includeInExport: initialIncludeInExport,
+      variations: {},
+      order: {},
+      archived: false,
+      recurrence: {
+        type: "daily",
+        daysOfWeek: ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"],
+        interval: 1,
+        startDate,
+        endDate: undefined,
+      },
+    })
+    setIncludeInExportByDefault(true)
+    setIncludeEndTime(false)
+    setIncludeEndTimeVariation({})
+    setHasVariation({})
+  }, [initialDay, initialDate])
 
   // State for form data
   const [formData, setFormData] = useState({
@@ -109,6 +207,10 @@ export function EventDialog({ event, open, onOpenChange, initialDay = "monday", 
   const [includeEndTime, setIncludeEndTime] = useState(false)
   const [includeEndTimeVariation, setIncludeEndTimeVariation] = useState<Record<string, boolean>>({})
   const [isResetting, setIsResetting] = useState(false)
+  const [availableAdminTags, setAvailableAdminTags] = useState<string[]>([])
+  const [selectedTag, setSelectedTag] = useState(activeTag)
+  const [isMissingInSelectedTag, setIsMissingInSelectedTag] = useState(false)
+  const tagLoadRef = useRef<string>(activeTag)
 
   // Flag to prevent infinite loops
   const [isInitialized, setIsInitialized] = useState(false)
@@ -116,133 +218,72 @@ export function EventDialog({ event, open, onOpenChange, initialDay = "monday", 
   // Modify the initialization of form data to initialize recurrence
   useEffect(() => {
     if (!open) {
-      // Reset initialization flag when dialog closes
       setIsInitialized(false)
       return
     }
 
-    // Only initialize once per dialog open
     if (isInitialized) return
 
-    // EventDialog opened
-
     if (isEditing && event) {
-      // Editing an existing event
-      // Initializing form with existing event
-
-      // Convert the includeInExport from the old format (object) to the new format (object)
-      let includeInExport: Record<string, boolean> = {}
-
-      if (typeof event.includeInExport === "object" && event.includeInExport !== null) {
-        // If it's an object (old format), use it directly
-        includeInExport = { ...event.includeInExport }
-      } else {
-        // If it's a boolean, create an object with the boolean value for all days
-        const boolValue = !!event.includeInExport
-        event.days.forEach((d: string) => {
-          includeInExport[d] = boolValue
-        })
-      }
-
-      // Check if event has an end time
-      const hasEndTime = event.endTime && event.endTime.trim() !== ""
-      setIncludeEndTime(hasEndTime)
-
-      // Initialize includeEndTimeVariation state based on existing variations
-      const endTimeVariations: Record<string, boolean> = {}
-      days.forEach((day) => {
-        if (event.variations && event.variations[day]) {
-          endTimeVariations[day] = !!(event.variations[day].endTime && event.variations[day].endTime.trim() !== "")
-        } else {
-          endTimeVariations[day] = hasEndTime
-        }
-      })
-      setIncludeEndTimeVariation(endTimeVariations)
-
-      // Initialize hasVariation state based on existing variations
-      const variations: Record<string, boolean> = {}
-      days.forEach((day) => {
-        variations[day] = !!(event.variations && event.variations[day])
-      })
-      setHasVariation(variations)
-
-      // Set the checkbox state based on the actual value
-      // Use the first day's value or default to true
-      setIncludeInExportByDefault(Object.values(includeInExport).length > 0 ? Object.values(includeInExport)[0] : true)
-
-      // Ensure the event has a valid recurrence with daysOfWeek
-      const recurrence = event.recurrence || {
-        type: "daily", // Change default from "none" to "daily"
-        daysOfWeek: [...event.days],
-        interval: 1,
-      }
-
-      // Add this code to default to "weekly" if multiple days are assigned
-      // If the event has multiple days assigned, default to "weekly" instead of "daily"
-      // Just ensure recurrence has daysOfWeek, but don't change the type
-      if (!recurrence.daysOfWeek || recurrence.daysOfWeek.length === 0) {
-        recurrence.daysOfWeek = [...event.days]
-      }
-
-      if (!recurrence.daysOfWeek || recurrence.daysOfWeek.length === 0) {
-        recurrence.daysOfWeek = [...event.days]
-      }
-
-      // Set form data last to avoid triggering re-renders
-      setFormData({
-        ...event,
-        includeInBriefing: event.includeInBriefing ?? true,
-        includeOnWebsite: event.includeOnWebsite ?? true,
-        includeInExport,
-        // If no end time, set to empty string
-        endTime: hasEndTime ? event.endTime : "",
-        // Ensure archived property is set
-        archived: event.archived ?? false,
-        // Ensure recurrence is properly set
-        recurrence: recurrence,
-      })
+      initializeFormFromEvent(event)
     } else {
-      // Creating a new event
-      // Initializing form for new event
-      // For new events, initialize with the initial day selected
-      const initialIncludeInExport: Record<string, boolean> = {}
-      initialIncludeInExport[initialDay] = true
-
-      // If we have an initial date, use it for the recurrence start date
-      const startDate = initialDate ? format(initialDate, "yyyy-MM-dd'T'HH:mm:ss.SSSxxx") : undefined
-
-      setFormData({
-        id: uuidv4(),
-        title: "",
-        description: "",
-        remindTomorrow: false,
-        remindEndOfDay: false,
-        includeInBriefing: true,
-        includeOnWebsite: true,
-        isAllDay: true,
-        startTime: "09:00",
-        endTime: "",
-        days: [initialDay], // Keep for backward compatibility
-        includeInExport: initialIncludeInExport,
-        variations: {},
-        order: {},
-        archived: false,
-        recurrence: {
-          type: "daily", // Change default from "none" to "daily"
-          daysOfWeek: ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"], // Default to all days
-          interval: 1,
-          startDate: startDate, // Use the initialDate if provided
-          endDate: undefined,
-        },
-      })
-      setIncludeInExportByDefault(true)
-      setIncludeEndTime(false)
-      setIncludeEndTimeVariation({})
+      initializeFormForNewEvent()
     }
-
-    // Mark as initialized to prevent re-running
+    setSelectedTag(activeTag)
+    tagLoadRef.current = activeTag
+    setIsMissingInSelectedTag(false)
     setIsInitialized(true)
-  }, [open, event, isEditing, initialDay, initialDate, days, isInitialized])
+  }, [open, isInitialized, isEditing, event, initializeFormFromEvent, initializeFormForNewEvent, activeTag])
+
+  useEffect(() => {
+    if (!open) return
+    const tags = (() => {
+      try {
+        return listAdminEnabledTags()
+      } catch {
+        return []
+      }
+    })()
+    const normalized = new Set(tags)
+    normalized.add(activeTag)
+    const merged = Array.from(normalized).sort()
+    setAvailableAdminTags(merged)
+    setSelectedTag(activeTag)
+    tagLoadRef.current = activeTag
+    setIsMissingInSelectedTag(false)
+  }, [open, activeTag])
+
+  useEffect(() => {
+    if (!open || !isEditing || !event?.id) return
+    if (selectedTag === tagLoadRef.current) return
+    tagLoadRef.current = selectedTag
+    let cancelled = false
+    const loadTargetEvent = async () => {
+      if (selectedTag === activeTag) {
+        initializeFormFromEvent(event)
+        setIsMissingInSelectedTag(false)
+        return
+      }
+      try {
+        const loaded = await loadEventForTag(selectedTag, event.id)
+        if (!cancelled) {
+          if (loaded) {
+            initializeFormFromEvent(loaded)
+            setIsMissingInSelectedTag(false)
+          } else {
+            setIsMissingInSelectedTag(true)
+          }
+        }
+      } catch (error) {
+        console.error(`Failed to load event for tag ${selectedTag}`, error)
+        if (!cancelled) setIsMissingInSelectedTag(true)
+      }
+    }
+    loadTargetEvent()
+    return () => {
+      cancelled = true
+    }
+  }, [selectedTag, open, isEditing, event, activeTag, initializeFormFromEvent])
 
   /**
    * Handle input change for text inputs
@@ -438,7 +479,7 @@ export function EventDialog({ event, open, onOpenChange, initialDay = "monday", 
   }
 
   // In the handleSubmit function, ensure days is in sync with recurrence.daysOfWeek
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
     // Ensure recurrence exists and has daysOfWeek
@@ -459,15 +500,37 @@ export function EventDialog({ event, open, onOpenChange, initialDay = "monday", 
     }
 
 
-    if (isEditing) {
-      // Updating event
-      updateEvent(syncedFormData)
-    } else {
-      // Adding new event
-      addEvent(syncedFormData)
-    }
+    const targetTag = selectedTag || activeTag
 
-    onOpenChange(false)
+    try {
+      await saveEventForTag(targetTag, syncedFormData)
+      if (targetTag === activeTag) {
+        if (isEditing) {
+          updateEvent(syncedFormData)
+        } else {
+          addEvent(syncedFormData)
+        }
+      } else {
+        toast({
+          title: "Event updated",
+          description: `Saved changes for ${targetTag}.`,
+          variant: "success",
+        })
+      }
+      clearConfigCache()
+      useEvents
+        .getState()
+        .initializeFromConfig(true)
+        .catch((error) => console.error("Failed to refresh events after save", error))
+      onOpenChange(false)
+    } catch (error) {
+      console.error("Failed to save event", error)
+      toast({
+        title: "Save failed",
+        description: "Could not save changes for the selected tag.",
+        variant: "destructive",
+      })
+    }
   }
 
   /**
@@ -567,6 +630,32 @@ export function EventDialog({ event, open, onOpenChange, initialDay = "monday", 
                 : "Create a new event by filling out the details below."}
             </DialogDescription>
           </DialogHeader>
+
+          {isEditing && availableAdminTags.filter((tag) => tag !== activeTag).length > 0 && (
+            <div className="mt-4 grid gap-2">
+              <Label className="text-sm font-medium">Apply changes to tag</Label>
+              <Select value={selectedTag} onValueChange={setSelectedTag}>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {availableAdminTags.map((tag) => (
+                    <SelectItem key={tag} value={tag}>
+                      {tag}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <p className="text-xs text-muted-foreground">
+                Changes will be saved to the selected tag without leaving Command mode.
+              </p>
+              {isMissingInSelectedTag && (
+                <p className="text-xs text-amber-600">
+                  This event does not exist for {selectedTag}; saving will create it using the current data.
+                </p>
+              )}
+            </div>
+          )}
 
           {hasOverrides && (
             <div className="mt-4 rounded border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900">

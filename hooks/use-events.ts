@@ -8,7 +8,7 @@
 
 import { create } from "zustand"
 import { persist } from "zustand/middleware"
-import { fetchConfig } from "@/lib/config-fetcher"
+import { fetchComposedForTag, clearConfigCache } from "@/lib/config-fetcher"
 import { fetchParentEvent } from "@/lib/config-diff"
 import { scopedStateStorage } from "@/lib/scoped-storage"
 import { getActiveTag, onTagChange } from "@/lib/config-tag"
@@ -218,12 +218,14 @@ export const useEvents = create<EventsState>()(
         }
 
         try {
-          const includeAncestorLocalOverrides = useAdminStore.getState().isAdmin
-          const config = await fetchConfig(forceRefresh, {
+          const includeAncestorLocalOverrides = useAdminStore.getState().adminMode
+          const targetTag = getActiveTag()
+          const config = await fetchComposedForTag(targetTag, forceRefresh, {
             includeAncestorLocalOverrides,
+            currentTag: targetTag,
           })
           const resolvedEvents = Array.isArray(config?.events) ? config.events : []
-          const resolvedTag = config?.tag || getActiveTag()
+          const resolvedTag = config?.tag || targetTag
           const baseMap = buildIdMap(resolvedEvents)
 
           set((state) => {
@@ -529,3 +531,32 @@ onTagChange((nextTag) => {
     scheduleInit()
   }
 })
+
+export const refreshEventsStore = async (forceRefresh = true) => {
+  await useEvents.getState().initializeFromConfig(forceRefresh)
+}
+
+export const invalidateAndRefreshEvents = async () => {
+  clearConfigCache()
+  await refreshEventsStore(true)
+}
+
+const bootstrapEventsStore = () => {
+  useEvents
+    .getState()
+    .initializeFromConfig(false)
+    .catch((error) => {
+      console.error("Failed to bootstrap events store", error)
+    })
+}
+
+if (typeof window !== "undefined") {
+  bootstrapEventsStore()
+  useAdminStore.subscribe((state, prevState) => {
+    if (state.adminMode !== prevState.adminMode) {
+      refreshEventsStore(true).catch((error) => {
+        console.error("Failed to refresh events after admin change", error)
+      })
+    }
+  })
+}

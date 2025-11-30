@@ -3,9 +3,14 @@
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { CalendarIcon, ChevronLeft, ChevronRight } from "lucide-react"
-import { format, addDays, startOfDay, endOfDay, differenceInDays } from "date-fns"
+import { differenceInDays } from "date-fns"
 import { cn } from "@/lib/utils"
-import { getAppTimezoneDate } from "@/lib/date-utils"
+import {
+  addAppDays,
+  formatInAppTimezone,
+  getAppToday,
+  getEndOfAppDay,
+} from "@/lib/date-utils"
 import { Input } from "@/components/ui/input"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 
@@ -27,15 +32,15 @@ export function DateRangeSelector({ value, onChange, className, quickSelectDays 
     {
       label: "Today",
       getValue: () => {
-        const today = startOfDay(getAppTimezoneDate())
-        return [today, endOfDay(today)]
+        const today = getAppToday()
+        return [today, getEndOfAppDay(today)]
       },
     },
     {
       label: `Next ${quickSelectDays} days`,
       getValue: () => {
-        const today = startOfDay(getAppTimezoneDate())
-        return [today, endOfDay(addDays(today, quickSelectDays - 1))]
+        const today = getAppToday()
+        return [today, getEndOfAppDay(addAppDays(today, quickSelectDays - 1))]
       },
     },
   ]
@@ -47,8 +52,8 @@ export function DateRangeSelector({ value, onChange, className, quickSelectDays 
     const daysToMove = differenceInDays(endDate, startDate) + 1
     const multiplier = direction === "prev" ? -1 : 1
     
-    const newStart = addDays(startDate, daysToMove * multiplier)
-    const newEnd = addDays(endDate, daysToMove * multiplier)
+    const newStart = addAppDays(startDate, daysToMove * multiplier)
+    const newEnd = addAppDays(endDate, daysToMove * multiplier)
     onChange([newStart, newEnd])
   }
 
@@ -63,7 +68,7 @@ export function DateRangeSelector({ value, onChange, className, quickSelectDays 
     if (e.target.value) {
       // Parse date manually to avoid timezone issues
       const [year, month, day] = e.target.value.split('-').map(Number)
-      setTempStartDate(new Date(year, month - 1, day))
+      setTempStartDate(getStartOfAppDay(new Date(year, month - 1, day)))
     }
   }
 
@@ -71,15 +76,15 @@ export function DateRangeSelector({ value, onChange, className, quickSelectDays 
     if (e.target.value) {
       // Parse date manually to avoid timezone issues
       const [year, month, day] = e.target.value.split('-').map(Number)
-      setTempEndDate(new Date(year, month - 1, day))
+      setTempEndDate(getStartOfAppDay(new Date(year, month - 1, day)))
     }
   }
 
   // Apply the custom date range
   const applyCustomDates = () => {
     if (tempStartDate) {
-      const newStart = startOfDay(tempStartDate)
-      const newEnd = tempEndDate ? endOfDay(tempEndDate) : endOfDay(tempStartDate)
+      const newStart = getStartOfAppDay(tempStartDate)
+      const newEnd = tempEndDate ? getEndOfAppDay(tempEndDate) : getEndOfAppDay(tempStartDate)
       onChange([newStart, newEnd])
       setIsCustomOpen(false)
     }
@@ -87,8 +92,8 @@ export function DateRangeSelector({ value, onChange, className, quickSelectDays 
 
   // Initialize temp dates when opening custom picker
   const handleCustomOpen = () => {
-    setTempStartDate(startDate || startOfDay(getAppTimezoneDate()))
-    setTempEndDate(endDate || startOfDay(getAppTimezoneDate()))
+    setTempStartDate(startDate || getAppToday())
+    setTempEndDate(endDate || getAppToday())
     setIsCustomOpen(true)
   }
 
@@ -136,7 +141,7 @@ export function DateRangeSelector({ value, onChange, className, quickSelectDays 
                   <label className="text-xs text-muted-foreground">Start Date</label>
                   <Input
                     type="date"
-                    value={tempStartDate ? format(tempStartDate, "yyyy-MM-dd") : ""}
+                    value={tempStartDate ? formatInAppTimezone(tempStartDate, "yyyy-MM-dd") : ""}
                     onChange={handleTempStartDateChange}
                     className="text-sm"
                   />
@@ -145,9 +150,9 @@ export function DateRangeSelector({ value, onChange, className, quickSelectDays 
                   <label className="text-xs text-muted-foreground">End Date</label>
                   <Input
                     type="date"
-                    value={tempEndDate ? format(tempEndDate, "yyyy-MM-dd") : ""}
+                    value={tempEndDate ? formatInAppTimezone(tempEndDate, "yyyy-MM-dd") : ""}
                     onChange={handleTempEndDateChange}
-                    min={tempStartDate ? format(tempStartDate, "yyyy-MM-dd") : undefined}
+                    min={tempStartDate ? formatInAppTimezone(tempStartDate, "yyyy-MM-dd") : undefined}
                     className="text-sm"
                   />
                 </div>
@@ -184,7 +189,7 @@ export function DateRangeSelector({ value, onChange, className, quickSelectDays 
 
       {startDate && endDate && (
         <span className="text-sm text-muted-foreground ml-2">
-          {format(startDate, "MMM d")} - {format(endDate, "MMM d, yyyy")}
+          {formatInAppTimezone(startDate, "MMM d")} - {formatInAppTimezone(endDate, "MMM d, yyyy")}
         </span>
       )}
     </div>

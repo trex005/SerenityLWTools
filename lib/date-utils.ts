@@ -4,26 +4,74 @@
  * This file contains utility functions for working with dates.
  */
 
+import { addDays, endOfDay, startOfDay } from "date-fns"
+import { formatInTimeZone, toZonedTime, fromZonedTime } from "date-fns-tz"
+
+// Centralized timezone handling for the app (GMT-2)
+export const APP_TIMEZONE = "Etc/GMT+2"
+
 /**
- * Get the day of the week as a string (e.g., "sunday")
- * @param date The date to get the day of the week for
+ * Get the current date/time in the application's timezone.
+ * The returned Date represents the same instant, but calculations should
+ * always go through the helpers below to avoid leaking the user's timezone.
  */
-export function getDayOfWeek(date: Date): string {
-  const days = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"]
-  return days[date.getDay()]
+export function getAppTimezoneDate(): Date {
+  return toZonedTime(new Date(), APP_TIMEZONE)
 }
 
 /**
- * Get the current date and time in the application's timezone
- * Currently set to UTC-2, but can be easily changed here for the entire app
- * @returns A new Date object representing the current time in the app timezone
+ * Start-of-day for "today" in the app timezone.
  */
-export function getAppTimezoneDate(): Date {
-  const now = new Date()
-  const timezoneOffsetHours = -2 // Change this value to adjust app timezone
-  // First convert to UTC by adding the timezone offset
-  // Then apply the app timezone offset
-  return new Date(now.getTime() + now.getTimezoneOffset() * 60000 + (timezoneOffsetHours * 60 * 60 * 1000))
+export function getAppToday(): Date {
+  return getStartOfAppDay(new Date())
+}
+
+/**
+ * Convenience string key for today's date in the app timezone (yyyy-MM-dd).
+ */
+export function getAppTodayKey(): string {
+  return formatInAppTimezone(new Date(), "yyyy-MM-dd")
+}
+
+/**
+ * Format a Date in the app timezone using a date-fns pattern.
+ */
+export function formatInAppTimezone(date: Date, formatStr: string): string {
+  return formatInTimeZone(date, APP_TIMEZONE, formatStr)
+}
+
+/**
+ * Get the day-of-week string (sunday...saturday) in the app timezone.
+ */
+export function getDayOfWeek(date: Date): string {
+  return formatInAppTimezone(date, "EEEE").toLowerCase()
+}
+
+/**
+ * Start of day in the app timezone, returned as a UTC Date.
+ */
+export function getStartOfAppDay(date: Date = new Date()): Date {
+  const zonedDate = toZonedTime(date, APP_TIMEZONE)
+  const start = startOfDay(zonedDate)
+  return fromZonedTime(start, APP_TIMEZONE)
+}
+
+/**
+ * End of day in the app timezone, returned as a UTC Date.
+ */
+export function getEndOfAppDay(date: Date = new Date()): Date {
+  const zonedDate = toZonedTime(date, APP_TIMEZONE)
+  const end = endOfDay(zonedDate)
+  return fromZonedTime(end, APP_TIMEZONE)
+}
+
+/**
+ * Add whole days in the app timezone to keep boundaries stable.
+ */
+export function addAppDays(date: Date, amount: number): Date {
+  const zonedDate = toZonedTime(date, APP_TIMEZONE)
+  const shifted = addDays(zonedDate, amount)
+  return fromZonedTime(shifted, APP_TIMEZONE)
 }
 
 /**
@@ -31,20 +79,14 @@ export function getAppTimezoneDate(): Date {
  * @returns Number of minutes until next day, rounded down to nearest 5
  */
 export function getMinutesUntilNextDay(): number {
-  const now = getAppTimezoneDate()
-  
-  // Create next day at midnight in app timezone
-  const nextDay = new Date(now)
-  nextDay.setDate(nextDay.getDate() + 1)
-  nextDay.setHours(0, 0, 0, 0)
-  
-  // Calculate difference in milliseconds
-  const diffMs = nextDay.getTime() - now.getTime()
-  
-  // Convert to minutes
+  const nowZoned = getAppTimezoneDate()
+  const nextDayStart = startOfDay(addDays(nowZoned, 1))
+  const nowUtc = fromZonedTime(nowZoned, APP_TIMEZONE)
+  const nextDayUtc = fromZonedTime(nextDayStart, APP_TIMEZONE)
+
+  const diffMs = nextDayUtc.getTime() - nowUtc.getTime()
   const totalMinutes = Math.floor(diffMs / (1000 * 60))
-  
-  // Round down to nearest 5-minute increment
+
   return Math.floor(totalMinutes / 5) * 5
 }
 

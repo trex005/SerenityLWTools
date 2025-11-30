@@ -8,6 +8,7 @@
 
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
 import { Edit, Trash2, Archive, X, Clock, Mail, Globe } from "lucide-react"
 import { useEvents } from "@/hooks/use-events"
 import { useState, type MouseEvent, useRef, useEffect } from "react"
@@ -23,12 +24,12 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
 import { formatRecurrence } from "@/lib/recurrence-utils"
-import { format } from "date-fns"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
-// Add import for the Switch component at the top
 import { Switch } from "@/components/ui/switch"
 import { Label } from "@/components/ui/label"
+import type { DiffInfo } from "@/lib/config-diff"
+import { formatInAppTimezone } from "@/lib/date-utils"
 
 // Update the EventCardProps interface to include showLocalTime
 interface EventCardProps {
@@ -36,10 +37,11 @@ interface EventCardProps {
   day: string // The current day (for showing day-specific variations)
   date: Date // The specific date being displayed
   showLocalTime?: boolean
+  overrideInfo?: DiffInfo
 }
 
 // Update the function signature to include the new prop
-export function EventCard({ event, day, date, showLocalTime = false }: EventCardProps) {
+export function EventCard({ event, day, date, showLocalTime = false, overrideInfo }: EventCardProps) {
   // State for dialogs
   const [editDialogOpen, setEditDialogOpen] = useState(false)
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
@@ -66,14 +68,15 @@ export function EventCard({ event, day, date, showLocalTime = false }: EventCard
   const dayOrder = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"]
 
   // Format the date as YYYY-MM-DD for use with dateOverrides
-  const dateString = format(date, "yyyy-MM-dd")
+  const dateString = formatInAppTimezone(date, "yyyy-MM-dd")
 
   // Check if there's a date override for this specific date
   const hasDateOverride = event.dateOverrides && event.dateOverrides[dateString]
 
-  // Add code to check if there's a date-specific override for includeInExport
-  // Add this after the hasDateOverride constant
   const hasDateIncludeOverride = event.dateIncludeOverrides && event.dateIncludeOverrides[dateString] !== undefined
+
+  const overrideKeys = overrideInfo?.overrideKeys ?? []
+  const hasOverrides = overrideKeys.length > 0
 
   /**
    * Helper function to get the effective value for a property
@@ -341,6 +344,23 @@ export function EventCard({ event, day, date, showLocalTime = false }: EventCard
                 <div>
                   <div className="flex items-center gap-2">
                     <h4 className="font-medium">{event.title}</h4>
+                    {hasOverrides && (
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Badge className="text-muted-foreground border-border bg-muted/60 dark:bg-muted/40">
+                              Overridden
+                            </Badge>
+                          </TooltipTrigger>
+                          <TooltipContent className="max-w-xs">
+                            <p className="text-xs">
+                              Overridden fields:{" "}
+                              {overrideKeys.length ? overrideKeys.join(", ") : "multiple properties"}
+                            </p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                    )}
                     <Globe
                       size={14}
                       className={`text-muted-foreground ${isIncludedOnWebsite() ? "opacity-100" : "opacity-20"}`}
@@ -383,7 +403,9 @@ export function EventCard({ event, day, date, showLocalTime = false }: EventCard
                           className="absolute z-50 bg-card border rounded-md p-3 shadow-md -ml-2 mt-1 w-[280px]"
                         >
                           <div className="flex justify-between items-center mb-2">
-                            <h4 className="text-sm font-medium">Edit Time for {format(date, "MMM d, yyyy")}</h4>
+                            <h4 className="text-sm font-medium">
+                              Edit Time for {formatInAppTimezone(date, "MMM d, yyyy")}
+                            </h4>
                             <Button variant="ghost" size="icon" className="h-6 w-6" onClick={cancelTimeEditing}>
                               <X size={14} />
                             </Button>

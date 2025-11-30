@@ -3,9 +3,14 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useState, useEffect, useMemo } from "react"
 import { DateRangeSelector } from "@/components/date-range-selector"
-import { addDays, startOfDay, endOfDay, format } from "date-fns"
 import { getDayOfWeek } from "@/lib/recurrence-utils"
-import { getAppTimezoneDate } from "@/lib/date-utils"
+import {
+  addAppDays,
+  formatInAppTimezone,
+  getAppToday,
+  getAppTodayKey,
+  getEndOfAppDay,
+} from "@/lib/date-utils"
 import { ReadOnlyDayAgenda } from "@/components/read-only-day-agenda"
 import { ReadOnlyTips } from "@/components/read-only-tips"
 import { setupTipHashNavigation } from "@/lib/hash-navigation"
@@ -22,15 +27,13 @@ export function UserInterface() {
 
   // State for date range - defaults to next 7 days for schedule view in UTC-2
   const [dateRange, setDateRange] = useState<[Date | undefined, Date | undefined]>(() => {
-    const utcMinus2 = getAppTimezoneDate()
-    const today = startOfDay(utcMinus2)
-    return [today, endOfDay(addDays(today, 6))] // Default to next 7 days from UTC-2 today
+    const today = getAppToday()
+    return [today, getEndOfAppDay(addAppDays(today, 6))] // Default to next 7 days from UTC-2 today
   })
 
   // State for active day - set to UTC-2 today
   const [activeDay, setActiveDay] = useState<string>(() => {
-    const utcMinus2 = getAppTimezoneDate()
-    return format(utcMinus2, "yyyy-MM-dd")
+    return getAppTodayKey()
   })
 
   // Add a state to force refresh of the tips component
@@ -44,7 +47,7 @@ export function UserInterface() {
   // Update active day when date range changes
   useEffect(() => {
     if (dateRange[0]) {
-      setActiveDay(format(dateRange[0], "yyyy-MM-dd"))
+      setActiveDay(formatInAppTimezone(dateRange[0], "yyyy-MM-dd"))
     }
   }, [dateRange])
 
@@ -100,8 +103,11 @@ export function UserInterface() {
                     </SelectTrigger>
                     <SelectContent>
                       {dayTabs.map(({ day, date }) => (
-                        <SelectItem key={format(date, "yyyy-MM-dd")} value={format(date, "yyyy-MM-dd")}>
-                          {`${day.substring(0, 3)} ${format(date, "M/d")}`}
+                        <SelectItem
+                          key={formatInAppTimezone(date, "yyyy-MM-dd")}
+                          value={formatInAppTimezone(date, "yyyy-MM-dd")}
+                        >
+                          {`${day.substring(0, 3)} ${formatInAppTimezone(date, "M/d")}`}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -109,28 +115,34 @@ export function UserInterface() {
                 </div>
               )}
 
-              <TabsList className="hidden md:flex w-full justify-start mb-4 overflow-x-auto">
-                {dayTabs.map(({ day, date }) => (
-                  <TabsTrigger
-                    key={format(date, "yyyy-MM-dd")}
-                    value={format(date, "yyyy-MM-dd")}
-                    className="capitalize"
-                  >
-                    {day.substring(0, 3)} {format(date, "M/d")}
-                  </TabsTrigger>
-                ))}
-              </TabsList>
+                <TabsList className="hidden md:flex w-full justify-start mb-4 overflow-x-auto">
+                  {dayTabs.map(({ day, date }) => (
+                    <TabsTrigger
+                      key={formatInAppTimezone(date, "yyyy-MM-dd")}
+                      value={formatInAppTimezone(date, "yyyy-MM-dd")}
+                      className="capitalize"
+                    >
+                      {day.substring(0, 3)} {formatInAppTimezone(date, "M/d")}
+                    </TabsTrigger>
+                  ))}
+                </TabsList>
 
-              {/* Content for each day tab */}
-              {dayTabs.map(({ day, date }) => (
-                <TabsContent key={format(date, "yyyy-MM-dd")} value={format(date, "yyyy-MM-dd")} className="mt-0">
-                  <div className="mb-4">
-                    <h3 className="text-lg font-medium capitalize">{format(date, "EEEE, MMMM d, yyyy")}</h3>
-                  </div>
-                  <ReadOnlyDayAgenda
-                    day={day}
-                    date={date}
-                    showLocalTime={showLocalTime}
+                {/* Content for each day tab */}
+                {dayTabs.map(({ day, date }) => (
+                  <TabsContent
+                    key={formatInAppTimezone(date, "yyyy-MM-dd")}
+                    value={formatInAppTimezone(date, "yyyy-MM-dd")}
+                    className="mt-0"
+                  >
+                    <div className="mb-4">
+                      <h3 className="text-lg font-medium capitalize">
+                        {formatInAppTimezone(date, "EEEE, MMMM d, yyyy")}
+                      </h3>
+                    </div>
+                    <ReadOnlyDayAgenda
+                      day={day}
+                      date={date}
+                      showLocalTime={showLocalTime}
                     setShowLocalTime={setShowLocalTime}
                   />
                 </TabsContent>
@@ -162,7 +174,7 @@ function generateDayTabs(startDate: Date, endDate: Date) {
       day,
       date: new Date(currentDate),
     })
-    currentDate = addDays(currentDate, 1)
+    currentDate = addAppDays(currentDate, 1)
   }
 
   return days

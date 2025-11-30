@@ -8,6 +8,7 @@ import { Switch } from "@/components/ui/switch"
 import { Label } from "@/components/ui/label"
 import { format } from "date-fns"
 import { scopedLocalStorage } from "@/lib/scoped-storage"
+import { formatInAppTimezone } from "@/lib/date-utils"
 
 interface ReadOnlyDayAgendaProps {
   day: string
@@ -53,20 +54,20 @@ export function ReadOnlyDayAgenda({ day, date, showLocalTime = false, setShowLoc
   useEffect(() => {
     if (!isLoaded) return
 
+    const dateKey = formatInAppTimezone(date, "yyyy-MM-dd")
+
     // Filter events for the current day that are not archived and match recurrence pattern
     const dayEvents = events.filter((event) => {
       // First check if the event should be shown based on recurrence pattern
-      // Pass isAdminView=false to respect all exclusions in the read-only view
+      // Pass adminModeView=false to respect all exclusions in the read-only view
       const shouldShow = !event.archived && shouldShowRecurringEvent(event, date, false)
 
       // If the basic check fails, don't show the event
       if (!shouldShow) return false
 
       // Additional check for date-specific overrides that might hide the event
-      const dateString = date.toISOString().split("T")[0]
-
       // If there's a date override that explicitly sets hidden to true, don't show
-      if (event.dateOverrides && event.dateOverrides[dateString] && event.dateOverrides[dateString].hidden === true) {
+      if (event.dateOverrides && event.dateOverrides[dateKey] && event.dateOverrides[dateKey].hidden === true) {
         return false
       }
 
@@ -84,8 +85,8 @@ export function ReadOnlyDayAgenda({ day, date, showLocalTime = false, setShowLoc
       // This check is ONLY applied in the read-only view
       if (event.includeInExport) {
         // Check date-specific override first
-        if (event.dateIncludeOverrides && event.dateIncludeOverrides[dateString] !== undefined) {
-          if (event.dateIncludeOverrides[dateString] === false) {
+        if (event.dateIncludeOverrides && event.dateIncludeOverrides[dateKey] !== undefined) {
+          if (event.dateIncludeOverrides[dateKey] === false) {
             return false
           }
         }
@@ -102,13 +103,8 @@ export function ReadOnlyDayAgenda({ day, date, showLocalTime = false, setShowLoc
     const allDay = dayEvents
       .filter((event) => {
         // Check if there's a date-specific override
-        const dateString = date.toISOString().split("T")[0]
-        if (
-          event.dateOverrides &&
-          event.dateOverrides[dateString] &&
-          event.dateOverrides[dateString].isAllDay !== undefined
-        ) {
-          return event.dateOverrides[dateString].isAllDay
+        if (event.dateOverrides && event.dateOverrides[dateKey] && event.dateOverrides[dateKey].isAllDay !== undefined) {
+          return event.dateOverrides[dateKey].isAllDay
         }
 
         // Check if there's a day-specific variation
@@ -129,13 +125,8 @@ export function ReadOnlyDayAgenda({ day, date, showLocalTime = false, setShowLoc
     const timed = dayEvents
       .filter((event) => {
         // Check if there's a date-specific override
-        const dateString = date.toISOString().split("T")[0]
-        if (
-          event.dateOverrides &&
-          event.dateOverrides[dateString] &&
-          event.dateOverrides[dateString].isAllDay !== undefined
-        ) {
-          return !event.dateOverrides[dateString].isAllDay
+        if (event.dateOverrides && event.dateOverrides[dateKey] && event.dateOverrides[dateKey].isAllDay !== undefined) {
+          return !event.dateOverrides[dateKey].isAllDay
         }
 
         // Check if there's a day-specific variation
@@ -149,11 +140,9 @@ export function ReadOnlyDayAgenda({ day, date, showLocalTime = false, setShowLoc
       .sort((a, b) => {
         // Get the effective start time (considering date overrides and variations)
         const getStartTime = (event: any) => {
-          const dateString = date.toISOString().split("T")[0]
-
           // Check for date override first
-          if (event.dateOverrides && event.dateOverrides[dateString] && event.dateOverrides[dateString].startTime) {
-            return event.dateOverrides[dateString].startTime
+          if (event.dateOverrides && event.dateOverrides[dateKey] && event.dateOverrides[dateKey].startTime) {
+            return event.dateOverrides[dateKey].startTime
           }
 
           // Then check for day variation
@@ -204,7 +193,7 @@ export function ReadOnlyDayAgenda({ day, date, showLocalTime = false, setShowLoc
    */
   const getEffectiveValue = (event: any, property: string) => {
     // Format the date as YYYY-MM-DD for use with dateOverrides
-    const dateString = format(date, "yyyy-MM-dd")
+      const dateString = formatInAppTimezone(date, "yyyy-MM-dd")
 
     // First check for date-specific override
     if (

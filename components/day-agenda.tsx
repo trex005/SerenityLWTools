@@ -9,6 +9,8 @@
 import { useState, useEffect } from "react"
 import { EventCard } from "@/components/event-card"
 import { useEvents } from "@/hooks/use-events"
+import { useOverrideDiff } from "@/hooks/use-override-diff"
+import type { DiffInfo } from "@/lib/config-diff"
 import {
   DndContext,
   closestCenter,
@@ -32,7 +34,7 @@ import { GripVertical } from "lucide-react"
 import { shouldShowRecurringEvent } from "@/lib/recurrence-utils"
 import { Switch } from "@/components/ui/switch"
 import { Label } from "@/components/ui/label"
-import { getDayOfWeek } from "@/lib/date-utils"
+import { formatInAppTimezone, getDayOfWeek } from "@/lib/date-utils"
 
 // Update the props interface and use the setShowLocalTime function
 interface DayAgendaProps {
@@ -51,6 +53,8 @@ interface DayAgendaProps {
 export function DayAgenda({ day, date, showLocalTime = false, setShowLocalTime }: DayAgendaProps) {
   // Access events data from store
   const { events, reorderEvents } = useEvents()
+  const { diffIndex } = useOverrideDiff()
+  const eventOverrideIndex = diffIndex?.events ?? {}
 
   // State to manage all-day and time-specific events
   const [allDayEvents, setAllDayEvents] = useState<any[]>([])
@@ -77,6 +81,8 @@ export function DayAgenda({ day, date, showLocalTime = false, setShowLocalTime }
    * It separates all-day events from time-specific events and sorts them appropriately
    */
   useEffect(() => {
+    const dateKey = formatInAppTimezone(date, "yyyy-MM-dd")
+
     // Filter events for the current day that are not archived and match recurrence pattern
     // We need to respect the recurrence pattern even in admin view, but still show events that
     // would be excluded by date-specific overrides
@@ -90,7 +96,7 @@ export function DayAgenda({ day, date, showLocalTime = false, setShowLocalTime }
 
       if (!isOnThisDay) return false
 
-      // Now check the recurrence pattern - pass isAdminView=true to show all events in admin view
+      // Now check the recurrence pattern - pass adminModeView=true to show all events in admin view
       return shouldShowRecurringEvent(event, date, true)
     })
 
@@ -98,13 +104,8 @@ export function DayAgenda({ day, date, showLocalTime = false, setShowLocalTime }
     const allDay = dayEvents
       .filter((event) => {
         // Check if there's a date-specific override
-        const dateString = date.toISOString().split("T")[0]
-        if (
-          event.dateOverrides &&
-          event.dateOverrides[dateString] &&
-          event.dateOverrides[dateString].isAllDay !== undefined
-        ) {
-          return event.dateOverrides[dateString].isAllDay
+        if (event.dateOverrides && event.dateOverrides[dateKey] && event.dateOverrides[dateKey].isAllDay !== undefined) {
+          return event.dateOverrides[dateKey].isAllDay
         }
 
         // Check if there's a day-specific variation
@@ -125,13 +126,8 @@ export function DayAgenda({ day, date, showLocalTime = false, setShowLocalTime }
     const timed = dayEvents
       .filter((event) => {
         // Check if there's a date-specific override
-        const dateString = date.toISOString().split("T")[0]
-        if (
-          event.dateOverrides &&
-          event.dateOverrides[dateString] &&
-          event.dateOverrides[dateString].isAllDay !== undefined
-        ) {
-          return !event.dateOverrides[dateString].isAllDay
+        if (event.dateOverrides && event.dateOverrides[dateKey] && event.dateOverrides[dateKey].isAllDay !== undefined) {
+          return !event.dateOverrides[dateKey].isAllDay
         }
 
         // Check if there's a day-specific variation
@@ -145,11 +141,9 @@ export function DayAgenda({ day, date, showLocalTime = false, setShowLocalTime }
       .sort((a, b) => {
         // Get the effective start time (considering date overrides and variations)
         const getStartTime = (event: any) => {
-          const dateString = date.toISOString().split("T")[0]
-
           // Check for date override first
-          if (event.dateOverrides && event.dateOverrides[dateString] && event.dateOverrides[dateString].startTime) {
-            return event.dateOverrides[dateString].startTime
+          if (event.dateOverrides && event.dateOverrides[dateKey] && event.dateOverrides[dateKey].startTime) {
+            return event.dateOverrides[dateKey].startTime
           }
 
           // Then check for day variation
@@ -246,7 +240,14 @@ export function DayAgenda({ day, date, showLocalTime = false, setShowLocalTime }
           </div>
           <div className="space-y-2">
             {timeEvents.map((event) => (
-              <EventCard key={event.id} event={event} day={day} date={date} showLocalTime={showLocalTime} />
+              <EventCard
+                key={event.id}
+                event={event}
+                day={day}
+                date={date}
+                showLocalTime={showLocalTime}
+                overrideInfo={eventOverrideIndex[event.id]}
+              />
             ))}
           </div>
         </div>
@@ -274,6 +275,7 @@ export function DayAgenda({ day, date, showLocalTime = false, setShowLocalTime }
                     date={date}
                     isActive={activeId === event.id}
                     showLocalTime={showLocalTime}
+                    overrideInfo={eventOverrideIndex[event.id]}
                   />
                 ))}
               </div>
@@ -302,12 +304,14 @@ function SortableEventCard({
   date,
   isActive,
   showLocalTime,
+  overrideInfo,
 }: {
   event: any
   day: string
   date: Date
   isActive: boolean
   showLocalTime?: boolean
+  overrideInfo?: DiffInfo
 }) {
   // Hook to make this component draggable/sortable
   const { attributes, listeners, setNodeRef, transform, transition } = useSortable({
@@ -340,7 +344,13 @@ function SortableEventCard({
 
       {/* Event card with padding for the grip icon */}
       <div className="pl-8">
-        <EventCard event={event} day={day} date={date} showLocalTime={showLocalTime} />
+        <EventCard
+          event={event}
+          day={day}
+          date={date}
+          showLocalTime={showLocalTime}
+          overrideInfo={overrideInfo}
+        />
       </div>
     </div>
   )

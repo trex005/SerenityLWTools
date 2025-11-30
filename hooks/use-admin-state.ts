@@ -5,16 +5,16 @@ import { create } from "zustand"
 import { scopedLocalStorage } from "@/lib/scoped-storage"
 
 interface AdminState {
-  isAdmin: boolean
+  adminMode: boolean
   hasAdminAccess: boolean
-  setIsAdmin: (value: boolean) => void
+  setadminMode: (value: boolean) => void
   setHasAdminAccess: (value: boolean) => void
 }
 
 export const useAdminStore = create<AdminState>((set) => ({
-  isAdmin: false,
+  adminMode: false,
   hasAdminAccess: false,
-  setIsAdmin: (value) => set({ isAdmin: value }),
+  setadminMode: (value) => set({ adminMode: value }),
   setHasAdminAccess: (value) => set({ hasAdminAccess: value }),
 }))
 
@@ -22,16 +22,16 @@ export const useAdminStore = create<AdminState>((set) => ({
 const ADMIN_PASSWORD = "admin123"
 
 export function useAdminState() {
-  const { isAdmin, hasAdminAccess, setIsAdmin, setHasAdminAccess } = useAdminStore()
+  const { adminMode, hasAdminAccess, setadminMode, setHasAdminAccess } = useAdminStore()
   const [initialized, setInitialized] = useState(false)
 
   // Check localStorage on component mount
   useEffect(() => {
-    const storedAdminStatus = scopedLocalStorage.getItem("isAdmin")
+    const storedAdminStatus = scopedLocalStorage.getItem("adminMode")
     const storedAdminAccess = scopedLocalStorage.getItem("hasAdminAccess")
 
-    if (storedAdminStatus === "true" && !isAdmin) {
-      setIsAdmin(true)
+    if (storedAdminStatus === "true" && !adminMode) {
+      setadminMode(true)
     }
 
     if (storedAdminAccess === "true" && !hasAdminAccess) {
@@ -39,15 +39,15 @@ export function useAdminState() {
     }
 
     setInitialized(true)
-  }, [isAdmin, hasAdminAccess, setIsAdmin, setHasAdminAccess])
+  }, [adminMode, hasAdminAccess, setadminMode, setHasAdminAccess])
 
   // Function to verify admin password
   const verifyAdminPassword = (password: string) => {
     const isCorrect = password === ADMIN_PASSWORD
     if (isCorrect) {
-      setIsAdmin(true)
+      setadminMode(true)
       setHasAdminAccess(true)
-      scopedLocalStorage.setItem("isAdmin", "true")
+      scopedLocalStorage.setItem("adminMode", "true")
       scopedLocalStorage.setItem("hasAdminAccess", "true")
     }
     return isCorrect
@@ -56,8 +56,8 @@ export function useAdminState() {
   // Function to enter admin mode without password (if previously authenticated)
   const enterAdminMode = () => {
     if (hasAdminAccess) {
-      setIsAdmin(true)
-      scopedLocalStorage.setItem("isAdmin", "true")
+      setadminMode(true)
+      scopedLocalStorage.setItem("adminMode", "true")
       return true
     }
     return false
@@ -65,13 +65,13 @@ export function useAdminState() {
 
   // Function to exit admin mode
   const exitAdminMode = () => {
-    setIsAdmin(false)
-    scopedLocalStorage.removeItem("isAdmin")
+    setadminMode(false)
+    scopedLocalStorage.removeItem("adminMode")
     // Note: We don't remove hasAdminAccess
   }
 
   return {
-    isAdmin,
+    adminMode,
     hasAdminAccess,
     verifyAdminPassword,
     enterAdminMode,

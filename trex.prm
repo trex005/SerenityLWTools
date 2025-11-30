@@ -617,7 +617,7 @@ current_tag = [the key as determined by ?tag= or domain]
 tag_data_cache(tag):
   return tag_cache[tag] if exists
   tag_data = {}
-  if isAdmin(current_tag) and hasHadmin(tag) and LocalStorage(tag):
+  if adminMode(current_tag) and hasHadmin(tag) and LocalStorage(tag):
     tag_data = data from localStorage
   if json for tag exists:
     tag_data = deep merge tag_data on top of json data
@@ -627,10 +627,9 @@ tag_data_cache(tag):
 data_cache(tag):
   return cache[tag] if exists
   data = tag_data_cache(tag):
-  data = deep merge tag_data on top of data
   if data has parent:
     parent_data = data_cache(parent)
-    data = deep merge parent_data on top of parent_data
+    data = deep merge parent_data on top of data
   
   cache[tag] = data
   return cache[tag]
@@ -656,3 +655,162 @@ get_data(tag,key):
 ** Merge Event Files **
 Remove all logic for archived events being in their own json files (import/export). Use only the archived attribute in the json.
 Do not add any functionality to maintain backward compatibility
+-------------
+Current test:
+Tags:
+serenity996 has a parent of 996
+996 has a parent of main
+main has no parent
+
+Event:
+Location:main
+Title:Marshal (Alliance Exercise)
+
+1. Open with ?tag=main
+2. Save Event title as: "Marshal (Alliance Exercise) - main"
+3. click edit and switch to tag 996.
+• Title is "Marshal (Alliance Exercise) - main" as expected
+4. Save Title as "Marshal (Alliance Exercise) - 996"
+5. Click Edit and switch to serenity996
+• Title is "Marshal (Alliance Exercise) - main"
+• Expected: Title is "Marshal (Alliance Exercise) - 996" the parent of serenity996 is 996
+
+-----------
+Current Test:
+login to admin as main
+login to admin as serenity996
+
+in ?tag=main
+1. Save title as "Marshal (Alliance Exercise) - main"
+2. click edit and select serenity996
+• Title is "Marshal (Alliance Exercise) - main" as expected
+3. login to admin as 996
+4. navigate back to ?tag=main
+5. Click edit, select "996", and save title as "Marshal (Alliance Exercise) - main"
+6. Click edit, select "serenity996"
+• Title is "Marshal (Alliance Exercise) - main"
+• Expected: Title to be: "Marshal (Alliance Exercise) - 996"
+-----------------------
+Current test:
+1. log in to admin at ?tag=main
+2. log in to admin at ?tag=serenity996
+3. Edit event, select "main", save name as "Marshal (Alliance Exercise) - main"
+• In current UI event is still showing as "Marshal (Alliance Exercise)"
+• Expected: Event should now show as "Marshal (Alliance Exercise) - main" since parent of parent was edited
+----------------
+Current test:
+1. log in to admin at ?tag=main
+2. log in to admin at ?tag=serenity996
+3. Edit event, select "main", save name as "Marshal (Alliance Exercise) - main"
+• As expected UI now shows "Marshal (Alliance Exercise) - main"
+• However, it is indicating that it is overridden (meaning that serenity996 has an override) which is not the case
+• On refresh, event name goes back to "Marshal (Alliance Exercise)" (I can't even figure out where it got this data since that event name should not exist anywhere)
+-------------
+
+** Rebuild Inheritance Take II **
+
+I gave the following prompt to another developer. That developer decided that they would add a feature trying to prevent changes on one tag from "spilling over to other tags". I can't figure out any reason why this would be needed, and I have spent many hours to try to fix bugs that it has caused.
+
+Please follow this prompt again, but stick to the prompt much more closely than the previous developer.
+
+Prompt:
+Read the following psudocode and evaluate it for any logical flaws.
+
+If you feel it is logically sound, compare it to the existing system and explain the differences in simple english.
+
+After we are in agreement, update the code to follow the new system:
+
+• Both events and tips data types use the same utility to manage fetching and writing data, however the tag_cach and resolved_cache should be specific to that data type
+
+current_tag = [the key as determined by ?tag= or domain]
+
+get_tag_data(tag):
+  return tag_cache[tag] if exists
+  tag_data = {}
+
+  if adminMode for current_tag
+    and hasHadminAccess for tag
+    and LocalStorage exists for tag:
+    tag_data = data from localStorage
+  
+  if json for tag exists:
+    tag_data = deep merge tag_data on top of json data
+  
+  tag_cache[tag] = tag_data
+  return tag_cache[tag]
+
+get_resolved_data(tag):
+  return resolved_cache[tag] if exists
+  data = tag_data_cache(tag):
+  if data has parent:
+    parent_data = get_resolved_data(parent)
+    data = deep merge parent_data on top of data
+  
+  resolved_cache[tag] = data
+  return resolved_cache[tag]
+
+get_value(tag,key):
+  override = false
+  set = false
+  if get_tag_data(tag)[key]:
+    override = true
+  data = get_resolved_data(tag)[key]
+  if data:
+    set = true
+  
+  if data:
+  return {
+    override:override,
+    set:true,
+    data:data
+  }
+
+set_value(tag,key):
+  if not AdminMode for current_tag:
+    return
+  save only needed fields to localstorage for tag
+  invalidate tag_cache and resolved_cache
+
+---------------
+While testing to ensure we followed the psudocode exactly, I did the following:
+
+Tags:
+serenity996 has a parent of 996
+996 has a parent of main
+main has no parent
+
+1. navigate to ?tag=main
+2. log in as admin
+3. navigate to ?tag=serenity996
+4. log in as admin
+5. click edit on event:
+"Sandworm (Alliance Exercise)"
+6. Set tag dropdwon to "main"
+7. Change title to "Sandworm (Alliance Exercise) - main" and save
+  As expected, because I am still in serenity996, and "main" is its grandparent, the UI updated to show "Sandworm (Alliance Exercise) - main".
+8. Refresh the page
+  Title is now showing as "Sandworm (Alliance Exercise)"
+  Expected Title: "Sandworm (Alliance Exercise) - main"
+
+If get_resolved_data was working properly:
+serenity996:
+  finds no localstorage override
+  finds no config override
+  996:
+    finds no localStorage override
+    finds no config override
+    main:
+      DOES find localstorage override
+      merges that on top of config value
+      returns all the way up to serenity996
+
+--------------
+Test:
+Event ID:
+7662a10a-144e-4dc5-8ae7-4c8af78b9e12
+Located in:
+public/conf/main/events.json
+has a timestamp of:
+2025-03-12T04:00:00.000Z
+If I am looking at the day 2025-03-12 no matter what timezone my computer is set to, that event should be showing up, because it falls on 2025-03-12 in GMT-2.
+However if I am looking at it from a browser in GMT-5 it is showing up, but GMT-8 it is not.

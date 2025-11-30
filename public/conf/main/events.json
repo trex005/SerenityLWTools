@@ -1,4 +1,4 @@
-{
+﻿{
   "updated": "2025-11-13T00:00:06.810Z",
   "events": [
     {
@@ -41,7 +41,7 @@
           "saturday",
           "sunday"
         ],
-        "startDate": "2025-09-29T04:00:00.000Z"
+        "startDate": "2025-09-29"
       },
       "remindTomorrow": true
     },
@@ -53,9 +53,7 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "10:00",
-      "days": [
-        "sunday"
-      ],
+      "days": ["sunday"],
       "includeInExport": {
         "sunday": true,
         "monday": true,
@@ -71,9 +69,7 @@
       },
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": [
-          "sunday"
-        ],
+        "daysOfWeek": ["sunday"],
         "interval": 1
       },
       "remindEndOfDay": true
@@ -82,14 +78,11 @@
       "id": "ev-6",
       "archived": false,
       "title": "Register for Desert Storm!",
-      "description": "• To register:\n   Events → Desert Storm → Select Participants → Request to Fight",
+      "description": "• To register:\n   Events â†’ Desert Storm â†’ Select Participants â†’ Request to Fight",
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "10:00",
-      "days": [
-        "monday",
-        "tuesday"
-      ],
+      "days": ["monday", "tuesday"],
       "includeInExport": {
         "monday": true,
         "tuesday": true,
@@ -105,11 +98,8 @@
         "type": "weeks",
         "onPeriods": 1,
         "offPeriods": 0,
-        "daysOfWeek": [
-          "monday",
-          "tuesday"
-        ],
-        "startDate": "2025-01-05T05:00:00.000Z"
+        "daysOfWeek": ["monday", "tuesday"],
+        "startDate": "2025-01-05"
       },
       "remindEndOfDay": true
     },
@@ -121,9 +111,7 @@
       "isAllDay": false,
       "startTime": "17:50",
       "endTime": "18:30",
-      "days": [
-        "friday"
-      ],
+      "days": ["friday"],
       "includeInExport": {
         "friday": true,
         "monday": true,
@@ -136,9 +124,7 @@
       "order": {},
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": [
-          "friday"
-        ],
+        "daysOfWeek": ["friday"],
         "interval": 1
       },
       "remindTomorrow": true
@@ -151,11 +137,7 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "10:00",
-      "days": [
-        "sunday",
-        "tuesday",
-        "thursday"
-      ],
+      "days": ["sunday", "tuesday", "thursday"],
       "includeInExport": {
         "sunday": true,
         "tuesday": true,
@@ -169,11 +151,7 @@
       },
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": [
-          "sunday",
-          "tuesday",
-          "thursday"
-        ],
+        "daysOfWeek": ["sunday", "tuesday", "thursday"],
         "interval": 1
       },
       "remindTomorrow": false
@@ -186,11 +164,7 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "10:00",
-      "days": [
-        "monday",
-        "thursday",
-        "friday"
-      ],
+      "days": ["monday", "thursday", "friday"],
       "includeInExport": {
         "sunday": false,
         "monday": true,
@@ -206,13 +180,9 @@
       },
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": [
-          "monday",
-          "thursday",
-          "friday"
-        ],
+        "daysOfWeek": ["monday", "thursday", "friday"],
         "interval": 3,
-        "startDate": "2025-06-30T04:00:00.000Z"
+        "startDate": "2025-06-30"
       },
       "remindTomorrow": true
     },
@@ -224,11 +194,7 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "10:00",
-      "days": [
-        "monday",
-        "wednesday",
-        "friday"
-      ],
+      "days": ["monday", "wednesday", "friday"],
       "includeInExport": {
         "monday": true,
         "wednesday": true,
@@ -242,11 +208,7 @@
       },
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": [
-          "monday",
-          "wednesday",
-          "friday"
-        ],
+        "daysOfWeek": ["monday", "wednesday", "friday"],
         "interval": 1
       },
       "includeInBriefing": true,
@@ -260,9 +222,7 @@
       "isAllDay": false,
       "startTime": "12:00",
       "endTime": "",
-      "days": [
-        "sunday"
-      ],
+      "days": ["sunday"],
       "includeInExport": {
         "sunday": true,
         "monday": true,
@@ -276,9 +236,7 @@
       "order": {},
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": [
-          "sunday"
-        ],
+        "daysOfWeek": ["sunday"],
         "interval": 1
       },
       "remindTomorrow": true
@@ -291,10 +249,7 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "10:00",
-      "days": [
-        "tuesday",
-        "saturday"
-      ],
+      "days": ["tuesday", "saturday"],
       "includeInExport": {
         "tuesday": true,
         "saturday": true
@@ -306,10 +261,7 @@
       },
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": [
-          "tuesday",
-          "saturday"
-        ],
+        "daysOfWeek": ["tuesday", "saturday"],
         "interval": 1
       }
     },
@@ -321,9 +273,7 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "10:00",
-      "days": [
-        "monday"
-      ],
+      "days": ["monday"],
       "includeInExport": {
         "monday": true,
         "tuesday": true,
@@ -339,9 +289,7 @@
       },
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": [
-          "monday"
-        ],
+        "daysOfWeek": ["monday"],
         "interval": 1
       }
     },
@@ -353,9 +301,7 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "10:00",
-      "days": [
-        "tuesday"
-      ],
+      "days": ["tuesday"],
       "includeInExport": {
         "tuesday": true,
         "monday": true,
@@ -371,9 +317,7 @@
       },
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": [
-          "tuesday"
-        ],
+        "daysOfWeek": ["tuesday"],
         "interval": 1
       }
     },
@@ -385,9 +329,7 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "10:00",
-      "days": [
-        "wednesday"
-      ],
+      "days": ["wednesday"],
       "includeInExport": {
         "wednesday": true
       },
@@ -397,9 +339,7 @@
       },
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": [
-          "wednesday"
-        ],
+        "daysOfWeek": ["wednesday"],
         "interval": 1
       },
       "includeInBriefing": true,
@@ -414,9 +354,7 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "10:00",
-      "days": [
-        "thursday"
-      ],
+      "days": ["thursday"],
       "includeInExport": {
         "thursday": true,
         "monday": true,
@@ -432,9 +370,7 @@
       },
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": [
-          "thursday"
-        ],
+        "daysOfWeek": ["thursday"],
         "interval": 1
       }
     },
@@ -446,9 +382,7 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "10:00",
-      "days": [
-        "friday"
-      ],
+      "days": ["friday"],
       "includeInExport": {
         "friday": true,
         "monday": true,
@@ -464,9 +398,7 @@
       },
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": [
-          "friday"
-        ],
+        "daysOfWeek": ["friday"],
         "interval": 1
       }
     },
@@ -478,9 +410,7 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "10:00",
-      "days": [
-        "saturday"
-      ],
+      "days": ["saturday"],
       "includeInExport": {
         "saturday": true,
         "monday": true,
@@ -496,9 +426,7 @@
       },
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": [
-          "saturday"
-        ],
+        "daysOfWeek": ["saturday"],
         "interval": 1
       }
     },
@@ -510,9 +438,7 @@
       "isAllDay": false,
       "startTime": "00:00",
       "endTime": "",
-      "days": [
-        "saturday"
-      ],
+      "days": ["saturday"],
       "includeInExport": {
         "saturday": true,
         "monday": true,
@@ -526,9 +452,7 @@
       "order": {},
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": [
-          "saturday"
-        ],
+        "daysOfWeek": ["saturday"],
         "interval": 1
       },
       "dateIncludeOverrides": {
@@ -544,11 +468,7 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "10:00",
-      "days": [
-        "tuesday",
-        "thursday",
-        "sunday"
-      ],
+      "days": ["tuesday", "thursday", "sunday"],
       "includeInExport": {
         "sunday": true,
         "tuesday": true,
@@ -566,11 +486,7 @@
       },
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": [
-          "tuesday",
-          "thursday",
-          "sunday"
-        ],
+        "daysOfWeek": ["tuesday", "thursday", "sunday"],
         "interval": 1
       }
     },
@@ -582,11 +498,7 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "10:00",
-      "days": [
-        "monday",
-        "wednesday",
-        "friday"
-      ],
+      "days": ["monday", "wednesday", "friday"],
       "includeInExport": {
         "monday": true,
         "wednesday": true,
@@ -604,11 +516,7 @@
       },
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": [
-          "monday",
-          "wednesday",
-          "friday"
-        ],
+        "daysOfWeek": ["monday", "wednesday", "friday"],
         "interval": 1
       },
       "remindEndOfDay": true
@@ -621,9 +529,7 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "10:00",
-      "days": [
-        "sunday"
-      ],
+      "days": ["sunday"],
       "includeInExport": {
         "sunday": true,
         "monday": true,
@@ -639,9 +545,7 @@
       },
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": [
-          "sunday"
-        ],
+        "daysOfWeek": ["sunday"],
         "interval": 1
       },
       "remindEndOfDay": true
@@ -654,11 +558,7 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "10:00",
-      "days": [
-        "wednesday",
-        "thursday",
-        "friday"
-      ],
+      "days": ["wednesday", "thursday", "friday"],
       "includeInExport": {
         "wednesday": true,
         "thursday": true,
@@ -672,26 +572,20 @@
       },
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": [
-          "wednesday",
-          "thursday",
-          "friday"
-        ],
+        "daysOfWeek": ["wednesday", "thursday", "friday"],
         "interval": 2,
-        "startDate": "2025-03-02T05:00:00.000Z"
+        "startDate": "2025-03-02"
       }
     },
     {
       "id": "ev-1739556818565",
       "archived": false,
-      "title": "Doomsday event - Don't forget to collect rewards as they are not mailed",
+      "title": "Doomsday event - Don\u0027t forget to collect rewards as they are not mailed",
       "description": "",
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "10:00",
-      "days": [
-        "sunday"
-      ],
+      "days": ["sunday"],
       "includeInExport": {
         "monday": false,
         "tuesday": false,
@@ -709,10 +603,8 @@
         "type": "weeks",
         "onPeriods": 1,
         "offPeriods": 1,
-        "daysOfWeek": [
-          "sunday"
-        ],
-        "startDate": "2025-08-31T04:00:00.000Z"
+        "daysOfWeek": ["sunday"],
+        "startDate": "2025-08-31"
       },
       "remindEndOfDay": true,
       "remindTomorrow": true
@@ -720,16 +612,12 @@
     {
       "id": "ev-1739556987954",
       "archived": false,
-      "title": "General's Trial - Choose ONE level after what you can solo.",
+      "title": "General\u0027s Trial - Choose ONE level after what you can solo.",
       "description": "",
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "10:00",
-      "days": [
-        "wednesday",
-        "thursday",
-        "friday"
-      ],
+      "days": ["wednesday", "thursday", "friday"],
       "includeInExport": {
         "wednesday": true,
         "thursday": true,
@@ -743,13 +631,9 @@
       },
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": [
-          "wednesday",
-          "thursday",
-          "friday"
-        ],
+        "daysOfWeek": ["wednesday", "thursday", "friday"],
         "interval": 2,
-        "startDate": "2025-03-09T05:00:00.000Z"
+        "startDate": "2025-03-09"
       },
       "remindTomorrow": true
     },
@@ -761,9 +645,7 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "10:00",
-      "days": [
-        "saturday"
-      ],
+      "days": ["saturday"],
       "includeInExport": {
         "saturday": true,
         "monday": true,
@@ -780,9 +662,7 @@
       },
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": [
-          "saturday"
-        ],
+        "daysOfWeek": ["saturday"],
         "interval": 1
       }
     },
@@ -794,9 +674,7 @@
       "isAllDay": false,
       "startTime": "22:50",
       "endTime": "23:30",
-      "days": [
-        "friday"
-      ],
+      "days": ["friday"],
       "includeInExport": {
         "monday": false,
         "tuesday": false,
@@ -810,9 +688,7 @@
       "order": {},
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": [
-          "friday"
-        ],
+        "daysOfWeek": ["friday"],
         "interval": 1
       },
       "remindTomorrow": true
@@ -821,13 +697,11 @@
       "id": "ev-1740278810425",
       "archived": false,
       "title": "Rampage Bosses",
-      "description": "• Spawn at 0:00, 6:00, and 12:00\n• Attacking doesn't cost stamina or troops\n• Take three shots on each and try to get as much damage as you can!\n• If the server manages to do enough damage, they'll drop rewards you can grab over the next few hours",
+      "description": "• Spawn at 0:00, 6:00, and 12:00\n• Attacking doesn\u0027t cost stamina or troops\n• Take three shots on each and try to get as much damage as you can!\n• If the server manages to do enough damage, they\u0027ll drop rewards you can grab over the next few hours",
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "10:00",
-      "days": [
-        "sunday"
-      ],
+      "days": ["sunday"],
       "includeInExport": {
         "sunday": true,
         "monday": true,
@@ -845,10 +719,8 @@
         "type": "weeks",
         "onPeriods": 1,
         "offPeriods": 1,
-        "daysOfWeek": [
-          "sunday"
-        ],
-        "startDate": "2025-09-07T04:00:00.000Z"
+        "daysOfWeek": ["sunday"],
+        "startDate": "2025-09-07"
       },
       "remindEndOfDay": true
     },
@@ -891,7 +763,7 @@
           "wednesday"
         ],
         "interval": 2,
-        "startDate": "2024-10-13T04:00:00.000Z"
+        "startDate": "2024-10-13"
       },
       "remindTomorrow": true
     },
@@ -999,7 +871,7 @@
           "friday",
           "saturday"
         ],
-        "startDate": "2025-09-22T04:00:00.000Z"
+        "startDate": "2025-09-22"
       },
       "remindEndOfDay": true
     },
@@ -1011,10 +883,7 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "10:00",
-      "days": [
-        "monday",
-        "thursday"
-      ],
+      "days": ["monday", "thursday"],
       "includeInExport": {
         "wednesday": true,
         "sunday": true,
@@ -1031,12 +900,9 @@
       },
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": [
-          "monday",
-          "thursday"
-        ],
+        "daysOfWeek": ["monday", "thursday"],
         "interval": 1,
-        "startDate": "2025-03-12T00:00:00.000-04:00"
+        "startDate": "2025-03-12"
       }
     },
     {
@@ -1047,10 +913,7 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "10:00",
-      "days": [
-        "tuesday",
-        "friday"
-      ],
+      "days": ["tuesday", "friday"],
       "includeInExport": {
         "wednesday": true,
         "sunday": true,
@@ -1067,12 +930,9 @@
       },
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": [
-          "tuesday",
-          "friday"
-        ],
+        "daysOfWeek": ["tuesday", "friday"],
         "interval": 1,
-        "startDate": "2025-03-12T00:00:00.000-04:00"
+        "startDate": "2025-03-12"
       }
     },
     {
@@ -1083,10 +943,7 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "10:00",
-      "days": [
-        "wednesday",
-        "saturday"
-      ],
+      "days": ["wednesday", "saturday"],
       "includeInExport": {
         "wednesday": true,
         "sunday": true,
@@ -1103,18 +960,15 @@
       },
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": [
-          "wednesday",
-          "saturday"
-        ],
+        "daysOfWeek": ["wednesday", "saturday"],
         "interval": 1,
-        "startDate": "2025-03-12T00:00:00.000-04:00"
+        "startDate": "2025-03-12"
       }
     },
     {
       "id": "dfb867b9-9ffc-4a60-baf2-bd89a1d18681",
       "archived": false,
-      "title": "SHINYs in 969-972, 982-986, 994 & 995",
+      "title": "SHINYs in 969-972, 982-986, 994 \u0026 995",
       "description": "",
       "isAllDay": true,
       "startTime": "09:00",
@@ -1157,7 +1011,7 @@
           "saturday"
         ],
         "interval": 3,
-        "startDate": "2025-03-14T00:00:00.000-04:00"
+        "startDate": "2025-03-14"
       },
       "dateIncludeOverrides": {}
     },
@@ -1207,7 +1061,7 @@
           "saturday"
         ],
         "interval": 3,
-        "startDate": "2025-03-12T04:00:00.000Z"
+        "startDate": "2025-03-12"
       },
       "dateIncludeOverrides": {}
     },
@@ -1256,7 +1110,7 @@
           "saturday"
         ],
         "interval": 3,
-        "startDate": "2025-03-13T04:00:00.000Z"
+        "startDate": "2025-03-13"
       },
       "dateIncludeOverrides": {
         "2025-07-05": true
@@ -1270,13 +1124,7 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "",
-      "days": [
-        "tuesday",
-        "wednesday",
-        "thursday",
-        "friday",
-        "saturday"
-      ],
+      "days": ["tuesday", "wednesday", "thursday", "friday", "saturday"],
       "includeInExport": {
         "monday": true,
         "sunday": true,
@@ -1302,7 +1150,7 @@
           "saturday"
         ],
         "interval": 4,
-        "startDate": "2025-07-22T04:00:00.000Z"
+        "startDate": "2025-07-22"
       },
       "dateIncludeOverrides": {
         "2025-07-08": false
@@ -1317,13 +1165,7 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "",
-      "days": [
-        "tuesday",
-        "wednesday",
-        "thursday",
-        "friday",
-        "saturday"
-      ],
+      "days": ["tuesday", "wednesday", "thursday", "friday", "saturday"],
       "includeInExport": {
         "monday": true,
         "sunday": true,
@@ -1348,7 +1190,7 @@
           "friday",
           "saturday"
         ],
-        "startDate": "2025-09-02T04:00:00.000Z"
+        "startDate": "2025-09-02"
       },
       "dateIncludeOverrides": {
         "2025-03-28": false
@@ -1362,9 +1204,7 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "",
-      "days": [
-        "tuesday"
-      ],
+      "days": ["tuesday"],
       "includeInExport": {
         "sunday": true,
         "monday": true,
@@ -1380,17 +1220,15 @@
       },
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": [
-          "tuesday"
-        ],
+        "daysOfWeek": ["tuesday"],
         "interval": 1,
-        "startDate": "2025-03-30T00:00:00.000-04:00"
+        "startDate": "2025-03-30"
       }
     },
     {
       "id": "fe4d455d-6f36-45b2-92c2-24c32521473f",
       "archived": false,
-      "title": "Hot Deals → Glittering Market",
+      "title": "Hot Deals â†’ Glittering Market",
       "description": "• At minimum, collect 100 diamonds / Buy 60 coins for 500 diamonds",
       "isAllDay": true,
       "startTime": "09:00",
@@ -1429,7 +1267,7 @@
           "sunday"
         ],
         "interval": 5,
-        "startDate": "2025-09-09T04:00:00.000Z"
+        "startDate": "2025-09-09"
       },
       "remindEndOfDay": true
     },
@@ -1441,9 +1279,7 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "",
-      "days": [
-        "thursday"
-      ],
+      "days": ["thursday"],
       "includeInExport": {
         "monday": true,
         "sunday": true,
@@ -1459,9 +1295,7 @@
       },
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": [
-          "thursday"
-        ],
+        "daysOfWeek": ["thursday"],
         "interval": 1
       }
     },
@@ -1473,12 +1307,7 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "",
-      "days": [
-        "sunday",
-        "monday",
-        "thursday",
-        "friday"
-      ],
+      "days": ["sunday", "monday", "thursday", "friday"],
       "includeInExport": {
         "friday": true,
         "sunday": true,
@@ -1497,14 +1326,9 @@
       },
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": [
-          "sunday",
-          "monday",
-          "thursday",
-          "friday"
-        ],
+        "daysOfWeek": ["sunday", "monday", "thursday", "friday"],
         "interval": 3,
-        "startDate": "2025-07-06T04:00:00.000Z"
+        "startDate": "2025-07-06"
       },
       "dateIncludeOverrides": {
         "2025-07-10": false,
@@ -1519,9 +1343,7 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "",
-      "days": [
-        "friday"
-      ],
+      "days": ["friday"],
       "includeInExport": {
         "friday": true,
         "sunday": true,
@@ -1535,11 +1357,9 @@
       "order": {},
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": [
-          "friday"
-        ],
+        "daysOfWeek": ["friday"],
         "interval": 3,
-        "startDate": "2025-07-13T04:00:00.000Z"
+        "startDate": "2025-07-13"
       }
     },
     {
@@ -1584,20 +1404,18 @@
           "saturday"
         ],
         "interval": 99,
-        "startDate": "2025-07-13T00:00:00.000-04:00"
+        "startDate": "2025-07-13"
       }
     },
     {
       "id": "4af5277e-a46b-4407-94cc-66452e907f1d",
       "archived": false,
-      "title": "Sky Predator - General's Trial Alliance Challenge",
+      "title": "Sky Predator - General\u0027s Trial Alliance Challenge",
       "description": "",
       "isAllDay": false,
       "startTime": "23:00",
       "endTime": "23:30",
-      "days": [
-        "thursday"
-      ],
+      "days": ["thursday"],
       "includeInExport": {
         "thursday": true,
         "sunday": true,
@@ -1611,11 +1429,9 @@
       "order": {},
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": [
-          "thursday"
-        ],
+        "daysOfWeek": ["thursday"],
         "interval": 2,
-        "startDate": "2025-07-17T04:00:00.000Z",
+        "startDate": "2025-07-17",
         "pattern": {
           "onWeeks": 1,
           "offWeeks": 1,
@@ -1632,9 +1448,7 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "",
-      "days": [
-        "friday"
-      ],
+      "days": ["friday"],
       "includeInExport": {
         "friday": true,
         "sunday": true,
@@ -1650,11 +1464,9 @@
       },
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": [
-          "friday"
-        ],
+        "daysOfWeek": ["friday"],
         "interval": 1,
-        "startDate": "2025-08-22T00:00:00.000-04:00"
+        "startDate": "2025-08-22"
       }
     },
     {
@@ -1667,9 +1479,7 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "",
-      "days": [
-        "sunday"
-      ],
+      "days": ["sunday"],
       "includeInExport": {
         "tuesday": true,
         "sunday": true,
@@ -1685,10 +1495,8 @@
         "type": "weeks",
         "onPeriods": 1,
         "offPeriods": 0,
-        "daysOfWeek": [
-          "sunday"
-        ],
-        "startDate": "2025-09-16T00:00:00.000-04:00"
+        "daysOfWeek": ["sunday"],
+        "startDate": "2025-09-16"
       }
     },
     {
@@ -1701,9 +1509,7 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "",
-      "days": [
-        "wednesday"
-      ],
+      "days": ["wednesday"],
       "includeInExport": {
         "wednesday": true,
         "monday": true,
@@ -1718,10 +1524,8 @@
         "type": "days",
         "onPeriods": 1,
         "offPeriods": 0,
-        "daysOfWeek": [
-          "wednesday"
-        ],
-        "startDate": "2025-09-17T00:00:00.000-04:00"
+        "daysOfWeek": ["wednesday"],
+        "startDate": "2025-09-17"
       },
       "includeInBriefing": true,
       "includeOnWebsite": true
@@ -1736,9 +1540,7 @@
       "isAllDay": false,
       "startTime": "13:30",
       "endTime": "14:00",
-      "days": [
-        "sunday"
-      ],
+      "days": ["sunday"],
       "includeInExport": {
         "sunday": true,
         "monday": true,
@@ -1754,10 +1556,8 @@
         "type": "weeks",
         "onPeriods": 1,
         "offPeriods": 99,
-        "daysOfWeek": [
-          "sunday"
-        ],
-        "startDate": "2025-09-21T00:00:00.000-04:00"
+        "daysOfWeek": ["sunday"],
+        "startDate": "2025-09-21"
       }
     },
     {
@@ -1770,9 +1570,7 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "",
-      "days": [
-        "sunday"
-      ],
+      "days": ["sunday"],
       "includeInExport": {
         "sunday": true,
         "tuesday": true,
@@ -1787,10 +1585,8 @@
         "type": "weeks",
         "onPeriods": 1,
         "offPeriods": 0,
-        "daysOfWeek": [
-          "sunday"
-        ],
-        "startDate": "2023-12-31T05:00:00.000Z"
+        "daysOfWeek": ["sunday"],
+        "startDate": "2023-12-31"
       },
       "dateIncludeOverrides": {
         "2025-09-21": false
@@ -1843,7 +1639,7 @@
           "friday",
           "saturday"
         ],
-        "startDate": "2024-01-01T05:00:00.000Z"
+        "startDate": "2024-01-01"
       }
     },
     {
@@ -1857,9 +1653,7 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "",
-      "days": [
-        "monday"
-      ],
+      "days": ["monday"],
       "includeInExport": {
         "monday": true,
         "tuesday": true,
@@ -1875,15 +1669,13 @@
         "type": "weeks",
         "onPeriods": 1,
         "offPeriods": 1,
-        "daysOfWeek": [
-          "monday"
-        ],
-        "startDate": "2023-12-31T05:00:00.000Z"
+        "daysOfWeek": ["monday"],
+        "startDate": "2023-12-31"
       }
     },
     {
       "id": "151805d5-5c6a-4cc0-a62b-9ab90c54d5a0",
-      "title": "Free/300/500 Stamina - Radar & Loot Goblins",
+      "title": "Free/300/500 Stamina - Radar \u0026 Loot Goblins",
       "description": "",
       "remindTomorrow": false,
       "remindEndOfDay": true,
@@ -1892,9 +1684,7 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "",
-      "days": [
-        "tuesday"
-      ],
+      "days": ["tuesday"],
       "includeInExport": {
         "monday": true,
         "sunday": true,
@@ -1911,10 +1701,8 @@
         "type": "weeks",
         "onPeriods": 1,
         "offPeriods": 1,
-        "daysOfWeek": [
-          "tuesday"
-        ],
-        "startDate": "2024-01-07T05:00:00.000Z"
+        "daysOfWeek": ["tuesday"],
+        "startDate": "2024-01-07"
       }
     },
     {
@@ -1928,9 +1716,7 @@
       "isAllDay": false,
       "startTime": "12:00",
       "endTime": "",
-      "days": [
-        "thursday"
-      ],
+      "days": ["thursday"],
       "includeInExport": {
         "wednesday": true,
         "sunday": true,
@@ -1947,10 +1733,8 @@
         "type": "weeks",
         "onPeriods": 1,
         "offPeriods": 0,
-        "daysOfWeek": [
-          "thursday"
-        ],
-        "startDate": "2023-12-31T05:00:00.000Z"
+        "daysOfWeek": ["thursday"],
+        "startDate": "2023-12-31"
       }
     },
     {
@@ -1998,7 +1782,7 @@
           "friday",
           "saturday"
         ],
-        "startDate": "2023-12-31T05:00:00.000Z"
+        "startDate": "2023-12-31"
       }
     },
     {
@@ -2012,9 +1796,7 @@
       "isAllDay": false,
       "startTime": "12:00",
       "endTime": "",
-      "days": [
-        "friday"
-      ],
+      "days": ["friday"],
       "includeInExport": {
         "monday": true,
         "sunday": true,
@@ -2031,10 +1813,8 @@
         "type": "weeks",
         "onPeriods": 1,
         "offPeriods": 0,
-        "daysOfWeek": [
-          "friday"
-        ],
-        "startDate": "2025-11-12T23:54:00.355Z"
+        "daysOfWeek": ["friday"],
+        "startDate": "2025-11-12"
       }
     },
     {
@@ -2048,9 +1828,7 @@
       "isAllDay": false,
       "startTime": "23:00",
       "endTime": "",
-      "days": [
-        "thursday"
-      ],
+      "days": ["thursday"],
       "includeInExport": {
         "thursday": true,
         "sunday": true,
@@ -2067,10 +1845,8 @@
         "type": "weeks",
         "onPeriods": 1,
         "offPeriods": 0,
-        "daysOfWeek": [
-          "thursday"
-        ],
-        "startDate": "2023-12-31T05:00:00.000Z"
+        "daysOfWeek": ["thursday"],
+        "startDate": "2023-12-31"
       }
     },
     {
@@ -2122,10 +1898,7 @@
       "isAllDay": false,
       "startTime": "12:00",
       "endTime": "13:00",
-      "days": [
-        "tuesday",
-        "friday"
-      ],
+      "days": ["tuesday", "friday"],
       "includeInExport": {
         "tuesday": false,
         "friday": false
@@ -2135,23 +1908,18 @@
       "archived": true,
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": [
-          "tuesday",
-          "friday"
-        ],
+        "daysOfWeek": ["tuesday", "friday"],
         "interval": 1
       }
     },
     {
       "id": "0966e2c0-e0d7-41ea-9a8b-16453388e178",
       "title": "Warzone Duel: Capitol War",
-      "description": "• This is Last War's main event so the rewards are very, very good\n• It is fairly easy to max participation rewards starting 1-2 hours after the capitol is contested\n• You can only earn ranking rewards while the capitol is being contested",
+      "description": "• This is Last War\u0027s main event so the rewards are very, very good\n• It is fairly easy to max participation rewards starting 1-2 hours after the capitol is contested\n• You can only earn ranking rewards while the capitol is being contested",
       "isAllDay": false,
       "startTime": "12:00",
       "endTime": "",
-      "days": [
-        "saturday"
-      ],
+      "days": ["saturday"],
       "includeInExport": {
         "wednesday": true,
         "sunday": true,
@@ -2166,11 +1934,9 @@
       "archived": true,
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": [
-          "saturday"
-        ],
+        "daysOfWeek": ["saturday"],
         "interval": 1,
-        "startDate": "2025-03-12T00:00:00.000-04:00"
+        "startDate": "2025-03-12"
       },
       "dateIncludeOverrides": {
         "2025-05-03": false
@@ -2183,10 +1949,7 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "",
-      "days": [
-        "tuesday",
-        "monday"
-      ],
+      "days": ["tuesday", "monday"],
       "includeInExport": {
         "monday": true,
         "sunday": true,
@@ -2204,10 +1967,7 @@
       "archived": true,
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": [
-          "tuesday",
-          "monday"
-        ],
+        "daysOfWeek": ["tuesday", "monday"],
         "interval": 2
       },
       "dateIncludeOverrides": {}
@@ -2219,9 +1979,7 @@
       "isAllDay": false,
       "startTime": "12:00",
       "endTime": "16:00",
-      "days": [
-        "friday"
-      ],
+      "days": ["friday"],
       "includeInExport": {
         "monday": true,
         "sunday": true,
@@ -2236,9 +1994,7 @@
       "archived": true,
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": [
-          "friday"
-        ],
+        "daysOfWeek": ["friday"],
         "interval": 1
       }
     },
@@ -2287,17 +2043,12 @@
     },
     {
       "id": "c0a5849e-5065-450d-ac67-5dd9f5b138c9",
-      "title": "Season I Celebration → Championship Duel → Predicts ",
-      "description": "• Wager to win Black Market Cash without risking any\n• More icon → x4 Elite Match → Predict → x100\n• I'm just picking the favorite since I don't feel like doing research",
+      "title": "Season I Celebration â†’ Championship Duel â†’ Predicts ",
+      "description": "• Wager to win Black Market Cash without risking any\n• More icon â†’ x4 Elite Match â†’ Predict â†’ x100\n• I\u0027m just picking the favorite since I don\u0027t feel like doing research",
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "",
-      "days": [
-        "monday",
-        "tuesday",
-        "wednesday",
-        "thursday"
-      ],
+      "days": ["monday", "tuesday", "wednesday", "thursday"],
       "includeInExport": {
         "monday": false,
         "sunday": true,
@@ -2314,12 +2065,7 @@
       "archived": true,
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": [
-          "monday",
-          "tuesday",
-          "wednesday",
-          "thursday"
-        ],
+        "daysOfWeek": ["monday", "tuesday", "wednesday", "thursday"],
         "interval": 1
       },
       "dateIncludeOverrides": {
@@ -2329,7 +2075,7 @@
     },
     {
       "id": "1d5cdb18-023b-4511-a73e-0ed1d300b76f",
-      "title": "Season II Celebration → Black Market",
+      "title": "Season II Celebration â†’ Black Market",
       "description": "• Use all of your refreshes every day\n• Always buy the free items\n• Free/Cheap players recommendation:\n   • Top Row\n      • Decorations\n      • Weapon Shards (until you have enough to unlock all Heroes)\n      • if you have plenty of cash, UR Skill Chips, UR decorations\n   • Bottom Row:\n      • Exclusive Weapons (until enough)",
       "isAllDay": true,
       "startTime": "09:00",
@@ -2375,7 +2121,7 @@
           "saturday"
         ],
         "interval": 1,
-        "startDate": "2025-04-08T00:00:00.000-04:00",
+        "startDate": "2025-04-08",
         "pattern": {
           "onWeeks": 1,
           "offWeeks": 1,
@@ -2409,9 +2155,7 @@
       "isAllDay": false,
       "startTime": "00:10",
       "endTime": "00:40",
-      "days": [
-        "saturday"
-      ],
+      "days": ["saturday"],
       "includeInExport": {
         "monday": false,
         "sunday": false,
@@ -2426,9 +2170,7 @@
       "archived": true,
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": [
-          "saturday"
-        ],
+        "daysOfWeek": ["saturday"],
         "interval": 1
       },
       "dateIncludeOverrides": {
@@ -2443,9 +2185,7 @@
       "isAllDay": false,
       "startTime": "12:30",
       "endTime": "13:00",
-      "days": [
-        "saturday"
-      ],
+      "days": ["saturday"],
       "includeInExport": {
         "saturday": true,
         "sunday": true,
@@ -2460,11 +2200,9 @@
       "archived": true,
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": [
-          "saturday"
-        ],
+        "daysOfWeek": ["saturday"],
         "interval": 1,
-        "startDate": "2025-05-03T00:00:00.000-04:00"
+        "startDate": "2025-05-03"
       },
       "dateIncludeOverrides": {
         "2025-05-03": true,
@@ -2478,10 +2216,7 @@
       "isAllDay": false,
       "startTime": "12:00",
       "endTime": "12:35",
-      "days": [
-        "tuesday",
-        "friday"
-      ],
+      "days": ["tuesday", "friday"],
       "includeInExport": {
         "thursday": true,
         "sunday": true,
@@ -2496,12 +2231,9 @@
       "archived": true,
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": [
-          "tuesday",
-          "friday"
-        ],
+        "daysOfWeek": ["tuesday", "friday"],
         "interval": 1,
-        "startDate": "2025-05-22T00:00:00.000-04:00"
+        "startDate": "2025-05-22"
       }
     },
     {
@@ -2511,10 +2243,7 @@
       "isAllDay": false,
       "startTime": "12:30",
       "endTime": "13:10",
-      "days": [
-        "wednesday",
-        "saturday"
-      ],
+      "days": ["wednesday", "saturday"],
       "includeInExport": {
         "thursday": true,
         "sunday": true,
@@ -2529,12 +2258,9 @@
       "archived": true,
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": [
-          "wednesday",
-          "saturday"
-        ],
+        "daysOfWeek": ["wednesday", "saturday"],
         "interval": 1,
-        "startDate": "2025-05-22T00:00:00.000-04:00"
+        "startDate": "2025-05-22"
       }
     },
     {
@@ -2582,7 +2308,7 @@
           "saturday"
         ],
         "interval": 1,
-        "startDate": "2025-07-07T00:00:00.000-04:00",
+        "startDate": "2025-07-07",
         "pattern": {
           "onWeeks": 1,
           "offWeeks": 99,
@@ -2597,9 +2323,7 @@
       "isAllDay": false,
       "startTime": "23:00",
       "endTime": "",
-      "days": [
-        "thursday"
-      ],
+      "days": ["thursday"],
       "includeInExport": {
         "wednesday": true,
         "sunday": true,
@@ -2614,11 +2338,9 @@
       "archived": true,
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": [
-          "thursday"
-        ],
+        "daysOfWeek": ["thursday"],
         "interval": 2,
-        "startDate": "2025-08-06T00:00:00.000-04:00"
+        "startDate": "2025-08-06"
       },
       "remindTomorrow": true
     },
@@ -2629,10 +2351,7 @@
       "isAllDay": false,
       "startTime": "11:00",
       "endTime": "11:30",
-      "days": [
-        "tuesday",
-        "friday"
-      ],
+      "days": ["tuesday", "friday"],
       "includeInExport": {
         "thursday": true,
         "sunday": true,
@@ -2647,12 +2366,9 @@
       "archived": true,
       "recurrence": {
         "type": "weekly",
-        "daysOfWeek": [
-          "tuesday",
-          "friday"
-        ],
+        "daysOfWeek": ["tuesday", "friday"],
         "interval": 1,
-        "startDate": "2025-09-04T00:00:00.000-04:00"
+        "startDate": "2025-09-04"
       },
       "remindTomorrow": true
     },
@@ -2665,10 +2381,7 @@
       "isAllDay": false,
       "startTime": "12:30",
       "endTime": "",
-      "days": [
-        "wednesday",
-        "saturday"
-      ],
+      "days": ["wednesday", "saturday"],
       "includeInExport": {
         "tuesday": true,
         "sunday": true,
@@ -2685,11 +2398,8 @@
         "type": "weeks",
         "onPeriods": 1,
         "offPeriods": 0,
-        "daysOfWeek": [
-          "wednesday",
-          "saturday"
-        ],
-        "startDate": "2025-09-16T00:00:00.000-04:00"
+        "daysOfWeek": ["wednesday", "saturday"],
+        "startDate": "2025-09-16"
       }
     },
     {
@@ -2701,9 +2411,7 @@
       "isAllDay": false,
       "startTime": "11:00",
       "endTime": "",
-      "days": [
-        "thursday"
-      ],
+      "days": ["thursday"],
       "includeInExport": {
         "monday": true,
         "sunday": true,
@@ -2720,15 +2428,13 @@
         "type": "weeks",
         "onPeriods": 1,
         "offPeriods": 0,
-        "daysOfWeek": [
-          "thursday"
-        ],
-        "startDate": "2025-09-11T04:00:00.000Z"
+        "daysOfWeek": ["thursday"],
+        "startDate": "2025-09-11"
       }
     },
     {
       "id": "226d3b1b-ce75-444f-ac11-5ee3fe3af4b4",
-      "title": "Hot Deals → Bounty Hunter",
+      "title": "Hot Deals â†’ Bounty Hunter",
       "description": "• Get daily free/diamond ammo by clicking on the \"+\" sign\n   ($5 deal also decent for pay players)\n• Use Jammers when only purple zombies are left.\n• Click on Wandering Merchants for free items",
       "remindTomorrow": false,
       "remindEndOfDay": true,

@@ -20,9 +20,9 @@ const getClientStorage = (): Storage | null => {
   }
 }
 
-const isAdminModeActive = (storage: Storage): boolean => {
+const adminModeModeActive = (storage: Storage): boolean => {
   try {
-    return storage.getItem(buildScopedKey("isAdmin")) === "true"
+    return storage.getItem(buildScopedKey("adminMode")) === "true"
   } catch {
     return false
   }
@@ -42,7 +42,7 @@ export const scopedStateStorage: StateStorage = {
   setItem: (key, value) => {
     const storage = getClientStorage()
     if (!storage) return
-    if (!isAdminModeActive(storage)) return
+    if (!adminModeModeActive(storage)) return
     const scopedKey = buildScopedKey(key)
     try {
       const serialized = typeof value === "string" ? value : JSON.stringify(value)
@@ -54,7 +54,7 @@ export const scopedStateStorage: StateStorage = {
   removeItem: (key) => {
     const storage = getClientStorage()
     if (!storage) return
-    if (!isAdminModeActive(storage)) return
+    if (!adminModeModeActive(storage)) return
     const scopedKey = buildScopedKey(key)
     try {
       storage.removeItem(scopedKey)
@@ -96,6 +96,27 @@ export const scopedLocalStorage = {
 
 export const getScopedKey = (key: string): string => buildScopedKey(key)
 
+const readScopedValueForTag = (tag: string, key: string): string | null => {
+  const storage = getClientStorage()
+  if (!storage) return null
+  try {
+    return storage.getItem(buildKeyForTag(tag, key))
+  } catch {
+    return null
+  }
+}
+
+export const isCurrentTagInAdminMode = (): boolean => scopedLocalStorage.getItem("adminMode") === "true"
+
+export const readScopedFlagForTag = (tag: string, key: string): boolean => {
+  const value = readScopedValueForTag(tag, key)
+  return value === "true"
+}
+
+export const hasAdminAccessForTag = (tag: string): boolean => readScopedFlagForTag(tag, "hasAdminAccess")
+
+export const isAdminModeEnabledForTag = (tag: string): boolean => readScopedFlagForTag(tag, "adminMode")
+
 const buildKeyForTag = (tag: string, key: string): string => `${STORAGE_PREFIX}:${tag}:${key}`
 
 const parseTagFromScopedKey = (rawKey: string): { tag: string; key: string } | null => {
@@ -122,6 +143,29 @@ export const listTagsWithStoredData = (dataKeys: readonly string[] = DEFAULT_DAT
   }
 
   return Array.from(keys).sort()
+}
+
+export const listAdminEnabledTags = (): string[] => {
+  const storage = getClientStorage()
+  if (!storage) return []
+
+  const tags = new Set<string>()
+  for (let index = 0; index < storage.length; index++) {
+    const rawKey = storage.key(index)
+    if (!rawKey) continue
+    const parsed = parseTagFromScopedKey(rawKey)
+    if (!parsed) continue
+    if (parsed.key !== "adminMode") continue
+    try {
+      if (storage.getItem(rawKey) === "true") {
+        tags.add(parsed.tag)
+      }
+    } catch {
+      // Ignore read failures
+    }
+  }
+
+  return Array.from(tags).sort()
 }
 
 export const readScopedStateForTag = <T = unknown>(tag: string, key: string): T | null => {
@@ -227,6 +271,38 @@ export const readStoredTipOverrides = (tag: string): StoredOverrideSnapshot | nu
   const state = readPersistedStateForTag(tag, "daily-agenda-tips")
   if (!state) return null
   return normalizeOverrideSnapshot(state, "deletedTipIds", "legacyTips")
+}
+
+const writePersistedStateForTag = (tag: string, key: string, state: Record<string, any>, version = 1) => {
+  const storage = getClientStorage()
+  if (!storage) return
+  try {
+    const payload = JSON.stringify({
+      state,
+      version,
+    })
+    storage.setItem(buildKeyForTag(tag, key), payload)
+  } catch {
+    // Ignore write failures
+  }
+}
+
+export const writeStoredEventOverrides = (tag: string, snapshot: StoredOverrideSnapshot) => {
+  const state = {
+    overridesById: snapshot.overridesById || {},
+    deletedEventIds: snapshot.deletedIds || [],
+    legacyEvents: snapshot.legacyItems || null,
+  }
+  writePersistedStateForTag(tag, "daily-agenda-events", state, 1)
+}
+
+export const writeStoredTipOverrides = (tag: string, snapshot: StoredOverrideSnapshot) => {
+  const state = {
+    overridesById: snapshot.overridesById || {},
+    deletedTipIds: snapshot.deletedIds || [],
+    legacyTips: snapshot.legacyItems || null,
+  }
+  writePersistedStateForTag(tag, "daily-agenda-tips", state, 1)
 }
 
 export type { StoredOverrideSnapshot }

@@ -14,9 +14,8 @@ type OverrideDiffValue = {
 const OverrideDiffContext = createContext<OverrideDiffValue | null>(null)
 
 export function OverrideDiffProvider({ children }: { children: ReactNode }) {
-  const events = useEvents((state) => state.events)
-  const activeTag = useEvents((state) => state.activeTag)
-  const tips = useTips((state) => state.tips)
+  const { events, activeTag } = useEvents()
+  const { tips } = useTips()
   const [diffIndex, setDiffIndex] = useState<DiffIndex | null>(null)
   const [loading, setLoading] = useState(false)
   const [refreshToken, setRefreshToken] = useState(0)

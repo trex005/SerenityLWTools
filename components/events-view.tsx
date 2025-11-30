@@ -426,8 +426,8 @@ function EventCard({
                     <TooltipProvider>
                       <Tooltip>
                         <TooltipTrigger asChild>
-                          <Badge variant="secondary" className="text-amber-900 bg-amber-100 border-amber-200">
-                            Overrides
+                          <Badge className="text-muted-foreground border-border bg-muted/60 dark:bg-muted/40">
+                            Overridden
                           </Badge>
                         </TooltipTrigger>
                         <TooltipContent className="max-w-xs">

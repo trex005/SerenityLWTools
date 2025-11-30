@@ -17,21 +17,21 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 
 export function AdminAccessTrigger() {
-  const { isAdmin, hasAdminAccess, verifyAdminPassword, enterAdminMode, exitAdminMode } = useAdminState()
+  const { adminMode, hasAdminAccess, verifyAdminPassword, enterAdminMode, exitAdminMode } = useAdminState()
   const [showDialog, setShowDialog] = useState(false)
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
 
   const handleClick = () => {
     // If already in admin mode, exit admin mode
-    if (isAdmin) {
+    if (adminMode) {
       exitAdminMode()
       return
     }
 
     // Otherwise, try to enter admin mode
     // Only show the dialog if we're not already in admin mode
-    if (!isAdmin) {
+    if (!adminMode) {
       // Try to enter admin mode without password if user has admin access
       if (hasAdminAccess && enterAdminMode()) {
         // Successfully entered admin mode without password

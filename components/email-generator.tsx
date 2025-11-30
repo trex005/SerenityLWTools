@@ -16,8 +16,13 @@ import { Textarea } from "@/components/ui/textarea"
 import { DateRangeSelector } from "@/components/date-range-selector"
 import { useEvents } from "@/hooks/use-events"
 import { useTips } from "@/hooks/use-tips"
-import { addDays, startOfDay, endOfDay, format } from "date-fns"
-import { getAppTimezoneDate } from "@/lib/date-utils"
+import {
+  addAppDays,
+  formatInAppTimezone,
+  getAppToday,
+  getEndOfAppDay,
+  getStartOfAppDay,
+} from "@/lib/date-utils"
 import { Copy, Check, RefreshCw } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -61,9 +66,8 @@ export function EmailGenerator({ initialDateRange }: EmailGeneratorProps) {
 
   // State for date range - ALWAYS default to today and tomorrow in UTC-2
   const [dateRange, setDateRange] = useState<[Date | undefined, Date | undefined]>(() => {
-    const utcMinus2 = getAppTimezoneDate()
-    const today = startOfDay(utcMinus2)
-    const tomorrow = endOfDay(addDays(today, 1))
+    const today = getAppToday()
+    const tomorrow = getEndOfAppDay(addAppDays(today, 1))
     return [today, tomorrow] // Default to today and tomorrow in UTC-2
   })
 
@@ -266,7 +270,7 @@ export function EmailGenerator({ initialDateRange }: EmailGeneratorProps) {
       return false
     }
 
-    const dateStr = format(date, "yyyy-MM-dd")
+    const dateStr = formatInAppTimezone(date, "yyyy-MM-dd")
     const dayOfWeek = getDayOfWeek(date)
 
     // Check date-specific override first
@@ -305,20 +309,19 @@ export function EmailGenerator({ initialDateRange }: EmailGeneratorProps) {
     let content = ""
 
     // Add date range header
-    content += `Schedule for ${format(dateRange[0]!, "MMMM d")} - ${format(dateRange[1]!, "MMMM d, yyyy")}\n\n`
+    content += `Schedule for ${formatInAppTimezone(dateRange[0]!, "MMMM d")} - ${formatInAppTimezone(dateRange[1]!, "MMMM d, yyyy")}\n\n`
 
     // Create a new date to iterate through the range
     const currentDate = new Date(dateRange[0]!.getTime())
     const endDate = new Date(dateRange[1]!.getTime())
 
     // Get current date in UTC-2 for "Today" and "Tomorrow" labels
-    const utcMinus2 = getAppTimezoneDate()
-    const utcMinus2Today = startOfDay(utcMinus2)
-    const utcMinus2Tomorrow = startOfDay(addDays(utcMinus2Today, 1))
+    const utcMinus2Today = getAppToday()
+    const utcMinus2Tomorrow = getStartOfAppDay(addAppDays(utcMinus2Today, 1))
 
     // Iterate through each day in the range
     while (currentDate <= endDate) {
-      const dateStr = format(currentDate, "yyyy-MM-dd")
+      const dateStr = formatInAppTimezone(currentDate, "yyyy-MM-dd")
       const dayOfWeek = getDayOfWeek(currentDate)
 
       // Get events for this specific date
@@ -329,12 +332,16 @@ export function EmailGenerator({ initialDateRange }: EmailGeneratorProps) {
       // Only add the date if there are events for it
       if (dateEvents.length > 0) {
         // Add the date header with Today/Tomorrow prefix if applicable
-        let dateHeader = format(currentDate, "EEEE, MMMM d")
+        let dateHeader = formatInAppTimezone(currentDate, "EEEE, MMMM d")
 
         // Check if this date is today or tomorrow in UTC-2
-        if (format(currentDate, "yyyy-MM-dd") === format(utcMinus2Today, "yyyy-MM-dd")) {
+        if (
+          formatInAppTimezone(currentDate, "yyyy-MM-dd") === formatInAppTimezone(utcMinus2Today, "yyyy-MM-dd")
+        ) {
           dateHeader = "Today: " + dateHeader
-        } else if (format(currentDate, "yyyy-MM-dd") === format(utcMinus2Tomorrow, "yyyy-MM-dd")) {
+        } else if (
+          formatInAppTimezone(currentDate, "yyyy-MM-dd") === formatInAppTimezone(utcMinus2Tomorrow, "yyyy-MM-dd")
+        ) {
           dateHeader = "Tomorrow: " + dateHeader
         }
 
@@ -434,7 +441,7 @@ export function EmailGenerator({ initialDateRange }: EmailGeneratorProps) {
       // Update tip's last used date
       updateTip({
         ...tip,
-        lastUsed: new Date().toISOString(),
+        lastUsed: formatInAppTimezone(new Date(), "yyyy-MM-dd'T'HH:mm:ssXXX"),
       })
     }
   }
@@ -502,7 +509,7 @@ export function EmailGenerator({ initialDateRange }: EmailGeneratorProps) {
     // Initialize all dates in the range
     const currentDate = new Date(startDate.getTime())
     while (currentDate <= endDate) {
-      const dateStr = format(currentDate, "yyyy-MM-dd")
+      const dateStr = formatInAppTimezone(currentDate, "yyyy-MM-dd")
       eventsByDate[dateStr] = []
       // Move to next day
       currentDate.setDate(currentDate.getDate() + 1)
@@ -514,7 +521,7 @@ export function EmailGenerator({ initialDateRange }: EmailGeneratorProps) {
       const eventDates = getEventDatesInRange(event, startDate, endDate)
 
       eventDates.forEach((date) => {
-        const dateStr = format(date, "yyyy-MM-dd")
+        const dateStr = formatInAppTimezone(date, "yyyy-MM-dd")
         const dayOfWeek = getDayOfWeek(date)
 
         // Skip if this date is not in our initialized range

@@ -1,6 +1,16 @@
-import { format, parseISO, startOfDay } from "date-fns"
+import { parseISO } from "date-fns"
+import { formatInAppTimezone, getDayOfWeek as getAppDayOfWeek, getStartOfAppDay } from "./date-utils"
+
+export const getDayOfWeek = getAppDayOfWeek
 
 const DAY_IN_MS = 1000 * 60 * 60 * 24
+
+// Normalize any date to the start of that calendar day in the app timezone
+const normalizeToAppDay = (date: Date): Date => {
+  const parts = formatInAppTimezone(date, "yyyy-MM-dd").split("-").map((v) => Number(v))
+  const [year, month, day] = parts
+  return getStartOfAppDay(new Date(Date.UTC(year, (month || 1) - 1, day || 1)))
+}
 
 /**
  * New schedule calculation that fixes calendar week boundary splitting bug.
@@ -23,9 +33,9 @@ export function shouldShowOnDate(
   allowedWeekdays?: string[],
   endDate?: Date
 ): boolean {
-  const normalizedTarget = startOfDay(targetDate)
-  const normalizedStart = startOfDay(startDate)
-  const normalizedEnd = endDate ? startOfDay(endDate) : undefined
+  const normalizedTarget = normalizeToAppDay(targetDate)
+  const normalizedStart = normalizeToAppDay(startDate)
+  const normalizedEnd = endDate ? normalizeToAppDay(endDate) : undefined
 
   const dayOffset = Math.floor((normalizedTarget.getTime() - normalizedStart.getTime()) / DAY_IN_MS)
 
@@ -72,18 +82,18 @@ export function convertLegacyRecurrence(event: any): {
   
   // Determine start date (priority: startDate > pattern.phaseStartDate > fallback)
   if (event.recurrence.startDate) {
-    startDate = parseISO(event.recurrence.startDate)
+    startDate = normalizeToAppDay(parseISO(event.recurrence.startDate))
   } else if (event.recurrence.pattern?.phaseStartDate) {
-    startDate = parseISO(event.recurrence.pattern.phaseStartDate)
+    startDate = normalizeToAppDay(parseISO(event.recurrence.pattern.phaseStartDate))
   } else {
     // Fallback date: 2025-01-05
-    startDate = new Date(2025, 0, 5) // Month is 0-indexed
+    startDate = normalizeToAppDay(new Date(2025, 0, 5)) // Month is 0-indexed
   }
   
   if (event.recurrence.endDate) {
     const parsedEnd = parseISO(event.recurrence.endDate)
     if (!Number.isNaN(parsedEnd.getTime())) {
-      endDate = parsedEnd
+      endDate = normalizeToAppDay(parsedEnd)
     }
   }
   
@@ -126,44 +136,32 @@ export function convertLegacyRecurrence(event: any): {
  * Get the day of the week as a string (e.g., "sunday")
  * @param date The date to get the day of the week for
  */
-export function getDayOfWeek(date: Date): string {
-  const days = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"]
-  return days[date.getDay()]
-}
-
-/**
- * Check if an event should be shown on a specific date based on its recurrence pattern
- * This function only checks the basic recurrence pattern, not any date-specific overrides
- * @param event The event to check
- * @param date The specific date to check
- * @param isAdminView If true, will ignore certain exclusions to show all events in admin view but still respect recurrence intervals
- */
-export function shouldShowRecurringEvent(event: any, date: Date, isAdminView = false): boolean {
+export function shouldShowRecurringEvent(event: any, date: Date, adminModeView = false): boolean {
   // Get the day of week string (e.g., "sunday")
-  const dayOfWeek = getDayOfWeek(date)
+  const dayOfWeek = getAppDayOfWeek(date)
 
   // Format the date as YYYY-MM-DD for use with dateOverrides
-  const dateString = date.toISOString().split("T")[0]
+  const dateString = formatInAppTimezone(date, "yyyy-MM-dd")
 
   // Check for date-specific include/exclude override first, but only if not in admin view
-  if (!isAdminView && event.dateIncludeOverrides && event.dateIncludeOverrides[dateString] !== undefined) {
+  if (!adminModeView && event.dateIncludeOverrides && event.dateIncludeOverrides[dateString] !== undefined) {
     // If we have an explicit include/exclude for this date, respect that above all else
     return event.dateIncludeOverrides[dateString]
   }
 
-  const normalizedTargetDate = startOfDay(date)
-  const recurrenceStartDate = event.recurrence?.startDate ? parseISO(event.recurrence.startDate) : undefined
-  const recurrenceEndDate = event.recurrence?.endDate ? parseISO(event.recurrence.endDate) : undefined
+  const normalizedTargetDate = normalizeToAppDay(date)
+  const recurrenceStartDate = event.recurrence?.startDate ? normalizeToAppDay(parseISO(event.recurrence.startDate)) : undefined
+  const recurrenceEndDate = event.recurrence?.endDate ? normalizeToAppDay(parseISO(event.recurrence.endDate)) : undefined
 
   if (recurrenceStartDate && !Number.isNaN(recurrenceStartDate.getTime())) {
-    const normalizedStart = startOfDay(recurrenceStartDate)
+    const normalizedStart = getStartOfAppDay(recurrenceStartDate)
     if (normalizedTargetDate.getTime() < normalizedStart.getTime()) {
       return false
     }
   }
 
   if (recurrenceEndDate && !Number.isNaN(recurrenceEndDate.getTime())) {
-    const normalizedEnd = startOfDay(recurrenceEndDate)
+    const normalizedEnd = getStartOfAppDay(recurrenceEndDate)
     if (normalizedTargetDate.getTime() > normalizedEnd.getTime()) {
       return false
     }
@@ -194,7 +192,7 @@ export function shouldShowRecurringEvent(event: any, date: Date, isAdminView = f
   }
 
   // For admin view, we want to show all events that are scheduled for this day of the week
-  if (isAdminView) {
+  if (adminModeView) {
     // First check if this day is in the days array or daysOfWeek array
     const isOnThisDay = event.recurrence
       ? Array.isArray(event.recurrence.daysOfWeek) && event.recurrence.daysOfWeek.includes(dayOfWeek)
@@ -245,12 +243,12 @@ function convertNewRecurrenceFormat(event: any): {
   if (event.recurrence.endDate) {
     const parsedEnd = parseISO(event.recurrence.endDate)
     if (!Number.isNaN(parsedEnd.getTime())) {
-      endDate = parsedEnd
+      endDate = normalizeToAppDay(parsedEnd)
     }
   }
   
   return {
-    startDate: parseISO(event.recurrence.startDate),
+    startDate: normalizeToAppDay(parseISO(event.recurrence.startDate)),
     periodDays,
     onPeriods: event.recurrence.onPeriods,
     offPeriods: event.recurrence.offPeriods,
@@ -404,10 +402,9 @@ export function formatRecurrence(event: any): string | null {
   if (event.recurrence?.endDate) {
     const parsedEnd = parseISO(event.recurrence.endDate)
     if (!Number.isNaN(parsedEnd.getTime())) {
-      label += ` (ends ${format(parsedEnd, "MMM d, yyyy")})`
+      label += ` (ends ${formatInAppTimezone(parsedEnd, "MMM d, yyyy")})`
     }
   }
 
   return label
 }
-

@@ -1,3 +1,5 @@
+import { formatInAppTimezone } from "./date-utils"
+
 // Define a minimal default configuration that will be used if fetching fails
 export const initialConfig = {
   events: [
@@ -38,7 +40,7 @@ export const initialConfig = {
       lastUsed: null,
     },
   ],
-  exportDate: new Date().toISOString(),
+  exportDate: formatInAppTimezone(new Date(), "yyyy-MM-dd'T'HH:mm:ssXXX"),
 }
 
 // Export the minimal fallback configuration

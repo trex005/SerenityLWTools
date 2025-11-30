@@ -12,7 +12,7 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { Calendar } from "@/components/ui/calendar"
 import { Button } from "@/components/ui/button"
 import { CalendarIcon } from "lucide-react"
-import { format } from "date-fns"
+import { formatInAppTimezone } from "@/lib/date-utils"
 import { useState } from "react"
 import { CustomNumberInput } from "./custom-number-input"
 
@@ -34,7 +34,9 @@ interface RecurrenceEditorProps {
 
 // Convert legacy recurrence format to new format for UI
 function convertLegacyToNew(legacyValue: any, isNewEvent: boolean = false): RecurrenceData {
-  const defaultStartDate = isNewEvent ? new Date().toISOString() : new Date(2025, 0, 5).toISOString()
+  const defaultStartDate = isNewEvent
+    ? formatInAppTimezone(new Date(), "yyyy-MM-dd'T'HH:mm:ssXXX")
+    : formatInAppTimezone(new Date(2025, 0, 5), "yyyy-MM-dd'T'HH:mm:ssXXX")
 
   // If it's already in new format, return as is
   if (legacyValue && (legacyValue.onPeriods !== undefined || legacyValue.offPeriods !== undefined)) {
@@ -97,7 +99,9 @@ function convertLegacyToNew(legacyValue: any, isNewEvent: boolean = false): Recu
     onPeriods: 1,
     offPeriods: 0,
     daysOfWeek: ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"],
-    startDate: isNewEvent ? new Date().toISOString() : defaultStartDate,
+    startDate: isNewEvent
+      ? formatInAppTimezone(new Date(), "yyyy-MM-dd'T'HH:mm:ssXXX")
+      : defaultStartDate,
     endDate: undefined,
   }
 }
@@ -197,7 +201,7 @@ export function RecurrenceEditor({ value, onChange, isNewEvent = false }: Recurr
     if (!date) return
 
     try {
-      const startIso = date.toISOString()
+      const startIso = formatInAppTimezone(date, "yyyy-MM-dd'T'HH:mm:ssXXX")
       let endIso = recurrence.endDate
 
       if (endIso) {
@@ -233,7 +237,7 @@ export function RecurrenceEditor({ value, onChange, isNewEvent = false }: Recurr
 
       const newRecurrence = {
         ...recurrence,
-        endDate: selectedDate.toISOString(),
+        endDate: formatInAppTimezone(selectedDate, "yyyy-MM-dd'T'HH:mm:ssXXX"),
         daysOfWeek: [...recurrence.daysOfWeek],
       }
       onChange(newRecurrence)
@@ -255,7 +259,7 @@ export function RecurrenceEditor({ value, onChange, isNewEvent = false }: Recurr
   const formatDateSafe = (dateString: string | undefined) => {
     if (!dateString) return "Pick a date"
     try {
-      return format(new Date(dateString), "PPP")
+      return formatInAppTimezone(new Date(dateString), "PPP")
     } catch (error) {
       console.error("Error formatting date:", error)
       return "Invalid date"

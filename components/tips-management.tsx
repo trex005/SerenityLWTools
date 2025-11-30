@@ -17,6 +17,10 @@ import { EmbeddedContent } from "@/components/embedded-content"
 import { sanitizeHtml, extractTextFromHtml } from "@/lib/html-utils"
 import { matchesSearchTokens, tokenizeSearchTerm } from "@/lib/search-utils"
 import { useOverrideDiff } from "@/hooks/use-override-diff"
+import { useToast } from "@/hooks/use-toast"
+import { listAdminEnabledTags } from "@/lib/scoped-storage"
+import { loadTipForTag, saveTipForTag } from "@/lib/tag-overrides"
+import { clearConfigCache } from "@/lib/config-fetcher"
 
 import {
   AlertDialog,
@@ -44,7 +48,7 @@ function TipHtmlPreview({ html }: { html: string }) {
  */
 export function TipsManagement({ forceRefresh }: { forceRefresh?: string }) {
   // Access tips store
-  const { tips, addTip, updateTip, deleteTip } = useTips()
+  const { tips, addTip, updateTip, deleteTip, activeTag } = useTips()
 
   // State for new tip form
   const [newTip, setNewTip] = useState({
@@ -70,6 +74,10 @@ export function TipsManagement({ forceRefresh }: { forceRefresh?: string }) {
   const [copiedLinkId, setCopiedLinkId] = useState<string | null>(null)
   const { diffIndex } = useOverrideDiff()
   const tipOverrideIndex = diffIndex?.tips ?? {}
+  const [availableAdminTags, setAvailableAdminTags] = useState<string[]>([])
+  const [tipTargetTags, setTipTargetTags] = useState<Record<string, string>>({})
+  const [tipMissingForTags, setTipMissingForTags] = useState<Record<string, boolean>>({})
+  const { toast } = useToast()
 
   const searchTokens = tokenizeSearchTerm(searchTerm)
 
@@ -84,6 +92,20 @@ export function TipsManagement({ forceRefresh }: { forceRefresh?: string }) {
       .trim()
       .replace(/\b\w/g, (char) => char.toUpperCase())
 
+  const buildDraftFromTip = (tip: any) => {
+    const inferredType = (
+      tip.type ||
+      (tip.embedUrl ? "embedded" : tip.isHtml ? "html" : tip.imageUrl ? "image" : "text")
+    ) as "text" | "html" | "image" | "embedded"
+    return {
+      title: tip.title || "",
+      content: tip.content || "",
+      type: inferredType,
+      embedUrl: tip.embedUrl || "",
+      imageUrl: tip.imageUrl || "",
+    }
+  }
+
   useEffect(() => {
     if (!copiedTipId) return
     const timer = setTimeout(() => setCopiedTipId(null), 2000)
@@ -96,50 +118,106 @@ export function TipsManagement({ forceRefresh }: { forceRefresh?: string }) {
     return () => clearTimeout(timer)
   }, [copiedLinkId])
 
+  useEffect(() => {
+    const tags = (() => {
+      try {
+        return listAdminEnabledTags()
+      } catch {
+        return []
+      }
+    })()
+    const normalized = new Set(tags)
+    normalized.add(activeTag)
+    setAvailableAdminTags(Array.from(normalized).sort())
+  }, [activeTag])
+
   // Start editing a tip
   const startEditing = (tip: any) => {
-    const inferredType = (
-      tip.type ||
-      (tip.embedUrl ? "embedded" : tip.isHtml ? "html" : tip.imageUrl ? "image" : "text")
-    ) as "text" | "html" | "image" | "embedded"
     setEditingTips((prev) => ({ ...prev, [tip.id]: true }))
     setEditedContent((prev) => ({
       ...prev,
-      [tip.id]: {
-        title: tip.title || "",
-        content: tip.content || "",
-        type: inferredType,
-        embedUrl: tip.embedUrl || "",
-        imageUrl: tip.imageUrl || "",
-      },
+      [tip.id]: buildDraftFromTip(tip),
     }))
+    setTipTargetTags((prev) => ({ ...prev, [tip.id]: activeTag }))
+    setTipMissingForTags((prev) => ({ ...prev, [tip.id]: false }))
   }
 
   // Save edited tip
-  const saveEditedTip = (tip: any) => {
+  const saveEditedTip = async (tip: any) => {
     const edited = editedContent[tip.id]
-    if (edited && (edited.content.trim() || edited.embedUrl?.trim())) {
-      const nextType = (edited.type || "text") as "text" | "html" | "image" | "embedded"
-      updateTip({
-        ...tip,
-        title: edited.title.trim(),
-        content: edited.content.trim(),
-        type: nextType,
-        isHtml: nextType === "html",
-        embedUrl: edited.embedUrl?.trim() || undefined,
-        imageUrl: edited.imageUrl?.trim() || undefined,
+    if (!edited || (!edited.content.trim() && !edited.embedUrl?.trim() && !edited.title.trim() && !edited.imageUrl?.trim())) {
+      return
+    }
+    const targetTag = tipTargetTags[tip.id] ?? activeTag
+    const nextType = (edited.type || "text") as "text" | "html" | "image" | "embedded"
+    const payload = {
+      ...tip,
+      title: edited.title.trim(),
+      content: edited.content.trim(),
+      type: nextType,
+      isHtml: nextType === "html",
+      embedUrl: edited.embedUrl?.trim() || undefined,
+      imageUrl: edited.imageUrl?.trim() || undefined,
+    }
+    try {
+      await saveTipForTag(targetTag, payload)
+      if (targetTag === activeTag) {
+        updateTip(payload)
+      } else {
+        toast({
+          title: "Tip saved",
+          description: `Updated ${targetTag} without switching tags.`,
+          variant: "success",
+        })
+      }
+      clearConfigCache()
+      useTips
+        .getState()
+        .initializeFromConfig(true)
+        .catch((error) => console.error("Failed to refresh tips after save", error))
+      setEditingTips((prev) => ({ ...prev, [tip.id]: false }))
+      setEditedContent((prev) => {
+        const next = { ...prev }
+        delete next[tip.id]
+        return next
       })
-      setEditingTips(prev => ({ ...prev, [tip.id]: false }))
+      setTipTargetTags((prev) => {
+        const next = { ...prev }
+        delete next[tip.id]
+        return next
+      })
+      setTipMissingForTags((prev) => {
+        const next = { ...prev }
+        delete next[tip.id]
+        return next
+      })
+    } catch (error) {
+      console.error("Failed to save tip", error)
+      toast({
+        title: "Save failed",
+        description: "Could not save the tip for the selected tag.",
+        variant: "destructive",
+      })
     }
   }
 
   // Cancel editing
   const cancelEditing = (tipId: string) => {
-    setEditingTips(prev => ({ ...prev, [tipId]: false }))
-    setEditedContent(prev => {
+    setEditingTips((prev) => ({ ...prev, [tipId]: false }))
+    setEditedContent((prev) => {
       const newState = { ...prev }
       delete newState[tipId]
       return newState
+    })
+    setTipTargetTags((prev) => {
+      const next = { ...prev }
+      delete next[tipId]
+      return next
+    })
+    setTipMissingForTags((prev) => {
+      const next = { ...prev }
+      delete next[tipId]
+      return next
     })
   }
 
@@ -198,6 +276,28 @@ export function TipsManagement({ forceRefresh }: { forceRefresh?: string }) {
     navigator.clipboard.writeText(tipUrl).then(() => {
       setCopiedLinkId(tip.id)
     })
+  }
+
+  const handleTipTargetSelection = async (tip: any, tag: string) => {
+    setTipTargetTags((prev) => ({ ...prev, [tip.id]: tag }))
+    if (!editingTips[tip.id] || !tip?.id) return
+    if (tag === activeTag) {
+      setEditedContent((prev) => ({ ...prev, [tip.id]: buildDraftFromTip(tip) }))
+      setTipMissingForTags((prev) => ({ ...prev, [tip.id]: false }))
+      return
+    }
+    try {
+      const loaded = await loadTipForTag(tag, tip.id)
+      if (loaded) {
+        setEditedContent((prev) => ({ ...prev, [tip.id]: buildDraftFromTip(loaded) }))
+        setTipMissingForTags((prev) => ({ ...prev, [tip.id]: false }))
+      } else {
+        setTipMissingForTags((prev) => ({ ...prev, [tip.id]: true }))
+      }
+    } catch (error) {
+      console.error(`Failed to load tip for tag ${tag}`, error)
+      setTipMissingForTags((prev) => ({ ...prev, [tip.id]: true }))
+    }
   }
 
   // Handle adding new tip
@@ -413,8 +513,8 @@ export function TipsManagement({ forceRefresh }: { forceRefresh?: string }) {
               const renderOverridePill = (keys: string | string[]) => {
                 const list = Array.isArray(keys) ? keys : [keys]
                 return list.some((key) => overrideKeySet.has(key)) ? (
-                  <span className="rounded bg-amber-100 px-2 py-0.5 text-[10px] font-semibold uppercase text-amber-800">
-                    Override
+                  <span className="rounded border border-border bg-muted/60 px-2 py-0.5 text-[10px] font-semibold uppercase text-muted-foreground dark:bg-muted/40">
+                    Overridden
                   </span>
                 ) : null
               }
@@ -432,8 +532,8 @@ export function TipsManagement({ forceRefresh }: { forceRefresh?: string }) {
                             <div className="font-medium mb-2 flex items-center gap-2">
                               {tip.title}
                               {hasOverrides && (
-                                <Badge variant="secondary" className="text-amber-900 bg-amber-100 border-amber-200">
-                                  Overrides
+                                <Badge className="text-muted-foreground border-border bg-muted/60 dark:bg-muted/40">
+                                  Overridden
                                 </Badge>
                               )}
                             </div>
@@ -481,6 +581,37 @@ export function TipsManagement({ forceRefresh }: { forceRefresh?: string }) {
                                   <li key={key}>{formatOverrideKey(key)}</li>
                                 ))}
                               </ul>
+                            </div>
+                          )}
+                          {availableAdminTags.filter((tag) => tag !== activeTag).length > 0 && (
+                            <div className="space-y-1">
+                              <Label className="flex items-center gap-2 text-xs">
+                                Apply changes to tag
+                              </Label>
+                              <Select
+                                value={tipTargetTags[tip.id] ?? activeTag}
+                                onValueChange={(value) => handleTipTargetSelection(tip, value)}
+                              >
+                                <SelectTrigger>
+                                  <SelectValue />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  {availableAdminTags.map((tag) => (
+                                    <SelectItem key={tag} value={tag}>
+                                      {tag}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                              <p className="text-[11px] text-muted-foreground">
+                                The selected tag receives these edits without leaving Command mode.
+                              </p>
+                              {tipMissingForTags[tip.id] && (
+                                <p className="text-[11px] text-amber-600">
+                                  This tip does not exist for the selected tag; saving will create it with the current
+                                  content.
+                                </p>
+                              )}
                             </div>
                           )}
                           <div>

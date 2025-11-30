@@ -56,6 +56,7 @@ import { getActiveTag } from "@/lib/config-tag"
 import JSZip from "jszip"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { buildIdMap, composeWithOverrides, deriveOverridesFromFinal } from "@/lib/override-helpers"
+import { formatInAppTimezone } from "@/lib/date-utils"
 
 const EVENTS_STORAGE_KEY = "daily-agenda-events"
 const TIPS_STORAGE_KEY = "daily-agenda-tips"
@@ -221,7 +222,7 @@ export function AdminPanel() {
   /**
    * Helper to generate a timestamp suitable for filenames
    */
-  const buildTimestamp = () => new Date().toISOString().replace(/[:.]/g, "-")
+  const buildTimestamp = () => formatInAppTimezone(new Date(), "yyyy-MM-dd'T'HH-mm-ssXXX")
 
   /**
    * Download helper that handles blob creation and cleanup

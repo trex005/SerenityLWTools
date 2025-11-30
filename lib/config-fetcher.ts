@@ -2,7 +2,14 @@
 
 import { getActiveTag, getTagOverride, sanitizeTag, setActiveTag } from "./config-tag"
 import { arrayToIdMap, deepMerge, idMapToArray, computeDelta } from "./config-merge"
-import { readStoredEventOverrides, readStoredTipOverrides, type StoredOverrideSnapshot } from "./scoped-storage"
+import {
+  readStoredEventOverrides,
+  readStoredTipOverrides,
+  type StoredOverrideSnapshot,
+  hasAdminAccessForTag,
+  isAdminModeEnabledForTag,
+} from "./scoped-storage"
+import { formatInAppTimezone } from "./date-utils"
 
 type DomainMapping = {
   tag?: string
@@ -16,7 +23,7 @@ interface RootConfig {
   [key: string]: unknown
 }
 
-interface TagBundle {
+export interface TagBundle {
   tag: string
   tagConfig: Record<string, unknown> | null
   events: any[]
@@ -31,6 +38,7 @@ interface TagBundle {
 
 export type FetchOptions = {
   includeAncestorLocalOverrides?: boolean
+  currentTag?: string
 }
 
 type TagLayer = {
@@ -38,8 +46,10 @@ type TagLayer = {
   config: any | null
   events: any[]
   eventsTombstones: Set<string>
+  eventsUpdated: string | null
   tips: any[]
   tipsTombstones: Set<string>
+  tipsUpdated: string | null
 }
 
 interface CacheEntry {
@@ -47,12 +57,57 @@ interface CacheEntry {
   timestamp: number
 }
 
-type LocalOverrideEntry = {
-  events?: StoredOverrideSnapshot
-  tips?: StoredOverrideSnapshot
+type DataType = "events" | "tips"
+type CacheVariant = "remote" | "local"
+
+type TagDataSnapshot = {
+  tag: string
+  parent: string | null
+  itemsById: Record<string, any>
+  tombstones: Set<string>
+  updated: string | null
 }
 
-type LocalOverridesByTag = Record<string, LocalOverrideEntry>
+type ResolvedDataSnapshot = {
+  tag: string
+  itemsById: Record<string, any>
+  updated: string | null
+}
+
+type CachedEntry<T> = {
+  snapshot: T
+  timestamp: number
+}
+
+type CacheStore<T> = Record<CacheVariant, Map<string, T>>
+
+const layerCache = new Map<string, CachedEntry<TagLayer>>()
+const layerInFlight = new Map<string, Promise<TagLayer>>()
+
+const tagDataCacheByType: Record<DataType, CacheStore<CachedEntry<TagDataSnapshot>>> = {
+  events: { remote: new Map(), local: new Map() },
+  tips: { remote: new Map(), local: new Map() },
+}
+
+const tagDataInFlightByType: Record<DataType, CacheStore<Promise<TagDataSnapshot>>> = {
+  events: { remote: new Map(), local: new Map() },
+  tips: { remote: new Map(), local: new Map() },
+}
+
+const resolvedCacheByType: Record<DataType, CacheStore<CachedEntry<ResolvedDataSnapshot>>> = {
+  events: { remote: new Map(), local: new Map() },
+  tips: { remote: new Map(), local: new Map() },
+}
+
+const resolvedInFlightByType: Record<DataType, CacheStore<Promise<ResolvedDataSnapshot>>> = {
+  events: { remote: new Map(), local: new Map() },
+  tips: { remote: new Map(), local: new Map() },
+}
+
+const isCacheEntryValid = <T>(entry: CachedEntry<T> | undefined): boolean => {
+  if (!entry) return false
+  return Date.now() - entry.timestamp < CACHE_TTL
+}
 
 const cloneJson = <T>(value: T): T => JSON.parse(JSON.stringify(value))
 
@@ -190,7 +245,7 @@ const resolveTag = (root: RootConfig): string => {
   throw new Error("Unable to resolve configuration tag")
 }
 
-const fetchLayer = async (tag: string): Promise<TagLayer> => {
+const fetchLayerFromSource = async (tag: string): Promise<TagLayer> => {
   const [configPayload, eventsPayload, tipsPayload] = await Promise.all([
     fetchJson(`${tag}/conf.json`),
     fetchJson(`${tag}/events.json`),
@@ -218,8 +273,44 @@ const fetchLayer = async (tag: string): Promise<TagLayer> => {
     config: configPayload && typeof configPayload === "object" ? { ...configPayload } : null,
     events,
     eventsTombstones,
+    eventsUpdated: eventsObj.updated || null,
     tips,
     tipsTombstones,
+    tipsUpdated: tipsObj.updated || null,
+  }
+}
+
+const getLayer = async (tag: string, force = false): Promise<TagLayer> => {
+  const normalizedTag = sanitizeTag(tag) || tag
+  if (!normalizedTag) {
+    throw new Error("Invalid tag provided")
+  }
+
+  if (force) {
+    layerCache.delete(normalizedTag)
+    layerInFlight.delete(normalizedTag)
+  } else {
+    const cached = layerCache.get(normalizedTag)
+    if (isCacheEntryValid(cached)) {
+      return cached!.snapshot
+    }
+    const pending = layerInFlight.get(normalizedTag)
+    if (pending) {
+      return pending
+    }
+  }
+
+  const promise = (async () => {
+    const data = await fetchLayerFromSource(normalizedTag)
+    layerCache.set(normalizedTag, { snapshot: data, timestamp: Date.now() })
+    return data
+  })()
+
+  layerInFlight.set(normalizedTag, promise)
+  try {
+    return await promise
+  } finally {
+    layerInFlight.delete(normalizedTag)
   }
 }
 
@@ -239,7 +330,7 @@ const buildAncestry = async (leafTag: string): Promise<string[]> => {
   while (current && depth < 16) {
     if (visited.has(current)) break
     visited.add(current)
-    const layer = await fetchLayer(current)
+    const layer = await getLayer(current)
     chain.push(current)
     const parent = getParentTag(layer)
     if (parent && !visited.has(parent)) current = parent
@@ -249,12 +340,168 @@ const buildAncestry = async (leafTag: string): Promise<string[]> => {
   return chain.reverse()
 }
 
+const shouldUseLocalOverrides = (tag: string, options?: ResolveOptions): boolean => {
+  if (!options?.includeLocalOverrides) return false
+  const currentTag = options.currentTag || getActiveTag()
+  if (!isAdminModeEnabledForTag(currentTag)) return false
+  return hasAdminAccessForTag(tag)
+}
+
+const getVariantForTag = (tag: string, options?: ResolveOptions): CacheVariant =>
+  shouldUseLocalOverrides(tag, options) ? "local" : "remote"
+
 const cloneIdMapFromArray = (items: any[]): Record<string, any> => {
   const map = arrayToIdMap(items || [])
   for (const id of Object.keys(map)) {
     map[id] = cloneJson(map[id])
   }
   return map
+}
+
+const cloneIdMap = (items: Record<string, any>): Record<string, any> => {
+  const map: Record<string, any> = {}
+  for (const id of Object.keys(items || {})) {
+    map[id] = cloneJson(items[id])
+  }
+  return map
+}
+
+type ResolveOptions = {
+  includeLocalOverrides?: boolean
+  force?: boolean
+  currentTag?: string
+}
+
+const getTagDataSnapshot = async (
+  type: DataType,
+  tag: string,
+  options: ResolveOptions = {},
+): Promise<TagDataSnapshot> => {
+  const normalizedTag = sanitizeTag(tag) || tag
+  if (!normalizedTag) {
+    throw new Error("Invalid tag provided")
+  }
+
+  const variant = getVariantForTag(normalizedTag, options)
+  const cache = tagDataCacheByType[type][variant]
+  const inFlight = tagDataInFlightByType[type][variant]
+
+  if (options.force) {
+    cache.delete(normalizedTag)
+    inFlight.delete(normalizedTag)
+  } else {
+    const cached = cache.get(normalizedTag)
+    if (isCacheEntryValid(cached)) {
+      return cached!.snapshot
+    }
+    const pending = inFlight.get(normalizedTag)
+    if (pending) {
+      return pending
+    }
+  }
+
+  const promise = (async () => {
+    const layer = await getLayer(normalizedTag, options.force)
+    const parent = getParentTag(layer)
+    const baseItems = (type === "events" ? layer.events : layer.tips) || []
+    const filtered = baseItems.filter((item: any) => item && item.deleted !== true)
+    let itemsById = cloneIdMapFromArray(filtered)
+    const tombstones = new Set<string>(
+      type === "events" ? Array.from(layer.eventsTombstones) : Array.from(layer.tipsTombstones),
+    )
+    const updated = type === "events" ? layer.eventsUpdated : layer.tipsUpdated
+
+    if (variant === "local") {
+      const snapshot =
+        type === "events" ? readStoredEventOverrides(normalizedTag) : readStoredTipOverrides(normalizedTag)
+      if (snapshot) {
+        itemsById = applyOverrideSnapshotToMap(itemsById, snapshot)
+        if (snapshot.deletedIds) {
+          for (const id of snapshot.deletedIds) {
+            tombstones.add(id)
+          }
+        }
+      }
+    }
+
+    const snapshot: TagDataSnapshot = {
+      tag: normalizedTag,
+      parent,
+      itemsById,
+      tombstones,
+      updated,
+    }
+    return snapshot
+  })()
+
+  tagDataInFlightByType[type][variant].set(normalizedTag, promise)
+  try {
+    const snapshot = await promise
+    cache.set(normalizedTag, { snapshot, timestamp: Date.now() })
+    return snapshot
+  } finally {
+    tagDataInFlightByType[type][variant].delete(normalizedTag)
+  }
+}
+
+const getResolvedSnapshot = async (
+  type: DataType,
+  tag: string,
+  options: ResolveOptions = {},
+): Promise<ResolvedDataSnapshot> => {
+  const normalizedTag = sanitizeTag(tag) || tag
+  if (!normalizedTag) {
+    throw new Error("Invalid tag provided")
+  }
+
+  const variant = getVariantForTag(normalizedTag, options.includeLocalOverrides)
+  const cache = resolvedCacheByType[type][variant]
+  const inFlight = resolvedInFlightByType[type][variant]
+
+  if (options.force) {
+    cache.delete(normalizedTag)
+    inFlight.delete(normalizedTag)
+  } else {
+    const cached = cache.get(normalizedTag)
+    if (isCacheEntryValid(cached)) {
+      return cached!.snapshot
+    }
+    const pending = inFlight.get(normalizedTag)
+    if (pending) {
+      return pending
+    }
+  }
+
+  const promise = (async () => {
+    const tagData = await getTagDataSnapshot(type, normalizedTag, options)
+    let merged = tagData.parent
+      ? cloneIdMap((await getResolvedSnapshot(type, tagData.parent, options)).itemsById)
+      : {}
+
+    for (const id of Object.keys(tagData.itemsById)) {
+      const base = merged[id]
+      merged[id] = deepMerge(base, tagData.itemsById[id])
+    }
+
+    for (const id of tagData.tombstones) {
+      delete merged[id]
+    }
+
+    return {
+      tag: normalizedTag,
+      itemsById: merged,
+      updated: tagData.updated,
+    }
+  })()
+
+  resolvedInFlightByType[type][variant].set(normalizedTag, promise)
+  try {
+    const snapshot = await promise
+    cache.set(normalizedTag, { snapshot, timestamp: Date.now() })
+    return snapshot
+  } finally {
+    resolvedInFlightByType[type][variant].delete(normalizedTag)
+  }
 }
 
 const applyOverrideSnapshotToMap = (
@@ -283,7 +530,7 @@ const applyOverrideSnapshotToMap = (
   return working
 }
 
-const composeFromLayers = (layers: TagLayer[], localOverridesByTag?: LocalOverridesByTag | null) => {
+const composeFromLayers = (layers: TagLayer[]) => {
   let eventsById: Record<string, any> = {}
   let tipsById: Record<string, any> = {}
 
@@ -305,27 +552,9 @@ const composeFromLayers = (layers: TagLayer[], localOverridesByTag?: LocalOverri
       tipsById[id] = merged
     }
     for (const id of layer.tipsTombstones) delete tipsById[id]
-
-    if (localOverridesByTag && localOverridesByTag[layer.tag]) {
-      const overrides = localOverridesByTag[layer.tag]
-      eventsById = applyOverrideSnapshotToMap(eventsById, overrides.events)
-      tipsById = applyOverrideSnapshotToMap(tipsById, overrides.tips)
-    }
   }
 
   return { events: idMapToArray(eventsById), tips: idMapToArray(tipsById) }
-}
-
-const buildLocalOverridesMap = (tags: string[]): LocalOverridesByTag | null => {
-  const overrides: LocalOverridesByTag = {}
-  for (const tag of tags) {
-    const events = readStoredEventOverrides(tag)
-    const tips = readStoredTipOverrides(tag)
-    if (events || tips) {
-      overrides[tag] = { events, tips }
-    }
-  }
-  return Object.keys(overrides).length > 0 ? overrides : null
 }
 
 const fetchBundleForTag = async (tag: string, force = false, options?: FetchOptions): Promise<TagBundle> => {
@@ -350,27 +579,26 @@ const fetchBundleForTag = async (tag: string, force = false, options?: FetchOpti
   }
 
   const promise = (async () => {
-    const ancestry = await buildAncestry(normalizedTag)
-    const layers: TagLayer[] = []
-    for (const t of ancestry) {
-      layers.push(await fetchLayer(t))
-    }
     const includeLocalOverrides = options?.includeAncestorLocalOverrides === true
-    const ancestorTags = ancestry.slice(0, -1)
-    const localOverridesByTag =
-      includeLocalOverrides && ancestorTags.length > 0 ? buildLocalOverridesMap(ancestorTags) : null
-    const composed = composeFromLayers(layers, localOverridesByTag)
-    const tagConfig = layers[layers.length - 1]?.config || null
+    const resolveOptions: ResolveOptions = {
+      includeLocalOverrides,
+      force,
+      currentTag: options?.currentTag || getActiveTag(),
+    }
+    const eventsSnapshot = await getResolvedSnapshot("events", normalizedTag, resolveOptions)
+    const tipsSnapshot = await getResolvedSnapshot("tips", normalizedTag, resolveOptions)
+    const layer = await getLayer(normalizedTag, force)
+    const tagConfig = layer?.config || null
     const data: TagBundle = {
       tag: normalizedTag,
       tagConfig,
-      events: composed.events,
-      tips: composed.tips,
+      events: idMapToArray(eventsSnapshot.itemsById),
+      tips: idMapToArray(tipsSnapshot.itemsById),
       updated: {
         root: null,
         tagConfig: typeof tagConfig?.updated === "string" ? tagConfig.updated : null,
-        events: null,
-        tips: null,
+        events: eventsSnapshot.updated,
+        tips: tipsSnapshot.updated,
       },
     }
     return data
@@ -403,7 +631,10 @@ export const fetchConfig = async (force = false, options?: FetchOptions): Promis
     const resolvedTag = resolveTag(rootConfig)
     setActiveTag(resolvedTag)
 
-    const data = await fetchBundleForTag(resolvedTag, force, options)
+    const data = await fetchBundleForTag(resolvedTag, force, {
+      ...options,
+      currentTag: resolvedTag,
+    })
     if (data.updated.root === null && typeof rootConfig.updated === "string") {
       data.updated.root = rootConfig.updated
     }
@@ -420,7 +651,11 @@ export const fetchComposedForTag = async (
   options?: FetchOptions,
 ): Promise<TagBundle> => {
   try {
-    return await fetchBundleForTag(tag, force, options)
+    const effectiveOptions: FetchOptions = {
+      ...options,
+      currentTag: options?.currentTag || getActiveTag(),
+    }
+    return await fetchBundleForTag(tag, force, effectiveOptions)
   } catch (error) {
     console.error(`Error fetching composed bundle for tag "${tag}":`, error)
     return emptyBundle()
@@ -433,7 +668,35 @@ export const clearConfigCache = () => {
   cachedRootConfig = null
   cachedRootTimestamp = 0
   rootPromise = null
+  layerCache.clear()
+  layerInFlight.clear()
+  const types: DataType[] = ["events", "tips"]
+  const variants: CacheVariant[] = ["remote", "local"]
+  for (const type of types) {
+    for (const variant of variants) {
+      tagDataCacheByType[type][variant].clear()
+      tagDataInFlightByType[type][variant].clear()
+      resolvedCacheByType[type][variant].clear()
+      resolvedInFlightByType[type][variant].clear()
+    }
+  }
 }
+
+const invalidateCachesForType = (type: DataType) => {
+  cacheByTag.clear()
+  inFlightByTag.clear()
+  const variants: CacheVariant[] = ["remote", "local"]
+  for (const variant of variants) {
+    tagDataCacheByType[type][variant].clear()
+    tagDataInFlightByType[type][variant].clear()
+    resolvedCacheByType[type][variant].clear()
+    resolvedInFlightByType[type][variant].clear()
+  }
+}
+
+export const invalidateEventCacheForTag = (_tag: string) => invalidateCachesForType("events")
+
+export const invalidateTipCacheForTag = (_tag: string) => invalidateCachesForType("tips")
 
 if (typeof window !== "undefined") {
   setTimeout(() => {
@@ -455,10 +718,10 @@ export const buildChildDeltaFiles = async (
   const parentTags = ancestry.slice(0, -1)
 
   const parentLayers: TagLayer[] = []
-  for (const t of parentTags) parentLayers.push(await fetchLayer(t))
+  for (const t of parentTags) parentLayers.push(await getLayer(t))
   const parentComposed = composeFromLayers(parentLayers)
   // Load leaf layer to capture tag-specific config including parent
-  const leafLayer = await fetchLayer(resolvedTag)
+  const leafLayer = await getLayer(resolvedTag)
 
   const parentEventsById = arrayToIdMap(parentComposed.events || [])
   const parentTipsById = arrayToIdMap(parentComposed.tips || [])
@@ -494,7 +757,7 @@ export const buildChildDeltaFiles = async (
     if (delta && typeof delta === "object") tips.push({ id, ...(delta as any) })
   }
 
-  const nowIso = new Date().toISOString()
+  const nowIso = formatInAppTimezone(new Date(), "yyyy-MM-dd'T'HH:mm:ssXXX")
   return {
     config: (() => {
       const cfg: any = { updated: nowIso }

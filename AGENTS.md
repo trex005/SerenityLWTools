@@ -9,8 +9,10 @@
 - Configs live in `next.config.mjs`, `tailwind.config.ts`, `postcss.config.mjs`, and `tsconfig.json`.
 - `lib/scoped-storage.ts` gates persistence behind Command (admin) modeÃ¢â‚¬â€keep events/tips storage writes aligned with that guard.
 - Admin edits are stored as per-tag overrides: the `use-events`/`use-tips` stores compose fetched configs with stored overrides and deletion markers so parent updates continue to flow even when local drafts exist.
+- Event and tip editors surface a tag dropdown whenever multiple admin-enabled tags exist; select the target tag to apply overrides without switching the main app context.
 - Tag configs under `public/conf/{tag}/` now only ship `config.json`, `events.json`, and `tips.json`; archived entries stay in `events.json` via `archived: true`.
 - Event admin dialog consolidates "Include in" toggles (Scheduled, Website, Briefing, Previous Day, End of Day); keep Scheduled on to surface the event anywhere, and use Website to control the public briefing tab while Briefing/Reminder toggles gate their respective outputs.
+- All scheduling logic, exports, and timestamps must run in the app timezone (GMT-2). Use the helpers in `lib/date-utils.ts` (`formatInAppTimezone`, `getStartOfAppDay`, `getEndOfAppDay`, `addAppDays`) for any date math or formatting; only the optional local-time display for event times should use the user's timezone.
 
 ## Build, Test, and Development Commands
 

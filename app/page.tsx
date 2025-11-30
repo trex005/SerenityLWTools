@@ -14,7 +14,7 @@ import { useEffect, useState } from "react"
 import { BrandLogo } from "@/components/brand-logo"
 
 export default function Home() {
-  const { isAdmin, initialized } = useAdminState()
+  const { adminMode, initialized } = useAdminState()
   const [isLoading, setIsLoading] = useState(true)
 
   // Wait for admin state to be initialized from localStorage
@@ -43,7 +43,7 @@ export default function Home() {
         <BrandLogo size={32} />
       </div>
 
-      {isAdmin ? <AdminInterface /> : <UserInterface />}
+      {adminMode ? <AdminInterface /> : <UserInterface />}
 
       {/* Include the admin access trigger */}
       <AdminAccessTrigger />

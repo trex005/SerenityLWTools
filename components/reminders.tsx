@@ -13,11 +13,12 @@ import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { useEvents } from "@/hooks/use-events"
-import { addDays, format, startOfDay } from "date-fns"
 import {
   formatTimeRemaining,
-  getAppTimezoneDate,
+  formatInAppTimezone,
+  getAppToday,
   getDayOfWeek,
+  addAppDays,
   getMinutesUntilNextDay,
 } from "@/lib/date-utils"
 import { Check, Copy, RefreshCw } from "lucide-react"
@@ -29,7 +30,7 @@ import { scopedLocalStorage } from "@/lib/scoped-storage"
 const STORAGE_PREFIX = "daily-reminders-content"
 const BULLET_PREFIX = "\u2022 "
 
-const getDateKey = (date: Date): string => format(date, "yyyy-MM-dd")
+const getDateKey = (date: Date): string => formatInAppTimezone(date, "yyyy-MM-dd")
 
 const getEffectiveValue = (event: any, date: Date, dayKey: string, property: string) => {
   const dateKey = getDateKey(date)
@@ -142,7 +143,7 @@ export function Reminders() {
   const { events, hydrated } = useEvents()
 
   // State for selected date (defaults to current day in app timezone)
-  const [selectedDate, setSelectedDate] = useState<Date>(() => startOfDay(getAppTimezoneDate()))
+  const [selectedDate, setSelectedDate] = useState<Date>(() => getAppToday())
 
   // State for copy button feedback
   const [isCopied, setIsCopied] = useState(false)
@@ -155,7 +156,7 @@ export function Reminders() {
   const minutesUntilNextDay = getMinutesUntilNextDay()
 
   const storageKey = useMemo(() => `${STORAGE_PREFIX}:${getDateKey(selectedDate)}`, [selectedDate])
-  const tomorrowDate = useMemo(() => addDays(selectedDate, 1), [selectedDate])
+  const tomorrowDate = useMemo(() => addAppDays(selectedDate, 1), [selectedDate])
 
   // Get events for the selected day and generate reminders
   const { dayReminders, tomorrowReminders, todayEventCount, tomorrowEventCount } = useMemo(() => {
@@ -272,12 +273,12 @@ export function Reminders() {
             <Input
               id="date-input"
               type="date"
-              value={selectedDate ? format(selectedDate, "yyyy-MM-dd") : ""}
+              value={selectedDate ? formatInAppTimezone(selectedDate, "yyyy-MM-dd") : ""}
               onChange={(e) => {
                 if (e.target.value) {
                   // Parse date manually to avoid timezone issues
                   const [year, month, day] = e.target.value.split("-").map(Number)
-                  setSelectedDate(startOfDay(new Date(year, month - 1, day)))
+                  setSelectedDate(getStartOfAppDay(new Date(year, month - 1, day)))
                   setTextareaContent("")
                   setInitializedKey(null)
                 }
@@ -353,7 +354,7 @@ export function Reminders() {
           {/* Status Info */}
           <div className="text-sm text-muted-foreground">
             Found {dayReminders.length} reminder{dayReminders.length !== 1 ? "s" : ""} for{" "}
-            {format(selectedDate, "EEEE, MMM d")}
+            {formatInAppTimezone(selectedDate, "EEEE, MMM d")}
             {tomorrowReminders.length > 0 && (
               <span> • {tomorrowReminders.length} tomorrow reminder{tomorrowReminders.length !== 1 ? "s" : ""}</span>
             )}
@@ -362,7 +363,8 @@ export function Reminders() {
           {/* Debug Info */}
           <div className="text-xs text-muted-foreground mt-2 p-2 bg-gray-100 rounded">
             <strong>Debug:</strong> {events.length} total events • {todayEventCount} active on{" "}
-            {format(selectedDate, "EEEE")} • {tomorrowEventCount} active on {format(tomorrowDate, "EEEE")}
+            {formatInAppTimezone(selectedDate, "EEEE")} • {tomorrowEventCount} active on{" "}
+            {formatInAppTimezone(tomorrowDate, "EEEE")}
           </div>
         </CardContent>
       </Card>

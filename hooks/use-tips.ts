@@ -8,7 +8,7 @@
 
 import { create } from "zustand"
 import { persist } from "zustand/middleware"
-import { fetchConfig } from "@/lib/config-fetcher"
+import { fetchComposedForTag, clearConfigCache } from "@/lib/config-fetcher"
 import { scopedStateStorage } from "@/lib/scoped-storage"
 import { getActiveTag, onTagChange } from "@/lib/config-tag"
 import { matchesSearchTokens, tokenizeSearchTerm } from "@/lib/search-utils"
@@ -21,6 +21,7 @@ import {
   ensureIdAdded,
   ensureIdRemoved,
 } from "@/lib/override-helpers"
+import { formatInAppTimezone } from "@/lib/date-utils"
 
 // Define the tip interface
 export interface Tip {
@@ -198,14 +199,16 @@ export const useTips = create<TipsState>()(
         }
 
         try {
-          const includeAncestorLocalOverrides = useAdminStore.getState().isAdmin
+          const includeAncestorLocalOverrides = useAdminStore.getState().adminMode
+          const targetTag = getActiveTag()
           // Fetch configuration with forceRefresh flag
-          const config = await fetchConfig(forceRefresh, {
+          const config = await fetchComposedForTag(targetTag, forceRefresh, {
             includeAncestorLocalOverrides,
+            currentTag: targetTag,
           })
 
           const resolvedTips = Array.isArray(config?.tips) ? config.tips : []
-          const resolvedTag = config?.tag || getActiveTag()
+          const resolvedTag = config?.tag || targetTag
           const baseMap = buildIdMap(resolvedTips)
 
           set((state) => {
@@ -243,7 +246,7 @@ export const useTips = create<TipsState>()(
         if (!target) return
         get().updateTip({
           ...target,
-          lastUsed: new Date().toISOString(),
+          lastUsed: formatInAppTimezone(new Date(), "yyyy-MM-dd'T'HH:mm:ssXXX"),
           useCount: (target.useCount || 0) + 1,
         })
       },
@@ -361,3 +364,32 @@ onTagChange((nextTag) => {
     scheduleInit()
   }
 })
+
+export const refreshTipsStore = async (forceRefresh = true) => {
+  await useTips.getState().initializeFromConfig(forceRefresh)
+}
+
+export const invalidateAndRefreshTips = async () => {
+  clearConfigCache()
+  await refreshTipsStore(true)
+}
+
+const bootstrapTipsStore = () => {
+  useTips
+    .getState()
+    .initializeFromConfig(false)
+    .catch((error) => {
+      console.error("Failed to bootstrap tips store", error)
+    })
+}
+
+if (typeof window !== "undefined") {
+  bootstrapTipsStore()
+  useAdminStore.subscribe((state, prevState) => {
+    if (state.adminMode !== prevState.adminMode) {
+      refreshTipsStore(true).catch((error) => {
+        console.error("Failed to refresh tips after admin change", error)
+      })
+    }
+  })
+}

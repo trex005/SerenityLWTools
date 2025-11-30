@@ -1,132 +1,138 @@
-{
-  "updated": "2025-11-13T00:58:46.142Z",
-  "events": [
-    {
-      "id": "4af5277e-a46b-4407-94cc-66452e907f1d",
-      "title": "Sky Predator",
-      "startTime": "21:40",
-      "endTime": "",
-      "recurrence": {
-        "type": "weeks",
-        "onPeriods": 1,
-        "offPeriods": 3,
-        "startDate": "2025-11-16T05:00:00.000Z"
-      },
-      "includeInBriefing": true,
-      "includeOnWebsite": true,
-      "archived": false
-    },
-    {
-      "id": "1ae7c08b-29e3-4ef3-a00f-ccc19f155ddb",
-      "recurrence": {
-        "startDate": "2024-01-01T05:00:00.000Z"
-      },
-      "archived": false
-    },
-    {
-      "id": "e05c1e28-c800-48d1-8d3a-53898d5f2922",
-      "startTime": "21:40",
-      "archived": false,
-      "recurrence": {
-        "type": "weeks",
-        "onPeriods": 1,
-        "offPeriods": 3,
-        "startDate": "2025-07-06T04:00:00.000Z"
-      },
-      "includeInBriefing": true,
-      "includeOnWebsite": true
-    },
-    {
-      "id": "1bfc5e6b-6c98-4535-842a-fca281b921d3",
-      "title": "Glacieradon",
-      "description": "",
-      "remindTomorrow": true,
-      "remindEndOfDay": false,
-      "includeInBriefing": true,
-      "includeOnWebsite": true,
-      "isAllDay": false,
-      "startTime": "21:40",
-      "endTime": "",
-      "days": [
-        "friday"
-      ],
-      "includeInExport": {
-        "monday": true,
-        "sunday": true,
-        "tuesday": true,
-        "wednesday": true,
-        "thursday": true,
-        "friday": true,
-        "saturday": true
-      },
-      "variations": {},
-      "order": {},
-      "archived": false,
-      "recurrence": {
-        "type": "weeks",
-        "onPeriods": 1,
-        "offPeriods": 3,
-        "daysOfWeek": [
-          "friday"
-        ],
-        "startDate": "2025-07-20T04:00:00.000Z"
-      }
-    },
-    {
-      "id": "8b3786b8-6bdf-4eea-9ba5-972b6c021291",
-      "title": "Sky Predator",
-      "description": "",
-      "remindTomorrow": true,
-      "remindEndOfDay": false,
-      "includeInBriefing": true,
-      "includeOnWebsite": true,
-      "isAllDay": false,
-      "startTime": "21:40",
-      "endTime": "",
-      "days": [
-        "sunday",
-        "monday",
-        "tuesday",
-        "wednesday",
-        "thursday",
-        "friday",
-        "saturday"
-      ],
-      "includeInExport": {
-        "monday": true,
-        "sunday": true,
-        "tuesday": true,
-        "wednesday": true,
-        "thursday": true,
-        "friday": true,
-        "saturday": true
-      },
-      "variations": {},
-      "order": {},
-      "archived": false,
-      "recurrence": {
-        "type": "weeks",
-        "onPeriods": 1,
-        "offPeriods": 3,
-        "daysOfWeek": [
-          "sunday",
-          "monday",
-          "tuesday",
-          "wednesday",
-          "thursday",
-          "friday",
-          "saturday"
-        ],
-        "startDate": "2025-11-02T04:00:00.000Z"
-      }
-    },
-    {
-      "id": "87a66ed0-70ea-4dfc-8519-ced7ef52be6e",
-      "archived": true
-    },
-    {
-      "id": "18acf2e1-218e-46c2-a9e4-3b21584523c6",
-      "archived": true
-    }
-  ]
+﻿{
+    "updated":  "2025-11-13T00:58:46.142Z",
+    "events":  [
+                   {
+                       "id":  "4af5277e-a46b-4407-94cc-66452e907f1d",
+                       "title":  "Sky Predator",
+                       "startTime":  "21:40",
+                       "endTime":  "",
+                       "recurrence":  {
+                                          "type":  "weeks",
+                                          "onPeriods":  1,
+                                          "offPeriods":  3,
+                                          "startDate":  "2025-11-16"
+                                      },
+                       "includeInBriefing":  true,
+                       "includeOnWebsite":  true
+                   },
+                   {
+                       "id":  "1ae7c08b-29e3-4ef3-a00f-ccc19f155ddb",
+                       "recurrence":  {
+                                          "startDate":  "2024-01-01"
+                                      }
+                   },
+                   {
+                       "id":  "e05c1e28-c800-48d1-8d3a-53898d5f2922",
+                       "startTime":  "21:40",
+                       "archived":  false,
+                       "recurrence":  {
+                                          "type":  "weeks",
+                                          "onPeriods":  1,
+                                          "offPeriods":  3,
+                                          "startDate":  "2025-07-06"
+                                      },
+                       "includeInBriefing":  true,
+                       "includeOnWebsite":  true
+                   },
+                   {
+                       "id":  "1bfc5e6b-6c98-4535-842a-fca281b921d3",
+                       "title":  "Glacieradon",
+                       "description":  "",
+                       "remindTomorrow":  true,
+                       "remindEndOfDay":  false,
+                       "includeInBriefing":  true,
+                       "includeOnWebsite":  true,
+                       "isAllDay":  false,
+                       "startTime":  "21:40",
+                       "endTime":  "",
+                       "days":  [
+                                    "friday"
+                                ],
+                       "includeInExport":  {
+                                               "monday":  true,
+                                               "sunday":  true,
+                                               "tuesday":  true,
+                                               "wednesday":  true,
+                                               "thursday":  true,
+                                               "friday":  true,
+                                               "saturday":  true
+                                           },
+                       "variations":  {
+
+                                      },
+                       "order":  {
+
+                                 },
+                       "archived":  false,
+                       "recurrence":  {
+                                          "type":  "weeks",
+                                          "onPeriods":  1,
+                                          "offPeriods":  3,
+                                          "daysOfWeek":  [
+                                                             "friday"
+                                                         ],
+                                          "startDate":  "2025-07-20"
+                                      }
+                   },
+                   {
+                       "id":  "8b3786b8-6bdf-4eea-9ba5-972b6c021291",
+                       "title":  "Sky Predator",
+                       "description":  "",
+                       "remindTomorrow":  true,
+                       "remindEndOfDay":  false,
+                       "includeInBriefing":  true,
+                       "includeOnWebsite":  true,
+                       "isAllDay":  false,
+                       "startTime":  "21:40",
+                       "endTime":  "",
+                       "days":  [
+                                    "sunday",
+                                    "monday",
+                                    "tuesday",
+                                    "wednesday",
+                                    "thursday",
+                                    "friday",
+                                    "saturday"
+                                ],
+                       "includeInExport":  {
+                                               "monday":  true,
+                                               "sunday":  true,
+                                               "tuesday":  true,
+                                               "wednesday":  true,
+                                               "thursday":  true,
+                                               "friday":  true,
+                                               "saturday":  true
+                                           },
+                       "variations":  {
+
+                                      },
+                       "order":  {
+
+                                 },
+                       "archived":  false,
+                       "recurrence":  {
+                                          "type":  "weeks",
+                                          "onPeriods":  1,
+                                          "offPeriods":  3,
+                                          "daysOfWeek":  [
+                                                             "sunday",
+                                                             "monday",
+                                                             "tuesday",
+                                                             "wednesday",
+                                                             "thursday",
+                                                             "friday",
+                                                             "saturday"
+                                                         ],
+                                          "startDate":  "2025-11-02"
+                                      }
+                   },
+                   {
+                       "id":  "87a66ed0-70ea-4dfc-8519-ced7ef52be6e",
+                       "archived":  true
+                   },
+                   {
+                       "id":  "18acf2e1-218e-46c2-a9e4-3b21584523c6",
+                       "archived":  true
+                   }
+               ]
 }

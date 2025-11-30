@@ -21,7 +21,7 @@ import { matchesSearchTokens, tokenizeSearchTerm } from "@/lib/search-utils"
 // Add a new prop to force the component to check for tip ID in URL
 export function ReadOnlyTips({ forceRefresh }: { forceRefresh?: string }) {
   const { tips, isLoaded, reload } = useConfigData()
-  const { isAdmin } = useAdminState() // Add this line to get admin state
+  const { adminMode } = useAdminState() // Add this line to get admin state
 
   // State for search term
   const [searchTerm, setSearchTerm] = useState("")
@@ -64,12 +64,12 @@ export function ReadOnlyTips({ forceRefresh }: { forceRefresh?: string }) {
   // Filter tips based on search term and filter option
   const filteredTips = tips.filter((tip) => {
     // First filter out admin-only tips if not admin
-    if (tip.adminOnly && !isAdmin) {
+    if (tip.adminOnly && !adminMode) {
       return false
     }
 
     // Filter out unlisted tips unless they match the topTipId or user is admin
-    if (tip.unlisted && !isAdmin && tip.id !== topTipId) {
+    if (tip.unlisted && !adminMode && tip.id !== topTipId) {
       return false
     }
 

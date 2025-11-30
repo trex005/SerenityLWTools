@@ -1,756 +1,768 @@
-{
-  "updated": "2025-11-13T05:58:23.886Z",
-  "events": [
-    {
-      "id": "ev-8",
-      "recurrence": {
-        "type": "weeks",
-        "onPeriods": 1,
-        "offPeriods": 0,
-        "startDate": "2025-11-01T04:00:00.000Z"
-      },
-      "archived": false
-    },
-    {
-      "id": "ev-10",
-      "recurrence": {
-        "type": "weeks",
-        "onPeriods": 1,
-        "offPeriods": 0,
-        "startDate": "2025-11-04T05:00:00.000Z"
-      },
-      "archived": false
-    },
-    {
-      "id": "ev-12",
-      "recurrence": {
-        "type": "weeks",
-        "onPeriods": 1,
-        "offPeriods": 0,
-        "startDate": "2025-11-03T05:00:00.000Z"
-      },
-      "archived": false
-    },
-    {
-      "id": "ev-14",
-      "title": "VS: Unwrap buildings and use construction speedups",
-      "recurrence": {
-        "type": "weeks",
-        "onPeriods": 1,
-        "offPeriods": 0,
-        "startDate": "2025-11-04T05:00:00.000Z"
-      },
-      "archived": false
-    },
-    {
-      "id": "ev-15",
-      "recurrence": {
-        "type": "weeks",
-        "onPeriods": 1,
-        "offPeriods": 0,
-        "startDate": "2025-11-05T05:00:00.000Z"
-      },
-      "archived": false
-    },
-    {
-      "id": "ev-16",
-      "recurrence": {
-        "type": "weeks",
-        "onPeriods": 1,
-        "offPeriods": 0,
-        "startDate": "2025-11-06T05:00:00.000Z"
-      },
-      "archived": false
-    },
-    {
-      "id": "ev-17",
-      "recurrence": {
-        "type": "weeks",
-        "onPeriods": 1,
-        "offPeriods": 0,
-        "startDate": "2025-11-07T05:00:00.000Z"
-      },
-      "archived": false
-    },
-    {
-      "id": "ev-18",
-      "recurrence": {
-        "type": "weeks",
-        "onPeriods": 1,
-        "offPeriods": 0,
-        "startDate": "2025-01-05T05:00:00.000Z",
-        "endDate": "2025-11-08T05:00:00.000Z"
-      },
-      "archived": false
-    },
-    {
-      "id": "ev-1739556183702",
-      "order": {
-        "thursday": 1,
-        "tuesday": 0
-      },
-      "archived": false
-    },
-    {
-      "id": "ev-1739556209550",
-      "order": {
-        "wednesday": 0,
-        "friday": 0
-      },
-      "archived": false
-    },
-    {
-      "id": "ev-1739556688004",
-      "recurrence": {
-        "type": "weeks",
-        "onPeriods": 1,
-        "offPeriods": 1,
-        "startDate": "2025-02-23T05:00:00.000Z"
-      },
-      "includeInBriefing": true,
-      "includeOnWebsite": true,
-      "archived": false
-    },
-    {
-      "id": "ev-1739556987954",
-      "recurrence": {
-        "type": "weeks",
-        "onPeriods": 1,
-        "offPeriods": 1,
-        "startDate": "2025-03-02T05:00:00.000Z"
-      },
-      "includeInBriefing": true,
-      "includeOnWebsite": true,
-      "archived": false
-    },
-    {
-      "id": "87a66ed0-70ea-4dfc-8519-ced7ef52be6e",
-      "startTime": "00:00",
-      "endTime": "",
-      "recurrence": {
-        "type": "days",
-        "startDate": "2025-10-27T04:00:00.000Z",
-        "onPeriods": 1,
-        "offPeriods": 1
-      },
-      "archived": false
-    },
-    {
-      "id": "5aec60d0-4d5f-4299-8f91-cc8590471e7b",
-      "order": {
-        "thursday": 0
-      },
-      "archived": false
-    },
-    {
-      "id": "6f0f73b6-24e7-491d-b6fa-39d73bb8711e",
-      "order": {
-        "friday": 3,
-        "tuesday": 3
-      },
-      "archived": false
-    },
-    {
-      "id": "5178bd44-1659-40df-9aa7-c76cf22ee563",
-      "order": {
-        "wednesday": 4
-      },
-      "archived": false
-    },
-    {
-      "id": "8d795f4d-e2f0-4194-9152-2163891aa0dc",
-      "recurrence": {
-        "type": "weeks",
-        "startDate": "2025-11-04T05:00:00.000Z",
-        "onPeriods": 1,
-        "offPeriods": 0
-      },
-      "archived": false
-    },
-    {
-      "id": "89b95f35-ae1a-485b-8aee-f012c758fa7b",
-      "recurrence": {
-        "type": "weeks",
-        "startDate": "2025-11-07T05:00:00.000Z",
-        "onPeriods": 1,
-        "offPeriods": 2
-      },
-      "archived": false
-    },
-    {
-      "id": "9632b4bd-843c-41af-9282-7dc6d9a50aa0",
-      "archived": false,
-      "title": "Apex Arena",
-      "description": "",
-      "remindTomorrow": false,
-      "remindEndOfDay": true,
-      "isAllDay": true,
-      "startTime": "09:00",
-      "endTime": "",
-      "days": [
-        "tuesday",
-        "wednesday",
-        "thursday"
-      ],
-      "includeInExport": {
-        "sunday": true,
-        "monday": true,
-        "tuesday": true,
-        "wednesday": true,
-        "thursday": true,
-        "friday": true,
-        "saturday": true
-      },
-      "variations": {},
-      "order": {
-        "tuesday": 1,
-        "wednesday": 3,
-        "thursday": 3
-      },
-      "recurrence": {
-        "type": "weeks",
-        "onPeriods": 1,
-        "offPeriods": 0,
-        "daysOfWeek": [
-          "tuesday",
-          "wednesday",
-          "thursday"
-        ],
-        "startDate": "2025-10-28T04:00:00.000Z"
-      }
-    },
-    {
-      "id": "64f6f56b-98d4-46fb-b1cb-cee21e81679f",
-      "archived": false,
-      "title": "Apex Arena - FINAL DAY",
-      "description": "",
-      "remindTomorrow": false,
-      "remindEndOfDay": true,
-      "isAllDay": true,
-      "startTime": "09:00",
-      "endTime": "",
-      "days": [
-        "friday"
-      ],
-      "includeInExport": {
-        "tuesday": true,
-        "monday": true,
-        "wednesday": true,
-        "thursday": true,
-        "friday": true,
-        "saturday": true
-      },
-      "variations": {},
-      "order": {
-        "friday": 1
-      },
-      "recurrence": {
-        "type": "weeks",
-        "onPeriods": 1,
-        "offPeriods": 0,
-        "daysOfWeek": [
-          "friday"
-        ],
-        "startDate": "2025-10-31T04:00:00.000Z"
-      }
-    },
-    {
-      "id": "c1c5189c-11d4-4472-ba99-38512b9b219a",
-      "archived": false,
-      "title": "Rookie Bootcamp",
-      "description": "",
-      "remindTomorrow": false,
-      "remindEndOfDay": true,
-      "isAllDay": true,
-      "startTime": "09:00",
-      "endTime": "",
-      "days": [
-        "tuesday"
-      ],
-      "includeInExport": {
-        "tuesday": true,
-        "monday": true,
-        "wednesday": true,
-        "thursday": true,
-        "friday": true,
-        "saturday": true
-      },
-      "variations": {},
-      "order": {
-        "tuesday": 2
-      },
-      "recurrence": {
-        "type": "days",
-        "onPeriods": 1,
-        "offPeriods": 0,
-        "daysOfWeek": [
-          "tuesday"
-        ],
-        "startDate": "2025-10-28T00:00:00.000-04:00",
-        "endDate": "2025-10-28T04:00:00.000Z"
-      }
-    },
-    {
-      "id": "aca47939-2035-476d-a4e6-90ee8ebd2553",
-      "archived": false,
-      "title": "Rookie Bootcamp - FINAL DAY",
-      "description": "",
-      "remindTomorrow": false,
-      "remindEndOfDay": false,
-      "isAllDay": true,
-      "startTime": "09:00",
-      "endTime": "",
-      "days": [
-        "wednesday"
-      ],
-      "includeInExport": {
-        "tuesday": true,
-        "monday": true,
-        "wednesday": true,
-        "thursday": true,
-        "friday": true,
-        "saturday": true
-      },
-      "variations": {},
-      "order": {
-        "wednesday": 1
-      },
-      "recurrence": {
-        "type": "days",
-        "onPeriods": 1,
-        "offPeriods": 0,
-        "daysOfWeek": [
-          "wednesday"
-        ],
-        "startDate": "2025-10-29T04:00:00.000Z",
-        "endDate": "2025-10-29T04:00:00.000Z"
-      }
-    },
-    {
-      "id": "cbfa1899-1357-4d10-b640-e31c7aeadaac",
-      "archived": false,
-      "title": "Mega Chest - Base Expansion",
-      "description": "",
-      "remindTomorrow": true,
-      "remindEndOfDay": true,
-      "isAllDay": true,
-      "startTime": "09:00",
-      "endTime": "",
-      "days": [
-        "sunday",
-        "monday",
-        "tuesday",
-        "wednesday",
-        "thursday",
-        "friday",
-        "saturday"
-      ],
-      "includeInExport": {
-        "wednesday": true,
-        "sunday": true,
-        "monday": true,
-        "tuesday": true,
-        "thursday": true,
-        "friday": true,
-        "saturday": true
-      },
-      "variations": {},
-      "order": {},
-      "recurrence": {
-        "type": "days",
-        "onPeriods": 1,
-        "offPeriods": 0,
-        "daysOfWeek": [
-          "sunday",
-          "monday",
-          "tuesday",
-          "wednesday",
-          "thursday",
-          "friday",
-          "saturday"
-        ],
-        "startDate": "2025-10-28T04:00:00.000Z",
-        "endDate": "2025-10-28T04:00:00.000Z"
-      }
-    },
-    {
-      "id": "8014f738-6488-46a7-9b95-53a2315a5cf4",
-      "archived": false,
-      "title": "Mega Chest - Tech",
-      "description": "",
-      "remindTomorrow": true,
-      "remindEndOfDay": true,
-      "isAllDay": true,
-      "startTime": "09:00",
-      "endTime": "",
-      "days": [
-        "sunday",
-        "monday",
-        "tuesday",
-        "wednesday",
-        "thursday",
-        "friday",
-        "saturday"
-      ],
-      "includeInExport": {
-        "wednesday": true,
-        "sunday": true,
-        "monday": true,
-        "tuesday": true,
-        "thursday": true,
-        "friday": true,
-        "saturday": true
-      },
-      "variations": {},
-      "order": {
-        "wednesday": 2
-      },
-      "recurrence": {
-        "type": "days",
-        "onPeriods": 1,
-        "offPeriods": 0,
-        "daysOfWeek": [
-          "sunday",
-          "monday",
-          "tuesday",
-          "wednesday",
-          "thursday",
-          "friday",
-          "saturday"
-        ],
-        "startDate": "2025-10-29T00:00:00.000-04:00",
-        "endDate": "2025-10-29T04:00:00.000Z"
-      }
-    },
-    {
-      "id": "f10b2d0d-bee7-4b6e-961c-95758fc553f0",
-      "archived": false,
-      "title": "Mega Chest - Heroes",
-      "description": "",
-      "remindTomorrow": true,
-      "remindEndOfDay": true,
-      "isAllDay": true,
-      "startTime": "09:00",
-      "endTime": "",
-      "days": [
-        "sunday",
-        "monday",
-        "tuesday",
-        "wednesday",
-        "thursday",
-        "friday",
-        "saturday"
-      ],
-      "includeInExport": {
-        "wednesday": true,
-        "sunday": true,
-        "monday": true,
-        "tuesday": true,
-        "thursday": true,
-        "friday": true,
-        "saturday": true
-      },
-      "variations": {},
-      "order": {
-        "thursday": 2
-      },
-      "recurrence": {
-        "type": "days",
-        "onPeriods": 1,
-        "offPeriods": 0,
-        "daysOfWeek": [
-          "sunday",
-          "monday",
-          "tuesday",
-          "wednesday",
-          "thursday",
-          "friday",
-          "saturday"
-        ],
-        "startDate": "2025-10-30T04:00:00.000Z",
-        "endDate": "2025-10-30T04:00:00.000Z"
-      }
-    },
-    {
-      "id": "6d1657f4-ee80-4c72-8917-f2a55cf86c45",
-      "archived": false,
-      "title": "Mega Chest - Units/Contruction/Research",
-      "description": "",
-      "remindTomorrow": true,
-      "remindEndOfDay": true,
-      "isAllDay": true,
-      "startTime": "09:00",
-      "endTime": "",
-      "days": [
-        "sunday",
-        "monday",
-        "tuesday",
-        "wednesday",
-        "thursday",
-        "friday",
-        "saturday"
-      ],
-      "includeInExport": {
-        "thursday": true,
-        "sunday": true,
-        "monday": true,
-        "tuesday": true,
-        "wednesday": true,
-        "friday": true,
-        "saturday": true
-      },
-      "variations": {},
-      "order": {
-        "friday": 2
-      },
-      "recurrence": {
-        "type": "days",
-        "onPeriods": 1,
-        "offPeriods": 0,
-        "daysOfWeek": [
-          "sunday",
-          "monday",
-          "tuesday",
-          "wednesday",
-          "thursday",
-          "friday",
-          "saturday"
-        ],
-        "startDate": "2025-10-31T04:00:00.000Z",
-        "endDate": "2025-10-31T04:00:00.000Z"
-      }
-    },
-    {
-      "id": "42aaadc1-14e5-4e3d-b4e6-d2286e1abf39",
-      "archived": false,
-      "title": "Mega Chest - Kill Other's Troops! (UR Tasks/Trucks)",
-      "description": "",
-      "remindTomorrow": true,
-      "remindEndOfDay": true,
-      "isAllDay": true,
-      "startTime": "09:00",
-      "endTime": "",
-      "days": [
-        "sunday",
-        "monday",
-        "tuesday",
-        "wednesday",
-        "thursday",
-        "friday",
-        "saturday"
-      ],
-      "includeInExport": {
-        "friday": true,
-        "sunday": true,
-        "monday": true,
-        "tuesday": true,
-        "wednesday": true,
-        "thursday": true,
-        "saturday": true
-      },
-      "variations": {},
-      "order": {},
-      "recurrence": {
-        "type": "days",
-        "onPeriods": 1,
-        "offPeriods": 0,
-        "daysOfWeek": [
-          "sunday",
-          "monday",
-          "tuesday",
-          "wednesday",
-          "thursday",
-          "friday",
-          "saturday"
-        ],
-        "startDate": "2025-11-01T04:00:00.000Z",
-        "endDate": "2025-11-01T04:00:00.000Z"
-      }
-    },
-    {
-      "id": "b07d91a6-74e8-4107-936b-756b01127cc9",
-      "archived": false,
-      "title": "Mega Chest - EVERYTHING",
-      "description": "",
-      "remindTomorrow": true,
-      "remindEndOfDay": true,
-      "isAllDay": true,
-      "startTime": "09:00",
-      "endTime": "",
-      "days": [
-        "sunday",
-        "monday",
-        "tuesday",
-        "wednesday",
-        "thursday",
-        "friday",
-        "saturday"
-      ],
-      "includeInExport": {
-        "friday": true,
-        "sunday": true,
-        "monday": true,
-        "tuesday": true,
-        "wednesday": true,
-        "thursday": true,
-        "saturday": true
-      },
-      "variations": {},
-      "order": {},
-      "recurrence": {
-        "type": "days",
-        "onPeriods": 1,
-        "offPeriods": 0,
-        "daysOfWeek": [
-          "sunday",
-          "monday",
-          "tuesday",
-          "wednesday",
-          "thursday",
-          "friday",
-          "saturday"
-        ],
-        "startDate": "2025-11-01T04:00:00.000Z",
-        "endDate": "2025-11-01T04:00:00.000Z"
-      }
-    },
-    {
-      "id": "ev-3",
-      "archived": true
-    },
-    {
-      "id": "ev-6",
-      "archived": true
-    },
-    {
-      "id": "ev-7",
-      "archived": true
-    },
-    {
-      "id": "ev-1739556307704",
-      "archived": true
-    },
-    {
-      "id": "ev-1739556818565",
-      "archived": true
-    },
-    {
-      "id": "ev-1739558845321",
-      "archived": true
-    },
-    {
-      "id": "ev-1740123329685",
-      "archived": true
-    },
-    {
-      "id": "ev-1740278810425",
-      "archived": true
-    },
-    {
-      "id": "4329a998-b697-4b0d-ae72-c629390328b4",
-      "archived": true
-    },
-    {
-      "id": "5c1804c1-eae9-48f9-a94d-495eea6eb156",
-      "archived": true
-    },
-    {
-      "id": "dfb867b9-9ffc-4a60-baf2-bd89a1d18681",
-      "archived": true
-    },
-    {
-      "id": "7662a10a-144e-4dc5-8ae7-4c8af78b9e12",
-      "archived": true
-    },
-    {
-      "id": "e5263084-2b0f-4289-9ed1-ede774a62176",
-      "archived": true
-    },
-    {
-      "id": "41b7230f-eac7-478d-8f95-2955050d1da0",
-      "archived": true
-    },
-    {
-      "id": "ff6b9bd0-e2e6-49fd-9fa6-7cea574f8d47",
-      "archived": true
-    },
-    {
-      "id": "fe4d455d-6f36-45b2-92c2-24c32521473f",
-      "archived": true
-    },
-    {
-      "id": "8c78efe1-5b5c-427c-b5e1-7249a7922606",
-      "archived": true
-    },
-    {
-      "id": "3c1c7552-cfbc-479d-a42c-2dc8476d0e1b",
-      "archived": true
-    },
-    {
-      "id": "4af5277e-a46b-4407-94cc-66452e907f1d",
-      "archived": true
-    },
-    {
-      "id": "9773fd5b-5070-4f05-b232-f527556751ab",
-      "archived": true
-    },
-    {
-      "id": "fc3ef9fe-0e81-4a26-b693-448794954e61",
-      "archived": true
-    },
-    {
-      "id": "6ea962c6-2e91-4a52-a670-eb4cd3c7d328",
-      "archived": true
-    },
-    {
-      "id": "4b3d8da0-2fc8-461b-923e-7423a403c28b",
-      "archived": true
-    },
-    {
-      "id": "160a7d34-b724-48de-8e20-0ea5bdef6d20",
-      "archived": true,
-      "title": "Take level 3 cities!",
-      "description": "",
-      "remindTomorrow": true,
-      "remindEndOfDay": false,
-      "isAllDay": false,
-      "startTime": "00:00",
-      "endTime": "",
-      "days": [
-        "sunday",
-        "monday",
-        "tuesday",
-        "wednesday",
-        "thursday",
-        "friday",
-        "saturday"
-      ],
-      "includeInExport": {
-        "tuesday": true,
-        "sunday": true,
-        "monday": true,
-        "wednesday": true,
-        "thursday": true,
-        "friday": true,
-        "saturday": true
-      },
-      "variations": {},
-      "order": {},
-      "recurrence": {
-        "type": "days",
-        "onPeriods": 1,
-        "offPeriods": 99,
-        "daysOfWeek": [
-          "sunday",
-          "monday",
-          "tuesday",
-          "wednesday",
-          "thursday",
-          "friday",
-          "saturday"
-        ],
-        "startDate": "2025-10-29T04:00:00.000Z"
-      }
-    }
-  ]
+﻿{
+    "updated":  "2025-11-13T05:58:23.886Z",
+    "events":  [
+                   {
+                       "id":  "ev-8",
+                       "recurrence":  {
+                                          "type":  "weeks",
+                                          "onPeriods":  1,
+                                          "offPeriods":  0,
+                                          "startDate":  "2025-11-01"
+                                      }
+                   },
+                   {
+                       "id":  "ev-10",
+                       "recurrence":  {
+                                          "type":  "weeks",
+                                          "onPeriods":  1,
+                                          "offPeriods":  0,
+                                          "startDate":  "2025-11-04"
+                                      }
+                   },
+                   {
+                       "id":  "ev-12",
+                       "recurrence":  {
+                                          "type":  "weeks",
+                                          "onPeriods":  1,
+                                          "offPeriods":  0,
+                                          "startDate":  "2025-11-03"
+                                      }
+                   },
+                   {
+                       "id":  "ev-14",
+                       "title":  "VS: Unwrap buildings and use construction speedups",
+                       "recurrence":  {
+                                          "type":  "weeks",
+                                          "onPeriods":  1,
+                                          "offPeriods":  0,
+                                          "startDate":  "2025-11-04"
+                                      }
+                   },
+                   {
+                       "id":  "ev-15",
+                       "recurrence":  {
+                                          "type":  "weeks",
+                                          "onPeriods":  1,
+                                          "offPeriods":  0,
+                                          "startDate":  "2025-11-05"
+                                      }
+                   },
+                   {
+                       "id":  "ev-16",
+                       "recurrence":  {
+                                          "type":  "weeks",
+                                          "onPeriods":  1,
+                                          "offPeriods":  0,
+                                          "startDate":  "2025-11-06"
+                                      }
+                   },
+                   {
+                       "id":  "ev-17",
+                       "recurrence":  {
+                                          "type":  "weeks",
+                                          "onPeriods":  1,
+                                          "offPeriods":  0,
+                                          "startDate":  "2025-11-07"
+                                      }
+                   },
+                   {
+                       "id":  "ev-18",
+                       "recurrence":  {
+                                          "type":  "weeks",
+                                          "onPeriods":  1,
+                                          "offPeriods":  0,
+                                          "startDate":  "2025-01-05",
+                                          "endDate":  "2025-11-08"
+                                      }
+                   },
+                   {
+                       "id":  "ev-1739556183702",
+                       "order":  {
+                                     "thursday":  1,
+                                     "tuesday":  0
+                                 }
+                   },
+                   {
+                       "id":  "ev-1739556209550",
+                       "order":  {
+                                     "wednesday":  0,
+                                     "friday":  0
+                                 }
+                   },
+                   {
+                       "id":  "ev-1739556688004",
+                       "recurrence":  {
+                                          "type":  "weeks",
+                                          "onPeriods":  1,
+                                          "offPeriods":  1,
+                                          "startDate":  "2025-02-23"
+                                      },
+                       "includeInBriefing":  true,
+                       "includeOnWebsite":  true
+                   },
+                   {
+                       "id":  "ev-1739556987954",
+                       "recurrence":  {
+                                          "type":  "weeks",
+                                          "onPeriods":  1,
+                                          "offPeriods":  1,
+                                          "startDate":  "2025-03-02"
+                                      },
+                       "includeInBriefing":  true,
+                       "includeOnWebsite":  true
+                   },
+                   {
+                       "id":  "87a66ed0-70ea-4dfc-8519-ced7ef52be6e",
+                       "startTime":  "00:00",
+                       "endTime":  "",
+                       "recurrence":  {
+                                          "type":  "days",
+                                          "startDate":  "2025-10-27",
+                                          "onPeriods":  1,
+                                          "offPeriods":  1
+                                      }
+                   },
+                   {
+                       "id":  "5aec60d0-4d5f-4299-8f91-cc8590471e7b",
+                       "order":  {
+                                     "thursday":  0
+                                 }
+                   },
+                   {
+                       "id":  "6f0f73b6-24e7-491d-b6fa-39d73bb8711e",
+                       "order":  {
+                                     "friday":  3,
+                                     "tuesday":  3
+                                 }
+                   },
+                   {
+                       "id":  "5178bd44-1659-40df-9aa7-c76cf22ee563",
+                       "order":  {
+                                     "wednesday":  4
+                                 }
+                   },
+                   {
+                       "id":  "8d795f4d-e2f0-4194-9152-2163891aa0dc",
+                       "recurrence":  {
+                                          "type":  "weeks",
+                                          "startDate":  "2025-11-04",
+                                          "onPeriods":  1,
+                                          "offPeriods":  0
+                                      }
+                   },
+                   {
+                       "id":  "89b95f35-ae1a-485b-8aee-f012c758fa7b",
+                       "recurrence":  {
+                                          "type":  "weeks",
+                                          "startDate":  "2025-11-07",
+                                          "onPeriods":  1,
+                                          "offPeriods":  2
+                                      }
+                   },
+                   {
+                       "id":  "9632b4bd-843c-41af-9282-7dc6d9a50aa0",
+                       "archived":  false,
+                       "title":  "Apex Arena",
+                       "description":  "",
+                       "remindTomorrow":  false,
+                       "remindEndOfDay":  true,
+                       "isAllDay":  true,
+                       "startTime":  "09:00",
+                       "endTime":  "",
+                       "days":  [
+                                    "tuesday",
+                                    "wednesday",
+                                    "thursday"
+                                ],
+                       "includeInExport":  {
+                                               "sunday":  true,
+                                               "monday":  true,
+                                               "tuesday":  true,
+                                               "wednesday":  true,
+                                               "thursday":  true,
+                                               "friday":  true,
+                                               "saturday":  true
+                                           },
+                       "variations":  {
+
+                                      },
+                       "order":  {
+                                     "tuesday":  1,
+                                     "wednesday":  3,
+                                     "thursday":  3
+                                 },
+                       "recurrence":  {
+                                          "type":  "weeks",
+                                          "onPeriods":  1,
+                                          "offPeriods":  0,
+                                          "daysOfWeek":  [
+                                                             "tuesday",
+                                                             "wednesday",
+                                                             "thursday"
+                                                         ],
+                                          "startDate":  "2025-10-28"
+                                      }
+                   },
+                   {
+                       "id":  "64f6f56b-98d4-46fb-b1cb-cee21e81679f",
+                       "archived":  false,
+                       "title":  "Apex Arena - FINAL DAY",
+                       "description":  "",
+                       "remindTomorrow":  false,
+                       "remindEndOfDay":  true,
+                       "isAllDay":  true,
+                       "startTime":  "09:00",
+                       "endTime":  "",
+                       "days":  [
+                                    "friday"
+                                ],
+                       "includeInExport":  {
+                                               "tuesday":  true,
+                                               "monday":  true,
+                                               "wednesday":  true,
+                                               "thursday":  true,
+                                               "friday":  true,
+                                               "saturday":  true
+                                           },
+                       "variations":  {
+
+                                      },
+                       "order":  {
+                                     "friday":  1
+                                 },
+                       "recurrence":  {
+                                          "type":  "weeks",
+                                          "onPeriods":  1,
+                                          "offPeriods":  0,
+                                          "daysOfWeek":  [
+                                                             "friday"
+                                                         ],
+                                          "startDate":  "2025-10-31"
+                                      }
+                   },
+                   {
+                       "id":  "c1c5189c-11d4-4472-ba99-38512b9b219a",
+                       "archived":  false,
+                       "title":  "Rookie Bootcamp",
+                       "description":  "",
+                       "remindTomorrow":  false,
+                       "remindEndOfDay":  true,
+                       "isAllDay":  true,
+                       "startTime":  "09:00",
+                       "endTime":  "",
+                       "days":  [
+                                    "tuesday"
+                                ],
+                       "includeInExport":  {
+                                               "tuesday":  true,
+                                               "monday":  true,
+                                               "wednesday":  true,
+                                               "thursday":  true,
+                                               "friday":  true,
+                                               "saturday":  true
+                                           },
+                       "variations":  {
+
+                                      },
+                       "order":  {
+                                     "tuesday":  2
+                                 },
+                       "recurrence":  {
+                                          "type":  "days",
+                                          "onPeriods":  1,
+                                          "offPeriods":  0,
+                                          "daysOfWeek":  [
+                                                             "tuesday"
+                                                         ],
+                                          "startDate":  "2025-10-28",
+                                          "endDate":  "2025-10-28"
+                                      }
+                   },
+                   {
+                       "id":  "aca47939-2035-476d-a4e6-90ee8ebd2553",
+                       "archived":  false,
+                       "title":  "Rookie Bootcamp - FINAL DAY",
+                       "description":  "",
+                       "remindTomorrow":  false,
+                       "remindEndOfDay":  false,
+                       "isAllDay":  true,
+                       "startTime":  "09:00",
+                       "endTime":  "",
+                       "days":  [
+                                    "wednesday"
+                                ],
+                       "includeInExport":  {
+                                               "tuesday":  true,
+                                               "monday":  true,
+                                               "wednesday":  true,
+                                               "thursday":  true,
+                                               "friday":  true,
+                                               "saturday":  true
+                                           },
+                       "variations":  {
+
+                                      },
+                       "order":  {
+                                     "wednesday":  1
+                                 },
+                       "recurrence":  {
+                                          "type":  "days",
+                                          "onPeriods":  1,
+                                          "offPeriods":  0,
+                                          "daysOfWeek":  [
+                                                             "wednesday"
+                                                         ],
+                                          "startDate":  "2025-10-29",
+                                          "endDate":  "2025-10-29"
+                                      }
+                   },
+                   {
+                       "id":  "cbfa1899-1357-4d10-b640-e31c7aeadaac",
+                       "archived":  false,
+                       "title":  "Mega Chest - Base Expansion",
+                       "description":  "",
+                       "remindTomorrow":  true,
+                       "remindEndOfDay":  true,
+                       "isAllDay":  true,
+                       "startTime":  "09:00",
+                       "endTime":  "",
+                       "days":  [
+                                    "sunday",
+                                    "monday",
+                                    "tuesday",
+                                    "wednesday",
+                                    "thursday",
+                                    "friday",
+                                    "saturday"
+                                ],
+                       "includeInExport":  {
+                                               "wednesday":  true,
+                                               "sunday":  true,
+                                               "monday":  true,
+                                               "tuesday":  true,
+                                               "thursday":  true,
+                                               "friday":  true,
+                                               "saturday":  true
+                                           },
+                       "variations":  {
+
+                                      },
+                       "order":  {
+
+                                 },
+                       "recurrence":  {
+                                          "type":  "days",
+                                          "onPeriods":  1,
+                                          "offPeriods":  0,
+                                          "daysOfWeek":  [
+                                                             "sunday",
+                                                             "monday",
+                                                             "tuesday",
+                                                             "wednesday",
+                                                             "thursday",
+                                                             "friday",
+                                                             "saturday"
+                                                         ],
+                                          "startDate":  "2025-10-28",
+                                          "endDate":  "2025-10-28"
+                                      }
+                   },
+                   {
+                       "id":  "8014f738-6488-46a7-9b95-53a2315a5cf4",
+                       "archived":  false,
+                       "title":  "Mega Chest - Tech",
+                       "description":  "",
+                       "remindTomorrow":  true,
+                       "remindEndOfDay":  true,
+                       "isAllDay":  true,
+                       "startTime":  "09:00",
+                       "endTime":  "",
+                       "days":  [
+                                    "sunday",
+                                    "monday",
+                                    "tuesday",
+                                    "wednesday",
+                                    "thursday",
+                                    "friday",
+                                    "saturday"
+                                ],
+                       "includeInExport":  {
+                                               "wednesday":  true,
+                                               "sunday":  true,
+                                               "monday":  true,
+                                               "tuesday":  true,
+                                               "thursday":  true,
+                                               "friday":  true,
+                                               "saturday":  true
+                                           },
+                       "variations":  {
+
+                                      },
+                       "order":  {
+                                     "wednesday":  2
+                                 },
+                       "recurrence":  {
+                                          "type":  "days",
+                                          "onPeriods":  1,
+                                          "offPeriods":  0,
+                                          "daysOfWeek":  [
+                                                             "sunday",
+                                                             "monday",
+                                                             "tuesday",
+                                                             "wednesday",
+                                                             "thursday",
+                                                             "friday",
+                                                             "saturday"
+                                                         ],
+                                          "startDate":  "2025-10-29",
+                                          "endDate":  "2025-10-29"
+                                      }
+                   },
+                   {
+                       "id":  "f10b2d0d-bee7-4b6e-961c-95758fc553f0",
+                       "archived":  false,
+                       "title":  "Mega Chest - Heroes",
+                       "description":  "",
+                       "remindTomorrow":  true,
+                       "remindEndOfDay":  true,
+                       "isAllDay":  true,
+                       "startTime":  "09:00",
+                       "endTime":  "",
+                       "days":  [
+                                    "sunday",
+                                    "monday",
+                                    "tuesday",
+                                    "wednesday",
+                                    "thursday",
+                                    "friday",
+                                    "saturday"
+                                ],
+                       "includeInExport":  {
+                                               "wednesday":  true,
+                                               "sunday":  true,
+                                               "monday":  true,
+                                               "tuesday":  true,
+                                               "thursday":  true,
+                                               "friday":  true,
+                                               "saturday":  true
+                                           },
+                       "variations":  {
+
+                                      },
+                       "order":  {
+                                     "thursday":  2
+                                 },
+                       "recurrence":  {
+                                          "type":  "days",
+                                          "onPeriods":  1,
+                                          "offPeriods":  0,
+                                          "daysOfWeek":  [
+                                                             "sunday",
+                                                             "monday",
+                                                             "tuesday",
+                                                             "wednesday",
+                                                             "thursday",
+                                                             "friday",
+                                                             "saturday"
+                                                         ],
+                                          "startDate":  "2025-10-30",
+                                          "endDate":  "2025-10-30"
+                                      }
+                   },
+                   {
+                       "id":  "6d1657f4-ee80-4c72-8917-f2a55cf86c45",
+                       "archived":  false,
+                       "title":  "Mega Chest - Units/Contruction/Research",
+                       "description":  "",
+                       "remindTomorrow":  true,
+                       "remindEndOfDay":  true,
+                       "isAllDay":  true,
+                       "startTime":  "09:00",
+                       "endTime":  "",
+                       "days":  [
+                                    "sunday",
+                                    "monday",
+                                    "tuesday",
+                                    "wednesday",
+                                    "thursday",
+                                    "friday",
+                                    "saturday"
+                                ],
+                       "includeInExport":  {
+                                               "thursday":  true,
+                                               "sunday":  true,
+                                               "monday":  true,
+                                               "tuesday":  true,
+                                               "wednesday":  true,
+                                               "friday":  true,
+                                               "saturday":  true
+                                           },
+                       "variations":  {
+
+                                      },
+                       "order":  {
+                                     "friday":  2
+                                 },
+                       "recurrence":  {
+                                          "type":  "days",
+                                          "onPeriods":  1,
+                                          "offPeriods":  0,
+                                          "daysOfWeek":  [
+                                                             "sunday",
+                                                             "monday",
+                                                             "tuesday",
+                                                             "wednesday",
+                                                             "thursday",
+                                                             "friday",
+                                                             "saturday"
+                                                         ],
+                                          "startDate":  "2025-10-31",
+                                          "endDate":  "2025-10-31"
+                                      }
+                   },
+                   {
+                       "id":  "42aaadc1-14e5-4e3d-b4e6-d2286e1abf39",
+                       "archived":  false,
+                       "title":  "Mega Chest - Kill Other\u0027s Troops! (UR Tasks/Trucks)",
+                       "description":  "",
+                       "remindTomorrow":  true,
+                       "remindEndOfDay":  true,
+                       "isAllDay":  true,
+                       "startTime":  "09:00",
+                       "endTime":  "",
+                       "days":  [
+                                    "sunday",
+                                    "monday",
+                                    "tuesday",
+                                    "wednesday",
+                                    "thursday",
+                                    "friday",
+                                    "saturday"
+                                ],
+                       "includeInExport":  {
+                                               "friday":  true,
+                                               "sunday":  true,
+                                               "monday":  true,
+                                               "tuesday":  true,
+                                               "wednesday":  true,
+                                               "thursday":  true,
+                                               "saturday":  true
+                                           },
+                       "variations":  {
+
+                                      },
+                       "order":  {
+
+                                 },
+                       "recurrence":  {
+                                          "type":  "days",
+                                          "onPeriods":  1,
+                                          "offPeriods":  0,
+                                          "daysOfWeek":  [
+                                                             "sunday",
+                                                             "monday",
+                                                             "tuesday",
+                                                             "wednesday",
+                                                             "thursday",
+                                                             "friday",
+                                                             "saturday"
+                                                         ],
+                                          "startDate":  "2025-11-01",
+                                          "endDate":  "2025-11-01"
+                                      }
+                   },
+                   {
+                       "id":  "b07d91a6-74e8-4107-936b-756b01127cc9",
+                       "archived":  false,
+                       "title":  "Mega Chest - EVERYTHING",
+                       "description":  "",
+                       "remindTomorrow":  true,
+                       "remindEndOfDay":  true,
+                       "isAllDay":  true,
+                       "startTime":  "09:00",
+                       "endTime":  "",
+                       "days":  [
+                                    "sunday",
+                                    "monday",
+                                    "tuesday",
+                                    "wednesday",
+                                    "thursday",
+                                    "friday",
+                                    "saturday"
+                                ],
+                       "includeInExport":  {
+                                               "friday":  true,
+                                               "sunday":  true,
+                                               "monday":  true,
+                                               "tuesday":  true,
+                                               "wednesday":  true,
+                                               "thursday":  true,
+                                               "saturday":  true
+                                           },
+                       "variations":  {
+
+                                      },
+                       "order":  {
+
+                                 },
+                       "recurrence":  {
+                                          "type":  "days",
+                                          "onPeriods":  1,
+                                          "offPeriods":  0,
+                                          "daysOfWeek":  [
+                                                             "sunday",
+                                                             "monday",
+                                                             "tuesday",
+                                                             "wednesday",
+                                                             "thursday",
+                                                             "friday",
+                                                             "saturday"
+                                                         ],
+                                          "startDate":  "2025-11-01",
+                                          "endDate":  "2025-11-01"
+                                      }
+                   },
+                   {
+                       "id":  "ev-3",
+                       "archived":  true
+                   },
+                   {
+                       "id":  "ev-6",
+                       "archived":  true
+                   },
+                   {
+                       "id":  "ev-7",
+                       "archived":  true
+                   },
+                   {
+                       "id":  "ev-1739556307704",
+                       "archived":  true
+                   },
+                   {
+                       "id":  "ev-1739556818565",
+                       "archived":  true
+                   },
+                   {
+                       "id":  "ev-1739558845321",
+                       "archived":  true
+                   },
+                   {
+                       "id":  "ev-1740123329685",
+                       "archived":  true
+                   },
+                   {
+                       "id":  "ev-1740278810425",
+                       "archived":  true
+                   },
+                   {
+                       "id":  "4329a998-b697-4b0d-ae72-c629390328b4",
+                       "archived":  true
+                   },
+                   {
+                       "id":  "5c1804c1-eae9-48f9-a94d-495eea6eb156",
+                       "archived":  true
+                   },
+                   {
+                       "id":  "dfb867b9-9ffc-4a60-baf2-bd89a1d18681",
+                       "archived":  true
+                   },
+                   {
+                       "id":  "7662a10a-144e-4dc5-8ae7-4c8af78b9e12",
+                       "archived":  true
+                   },
+                   {
+                       "id":  "e5263084-2b0f-4289-9ed1-ede774a62176",
+                       "archived":  true
+                   },
+                   {
+                       "id":  "41b7230f-eac7-478d-8f95-2955050d1da0",
+                       "archived":  true
+                   },
+                   {
+                       "id":  "ff6b9bd0-e2e6-49fd-9fa6-7cea574f8d47",
+                       "archived":  true
+                   },
+                   {
+                       "id":  "fe4d455d-6f36-45b2-92c2-24c32521473f",
+                       "archived":  true
+                   },
+                   {
+                       "id":  "8c78efe1-5b5c-427c-b5e1-7249a7922606",
+                       "archived":  true
+                   },
+                   {
+                       "id":  "3c1c7552-cfbc-479d-a42c-2dc8476d0e1b",
+                       "archived":  true
+                   },
+                   {
+                       "id":  "4af5277e-a46b-4407-94cc-66452e907f1d",
+                       "archived":  true
+                   },
+                   {
+                       "id":  "9773fd5b-5070-4f05-b232-f527556751ab",
+                       "archived":  true
+                   },
+                   {
+                       "id":  "fc3ef9fe-0e81-4a26-b693-448794954e61",
+                       "archived":  true
+                   },
+                   {
+                       "id":  "6ea962c6-2e91-4a52-a670-eb4cd3c7d328",
+                       "archived":  true
+                   },
+                   {
+                       "id":  "4b3d8da0-2fc8-461b-923e-7423a403c28b",
+                       "archived":  true
+                   },
+                   {
+                       "id":  "160a7d34-b724-48de-8e20-0ea5bdef6d20",
+                       "archived":  true,
+                       "title":  "Take level 3 cities!",
+                       "description":  "",
+                       "remindTomorrow":  true,
+                       "remindEndOfDay":  false,
+                       "isAllDay":  false,
+                       "startTime":  "00:00",
+                       "endTime":  "",
+                       "days":  [
+                                    "sunday",
+                                    "monday",
+                                    "tuesday",
+                                    "wednesday",
+                                    "thursday",
+                                    "friday",
+                                    "saturday"
+                                ],
+                       "includeInExport":  {
+                                               "tuesday":  true,
+                                               "sunday":  true,
+                                               "monday":  true,
+                                               "wednesday":  true,
+                                               "thursday":  true,
+                                               "friday":  true,
+                                               "saturday":  true
+                                           },
+                       "variations":  {
+
+                                      },
+                       "order":  {
+
+                                 },
+                       "recurrence":  {
+                                          "type":  "days",
+                                          "onPeriods":  1,
+                                          "offPeriods":  99,
+                                          "daysOfWeek":  [
+                                                             "sunday",
+                                                             "monday",
+                                                             "tuesday",
+                                                             "wednesday",
+                                                             "thursday",
+                                                             "friday",
+                                                             "saturday"
+                                                         ],
+                                          "startDate":  "2025-10-29"
+                                      }
+                   }
+               ]
 }
