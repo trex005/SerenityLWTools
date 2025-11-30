@@ -9,11 +9,9 @@
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Label } from "@/components/ui/label"
 import { Checkbox } from "@/components/ui/checkbox"
-import { Calendar } from "@/components/ui/calendar"
+import { formatInAppTimezone, getStartOfAppDay } from "@/lib/date-utils"
+import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { CalendarIcon } from "lucide-react"
-import { formatInAppTimezone } from "@/lib/date-utils"
-import { useState } from "react"
 import { CustomNumberInput } from "./custom-number-input"
 
 // Define the RecurrenceData type for the new structure
@@ -107,10 +105,6 @@ function convertLegacyToNew(legacyValue: any, isNewEvent: boolean = false): Recu
 }
 
 export function RecurrenceEditor({ value, onChange, isNewEvent = false }: RecurrenceEditorProps) {
-  // State to control popover open state
-  const [startDatePickerOpen, setStartDatePickerOpen] = useState(false)
-  const [endDatePickerOpen, setEndDatePickerOpen] = useState(false)
-
   // Convert legacy format to new format for display
   const recurrence: RecurrenceData = convertLegacyToNew(value, isNewEvent)
 
@@ -257,12 +251,12 @@ export function RecurrenceEditor({ value, onChange, isNewEvent = false }: Recurr
 
   // Safely format a date string
   const formatDateSafe = (dateString: string | undefined) => {
-    if (!dateString) return "Pick a date"
+    if (!dateString) return ""
     try {
-      return formatInAppTimezone(new Date(dateString), "PPP")
+      return formatInAppTimezone(new Date(dateString), "yyyy-MM-dd")
     } catch (error) {
       console.error("Error formatting date:", error)
-      return "Invalid date"
+      return ""
     }
   }
 
@@ -270,43 +264,19 @@ export function RecurrenceEditor({ value, onChange, isNewEvent = false }: Recurr
   const renderStartDatePicker = () => {
     return (
       <div className="space-y-2">
-        <Label>Start Date</Label>
-        <div className="flex items-center gap-2">
-          <div className="relative w-full">
-            <Button
-              type="button"
-              variant="outline"
-              className="w-full justify-start text-left font-normal"
-              onClick={(e) => {
-                e.preventDefault()
-                e.stopPropagation()
-                setStartDatePickerOpen(!startDatePickerOpen)
-              }}
-            >
-              <CalendarIcon className="mr-2 h-4 w-4" />
-              {recurrence.startDate ? formatDateSafe(recurrence.startDate) : "Pick a date"}
-            </Button>
-
-            {startDatePickerOpen && (
-              <div
-                className="absolute z-50 mt-1 bg-popover border rounded-md shadow-md p-3"
-                onClick={(event) => event.stopPropagation()}
-                onMouseDown={(event) => event.stopPropagation()}
-              >
-                <Calendar
-                  mode="single"
-                  selected={recurrence.startDate ? new Date(recurrence.startDate) : undefined}
-                  onSelect={(selected) => {
-                    handleStartDateChange(selected)
-                    setStartDatePickerOpen(false)
-                  }}
-                  initialFocus
-                  className="rounded-md border"
-                />
-              </div>
-            )}
-          </div>
-        </div>
+        <Label htmlFor="start-date">Start Date</Label>
+        <Input
+          id="start-date"
+          type="date"
+          value={formatDateSafe(recurrence.startDate)}
+          onChange={(e) => {
+            if (e.target.value) {
+              const [year, month, day] = e.target.value.split("-").map(Number)
+              handleStartDateChange(getStartOfAppDay(new Date(year, month - 1, day)))
+            }
+          }}
+          className="w-[240px]"
+        />
         <p className="text-xs text-muted-foreground">
           This date controls when the schedule pattern begins. All schedule calculations are based on day offsets from this date.
         </p>
@@ -317,52 +287,21 @@ export function RecurrenceEditor({ value, onChange, isNewEvent = false }: Recurr
   const renderEndDatePicker = () => {
     return (
       <div className="space-y-2">
-        <Label>End Date (optional)</Label>
+        <Label htmlFor="end-date">End Date (optional)</Label>
         <div className="flex items-center gap-2">
-          <div className="relative w-full">
-            <Button
-              type="button"
-              variant="outline"
-              className="w-full justify-start text-left font-normal"
-              onClick={(e) => {
-                e.preventDefault()
-                e.stopPropagation()
-                setEndDatePickerOpen(!endDatePickerOpen)
-              }}
-            >
-              <CalendarIcon className="mr-2 h-4 w-4" />
-              {recurrence.endDate ? formatDateSafe(recurrence.endDate) : "No end date"}
-            </Button>
-
-            {endDatePickerOpen && (
-              <div
-                className="absolute z-50 mt-1 bg-popover border rounded-md shadow-md p-3"
-                onClick={(event) => event.stopPropagation()}
-                onMouseDown={(event) => event.stopPropagation()}
-              >
-                <Calendar
-                  mode="single"
-                  selected={recurrence.endDate ? new Date(recurrence.endDate) : undefined}
-                  onSelect={(selected) => {
-                    handleEndDateChange(selected)
-                    setEndDatePickerOpen(false)
-                  }}
-                  disabled={(candidate) => {
-                    if (!recurrence.startDate) return false
-                    const startDate = new Date(recurrence.startDate)
-                    if (Number.isNaN(startDate.getTime())) return false
-                    const normalizedStart = new Date(startDate)
-                    normalizedStart.setHours(0, 0, 0, 0)
-                    const normalizedCandidate = new Date(candidate)
-                    normalizedCandidate.setHours(0, 0, 0, 0)
-                    return normalizedCandidate.getTime() < normalizedStart.getTime()
-                  }}
-                  initialFocus
-                  className="rounded-md border"
-                />
-              </div>
-            )}
-          </div>
+          <Input
+            id="end-date"
+            type="date"
+            value={formatDateSafe(recurrence.endDate)}
+            min={formatDateSafe(recurrence.startDate) || undefined}
+            onChange={(e) => {
+              if (e.target.value) {
+                const [year, month, day] = e.target.value.split("-").map(Number)
+                handleEndDateChange(getStartOfAppDay(new Date(year, month - 1, day)))
+              }
+            }}
+            className="w-[240px]"
+          />
           {recurrence.endDate && (
             <Button
               type="button"
