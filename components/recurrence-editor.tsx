@@ -9,7 +9,7 @@
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Label } from "@/components/ui/label"
 import { Checkbox } from "@/components/ui/checkbox"
-import { formatInAppTimezone, getStartOfAppDay } from "@/lib/date-utils"
+import { formatInAppTimezone } from "@/lib/date-utils"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { CustomNumberInput } from "./custom-number-input"
@@ -31,10 +31,17 @@ interface RecurrenceEditorProps {
 }
 
 // Convert legacy recurrence format to new format for UI
+const toDateOnly = (value: string | undefined, fallback: string): string => {
+  if (!value) return fallback
+  const match = value.match(/^(\d{4}-\d{2}-\d{2})/)
+  if (match) return match[1]
+  return fallback
+}
+
 function convertLegacyToNew(legacyValue: any, isNewEvent: boolean = false): RecurrenceData {
   const defaultStartDate = isNewEvent
-    ? formatInAppTimezone(new Date(), "yyyy-MM-dd'T'HH:mm:ssXXX")
-    : formatInAppTimezone(new Date(2025, 0, 5), "yyyy-MM-dd'T'HH:mm:ssXXX")
+    ? formatInAppTimezone(new Date(), "yyyy-MM-dd")
+    : formatInAppTimezone(new Date(2025, 0, 5), "yyyy-MM-dd")
 
   // If it's already in new format, return as is
   if (legacyValue && (legacyValue.onPeriods !== undefined || legacyValue.offPeriods !== undefined)) {
@@ -43,8 +50,8 @@ function convertLegacyToNew(legacyValue: any, isNewEvent: boolean = false): Recu
       onPeriods: legacyValue.onPeriods ?? 1,
       offPeriods: legacyValue.offPeriods ?? 0,
       daysOfWeek: legacyValue.daysOfWeek || ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"],
-      startDate: legacyValue.startDate || defaultStartDate,
-      endDate: legacyValue.endDate || undefined,
+      startDate: toDateOnly(legacyValue.startDate, defaultStartDate),
+      endDate: legacyValue.endDate ? toDateOnly(legacyValue.endDate, defaultStartDate) : undefined,
     }
   }
 
@@ -54,7 +61,7 @@ function convertLegacyToNew(legacyValue: any, isNewEvent: boolean = false): Recu
     let onPeriods = 1
     let offPeriods = 0
     let startDate = defaultStartDate
-    let endDate: string | undefined = legacyValue.endDate || undefined
+    let endDate: string | undefined = legacyValue.endDate ? toDateOnly(legacyValue.endDate, defaultStartDate) : undefined
 
     // Handle legacy types
     if (legacyValue.type === "daily") {
@@ -86,7 +93,7 @@ function convertLegacyToNew(legacyValue: any, isNewEvent: boolean = false): Recu
       onPeriods,
       offPeriods,
       daysOfWeek: legacyValue.daysOfWeek || ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"],
-      startDate,
+      startDate: toDateOnly(startDate, defaultStartDate),
       endDate,
     }
   }
@@ -97,9 +104,7 @@ function convertLegacyToNew(legacyValue: any, isNewEvent: boolean = false): Recu
     onPeriods: 1,
     offPeriods: 0,
     daysOfWeek: ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"],
-    startDate: isNewEvent
-      ? formatInAppTimezone(new Date(), "yyyy-MM-dd'T'HH:mm:ssXXX")
-      : defaultStartDate,
+    startDate: isNewEvent ? formatInAppTimezone(new Date(), "yyyy-MM-dd") : defaultStartDate,
     endDate: undefined,
   }
 }
@@ -191,53 +196,41 @@ export function RecurrenceEditor({ value, onChange, isNewEvent = false }: Recurr
   }
 
   // Handle start date change
-  const handleStartDateChange = (date: Date | undefined) => {
-    if (!date) return
-
-    try {
-      const startIso = formatInAppTimezone(date, "yyyy-MM-dd'T'HH:mm:ssXXX")
-      let endIso = recurrence.endDate
-
-      if (endIso) {
-        const currentEnd = new Date(endIso)
-        if (!Number.isNaN(currentEnd.getTime()) && date > currentEnd) {
-          endIso = startIso
-        }
-      }
-
-      const newRecurrence = {
-        ...recurrence,
-        startDate: startIso,
-        endDate: endIso,
-        daysOfWeek: [...recurrence.daysOfWeek],
-      }
-      onChange(newRecurrence)
-    } catch (error) {
-      console.error("Error updating start date:", error)
-    }
+  const normalizeDateInput = (value: string | undefined): string | null => {
+    if (!value) return null
+    const match = value.match(/^(\d{4}-\d{2}-\d{2})/)
+    return match ? match[1] : null
   }
 
-  const handleEndDateChange = (date: Date | undefined) => {
-    if (!date) return
+  const handleStartDateChange = (value: string | undefined) => {
+    const startIso = normalizeDateInput(value)
+    if (!startIso) return
 
-    try {
-      let selectedDate = date
-      if (recurrence.startDate) {
-        const startDate = new Date(recurrence.startDate)
-        if (!Number.isNaN(startDate.getTime()) && selectedDate < startDate) {
-          selectedDate = startDate
-        }
-      }
-
-      const newRecurrence = {
-        ...recurrence,
-        endDate: formatInAppTimezone(selectedDate, "yyyy-MM-dd'T'HH:mm:ssXXX"),
-        daysOfWeek: [...recurrence.daysOfWeek],
-      }
-      onChange(newRecurrence)
-    } catch (error) {
-      console.error("Error updating end date:", error)
+    let endIso = recurrence.endDate
+    if (endIso && endIso < startIso) {
+      endIso = startIso
     }
+
+    onChange({
+      ...recurrence,
+      startDate: startIso,
+      endDate: endIso,
+      daysOfWeek: [...recurrence.daysOfWeek],
+    })
+  }
+
+  const handleEndDateChange = (value: string | undefined) => {
+    const endIso = normalizeDateInput(value)
+    if (!endIso) return
+
+    const startIso = recurrence.startDate
+    const nextEnd = startIso && endIso < startIso ? startIso : endIso
+
+    onChange({
+      ...recurrence,
+      endDate: nextEnd,
+      daysOfWeek: [...recurrence.daysOfWeek],
+    })
   }
 
   const handleClearEndDate = () => {
@@ -252,12 +245,7 @@ export function RecurrenceEditor({ value, onChange, isNewEvent = false }: Recurr
   // Safely format a date string
   const formatDateSafe = (dateString: string | undefined) => {
     if (!dateString) return ""
-    try {
-      return formatInAppTimezone(new Date(dateString), "yyyy-MM-dd")
-    } catch (error) {
-      console.error("Error formatting date:", error)
-      return ""
-    }
+    return normalizeDateInput(dateString) || ""
   }
 
   // Helper function to create a simple date picker
@@ -269,12 +257,7 @@ export function RecurrenceEditor({ value, onChange, isNewEvent = false }: Recurr
           id="start-date"
           type="date"
           value={formatDateSafe(recurrence.startDate)}
-          onChange={(e) => {
-            if (e.target.value) {
-              const [year, month, day] = e.target.value.split("-").map(Number)
-              handleStartDateChange(getStartOfAppDay(new Date(year, month - 1, day)))
-            }
-          }}
+          onChange={(e) => handleStartDateChange(e.target.value)}
           className="w-[240px]"
         />
         <p className="text-xs text-muted-foreground">
@@ -294,12 +277,7 @@ export function RecurrenceEditor({ value, onChange, isNewEvent = false }: Recurr
             type="date"
             value={formatDateSafe(recurrence.endDate)}
             min={formatDateSafe(recurrence.startDate) || undefined}
-            onChange={(e) => {
-              if (e.target.value) {
-                const [year, month, day] = e.target.value.split("-").map(Number)
-                handleEndDateChange(getStartOfAppDay(new Date(year, month - 1, day)))
-              }
-            }}
+            onChange={(e) => handleEndDateChange(e.target.value)}
             className="w-[240px]"
           />
           {recurrence.endDate && (

@@ -148,7 +148,7 @@ export function EventDialog({ event, open, onOpenChange, initialDay = "monday", 
     const initialIncludeInExport: Record<string, boolean> = {}
     initialIncludeInExport[initialDay] = true
 
-    const startDate = initialDate ? formatInAppTimezone(initialDate, "yyyy-MM-dd'T'HH:mm:ss.SSSxxx") : undefined
+    const startDate = initialDate ? formatInAppTimezone(initialDate, "yyyy-MM-dd") : undefined
 
     setFormData({
       id: uuidv4(),
@@ -478,12 +478,27 @@ export function EventDialog({ event, open, onOpenChange, initialDay = "monday", 
     })
   }
 
+  const normalizeRecurrenceDates = (recurrence: any) => {
+    if (!recurrence) return recurrence
+    const normalizeDate = (value?: string) => {
+      if (!value) return undefined
+      const match = value.match(/^(\d{4}-\d{2}-\d{2})/)
+      return match ? match[1] : value
+    }
+
+    return {
+      ...recurrence,
+      startDate: normalizeDate(recurrence.startDate) ?? formatInAppTimezone(new Date(), "yyyy-MM-dd"),
+      endDate: normalizeDate(recurrence.endDate),
+    }
+  }
+
   // In the handleSubmit function, ensure days is in sync with recurrence.daysOfWeek
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
     // Ensure recurrence exists and has daysOfWeek
-    const recurrence = formData.recurrence || {
+    const recurrence = normalizeRecurrenceDates(formData.recurrence) || {
       type: "none",
       daysOfWeek: formData.days || ["monday"],
     }

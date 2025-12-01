@@ -6,11 +6,7 @@ export const getDayOfWeek = getAppDayOfWeek
 const DAY_IN_MS = 1000 * 60 * 60 * 24
 
 // Normalize any date to the start of that calendar day in the app timezone
-const normalizeToAppDay = (date: Date): Date => {
-  const parts = formatInAppTimezone(date, "yyyy-MM-dd").split("-").map((v) => Number(v))
-  const [year, month, day] = parts
-  return getStartOfAppDay(new Date(Date.UTC(year, (month || 1) - 1, day || 1)))
-}
+const normalizeToAppDay = (date: Date): Date => getStartOfAppDay(date)
 
 /**
  * New schedule calculation that fixes calendar week boundary splitting bug.
