@@ -212,7 +212,11 @@ export const useEvents = create<EventsState>()(
 
       // Initialize events from configuration if not already initialized
       initializeFromConfig: async (forceRefresh = false) => {
-        const { initialized, baseEvents, activeTag } = get()
+        const { initialized, baseEvents, activeTag, hydrated } = get()
+        if (!hydrated) {
+          // Avoid writing empty state back to storage before hydration completes
+          return
+        }
         if (!forceRefresh && initialized && baseEvents.length > 0 && !get().legacyEvents?.length) {
           return
         }
@@ -471,8 +475,9 @@ export const useEvents = create<EventsState>()(
       },
     }),
     {
-      name: "daily-agenda-events",
+      name: "events",
       storage: scopedStateStorage,
+      skipHydration: true,
       partialize: (state) => ({
         overridesById: state.overridesById,
         deletedEventIds: state.deletedEventIds,
@@ -511,24 +516,30 @@ onTagChange((nextTag) => {
     deletedEventIds: [],
     legacyEvents: null,
     initialized: false,
+    hydrated: false,
   })
 
-  const scheduleInit = () => {
-    setTimeout(() => {
-      useEvents
-        .getState()
-        .initializeFromConfig(false)
-        .catch((error) => {
-          console.error("Failed to load events for tag", nextTag, error)
-        })
-    }, 0)
+  const runInit = () => {
+    useEvents
+      .getState()
+      .initializeFromConfig(false)
+      .catch((error) => {
+        console.error("Failed to load events for tag", nextTag, error)
+      })
   }
+
+  const unsubscribe = useEvents.subscribe(
+    (state) => state.hydrated,
+    (hydrated) => {
+      if (!hydrated) return
+      unsubscribe()
+      runInit()
+    },
+  )
 
   const hydrator = useEvents.persist?.rehydrate?.()
   if (hydrator && typeof (hydrator as Promise<void>).then === "function") {
-    ;(hydrator as Promise<void>).finally(scheduleInit)
-  } else {
-    scheduleInit()
+    ;(hydrator as Promise<void>).catch(() => undefined)
   }
 })
 
@@ -542,12 +553,33 @@ export const invalidateAndRefreshEvents = async () => {
 }
 
 const bootstrapEventsStore = () => {
-  useEvents
-    .getState()
-    .initializeFromConfig(false)
-    .catch((error) => {
-      console.error("Failed to bootstrap events store", error)
-    })
+  const runInit = () => {
+    useEvents
+      .getState()
+      .initializeFromConfig(false)
+      .catch((error) => {
+        console.error("Failed to bootstrap events store", error)
+      })
+  }
+
+  if (useEvents.getState().hydrated) {
+    runInit()
+    return
+  }
+
+  const unsubscribe = useEvents.subscribe(
+    (state) => state.hydrated,
+    (hydrated) => {
+      if (!hydrated) return
+      unsubscribe()
+      runInit()
+    },
+  )
+
+  const hydrator = useEvents.persist?.rehydrate?.()
+  if (hydrator && typeof (hydrator as Promise<void>).then === "function") {
+    ;(hydrator as Promise<void>).catch(() => undefined)
+  }
 }
 
 if (typeof window !== "undefined") {

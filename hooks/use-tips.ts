@@ -193,7 +193,11 @@ export const useTips = create<TipsState>()(
 
       // Initialize tips from configuration if not already initialized
       initializeFromConfig: async (forceRefresh = false) => {
-        const { initialized, baseTips, activeTag } = get()
+        const { initialized, baseTips, activeTag, hydrated } = get()
+        if (!hydrated) {
+          // Avoid clobbering persisted overrides before hydration completes
+          return
+        }
         if (!forceRefresh && initialized && baseTips.length > 0 && !get().legacyTips?.length) {
           return
         }
@@ -305,8 +309,9 @@ export const useTips = create<TipsState>()(
       },
     }),
     {
-      name: "daily-agenda-tips",
+      name: "tips",
       storage: scopedStateStorage,
+      skipHydration: true,
       partialize: (state) => ({
         overridesById: state.overridesById,
         deletedTipIds: state.deletedTipIds,
@@ -344,24 +349,30 @@ onTagChange((nextTag) => {
     deletedTipIds: [],
     legacyTips: null,
     initialized: false,
+    hydrated: false,
   })
 
-  const scheduleInit = () => {
-    setTimeout(() => {
-      useTips
-        .getState()
-        .initializeFromConfig(false)
-        .catch((error) => {
-          console.error("Failed to load tips for tag", nextTag, error)
-        })
-    }, 0)
+  const runInit = () => {
+    useTips
+      .getState()
+      .initializeFromConfig(false)
+      .catch((error) => {
+        console.error("Failed to load tips for tag", nextTag, error)
+      })
   }
+
+  const unsubscribe = useTips.subscribe(
+    (state) => state.hydrated,
+    (hydrated) => {
+      if (!hydrated) return
+      unsubscribe()
+      runInit()
+    },
+  )
 
   const hydrator = useTips.persist?.rehydrate?.()
   if (hydrator && typeof (hydrator as Promise<void>).then === "function") {
-    ;(hydrator as Promise<void>).finally(scheduleInit)
-  } else {
-    scheduleInit()
+    ;(hydrator as Promise<void>).catch(() => undefined)
   }
 })
 
@@ -375,12 +386,33 @@ export const invalidateAndRefreshTips = async () => {
 }
 
 const bootstrapTipsStore = () => {
-  useTips
-    .getState()
-    .initializeFromConfig(false)
-    .catch((error) => {
-      console.error("Failed to bootstrap tips store", error)
-    })
+  const runInit = () => {
+    useTips
+      .getState()
+      .initializeFromConfig(false)
+      .catch((error) => {
+        console.error("Failed to bootstrap tips store", error)
+      })
+  }
+
+  if (useTips.getState().hydrated) {
+    runInit()
+    return
+  }
+
+  const unsubscribe = useTips.subscribe(
+    (state) => state.hydrated,
+    (hydrated) => {
+      if (!hydrated) return
+      unsubscribe()
+      runInit()
+    },
+  )
+
+  const hydrator = useTips.persist?.rehydrate?.()
+  if (hydrator && typeof (hydrator as Promise<void>).then === "function") {
+    ;(hydrator as Promise<void>).catch(() => undefined)
+  }
 }
 
 if (typeof window !== "undefined") {

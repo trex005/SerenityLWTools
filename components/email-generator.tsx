@@ -113,17 +113,17 @@ export function EmailGenerator({ initialDateRange }: EmailGeneratorProps) {
 
   // Load persisted content from localStorage on initial render
   useEffect(() => {
-    const savedHeader = scopedLocalStorage.getItem("daily-agenda-email-header")
+    const savedHeader = scopedLocalStorage.getItem("email-header")
     if (savedHeader) {
       setHeaderContent(savedHeader)
     }
 
-    const savedAgenda = scopedLocalStorage.getItem("daily-agenda-email-content")
+    const savedAgenda = scopedLocalStorage.getItem("email-content")
     if (savedAgenda) {
       setEditedAgendaContent(savedAgenda)
     }
 
-    const savedTip = scopedLocalStorage.getItem("daily-agenda-tip-content")
+    const savedTip = scopedLocalStorage.getItem("tip-content")
     if (savedTip) {
       setEditedTipContent(savedTip)
     }
@@ -131,17 +131,17 @@ export function EmailGenerator({ initialDateRange }: EmailGeneratorProps) {
 
   // Save header content to localStorage whenever it changes
   useEffect(() => {
-    scopedLocalStorage.setItem("daily-agenda-email-header", headerContent)
+    scopedLocalStorage.setItem("email-header", headerContent)
   }, [headerContent])
 
   // Save agenda content to localStorage whenever it changes
   useEffect(() => {
-    scopedLocalStorage.setItem("daily-agenda-email-content", editedAgendaContent)
+    scopedLocalStorage.setItem("email-content", editedAgendaContent)
   }, [editedAgendaContent])
 
   // Save tip content to localStorage whenever it changes
   useEffect(() => {
-    scopedLocalStorage.setItem("daily-agenda-tip-content", editedTipContent)
+    scopedLocalStorage.setItem("tip-content", editedTipContent)
   }, [editedTipContent])
 
   // Save clear tip preference to localStorage

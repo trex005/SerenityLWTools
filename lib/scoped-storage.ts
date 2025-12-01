@@ -4,7 +4,7 @@ import type { StateStorage } from "zustand/middleware"
 import { getActiveTag } from "./config-tag"
 
 const STORAGE_PREFIX = "lw-tools"
-const DEFAULT_DATA_KEYS = ["daily-agenda-events", "daily-agenda-tips"] as const
+const DEFAULT_DATA_KEYS = ["events", "tips"] as const
 
 const buildScopedKey = (key: string): string => {
   const tag = getActiveTag()
@@ -28,6 +28,33 @@ const adminModeModeActive = (storage: Storage): boolean => {
   }
 }
 
+type PersistedPayload = { state?: { overridesById?: Record<string, any>; deletedEventIds?: any; deletedTipIds?: any; legacyEvents?: any; legacyTips?: any } }
+
+const parsePersistedPayload = (raw: string | null): PersistedPayload | null => {
+  if (!raw) return null
+  try {
+    return JSON.parse(raw) as PersistedPayload
+  } catch {
+    return null
+  }
+}
+
+const isOverrideSnapshotEmpty = (payload: PersistedPayload | null, key: string): boolean => {
+  if (!payload || !payload.state) return true
+  const { overridesById, deletedEventIds, deletedTipIds, legacyEvents, legacyTips } = payload.state
+  const overridesEmpty = !overridesById || Object.keys(overridesById).length === 0
+  const deletedEmpty =
+    key === "events"
+      ? !Array.isArray(deletedEventIds) || deletedEventIds.length === 0
+      : !Array.isArray(deletedTipIds) || deletedTipIds.length === 0
+  const legacyEmpty =
+    key === "events"
+      ? !legacyEvents || (Array.isArray(legacyEvents) && legacyEvents.length === 0)
+      : !legacyTips || (Array.isArray(legacyTips) && legacyTips.length === 0)
+
+  return overridesEmpty && deletedEmpty && legacyEmpty
+}
+
 export const scopedStateStorage: StateStorage = {
   getItem: (key) => {
     const storage = getClientStorage()
@@ -46,6 +73,16 @@ export const scopedStateStorage: StateStorage = {
     const scopedKey = buildScopedKey(key)
     try {
       const serialized = typeof value === "string" ? value : JSON.stringify(value)
+      // Prevent overwriting existing overrides with empty payloads during hydration/init
+      if (key === "events" || key === "tips") {
+        const incoming = parsePersistedPayload(serialized)
+        const existing = parsePersistedPayload(storage.getItem(scopedKey))
+        const incomingEmpty = isOverrideSnapshotEmpty(incoming, key)
+        const existingEmpty = isOverrideSnapshotEmpty(existing, key)
+        if (incomingEmpty && !existingEmpty) {
+          return
+        }
+      }
       storage.setItem(scopedKey, serialized)
     } catch {
       // Ignore storage failures
@@ -262,13 +299,13 @@ const normalizeOverrideSnapshot = <T = any>(
 }
 
 export const readStoredEventOverrides = (tag: string): StoredOverrideSnapshot | null => {
-  const state = readPersistedStateForTag(tag, "daily-agenda-events")
+  const state = readPersistedStateForTag(tag, "events")
   if (!state) return null
   return normalizeOverrideSnapshot(state, "deletedEventIds", "legacyEvents")
 }
 
 export const readStoredTipOverrides = (tag: string): StoredOverrideSnapshot | null => {
-  const state = readPersistedStateForTag(tag, "daily-agenda-tips")
+  const state = readPersistedStateForTag(tag, "tips")
   if (!state) return null
   return normalizeOverrideSnapshot(state, "deletedTipIds", "legacyTips")
 }
@@ -293,7 +330,7 @@ export const writeStoredEventOverrides = (tag: string, snapshot: StoredOverrideS
     deletedEventIds: snapshot.deletedIds || [],
     legacyEvents: snapshot.legacyItems || null,
   }
-  writePersistedStateForTag(tag, "daily-agenda-events", state, 1)
+  writePersistedStateForTag(tag, "events", state, 1)
 }
 
 export const writeStoredTipOverrides = (tag: string, snapshot: StoredOverrideSnapshot) => {
@@ -302,7 +339,7 @@ export const writeStoredTipOverrides = (tag: string, snapshot: StoredOverrideSna
     deletedTipIds: snapshot.deletedIds || [],
     legacyTips: snapshot.legacyItems || null,
   }
-  writePersistedStateForTag(tag, "daily-agenda-tips", state, 1)
+  writePersistedStateForTag(tag, "tips", state, 1)
 }
 
 export type { StoredOverrideSnapshot }

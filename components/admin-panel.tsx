@@ -58,8 +58,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { buildIdMap, composeWithOverrides, deriveOverridesFromFinal } from "@/lib/override-helpers"
 import { formatInAppTimezone } from "@/lib/date-utils"
 
-const EVENTS_STORAGE_KEY = "daily-agenda-events"
-const TIPS_STORAGE_KEY = "daily-agenda-tips"
+const EVENTS_STORAGE_KEY = "events"
+const TIPS_STORAGE_KEY = "tips"
 
 type StoredEventsState = {
   overridesById?: Record<string, any>
