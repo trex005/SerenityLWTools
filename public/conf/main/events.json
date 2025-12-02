@@ -170,7 +170,7 @@
         "onPeriods": 1,
         "offPeriods": 0
       },
-      "remindTomorrow": false,
+      "remindTomorrow": true,
       "includeOnWebsite": true
     },
     {
@@ -235,7 +235,8 @@
         "offPeriods": 0
       },
       "includeInBriefing": true,
-      "includeOnWebsite": true
+      "includeOnWebsite": true,
+      "remindTomorrow": true
     },
     {
       "id": "ev-11",
@@ -294,7 +295,8 @@
         "onPeriods": 1,
         "offPeriods": 0
       },
-      "includeOnWebsite": true
+      "includeOnWebsite": true,
+      "remindTomorrow": true
     },
     {
       "id": "ev-13",
@@ -326,7 +328,8 @@
         "onPeriods": 1,
         "offPeriods": 0
       },
-      "includeOnWebsite": true
+      "includeOnWebsite": true,
+      "remindTomorrow": true
     },
     {
       "id": "ev-14",
@@ -358,7 +361,8 @@
         "onPeriods": 1,
         "offPeriods": 0
       },
-      "includeOnWebsite": true
+      "includeOnWebsite": true,
+      "remindTomorrow": true
     },
     {
       "id": "ev-15",
@@ -418,7 +422,8 @@
         "onPeriods": 1,
         "offPeriods": 0
       },
-      "includeOnWebsite": true
+      "includeOnWebsite": true,
+      "remindTomorrow": true
     },
     {
       "id": "ev-17",
@@ -450,7 +455,8 @@
         "onPeriods": 1,
         "offPeriods": 0
       },
-      "includeOnWebsite": true
+      "includeOnWebsite": true,
+      "remindTomorrow": true
     },
     {
       "id": "ev-18",
@@ -482,7 +488,8 @@
         "onPeriods": 1,
         "offPeriods": 0
       },
-      "includeOnWebsite": true
+      "includeOnWebsite": true,
+      "remindTomorrow": true
     },
     {
       "id": "ev-1739555974133",
@@ -1313,7 +1320,8 @@
         "onPeriods": 1,
         "offPeriods": 0
       },
-      "includeOnWebsite": true
+      "includeOnWebsite": true,
+      "remindTomorrow": true
     },
     {
       "id": "fe4d455d-6f36-45b2-92c2-24c32521473f",
@@ -1435,7 +1443,8 @@
         "2025-07-10": false,
         "2025-07-11": false
       },
-      "includeOnWebsite": true
+      "includeOnWebsite": true,
+      "remindTomorrow": true
     },
     {
       "id": "89b95f35-ae1a-485b-8aee-f012c758fa7b",
@@ -1465,7 +1474,8 @@
         "onPeriods": 1,
         "offPeriods": 0
       },
-      "includeOnWebsite": true
+      "includeOnWebsite": true,
+      "remindTomorrow": true
     },
     {
       "id": "4af5277e-a46b-4407-94cc-66452e907f1d",
@@ -1529,7 +1539,8 @@
         "onPeriods": 1,
         "offPeriods": 0
       },
-      "includeOnWebsite": true
+      "includeOnWebsite": true,
+      "remindTomorrow": true
     },
     {
       "id": "e1a61d22-c57e-45aa-ab6c-d648c529bb89",
@@ -1868,7 +1879,7 @@
       "title": "Capitol Conquest",
       "description": "",
       "remindTomorrow": true,
-      "remindEndOfDay": true,
+      "remindEndOfDay": false,
       "includeInBriefing": true,
       "includeOnWebsite": true,
       "isAllDay": false,
@@ -1886,7 +1897,7 @@
       },
       "variations": {},
       "order": {},
-      "archived": false,
+      "archived": true,
       "recurrence": {
         "type": "weeks",
         "onPeriods": 1,
@@ -2209,7 +2220,9 @@
         "2025-05-03": true,
         "2025-07-05": true
       },
-      "includeOnWebsite": true
+      "includeOnWebsite": true,
+      "includeInBriefing": true,
+      "remindTomorrow": true
     },
     {
       "id": "a061f2df-34c9-4bdd-9fa2-a95e11470268",
@@ -2243,7 +2256,9 @@
         "2025-05-03": true,
         "2025-07-19": true
       },
-      "includeOnWebsite": true
+      "includeOnWebsite": true,
+      "includeInBriefing": true,
+      "remindTomorrow": true
     },
     {
       "id": "5a015825-f2c7-44ce-81c6-c09bcff682e2",
