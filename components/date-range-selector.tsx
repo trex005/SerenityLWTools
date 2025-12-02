@@ -28,8 +28,10 @@ export function DateRangeSelector({ value, onChange, className, quickSelectDays 
   const [tempStartDate, setTempStartDate] = useState<Date | undefined>()
   const [tempEndDate, setTempEndDate] = useState<Date | undefined>()
 
+  type QuickSelectOption = { label: string; getValue: () => [Date, Date] }
+
   // Quick select options
-  const quickSelectOptions = [
+  const quickSelectOptions: QuickSelectOption[] = [
     {
       label: "Today",
       getValue: () => {
@@ -59,7 +61,7 @@ export function DateRangeSelector({ value, onChange, className, quickSelectDays 
   }
 
   // Handle quick select
-  const handleQuickSelect = (option: { getValue: () => [Date, Date] }) => {
+  const handleQuickSelect = (option: QuickSelectOption) => {
     const [start, end] = option.getValue()
     onChange([start, end])
   }

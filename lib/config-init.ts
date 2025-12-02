@@ -26,9 +26,11 @@ export const initialConfig = {
       order: {},
       archived: false,
       recurrence: {
-        type: "weekly",
+        type: "weeks",
         daysOfWeek: ["monday", "tuesday", "wednesday", "thursday", "friday"],
-        interval: 1,
+        onPeriods: 1,
+        offPeriods: 0,
+        startDate: formatInAppTimezone(new Date(), "yyyy-MM-dd"),
       },
     },
   ],

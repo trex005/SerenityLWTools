@@ -56,86 +56,10 @@ export function shouldShowOnDate(
 }
 
 /**
- * Convert legacy recurrence data to new format parameters
- * @param event The event with legacy recurrence data
- * @returns Parameters for the new schedule calculation
- */
-export function convertLegacyRecurrence(event: any): {
-  startDate: Date,
-  periodDays: number,
-  onPeriods: number,
-  offPeriods: number,
-  allowedWeekdays?: string[],
-  endDate?: Date
-} | null {
-  if (!event.recurrence) return null
-  
-  let startDate: Date
-  let periodDays: number
-  let onPeriods: number
-  let offPeriods: number
-  let endDate: Date | undefined
-  
-  // Determine start date (priority: startDate > pattern.phaseStartDate > fallback)
-  if (event.recurrence.startDate) {
-    startDate = normalizeToAppDay(parseISO(event.recurrence.startDate))
-  } else if (event.recurrence.pattern?.phaseStartDate) {
-    startDate = normalizeToAppDay(parseISO(event.recurrence.pattern.phaseStartDate))
-  } else {
-    // Fallback date: 2025-01-05
-    startDate = normalizeToAppDay(new Date(2025, 0, 5)) // Month is 0-indexed
-  }
-  
-  if (event.recurrence.endDate) {
-    const parsedEnd = parseISO(event.recurrence.endDate)
-    if (!Number.isNaN(parsedEnd.getTime())) {
-      endDate = normalizeToAppDay(parsedEnd)
-    }
-  }
-  
-  // Convert based on pattern vs interval/type
-  if (event.recurrence.pattern) {
-    // Custom pattern with onWeeks/offWeeks
-    periodDays = 7
-    onPeriods = event.recurrence.pattern.onWeeks || 1
-    offPeriods = event.recurrence.pattern.offWeeks || 1
-  } else {
-    // Legacy interval/type format
-    const interval = event.recurrence.interval || 1
-    
-    if (event.recurrence.type === "weekly") {
-      periodDays = 7
-    } else if (event.recurrence.type === "daily") {
-      periodDays = 1
-    } else {
-      return null // Unsupported type
-    }
-    
-    onPeriods = 1
-    offPeriods = interval - 1
-  }
-  
-  // Get allowed weekdays
-  const allowedWeekdays = event.recurrence.daysOfWeek || event.days
-  
-  return {
-    startDate,
-    periodDays,
-    onPeriods,
-    offPeriods,
-    allowedWeekdays: allowedWeekdays && allowedWeekdays.length > 0 ? allowedWeekdays : undefined,
-    endDate,
-  }
-}
-
-/**
  * Get the day of the week as a string (e.g., "sunday")
  * @param date The date to get the day of the week for
  */
 export function shouldShowRecurringEvent(event: any, date: Date, adminModeView = false): boolean {
-  // Get the day of week string (e.g., "sunday")
-  const dayOfWeek = getAppDayOfWeek(date)
-
   // Format the date as YYYY-MM-DD for use with dateOverrides
   const dateString = formatInAppTimezone(date, "yyyy-MM-dd")
 
@@ -163,47 +87,15 @@ export function shouldShowRecurringEvent(event: any, date: Date, adminModeView =
     }
   }
 
-  // Handle new recurrence format
-  if (event.recurrence && (event.recurrence.onPeriods !== undefined || event.recurrence.offPeriods !== undefined)) {
-    // New format: use the new calculation
-    const params = convertNewRecurrenceFormat(event)
-    if (!params) return false
-    
-    return shouldShowOnDate(date, params.startDate, params.periodDays, params.onPeriods, params.offPeriods, params.allowedWeekdays, params.endDate)
-  }
-
-  // Handle legacy format
-  const legacyParams = convertLegacyRecurrence(event)
-  if (legacyParams) {
-    return shouldShowOnDate(date, legacyParams.startDate, legacyParams.periodDays, legacyParams.onPeriods, legacyParams.offPeriods, legacyParams.allowedWeekdays, legacyParams.endDate)
-  }
-
-  // If no recurrence, check the days array for backward compatibility
-  if (!event.recurrence) {
-    // Default to not showing if days array is missing or empty
-    if (!Array.isArray(event.days) || event.days.length === 0) {
-      return false
-    }
-    return event.days.includes(dayOfWeek)
-  }
-
-  // For admin view, we want to show all events that are scheduled for this day of the week
-  if (adminModeView) {
-    // First check if this day is in the days array or daysOfWeek array
-    const isOnThisDay = event.recurrence
-      ? Array.isArray(event.recurrence.daysOfWeek) && event.recurrence.daysOfWeek.includes(dayOfWeek)
-      : Array.isArray(event.days) && event.days.includes(dayOfWeek)
-
-    return isOnThisDay
-  }
-
-  // If recurrence type is "none", don't show the event
-  if (event.recurrence && event.recurrence.type === "none") {
+  if (!event.recurrence || event.recurrence.type === "none") {
     return false
   }
 
-  // Default to not showing the event if none of the above conditions are met
-  return false
+  const params = convertNewRecurrenceFormat(event)
+  if (!params) return false
+
+  // For admin view, show events that match recurrence rules (ignoring include overrides already skipped)
+  return shouldShowOnDate(date, params.startDate, params.periodDays, params.onPeriods, params.offPeriods, params.allowedWeekdays, params.endDate)
 }
 
 /**
@@ -221,7 +113,6 @@ function convertNewRecurrenceFormat(event: any): {
 } | null {
   if (!event.recurrence) return null
   
-  // New format should have startDate, onPeriods, offPeriods, type
   if (!event.recurrence.startDate || event.recurrence.onPeriods === undefined || event.recurrence.offPeriods === undefined) {
     return null
   }
@@ -327,35 +218,16 @@ export function formatRecurrence(event: any): string | null {
     return null
   }
 
-  // Extract parameters from new or legacy format
+  // Extract parameters from new format
   let periodDays: number
   let onPeriods: number
   let offPeriods: number
   let weekdays: string[] = []
 
-  // Handle new format
-  if (event.recurrence.onPeriods !== undefined || event.recurrence.offPeriods !== undefined) {
-    onPeriods = event.recurrence.onPeriods || 1
-    offPeriods = event.recurrence.offPeriods || 0
-    periodDays = event.recurrence.type === "days" ? 1 : 7
-    weekdays = event.recurrence.daysOfWeek || []
-  } 
-  // Handle legacy format
-  else if (event.recurrence.pattern && event.recurrence.type === "custom") {
-    // Custom pattern
-    periodDays = 7
-    onPeriods = event.recurrence.pattern.onWeeks || 1
-    offPeriods = event.recurrence.pattern.offWeeks || 0
-    weekdays = event.recurrence.daysOfWeek || []
-  } 
-  else {
-    // Legacy interval-based format
-    const interval = event.recurrence.interval || 1
-    periodDays = event.recurrence.type === "daily" ? 1 : 7
-    onPeriods = 1
-    offPeriods = Math.max(0, interval - 1)
-    weekdays = event.recurrence.daysOfWeek || []
-  }
+  onPeriods = event.recurrence.onPeriods || 1
+  offPeriods = event.recurrence.offPeriods || 0
+  periodDays = event.recurrence.type === "days" ? 1 : 7
+  weekdays = event.recurrence.daysOfWeek || []
 
   // Step 1: Handle special cases first
   if (onPeriods === 1 && offPeriods === 0) {

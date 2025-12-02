@@ -30,7 +30,7 @@ interface RecurrenceEditorProps {
   isNewEvent?: boolean // true for new events, false/undefined for existing events
 }
 
-// Convert legacy recurrence format to new format for UI
+// Normalize recurrence into the new format for UI
 const toDateOnly = (value: string | undefined, fallback: string): string => {
   if (!value) return fallback
   const match = value.match(/^(\d{4}-\d{2}-\d{2})/)
@@ -46,55 +46,15 @@ function convertLegacyToNew(legacyValue: any, isNewEvent: boolean = false): Recu
   // If it's already in new format, return as is
   if (legacyValue && (legacyValue.onPeriods !== undefined || legacyValue.offPeriods !== undefined)) {
     return {
-      type: legacyValue.type || "days",
+      type: legacyValue.type === "weeks" || legacyValue.type === "none" ? legacyValue.type : "days",
       onPeriods: legacyValue.onPeriods ?? 1,
       offPeriods: legacyValue.offPeriods ?? 0,
-      daysOfWeek: legacyValue.daysOfWeek || ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"],
+      daysOfWeek:
+        legacyValue.daysOfWeek && legacyValue.daysOfWeek.length > 0
+          ? legacyValue.daysOfWeek
+          : ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"],
       startDate: toDateOnly(legacyValue.startDate, defaultStartDate),
       endDate: legacyValue.endDate ? toDateOnly(legacyValue.endDate, defaultStartDate) : undefined,
-    }
-  }
-
-  // Convert legacy format
-  if (legacyValue) {
-    let type: "days" | "weeks" | "none" = "none"
-    let onPeriods = 1
-    let offPeriods = 0
-    let startDate = defaultStartDate
-    let endDate: string | undefined = legacyValue.endDate ? toDateOnly(legacyValue.endDate, defaultStartDate) : undefined
-
-    // Handle legacy types
-    if (legacyValue.type === "daily") {
-      type = "days"
-      onPeriods = 1
-      offPeriods = Math.max(0, (legacyValue.interval || 1) - 1)
-    } else if (legacyValue.type === "weekly") {
-      type = "weeks"
-      onPeriods = 1
-      offPeriods = Math.max(0, (legacyValue.interval || 1) - 1)
-    } else if (legacyValue.type === "custom" && legacyValue.pattern) {
-      type = "weeks"
-      onPeriods = legacyValue.pattern.onWeeks || 1
-      offPeriods = legacyValue.pattern.offWeeks || 0
-      if (legacyValue.pattern.phaseStartDate) {
-        startDate = legacyValue.pattern.phaseStartDate
-      }
-    } else if (legacyValue.type === "none") {
-      type = "none"
-    }
-
-    // Get start date (priority: explicit startDate > pattern.phaseStartDate > default)
-    if (legacyValue.startDate) {
-      startDate = legacyValue.startDate
-    }
-
-    return {
-      type,
-      onPeriods,
-      offPeriods,
-      daysOfWeek: legacyValue.daysOfWeek || ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"],
-      startDate: toDateOnly(startDate, defaultStartDate),
-      endDate,
     }
   }
 

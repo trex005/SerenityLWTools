@@ -13,6 +13,7 @@
 - Tag configs under `public/conf/{tag}/` now only ship `config.json`, `events.json`, and `tips.json`; archived entries stay in `events.json` via `archived: true`.
 - Event admin dialog consolidates "Include in" toggles (Scheduled, Website, Briefing, Previous Day, End of Day); keep Scheduled on to surface the event anywhere, and use Website to control the public briefing tab while Briefing/Reminder toggles gate their respective outputs.
 - All scheduling logic, exports, and timestamps must run in the app timezone (GMT-2). Use the helpers in `lib/date-utils.ts` (`formatInAppTimezone`, `getStartOfAppDay`, `getEndOfAppDay`, `addAppDays`) for any date math or formatting; only the optional local-time display for event times should use the user's timezone.
+- Recurrence uses only the new `type: "days" | "weeks"` shape with `onPeriods`/`offPeriods`, `daysOfWeek`, and `startDate`; legacy fields like `interval`, `daily/weekly` types, `pattern`, `phaseStartDate`, or `event.days` fallbacks are no longer read.
 
 ## Build, Test, and Development Commands
 

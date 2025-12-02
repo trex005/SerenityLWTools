@@ -209,7 +209,7 @@ export function EventsView() {
 
       {debouncedFilter && (
         <div className="text-sm text-muted-foreground">
-          Showing results for "{debouncedFilter}" ({allFilteredEvents.length} events)
+          Showing results for &quot;{debouncedFilter}&quot; ({allFilteredEvents.length} events)
         </div>
       )}
 

@@ -22,10 +22,17 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
+  // The webpack build worker path has been crashing with WasmHash on Node 22.
+  // Keep the experimental flags off to stick to the stable build path.
   experimental: {
-    webpackBuildWorker: true,
-    parallelServerBuildTraces: true,
-    parallelServerCompiles: true,
+    webpackBuildWorker: false,
+    parallelServerBuildTraces: false,
+    parallelServerCompiles: false,
+  },
+  webpack: (config) => {
+    // Force a stable crypto hash function to avoid WasmHash crashes seen in the default pipeline.
+    config.output.hashFunction = 'sha256'
+    return config
   },
 }
 

@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client"
 
 import type React from "react"
@@ -7,7 +8,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Search, X, Copy, Check, Link, Loader2, ZoomIn, ChevronDown } from "lucide-react"
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect, useRef, useCallback } from "react"
 import { useDebounce } from "@/hooks/use-debounce"
 import { useAdminState } from "@/hooks/use-admin-state"
 import { Dialog, DialogContent } from "@/components/ui/dialog"
@@ -141,7 +142,7 @@ export function ReadOnlyTips({ forceRefresh }: { forceRefresh?: string }) {
   }, [copiedLinkId])
 
   // Function to process the hash and highlight the tip
-  const processHash = () => {
+  const processHash = useCallback(() => {
     if (typeof window === "undefined") return
 
     const hash = window.location.hash
@@ -204,7 +205,7 @@ export function ReadOnlyTips({ forceRefresh }: { forceRefresh?: string }) {
 
       setProcessingHash(false)
     }, 500)
-  }
+  }, [isLoaded, reload, tips])
 
   // Process hash when component mounts or when forceRefresh changes
   useEffect(() => {
@@ -217,7 +218,7 @@ export function ReadOnlyTips({ forceRefresh }: { forceRefresh?: string }) {
     if (isLoaded && tips.length > 0) {
       processHash()
     }
-  }, [forceRefresh, isLoaded, tips])
+  }, [forceRefresh, isLoaded, processHash, tips])
 
   // Handle copying tip content to clipboard
   const handleCopyTip = (tipId: string, content: string, title?: string, isHtml?: boolean, altText?: string) => {

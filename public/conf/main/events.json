@@ -1,5 +1,5 @@
-﻿{
-  "updated": "2025-11-13T00:00:06.810Z",
+{
+  "updated": "2025-12-02T00:17:05-02:00",
   "events": [
     {
       "id": "ev-3",
@@ -41,9 +41,11 @@
           "saturday",
           "sunday"
         ],
-        "startDate": "2025-09-29"
+        "startDate": "2025-09-29",
+        "interval": 1
       },
-      "remindTomorrow": true
+      "remindTomorrow": true,
+      "includeOnWebsite": true
     },
     {
       "id": "ev-4",
@@ -68,17 +70,21 @@
         "sunday": 3
       },
       "recurrence": {
-        "type": "weekly",
+        "type": "weeks",
         "daysOfWeek": ["sunday"],
-        "interval": 1
+        "interval": 1,
+        "startDate": "2024-01-01",
+        "onPeriods": 1,
+        "offPeriods": 0
       },
-      "remindEndOfDay": true
+      "remindEndOfDay": true,
+      "includeOnWebsite": true
     },
     {
       "id": "ev-6",
       "archived": false,
       "title": "Register for Desert Storm!",
-      "description": "• To register:\n   Events â†’ Desert Storm â†’ Select Participants â†’ Request to Fight",
+      "description": "• To register:\n   Events → Desert Storm → Select Participants → Request to Fight",
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "10:00",
@@ -99,18 +105,20 @@
         "onPeriods": 1,
         "offPeriods": 0,
         "daysOfWeek": ["monday", "tuesday"],
-        "startDate": "2025-01-05"
+        "startDate": "2025-01-05",
+        "interval": 1
       },
-      "remindEndOfDay": true
+      "remindEndOfDay": true,
+      "includeOnWebsite": true
     },
     {
       "id": "ev-7",
       "archived": false,
-      "title": "Desert Storm - Task Force A",
+      "title": "Desert Storm - Mid-day",
       "description": "",
       "isAllDay": false,
       "startTime": "17:50",
-      "endTime": "18:30",
+      "endTime": "",
       "days": ["friday"],
       "includeInExport": {
         "friday": true,
@@ -123,11 +131,16 @@
       "variations": {},
       "order": {},
       "recurrence": {
-        "type": "weekly",
+        "type": "weeks",
+        "onPeriods": 1,
+        "offPeriods": 0,
         "daysOfWeek": ["friday"],
+        "startDate": "2024-01-05",
         "interval": 1
       },
-      "remindTomorrow": true
+      "remindTomorrow": true,
+      "includeInBriefing": true,
+      "includeOnWebsite": true
     },
     {
       "id": "ev-8",
@@ -150,11 +163,15 @@
         "tuesday": 1
       },
       "recurrence": {
-        "type": "weekly",
+        "type": "weeks",
         "daysOfWeek": ["sunday", "tuesday", "thursday"],
-        "interval": 1
+        "interval": 1,
+        "startDate": "2024-01-01",
+        "onPeriods": 1,
+        "offPeriods": 0
       },
-      "remindTomorrow": false
+      "remindTomorrow": false,
+      "includeOnWebsite": true
     },
     {
       "id": "ev-9",
@@ -179,12 +196,15 @@
         "thursday": 2
       },
       "recurrence": {
-        "type": "weekly",
+        "type": "weeks",
         "daysOfWeek": ["monday", "thursday", "friday"],
         "interval": 3,
-        "startDate": "2025-06-30"
+        "startDate": "2025-06-30",
+        "onPeriods": 1,
+        "offPeriods": 0
       },
-      "remindTomorrow": true
+      "remindTomorrow": true,
+      "includeOnWebsite": true
     },
     {
       "id": "ev-10",
@@ -202,14 +222,17 @@
       },
       "variations": {},
       "order": {
-        "monday": 5,
+        "monday": 1,
         "wednesday": 3,
         "friday": 1
       },
       "recurrence": {
-        "type": "weekly",
+        "type": "weeks",
         "daysOfWeek": ["monday", "wednesday", "friday"],
-        "interval": 1
+        "interval": 1,
+        "startDate": "2024-01-01",
+        "onPeriods": 1,
+        "offPeriods": 0
       },
       "includeInBriefing": true,
       "includeOnWebsite": true
@@ -235,11 +258,15 @@
       "variations": {},
       "order": {},
       "recurrence": {
-        "type": "weekly",
+        "type": "weeks",
         "daysOfWeek": ["sunday"],
-        "interval": 1
+        "interval": 1,
+        "startDate": "2024-01-01",
+        "onPeriods": 1,
+        "offPeriods": 0
       },
-      "remindTomorrow": true
+      "remindTomorrow": true,
+      "includeOnWebsite": true
     },
     {
       "id": "ev-12",
@@ -260,10 +287,14 @@
         "tuesday": 2
       },
       "recurrence": {
-        "type": "weekly",
+        "type": "weeks",
         "daysOfWeek": ["tuesday", "saturday"],
-        "interval": 1
-      }
+        "interval": 1,
+        "startDate": "2024-01-01",
+        "onPeriods": 1,
+        "offPeriods": 0
+      },
+      "includeOnWebsite": true
     },
     {
       "id": "ev-13",
@@ -285,13 +316,17 @@
       },
       "variations": {},
       "order": {
-        "monday": 6
+        "monday": 3
       },
       "recurrence": {
-        "type": "weekly",
+        "type": "weeks",
         "daysOfWeek": ["monday"],
-        "interval": 1
-      }
+        "interval": 1,
+        "startDate": "2024-01-01",
+        "onPeriods": 1,
+        "offPeriods": 0
+      },
+      "includeOnWebsite": true
     },
     {
       "id": "ev-14",
@@ -316,10 +351,14 @@
         "tuesday": 3
       },
       "recurrence": {
-        "type": "weekly",
+        "type": "weeks",
         "daysOfWeek": ["tuesday"],
-        "interval": 1
-      }
+        "interval": 1,
+        "startDate": "2024-01-01",
+        "onPeriods": 1,
+        "offPeriods": 0
+      },
+      "includeOnWebsite": true
     },
     {
       "id": "ev-15",
@@ -338,9 +377,12 @@
         "wednesday": 4
       },
       "recurrence": {
-        "type": "weekly",
+        "type": "weeks",
         "daysOfWeek": ["wednesday"],
-        "interval": 1
+        "interval": 1,
+        "startDate": "2024-01-01",
+        "onPeriods": 1,
+        "offPeriods": 0
       },
       "includeInBriefing": true,
       "includeOnWebsite": true,
@@ -369,10 +411,14 @@
         "thursday": 2
       },
       "recurrence": {
-        "type": "weekly",
+        "type": "weeks",
         "daysOfWeek": ["thursday"],
-        "interval": 1
-      }
+        "interval": 1,
+        "startDate": "2024-01-01",
+        "onPeriods": 1,
+        "offPeriods": 0
+      },
+      "includeOnWebsite": true
     },
     {
       "id": "ev-17",
@@ -397,10 +443,14 @@
         "friday": 2
       },
       "recurrence": {
-        "type": "weekly",
+        "type": "weeks",
         "daysOfWeek": ["friday"],
-        "interval": 1
-      }
+        "interval": 1,
+        "startDate": "2024-01-01",
+        "onPeriods": 1,
+        "offPeriods": 0
+      },
+      "includeOnWebsite": true
     },
     {
       "id": "ev-18",
@@ -425,10 +475,14 @@
         "saturday": 3
       },
       "recurrence": {
-        "type": "weekly",
+        "type": "weeks",
         "daysOfWeek": ["saturday"],
-        "interval": 1
-      }
+        "interval": 1,
+        "startDate": "2024-01-01",
+        "onPeriods": 1,
+        "offPeriods": 0
+      },
+      "includeOnWebsite": true
     },
     {
       "id": "ev-1739555974133",
@@ -451,19 +505,23 @@
       "variations": {},
       "order": {},
       "recurrence": {
-        "type": "weekly",
+        "type": "weeks",
         "daysOfWeek": ["saturday"],
-        "interval": 1
+        "interval": 1,
+        "startDate": "2024-01-01",
+        "onPeriods": 1,
+        "offPeriods": 0
       },
       "dateIncludeOverrides": {
         "2025-04-12": true
       },
-      "remindTomorrow": true
+      "remindTomorrow": true,
+      "includeOnWebsite": true
     },
     {
       "id": "ev-1739556183702",
       "archived": false,
-      "title": "Honorable campaign - first day",
+      "title": "Honorable campaign",
       "description": "",
       "isAllDay": true,
       "startTime": "09:00",
@@ -482,13 +540,18 @@
       "order": {
         "sunday": 4,
         "thursday": 6,
-        "tuesday": 5
+        "tuesday": 6
       },
       "recurrence": {
-        "type": "weekly",
+        "type": "weeks",
         "daysOfWeek": ["tuesday", "thursday", "sunday"],
-        "interval": 1
-      }
+        "interval": 1,
+        "startDate": "2025-12-01",
+        "onPeriods": 1,
+        "offPeriods": 0
+      },
+      "includeInBriefing": true,
+      "includeOnWebsite": true
     },
     {
       "id": "ev-1739556209550",
@@ -510,45 +573,20 @@
       },
       "variations": {},
       "order": {
-        "monday": 7,
+        "monday": 4,
         "wednesday": 5,
         "friday": 4
       },
       "recurrence": {
-        "type": "weekly",
+        "type": "weeks",
         "daysOfWeek": ["monday", "wednesday", "friday"],
-        "interval": 1
+        "interval": 1,
+        "startDate": "2024-01-01",
+        "onPeriods": 1,
+        "offPeriods": 0
       },
-      "remindEndOfDay": true
-    },
-    {
-      "id": "ev-1739556307704",
-      "archived": false,
-      "title": "Buy what you can from Alliance, VIP, and Campaign Stores.",
-      "description": "",
-      "isAllDay": true,
-      "startTime": "09:00",
-      "endTime": "10:00",
-      "days": ["sunday"],
-      "includeInExport": {
-        "sunday": true,
-        "monday": true,
-        "tuesday": true,
-        "wednesday": true,
-        "thursday": true,
-        "friday": true,
-        "saturday": true
-      },
-      "variations": {},
-      "order": {
-        "sunday": 1
-      },
-      "recurrence": {
-        "type": "weekly",
-        "daysOfWeek": ["sunday"],
-        "interval": 1
-      },
-      "remindEndOfDay": true
+      "remindEndOfDay": true,
+      "includeOnWebsite": true
     },
     {
       "id": "ev-1739556688004",
@@ -571,16 +609,19 @@
         "friday": 6
       },
       "recurrence": {
-        "type": "weekly",
+        "type": "weeks",
         "daysOfWeek": ["wednesday", "thursday", "friday"],
         "interval": 2,
-        "startDate": "2025-03-02"
-      }
+        "startDate": "2025-03-02",
+        "onPeriods": 1,
+        "offPeriods": 0
+      },
+      "includeOnWebsite": true
     },
     {
       "id": "ev-1739556818565",
       "archived": false,
-      "title": "Doomsday event - Don\u0027t forget to collect rewards as they are not mailed",
+      "title": "Doomsday event - Don't forget to collect rewards as they are not mailed",
       "description": "",
       "isAllDay": true,
       "startTime": "09:00",
@@ -604,15 +645,17 @@
         "onPeriods": 1,
         "offPeriods": 1,
         "daysOfWeek": ["sunday"],
-        "startDate": "2025-08-31"
+        "startDate": "2025-08-31",
+        "interval": 1
       },
       "remindEndOfDay": true,
-      "remindTomorrow": true
+      "remindTomorrow": true,
+      "includeOnWebsite": true
     },
     {
       "id": "ev-1739556987954",
       "archived": false,
-      "title": "General\u0027s Trial - Choose ONE level after what you can solo.",
+      "title": "General's Trial - Choose ONE level after what you can solo.",
       "description": "",
       "isAllDay": true,
       "startTime": "09:00",
@@ -630,12 +673,15 @@
         "thursday": 3
       },
       "recurrence": {
-        "type": "weekly",
+        "type": "weeks",
         "daysOfWeek": ["wednesday", "thursday", "friday"],
         "interval": 2,
-        "startDate": "2025-03-09"
+        "startDate": "2025-03-09",
+        "onPeriods": 1,
+        "offPeriods": 0
       },
-      "remindTomorrow": true
+      "remindTomorrow": true,
+      "includeOnWebsite": true
     },
     {
       "id": "ev-1739558845321",
@@ -661,19 +707,23 @@
         "monday": 3
       },
       "recurrence": {
-        "type": "weekly",
+        "type": "weeks",
         "daysOfWeek": ["saturday"],
-        "interval": 1
-      }
+        "interval": 1,
+        "startDate": "2024-01-01",
+        "onPeriods": 1,
+        "offPeriods": 0
+      },
+      "includeOnWebsite": true
     },
     {
       "id": "ev-1740123329685",
       "archived": false,
-      "title": "Desert Storm - Task Force B",
+      "title": "Desert Storm - Late",
       "description": "",
       "isAllDay": false,
       "startTime": "22:50",
-      "endTime": "23:30",
+      "endTime": "",
       "days": ["friday"],
       "includeInExport": {
         "monday": false,
@@ -687,17 +737,22 @@
       "variations": {},
       "order": {},
       "recurrence": {
-        "type": "weekly",
+        "type": "weeks",
+        "onPeriods": 1,
+        "offPeriods": 0,
         "daysOfWeek": ["friday"],
+        "startDate": "2024-01-05",
         "interval": 1
       },
-      "remindTomorrow": true
+      "remindTomorrow": true,
+      "includeInBriefing": true,
+      "includeOnWebsite": true
     },
     {
       "id": "ev-1740278810425",
       "archived": false,
       "title": "Rampage Bosses",
-      "description": "• Spawn at 0:00, 6:00, and 12:00\n• Attacking doesn\u0027t cost stamina or troops\n• Take three shots on each and try to get as much damage as you can!\n• If the server manages to do enough damage, they\u0027ll drop rewards you can grab over the next few hours",
+      "description": "• Spawn at 0:00, 6:00, and 12:00\n• Attacking doesn't cost stamina or troops\n• Take three shots on each and try to get as much damage as you can!\n• If the server manages to do enough damage, they'll drop rewards you can grab over the next few hours",
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "10:00",
@@ -720,18 +775,20 @@
         "onPeriods": 1,
         "offPeriods": 1,
         "daysOfWeek": ["sunday"],
-        "startDate": "2025-09-07"
+        "startDate": "2025-09-07",
+        "interval": 1
       },
-      "remindEndOfDay": true
+      "remindEndOfDay": true,
+      "includeOnWebsite": true
     },
     {
       "id": "87a66ed0-70ea-4dfc-8519-ced7ef52be6e",
-      "archived": false,
+      "archived": true,
       "title": "Marshal (Alliance Exercise)",
       "description": "",
       "isAllDay": false,
       "startTime": "21:40",
-      "endTime": "22:10",
+      "endTime": "",
       "days": [
         "monday",
         "sunday",
@@ -763,9 +820,13 @@
           "wednesday"
         ],
         "interval": 2,
-        "startDate": "2024-10-13"
+        "startDate": "2024-10-13",
+        "onPeriods": 1,
+        "offPeriods": 0
       },
-      "remindTomorrow": true
+      "remindTomorrow": true,
+      "includeInBriefing": true,
+      "includeOnWebsite": true
     },
     {
       "id": "4329a998-b697-4b0d-ae72-c629390328b4",
@@ -803,24 +864,25 @@
         "tuesday": 8
       },
       "recurrence": {
-        "type": "custom",
+        "type": "weeks",
+        "onPeriods": 1,
+        "offPeriods": 2,
         "daysOfWeek": [
+          "sunday",
           "monday",
+          "tuesday",
           "wednesday",
           "thursday",
-          "tuesday",
           "friday",
-          "saturday",
-          "sunday"
+          "saturday"
         ],
-        "interval": 1,
-        "pattern": {
-          "onWeeks": 1,
-          "offWeeks": 2,
-          "phaseStartDate": "2025-03-10T04:00:00.000Z"
-        }
+        "startDate": "2025-09-15",
+        "interval": 1
       },
-      "remindEndOfDay": true
+      "remindEndOfDay": true,
+      "includeInBriefing": true,
+      "includeOnWebsite": true,
+      "remindTomorrow": true
     },
     {
       "id": "5c1804c1-eae9-48f9-a94d-495eea6eb156",
@@ -850,9 +912,9 @@
       },
       "variations": {},
       "order": {
-        "monday": 8,
+        "monday": 5,
         "saturday": 6,
-        "tuesday": 9,
+        "tuesday": 8,
         "sunday": 7,
         "wednesday": 7,
         "thursday": 8,
@@ -871,9 +933,11 @@
           "friday",
           "saturday"
         ],
-        "startDate": "2025-09-22"
+        "startDate": "2025-09-22",
+        "interval": 1
       },
-      "remindEndOfDay": true
+      "remindEndOfDay": true,
+      "includeOnWebsite": true
     },
     {
       "id": "5aec60d0-4d5f-4299-8f91-cc8590471e7b",
@@ -896,14 +960,17 @@
       "variations": {},
       "order": {
         "thursday": 5,
-        "monday": 9
+        "monday": 6
       },
       "recurrence": {
-        "type": "weekly",
+        "type": "weeks",
         "daysOfWeek": ["monday", "thursday"],
         "interval": 1,
-        "startDate": "2025-03-12"
-      }
+        "startDate": "2025-03-12",
+        "onPeriods": 1,
+        "offPeriods": 0
+      },
+      "includeOnWebsite": true
     },
     {
       "id": "6f0f73b6-24e7-491d-b6fa-39d73bb8711e",
@@ -926,14 +993,17 @@
       "variations": {},
       "order": {
         "friday": 6,
-        "tuesday": 6
+        "tuesday": 7
       },
       "recurrence": {
-        "type": "weekly",
+        "type": "weeks",
         "daysOfWeek": ["tuesday", "friday"],
         "interval": 1,
-        "startDate": "2025-03-12"
-      }
+        "startDate": "2025-03-12",
+        "onPeriods": 1,
+        "offPeriods": 0
+      },
+      "includeOnWebsite": true
     },
     {
       "id": "5178bd44-1659-40df-9aa7-c76cf22ee563",
@@ -959,16 +1029,19 @@
         "wednesday": 8
       },
       "recurrence": {
-        "type": "weekly",
+        "type": "weeks",
         "daysOfWeek": ["wednesday", "saturday"],
         "interval": 1,
-        "startDate": "2025-03-12"
-      }
+        "startDate": "2025-03-12",
+        "onPeriods": 1,
+        "offPeriods": 0
+      },
+      "includeOnWebsite": true
     },
     {
       "id": "dfb867b9-9ffc-4a60-baf2-bd89a1d18681",
       "archived": false,
-      "title": "SHINYs in 969-972, 982-986, 994 \u0026 995",
+      "title": "SHINYs in 969-972, 982-986, 994 & 995",
       "description": "",
       "isAllDay": true,
       "startTime": "09:00",
@@ -1011,9 +1084,12 @@
           "saturday"
         ],
         "interval": 3,
-        "startDate": "2025-03-14"
+        "startDate": "2025-03-14",
+        "onPeriods": 1,
+        "offPeriods": 0
       },
-      "dateIncludeOverrides": {}
+      "dateIncludeOverrides": {},
+      "includeOnWebsite": true
     },
     {
       "id": "7662a10a-144e-4dc5-8ae7-4c8af78b9e12",
@@ -1044,7 +1120,7 @@
       "variations": {},
       "order": {
         "saturday": 5,
-        "monday": 10,
+        "monday": 7,
         "tuesday": 8,
         "thursday": 10,
         "sunday": 5
@@ -1061,9 +1137,12 @@
           "saturday"
         ],
         "interval": 3,
-        "startDate": "2025-03-12"
+        "startDate": "2025-03-12",
+        "onPeriods": 1,
+        "offPeriods": 0
       },
-      "dateIncludeOverrides": {}
+      "dateIncludeOverrides": {},
+      "includeOnWebsite": true
     },
     {
       "id": "e5263084-2b0f-4289-9ed1-ede774a62176",
@@ -1095,7 +1174,7 @@
       "order": {
         "monday": 10,
         "saturday": 6,
-        "tuesday": 11,
+        "tuesday": 9,
         "friday": 9
       },
       "recurrence": {
@@ -1110,15 +1189,18 @@
           "saturday"
         ],
         "interval": 3,
-        "startDate": "2025-03-13"
+        "startDate": "2025-03-13",
+        "onPeriods": 1,
+        "offPeriods": 0
       },
       "dateIncludeOverrides": {
         "2025-07-05": true
-      }
+      },
+      "includeOnWebsite": true
     },
     {
       "id": "41b7230f-eac7-478d-8f95-2955050d1da0",
-      "archived": false,
+      "archived": true,
       "title": "Bullseye Loot/Ammo Bonanza",
       "description": "• 3 very simple daily tasks in Ammo Bonanza\n• The ammo stays in inventory between events, so you can save up and spend it all at once to get better prizes (Mythic blueprint!)",
       "isAllDay": true,
@@ -1141,7 +1223,7 @@
         "friday": 9
       },
       "recurrence": {
-        "type": "weekly",
+        "type": "weeks",
         "daysOfWeek": [
           "tuesday",
           "wednesday",
@@ -1150,12 +1232,15 @@
           "saturday"
         ],
         "interval": 4,
-        "startDate": "2025-07-22"
+        "startDate": "2025-07-22",
+        "onPeriods": 1,
+        "offPeriods": 0
       },
       "dateIncludeOverrides": {
         "2025-07-08": false
       },
-      "remindEndOfDay": true
+      "remindEndOfDay": true,
+      "includeOnWebsite": true
     },
     {
       "id": "ff6b9bd0-e2e6-49fd-9fa6-7cea574f8d47",
@@ -1190,11 +1275,13 @@
           "friday",
           "saturday"
         ],
-        "startDate": "2025-09-02"
+        "startDate": "2025-09-02",
+        "interval": 1
       },
       "dateIncludeOverrides": {
         "2025-03-28": false
-      }
+      },
+      "includeOnWebsite": true
     },
     {
       "id": "8d795f4d-e2f0-4194-9152-2163891aa0dc",
@@ -1219,16 +1306,19 @@
         "tuesday": 4
       },
       "recurrence": {
-        "type": "weekly",
+        "type": "weeks",
         "daysOfWeek": ["tuesday"],
         "interval": 1,
-        "startDate": "2025-03-30"
-      }
+        "startDate": "2025-03-30",
+        "onPeriods": 1,
+        "offPeriods": 0
+      },
+      "includeOnWebsite": true
     },
     {
       "id": "fe4d455d-6f36-45b2-92c2-24c32521473f",
       "archived": false,
-      "title": "Hot Deals â†’ Glittering Market",
+      "title": "Hot Deals → Glittering Market",
       "description": "• At minimum, collect 100 diamonds / Buy 60 coins for 500 diamonds",
       "isAllDay": true,
       "startTime": "09:00",
@@ -1254,10 +1344,13 @@
       "order": {
         "saturday": 6,
         "friday": 8,
-        "sunday": 6
+        "sunday": 6,
+        "tuesday": 5
       },
       "recurrence": {
-        "type": "weekly",
+        "type": "weeks",
+        "onPeriods": 1,
+        "offPeriods": 4,
         "daysOfWeek": [
           "tuesday",
           "wednesday",
@@ -1266,10 +1359,12 @@
           "saturday",
           "sunday"
         ],
-        "interval": 5,
-        "startDate": "2025-09-09"
+        "startDate": "2025-12-02",
+        "interval": 1
       },
-      "remindEndOfDay": true
+      "remindEndOfDay": true,
+      "includeInBriefing": true,
+      "includeOnWebsite": true
     },
     {
       "id": "8c78efe1-5b5c-427c-b5e1-7249a7922606",
@@ -1294,10 +1389,14 @@
         "thursday": 9
       },
       "recurrence": {
-        "type": "weekly",
+        "type": "weeks",
         "daysOfWeek": ["thursday"],
-        "interval": 1
-      }
+        "interval": 1,
+        "startDate": "2024-01-01",
+        "onPeriods": 1,
+        "offPeriods": 0
+      },
+      "includeOnWebsite": true
     },
     {
       "id": "5831a6ec-244d-40d2-88dc-81a7173ecffd",
@@ -1320,20 +1419,23 @@
       "variations": {},
       "order": {
         "sunday": 4,
-        "monday": 4,
+        "monday": 2,
         "thursday": 3,
         "friday": 0
       },
       "recurrence": {
-        "type": "weekly",
+        "type": "weeks",
         "daysOfWeek": ["sunday", "monday", "thursday", "friday"],
         "interval": 3,
-        "startDate": "2025-07-06"
+        "startDate": "2025-07-06",
+        "onPeriods": 1,
+        "offPeriods": 0
       },
       "dateIncludeOverrides": {
         "2025-07-10": false,
         "2025-07-11": false
-      }
+      },
+      "includeOnWebsite": true
     },
     {
       "id": "89b95f35-ae1a-485b-8aee-f012c758fa7b",
@@ -1356,65 +1458,23 @@
       "variations": {},
       "order": {},
       "recurrence": {
-        "type": "weekly",
+        "type": "weeks",
         "daysOfWeek": ["friday"],
         "interval": 3,
-        "startDate": "2025-07-13"
-      }
-    },
-    {
-      "id": "3c1c7552-cfbc-479d-a42c-2dc8476d0e1b",
-      "archived": false,
-      "title": "Golden Melody - FINAL DAY",
-      "description": "",
-      "isAllDay": true,
-      "startTime": "09:00",
-      "endTime": "",
-      "days": [
-        "sunday",
-        "monday",
-        "tuesday",
-        "wednesday",
-        "thursday",
-        "friday",
-        "saturday"
-      ],
-      "includeInExport": {
-        "sunday": true,
-        "monday": true,
-        "tuesday": true,
-        "wednesday": true,
-        "thursday": true,
-        "friday": true,
-        "saturday": true
+        "startDate": "2025-07-13",
+        "onPeriods": 1,
+        "offPeriods": 0
       },
-      "variations": {},
-      "order": {
-        "sunday": 1
-      },
-      "recurrence": {
-        "type": "daily",
-        "daysOfWeek": [
-          "sunday",
-          "monday",
-          "tuesday",
-          "wednesday",
-          "thursday",
-          "friday",
-          "saturday"
-        ],
-        "interval": 99,
-        "startDate": "2025-07-13"
-      }
+      "includeOnWebsite": true
     },
     {
       "id": "4af5277e-a46b-4407-94cc-66452e907f1d",
       "archived": false,
-      "title": "Sky Predator - General\u0027s Trial Alliance Challenge",
+      "title": "Sky Predator",
       "description": "",
       "isAllDay": false,
-      "startTime": "23:00",
-      "endTime": "23:30",
+      "startTime": "21:40",
+      "endTime": "",
       "days": ["thursday"],
       "includeInExport": {
         "thursday": true,
@@ -1428,17 +1488,16 @@
       "variations": {},
       "order": {},
       "recurrence": {
-        "type": "weekly",
+        "type": "weeks",
         "daysOfWeek": ["thursday"],
         "interval": 2,
-        "startDate": "2025-07-17",
-        "pattern": {
-          "onWeeks": 1,
-          "offWeeks": 1,
-          "phaseStartDate": "2025-07-31T01:34:25.719Z"
-        }
+        "startDate": "2025-07-11",
+        "onPeriods": 1,
+        "offPeriods": 1
       },
-      "remindTomorrow": true
+      "remindTomorrow": true,
+      "includeInBriefing": true,
+      "includeOnWebsite": true
     },
     {
       "id": "9773fd5b-5070-4f05-b232-f527556751ab",
@@ -1463,18 +1522,21 @@
         "friday": 3
       },
       "recurrence": {
-        "type": "weekly",
+        "type": "weeks",
         "daysOfWeek": ["friday"],
         "interval": 1,
-        "startDate": "2025-08-22"
-      }
+        "startDate": "2025-08-22",
+        "onPeriods": 1,
+        "offPeriods": 0
+      },
+      "includeOnWebsite": true
     },
     {
       "id": "e1a61d22-c57e-45aa-ab6c-d648c529bb89",
       "archived": false,
-      "title": "Buy from Alliance, Campaign and VIP stores before reset.",
+      "title": "Buy from Alliance, Campaign and VIP stores.",
       "description": "",
-      "remindTomorrow": false,
+      "remindTomorrow": true,
       "remindEndOfDay": true,
       "isAllDay": true,
       "startTime": "09:00",
@@ -1496,8 +1558,11 @@
         "onPeriods": 1,
         "offPeriods": 0,
         "daysOfWeek": ["sunday"],
-        "startDate": "2025-09-16"
-      }
+        "startDate": "2024-09-29",
+        "interval": 1
+      },
+      "includeInBriefing": true,
+      "includeOnWebsite": true
     },
     {
       "id": "fc3ef9fe-0e81-4a26-b693-448794954e61",
@@ -1525,7 +1590,8 @@
         "onPeriods": 1,
         "offPeriods": 0,
         "daysOfWeek": ["wednesday"],
-        "startDate": "2025-09-17"
+        "startDate": "2025-09-17",
+        "interval": 1
       },
       "includeInBriefing": true,
       "includeOnWebsite": true
@@ -1536,7 +1602,7 @@
       "title": "Capitol Event - Garrison the capitol",
       "description": "",
       "remindTomorrow": true,
-      "remindEndOfDay": false,
+      "remindEndOfDay": true,
       "isAllDay": false,
       "startTime": "13:30",
       "endTime": "14:00",
@@ -1557,8 +1623,10 @@
         "onPeriods": 1,
         "offPeriods": 99,
         "daysOfWeek": ["sunday"],
-        "startDate": "2025-09-21"
-      }
+        "startDate": "2025-09-21",
+        "interval": 1
+      },
+      "includeOnWebsite": true
     },
     {
       "id": "4b3d8da0-2fc8-461b-923e-7423a403c28b",
@@ -1586,7 +1654,8 @@
         "onPeriods": 1,
         "offPeriods": 0,
         "daysOfWeek": ["sunday"],
-        "startDate": "2023-12-31"
+        "startDate": "2023-12-31",
+        "interval": 1
       },
       "dateIncludeOverrides": {
         "2025-09-21": false
@@ -1624,8 +1693,10 @@
         "saturday": true
       },
       "variations": {},
-      "order": {},
-      "archived": false,
+      "order": {
+        "monday": 8
+      },
+      "archived": true,
       "recurrence": {
         "type": "weeks",
         "onPeriods": 1,
@@ -1639,7 +1710,8 @@
           "friday",
           "saturday"
         ],
-        "startDate": "2024-01-01"
+        "startDate": "2024-01-01",
+        "interval": 1
       }
     },
     {
@@ -1663,19 +1735,22 @@
         "saturday": true
       },
       "variations": {},
-      "order": {},
+      "order": {
+        "monday": 9
+      },
       "archived": false,
       "recurrence": {
         "type": "weeks",
         "onPeriods": 1,
         "offPeriods": 1,
         "daysOfWeek": ["monday"],
-        "startDate": "2023-12-31"
+        "startDate": "2023-12-31",
+        "interval": 1
       }
     },
     {
       "id": "151805d5-5c6a-4cc0-a62b-9ab90c54d5a0",
-      "title": "Free/300/500 Stamina - Radar \u0026 Loot Goblins",
+      "title": "Free/300/500 Stamina - Radar & Loot Goblins",
       "description": "",
       "remindTomorrow": false,
       "remindEndOfDay": true,
@@ -1702,15 +1777,16 @@
         "onPeriods": 1,
         "offPeriods": 1,
         "daysOfWeek": ["tuesday"],
-        "startDate": "2024-01-07"
+        "startDate": "2024-01-07",
+        "interval": 1
       }
     },
     {
       "id": "04434cb7-53c9-4aa5-b7a7-0dac1f6239c1",
-      "title": "Canyon Storm",
+      "title": "Canyon Storm - Early",
       "description": "",
       "remindTomorrow": true,
-      "remindEndOfDay": false,
+      "remindEndOfDay": true,
       "includeInBriefing": true,
       "includeOnWebsite": true,
       "isAllDay": false,
@@ -1734,7 +1810,8 @@
         "onPeriods": 1,
         "offPeriods": 0,
         "daysOfWeek": ["thursday"],
-        "startDate": "2023-12-31"
+        "startDate": "2023-12-31",
+        "interval": 1
       }
     },
     {
@@ -1782,7 +1859,8 @@
           "friday",
           "saturday"
         ],
-        "startDate": "2023-12-31"
+        "startDate": "2024-10-13",
+        "interval": 1
       }
     },
     {
@@ -1790,7 +1868,7 @@
       "title": "Capitol Conquest",
       "description": "",
       "remindTomorrow": true,
-      "remindEndOfDay": false,
+      "remindEndOfDay": true,
       "includeInBriefing": true,
       "includeOnWebsite": true,
       "isAllDay": false,
@@ -1814,15 +1892,16 @@
         "onPeriods": 1,
         "offPeriods": 0,
         "daysOfWeek": ["friday"],
-        "startDate": "2025-11-12"
+        "startDate": "2025-11-12",
+        "interval": 1
       }
     },
     {
       "id": "d60cae98-2318-4856-a8e0-b68c567f8306",
-      "title": "Canyon Storm",
+      "title": "Canyon Storm - Late",
       "description": "",
       "remindTomorrow": true,
-      "remindEndOfDay": false,
+      "remindEndOfDay": true,
       "includeInBriefing": true,
       "includeOnWebsite": true,
       "isAllDay": false,
@@ -1846,7 +1925,8 @@
         "onPeriods": 1,
         "offPeriods": 0,
         "daysOfWeek": ["thursday"],
-        "startDate": "2023-12-31"
+        "startDate": "2023-12-31",
+        "interval": 1
       }
     },
     {
@@ -1879,7 +1959,7 @@
       },
       "archived": true,
       "recurrence": {
-        "type": "weekly",
+        "type": "weeks",
         "daysOfWeek": [
           "monday",
           "thursday",
@@ -1888,12 +1968,16 @@
           "friday",
           "saturday"
         ],
-        "interval": 1
-      }
+        "interval": 1,
+        "startDate": "2024-01-01",
+        "onPeriods": 1,
+        "offPeriods": 0
+      },
+      "includeOnWebsite": true
     },
     {
       "id": "ev-1739559151491",
-      "title": "Crimson Legion",
+      "title": "Season II - Crimson Legion",
       "description": "• Set your strongest squad to garrison before signing off the night before\n• R4s will kick the lowest power garrisons to make room as needed\n• Arrive for the event and garrison/heal like a cryptid should!",
       "isAllDay": false,
       "startTime": "12:00",
@@ -1907,15 +1991,20 @@
       "order": {},
       "archived": true,
       "recurrence": {
-        "type": "weekly",
+        "type": "weeks",
         "daysOfWeek": ["tuesday", "friday"],
-        "interval": 1
-      }
+        "interval": 1,
+        "startDate": "2025-12-01",
+        "onPeriods": 1,
+        "offPeriods": 0
+      },
+      "includeInBriefing": true,
+      "includeOnWebsite": true
     },
     {
       "id": "0966e2c0-e0d7-41ea-9a8b-16453388e178",
       "title": "Warzone Duel: Capitol War",
-      "description": "• This is Last War\u0027s main event so the rewards are very, very good\n• It is fairly easy to max participation rewards starting 1-2 hours after the capitol is contested\n• You can only earn ranking rewards while the capitol is being contested",
+      "description": "• This is Last War's main event so the rewards are very, very good\n• It is fairly easy to max participation rewards starting 1-2 hours after the capitol is contested\n• You can only earn ranking rewards while the capitol is being contested",
       "isAllDay": false,
       "startTime": "12:00",
       "endTime": "",
@@ -1933,14 +2022,17 @@
       "order": {},
       "archived": true,
       "recurrence": {
-        "type": "weekly",
+        "type": "weeks",
         "daysOfWeek": ["saturday"],
         "interval": 1,
-        "startDate": "2025-03-12"
+        "startDate": "2025-03-12",
+        "onPeriods": 1,
+        "offPeriods": 0
       },
       "dateIncludeOverrides": {
         "2025-05-03": false
-      }
+      },
+      "includeOnWebsite": true
     },
     {
       "id": "0cdd036c-c5fc-4bb6-8c4a-85bcec205e61",
@@ -1966,85 +2058,20 @@
       },
       "archived": true,
       "recurrence": {
-        "type": "weekly",
+        "type": "weeks",
         "daysOfWeek": ["tuesday", "monday"],
-        "interval": 2
+        "interval": 2,
+        "startDate": "2024-01-01",
+        "onPeriods": 1,
+        "offPeriods": 0
       },
-      "dateIncludeOverrides": {}
-    },
-    {
-      "id": "688407f7-8f25-47c9-bcbb-3b97632414d8",
-      "title": "Capitol Conquest (trading tile hits at the capitol)",
-      "description": "• Every week there is a war to see which alliance will control the capitol but in 996, we have an agreement for peaceful transfer of power, so we do not fight.\n• To get your rewards:\n   • Send your squad to gather at a tile in the mud around the capitol\n   • Post the coordinates in world chat for someone to hit\n     - OR -\n   • Watch for mud tiles to be posted in WC and after verifying the person who posted it is also the one on the tile, attack.",
-      "isAllDay": false,
-      "startTime": "12:00",
-      "endTime": "16:00",
-      "days": ["friday"],
-      "includeInExport": {
-        "monday": true,
-        "sunday": true,
-        "tuesday": true,
-        "wednesday": true,
-        "thursday": true,
-        "friday": true,
-        "saturday": true
-      },
-      "variations": {},
-      "order": {},
-      "archived": true,
-      "recurrence": {
-        "type": "weekly",
-        "daysOfWeek": ["friday"],
-        "interval": 1
-      }
-    },
-    {
-      "id": "9bc76420-1995-4ad4-b83e-0d64ac512f4d",
-      "title": "Scout Tater",
-      "description": "",
-      "isAllDay": false,
-      "startTime": "00:15",
-      "endTime": "",
-      "days": [
-        "sunday",
-        "monday",
-        "tuesday",
-        "wednesday",
-        "thursday",
-        "friday"
-      ],
-      "includeInExport": {
-        "monday": true,
-        "sunday": true,
-        "tuesday": true,
-        "wednesday": true,
-        "thursday": true,
-        "friday": true,
-        "saturday": true
-      },
-      "variations": {},
-      "order": {},
-      "archived": true,
-      "recurrence": {
-        "type": "weekly",
-        "daysOfWeek": [
-          "sunday",
-          "monday",
-          "tuesday",
-          "wednesday",
-          "thursday",
-          "friday"
-        ],
-        "interval": 1
-      },
-      "dateIncludeOverrides": {
-        "2025-04-08": true
-      }
+      "dateIncludeOverrides": {},
+      "includeOnWebsite": true
     },
     {
       "id": "c0a5849e-5065-450d-ac67-5dd9f5b138c9",
-      "title": "Season I Celebration â†’ Championship Duel â†’ Predicts ",
-      "description": "• Wager to win Black Market Cash without risking any\n• More icon â†’ x4 Elite Match â†’ Predict â†’ x100\n• I\u0027m just picking the favorite since I don\u0027t feel like doing research",
+      "title": "Season I Celebration → Championship Duel → Predicts ",
+      "description": "• Wager to win Black Market Cash without risking any\n• More icon → x4 Elite Match → Predict → x100\n• I'm just picking the favorite since I don't feel like doing research",
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "",
@@ -2064,18 +2091,22 @@
       },
       "archived": true,
       "recurrence": {
-        "type": "weekly",
+        "type": "weeks",
         "daysOfWeek": ["monday", "tuesday", "wednesday", "thursday"],
-        "interval": 1
+        "interval": 1,
+        "startDate": "2024-01-01",
+        "onPeriods": 1,
+        "offPeriods": 0
       },
       "dateIncludeOverrides": {
         "2025-04-08": true,
         "2025-04-09": true
-      }
+      },
+      "includeOnWebsite": true
     },
     {
       "id": "1d5cdb18-023b-4511-a73e-0ed1d300b76f",
-      "title": "Season II Celebration â†’ Black Market",
+      "title": "Season II Celebration → Black Market",
       "description": "• Use all of your refreshes every day\n• Always buy the free items\n• Free/Cheap players recommendation:\n   • Top Row\n      • Decorations\n      • Weapon Shards (until you have enough to unlock all Heroes)\n      • if you have plenty of cash, UR Skill Chips, UR decorations\n   • Bottom Row:\n      • Exclusive Weapons (until enough)",
       "isAllDay": true,
       "startTime": "09:00",
@@ -2122,11 +2153,8 @@
         ],
         "interval": 1,
         "startDate": "2025-04-08",
-        "pattern": {
-          "onWeeks": 1,
-          "offWeeks": 1,
-          "phaseStartDate": "2025-07-05T00:06:18.516Z"
-        }
+        "onPeriods": 1,
+        "offPeriods": 0
       },
       "dateIncludeOverrides": {
         "2025-04-07": true,
@@ -2146,7 +2174,8 @@
         "2025-06-28": false,
         "2025-06-27": false,
         "2025-07-05": true
-      }
+      },
+      "includeOnWebsite": true
     },
     {
       "id": "5870d28b-5d10-4dd9-83fb-612e4c28e0b0",
@@ -2157,26 +2186,30 @@
       "endTime": "00:40",
       "days": ["saturday"],
       "includeInExport": {
-        "monday": false,
-        "sunday": false,
-        "tuesday": false,
-        "wednesday": false,
-        "thursday": false,
-        "friday": false,
-        "saturday": true
+        "saturday": true,
+        "sunday": true,
+        "monday": true,
+        "tuesday": true,
+        "wednesday": true,
+        "thursday": true,
+        "friday": true
       },
       "variations": {},
       "order": {},
       "archived": true,
       "recurrence": {
-        "type": "weekly",
+        "type": "weeks",
         "daysOfWeek": ["saturday"],
-        "interval": 1
+        "interval": 1,
+        "startDate": "2024-01-01",
+        "onPeriods": 1,
+        "offPeriods": 0
       },
       "dateIncludeOverrides": {
         "2025-05-03": true,
         "2025-07-05": true
-      }
+      },
+      "includeOnWebsite": true
     },
     {
       "id": "a061f2df-34c9-4bdd-9fa2-a95e11470268",
@@ -2199,15 +2232,18 @@
       "order": {},
       "archived": true,
       "recurrence": {
-        "type": "weekly",
+        "type": "weeks",
         "daysOfWeek": ["saturday"],
         "interval": 1,
-        "startDate": "2025-05-03"
+        "startDate": "2025-05-03",
+        "onPeriods": 1,
+        "offPeriods": 0
       },
       "dateIncludeOverrides": {
         "2025-05-03": true,
         "2025-07-19": true
-      }
+      },
+      "includeOnWebsite": true
     },
     {
       "id": "5a015825-f2c7-44ce-81c6-c09bcff682e2",
@@ -2230,11 +2266,14 @@
       "order": {},
       "archived": true,
       "recurrence": {
-        "type": "weekly",
+        "type": "weeks",
         "daysOfWeek": ["tuesday", "friday"],
         "interval": 1,
-        "startDate": "2025-05-22"
-      }
+        "startDate": "2025-05-22",
+        "onPeriods": 1,
+        "offPeriods": 0
+      },
+      "includeOnWebsite": true
     },
     {
       "id": "1f65fd3a-b31b-4d67-9d46-0a53606e79a4",
@@ -2257,73 +2296,23 @@
       "order": {},
       "archived": true,
       "recurrence": {
-        "type": "weekly",
+        "type": "weeks",
         "daysOfWeek": ["wednesday", "saturday"],
         "interval": 1,
-        "startDate": "2025-05-22"
-      }
+        "startDate": "2025-05-22",
+        "onPeriods": 1,
+        "offPeriods": 0
+      },
+      "includeOnWebsite": true
     },
     {
-      "id": "fecdeae1-1d56-493c-9e92-d3103bc39910",
-      "title": "Golden Melody",
-      "description": "• Use at minimum 1 ticket, score at least 5,000 points then collect your tasks",
-      "isAllDay": true,
-      "startTime": "09:00",
-      "endTime": "",
-      "days": [
-        "monday",
-        "tuesday",
-        "wednesday",
-        "thursday",
-        "friday",
-        "saturday"
-      ],
-      "includeInExport": {
-        "monday": true,
-        "sunday": true,
-        "tuesday": true,
-        "wednesday": true,
-        "thursday": true,
-        "friday": true,
-        "saturday": true
-      },
-      "variations": {},
-      "order": {
-        "monday": 2,
-        "tuesday": 3,
-        "wednesday": 2,
-        "thursday": 1,
-        "friday": 1,
-        "saturday": 1
-      },
-      "archived": true,
-      "recurrence": {
-        "type": "custom",
-        "daysOfWeek": [
-          "monday",
-          "tuesday",
-          "wednesday",
-          "thursday",
-          "friday",
-          "saturday"
-        ],
-        "interval": 1,
-        "startDate": "2025-07-07",
-        "pattern": {
-          "onWeeks": 1,
-          "offWeeks": 99,
-          "phaseStartDate": "2025-07-07T08:19:54.884Z"
-        }
-      }
-    },
-    {
-      "id": "e05c1e28-c800-48d1-8d3a-53898d5f2922",
+      "id": "e05c1e28-c800-48d1-8d3a-53898d5f2923",
       "title": "Glacieradon",
       "description": "",
       "isAllDay": false,
-      "startTime": "23:00",
+      "startTime": "21:40",
       "endTime": "",
-      "days": ["thursday"],
+      "days": ["friday"],
       "includeInExport": {
         "wednesday": true,
         "sunday": true,
@@ -2335,18 +2324,22 @@
       },
       "variations": {},
       "order": {},
-      "archived": true,
+      "archived": false,
       "recurrence": {
-        "type": "weekly",
-        "daysOfWeek": ["thursday"],
-        "interval": 2,
-        "startDate": "2025-08-06"
+        "type": "weeks",
+        "onPeriods": 1,
+        "offPeriods": 1,
+        "daysOfWeek": ["friday"],
+        "startDate": "2025-08-06",
+        "interval": 1
       },
-      "remindTomorrow": true
+      "remindTomorrow": true,
+      "includeInBriefing": true,
+      "includeOnWebsite": true
     },
     {
       "id": "16f2e4b5-58d7-4c14-b409-ef1e3e1b84c6",
-      "title": "Return of the Dead - Defend Alliance Center",
+      "title": "Season III - Return of the Dead - Defend Alliance Center",
       "description": "",
       "isAllDay": false,
       "startTime": "11:00",
@@ -2365,19 +2358,23 @@
       "order": {},
       "archived": true,
       "recurrence": {
-        "type": "weekly",
+        "type": "weeks",
         "daysOfWeek": ["tuesday", "friday"],
         "interval": 1,
-        "startDate": "2025-09-04"
+        "startDate": "2025-09-04",
+        "onPeriods": 1,
+        "offPeriods": 0
       },
-      "remindTomorrow": true
+      "remindTomorrow": true,
+      "includeInBriefing": true,
+      "includeOnWebsite": true
     },
     {
       "id": "e41e6e5f-79c4-4927-9030-ced38b9229b6",
       "title": "Spice Wars Battle!",
       "description": "",
       "remindTomorrow": true,
-      "remindEndOfDay": false,
+      "remindEndOfDay": true,
       "isAllDay": false,
       "startTime": "12:30",
       "endTime": "",
@@ -2399,15 +2396,17 @@
         "onPeriods": 1,
         "offPeriods": 0,
         "daysOfWeek": ["wednesday", "saturday"],
-        "startDate": "2025-09-16"
-      }
+        "startDate": "2025-09-16",
+        "interval": 1
+      },
+      "includeOnWebsite": true
     },
     {
       "id": "83c5acdd-07b9-4dee-b85c-27ef30fb10bd",
-      "title": "Capture Level 4 Trading Post",
+      "title": "Season III - Capture Level 4 Trading Post",
       "description": "",
       "remindTomorrow": true,
-      "remindEndOfDay": false,
+      "remindEndOfDay": true,
       "isAllDay": false,
       "startTime": "11:00",
       "endTime": "",
@@ -2429,12 +2428,15 @@
         "onPeriods": 1,
         "offPeriods": 0,
         "daysOfWeek": ["thursday"],
-        "startDate": "2025-09-11"
-      }
+        "startDate": "2025-09-11",
+        "interval": 1
+      },
+      "includeInBriefing": true,
+      "includeOnWebsite": true
     },
     {
       "id": "226d3b1b-ce75-444f-ac11-5ee3fe3af4b4",
-      "title": "Hot Deals â†’ Bounty Hunter",
+      "title": "Hot Deals → Bounty Hunter",
       "description": "• Get daily free/diamond ammo by clicking on the \"+\" sign\n   ($5 deal also decent for pay players)\n• Use Jammers when only purple zombies are left.\n• Click on Wandering Merchants for free items",
       "remindTomorrow": false,
       "remindEndOfDay": true,
@@ -2467,8 +2469,12 @@
           "friday",
           "saturday"
         ],
-        "interval": 1
-      }
+        "interval": 1,
+        "startDate": "2024-01-01",
+        "onPeriods": 1,
+        "offPeriods": 0
+      },
+      "includeOnWebsite": true
     }
   ]
 }

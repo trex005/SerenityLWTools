@@ -37,10 +37,12 @@ interface Event {
   includeInBriefing?: boolean
   includeOnWebsite?: boolean
   recurrence?: {
-    pattern: "daily" | "weekly" | "monthly" | "yearly"
-    interval: number
+    type: "days" | "weeks" | "none"
+    onPeriods: number
+    offPeriods: number
+    daysOfWeek: string[]
+    startDate: string
     endDate?: string
-    count?: number
   }
   variations?: Record<
     string,

@@ -61,9 +61,12 @@ export function EventDialog({ event, open, onOpenChange, initialDay = "monday", 
   const isEditing = !!event
 
   // Days of the week
-  const days = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"]
+  const days = useMemo(
+    () => ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"],
+    [],
+  )
   const overrideInfo = event?.id ? diffIndex?.events[event.id] : null
-  const overrideKeys = overrideInfo?.overrideKeys ?? []
+  const overrideKeys = useMemo(() => overrideInfo?.overrideKeys ?? [], [overrideInfo])
   const overrideKeySet = useMemo(() => new Set(overrideKeys), [overrideKeys])
   const hasOverrides = overrideKeys.length > 0
   const parentHasData = overrideInfo?.parentExists ?? false
@@ -89,12 +92,34 @@ export function EventDialog({ event, open, onOpenChange, initialDay = "monday", 
     (sourceEvent: any) => {
       if (!sourceEvent) return
       let includeInExport: Record<string, boolean> = {}
+      const recurrence = sourceEvent.recurrence
+        ? {
+            ...sourceEvent.recurrence,
+            type: sourceEvent.recurrence.type === "weeks" || sourceEvent.recurrence.type === "none" ? sourceEvent.recurrence.type : "days",
+            onPeriods: sourceEvent.recurrence.onPeriods ?? 1,
+            offPeriods: sourceEvent.recurrence.offPeriods ?? 0,
+            daysOfWeek:
+              sourceEvent.recurrence.daysOfWeek && sourceEvent.recurrence.daysOfWeek.length > 0
+                ? [...sourceEvent.recurrence.daysOfWeek]
+                : ["monday"],
+            startDate:
+              sourceEvent.recurrence.startDate ??
+              formatInAppTimezone(new Date(2025, 0, 5), "yyyy-MM-dd"),
+          }
+        : {
+            type: "days",
+            daysOfWeek: ["monday"],
+            onPeriods: 1,
+            offPeriods: 0,
+            startDate: formatInAppTimezone(new Date(2025, 0, 5), "yyyy-MM-dd"),
+          }
+      const recurrenceDays = recurrence.daysOfWeek
 
       if (typeof sourceEvent.includeInExport === "object" && sourceEvent.includeInExport !== null) {
         includeInExport = { ...sourceEvent.includeInExport }
       } else {
         const boolValue = !!sourceEvent.includeInExport
-        sourceEvent.days.forEach((d: string) => {
+        recurrenceDays.forEach((d: string) => {
           includeInExport[d] = boolValue
         })
       }
@@ -117,19 +142,9 @@ export function EventDialog({ event, open, onOpenChange, initialDay = "monday", 
       days.forEach((day) => {
         variationFlags[day] = !!(sourceEvent.variations && sourceEvent.variations[day])
       })
-      setHasVariation(variationFlags)
+          setHasVariation(variationFlags)
 
       setIncludeInExportByDefault(Object.values(includeInExport).length > 0 ? Object.values(includeInExport)[0] : true)
-
-      const recurrence = sourceEvent.recurrence || {
-        type: "daily",
-        daysOfWeek: [...sourceEvent.days],
-        interval: 1,
-      }
-
-      if (!recurrence.daysOfWeek || recurrence.daysOfWeek.length === 0) {
-        recurrence.daysOfWeek = [...sourceEvent.days]
-      }
 
       setFormData({
         ...sourceEvent,
@@ -139,6 +154,7 @@ export function EventDialog({ event, open, onOpenChange, initialDay = "monday", 
         endTime: hasEndTimeValue ? sourceEvent.endTime : "",
         archived: sourceEvent.archived ?? false,
         recurrence,
+        days: [...recurrenceDays],
       })
     },
     [days],
@@ -149,6 +165,7 @@ export function EventDialog({ event, open, onOpenChange, initialDay = "monday", 
     initialIncludeInExport[initialDay] = true
 
     const startDate = initialDate ? formatInAppTimezone(initialDate, "yyyy-MM-dd") : undefined
+    const recurrenceDays = [initialDay]
 
     setFormData({
       id: uuidv4(),
@@ -161,16 +178,17 @@ export function EventDialog({ event, open, onOpenChange, initialDay = "monday", 
       isAllDay: true,
       startTime: "09:00",
       endTime: "",
-      days: [initialDay],
+      days: [...recurrenceDays],
       includeInExport: initialIncludeInExport,
       variations: {},
       order: {},
       archived: false,
       recurrence: {
-        type: "daily",
-        daysOfWeek: ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"],
-        interval: 1,
-        startDate,
+        type: "weeks",
+        daysOfWeek: recurrenceDays,
+        onPeriods: 1,
+        offPeriods: 0,
+        startDate: startDate ?? formatInAppTimezone(new Date(), "yyyy-MM-dd"),
         endDate: undefined,
       },
     })
@@ -389,7 +407,8 @@ export function EventDialog({ event, open, onOpenChange, initialDay = "monday", 
     setFormData((prev) => {
       // Update all selected days with the new value
       const newIncludeInExport = { ...prev.includeInExport }
-      prev.days.forEach((day) => {
+      const selectedDays = prev.recurrence?.daysOfWeek || prev.days
+      selectedDays.forEach((day) => {
         newIncludeInExport[day] = checked
       })
 
@@ -454,24 +473,26 @@ export function EventDialog({ event, open, onOpenChange, initialDay = "monday", 
       : {
           type: "none",
           daysOfWeek: ["monday"],
+          onPeriods: 1,
+          offPeriods: 0,
+          startDate: formatInAppTimezone(new Date(), "yyyy-MM-dd"),
         }
 
     // Update the form data
     setFormData((prev) => {
-      // Sync days array with recurrence.daysOfWeek for backward compatibility
-      const newDays = [...newRecurrence.daysOfWeek]
+      const allowedDays = new Set(newRecurrence.daysOfWeek)
+      const newDays = [...allowedDays]
 
-      // Add any new days to includeInExport
-      const newIncludeInExport = { ...prev.includeInExport }
-      newRecurrence.daysOfWeek.forEach((day: string) => {
-        if (newIncludeInExport[day] === undefined) {
-          newIncludeInExport[day] = includeInExportByDefault
-        }
+      // Keep includeInExport aligned with selected days
+      const newIncludeInExport: Record<string, boolean> = {}
+      newDays.forEach((day: string) => {
+        const previous = prev.includeInExport[day]
+        newIncludeInExport[day] = previous !== undefined ? previous : includeInExportByDefault
       })
 
       return {
         ...prev,
-        days: newDays, // Keep days in sync with daysOfWeek
+        days: newDays,
         recurrence: newRecurrence,
         includeInExport: newIncludeInExport,
       }
@@ -500,11 +521,14 @@ export function EventDialog({ event, open, onOpenChange, initialDay = "monday", 
     // Ensure recurrence exists and has daysOfWeek
     const recurrence = normalizeRecurrenceDates(formData.recurrence) || {
       type: "none",
-      daysOfWeek: formData.days || ["monday"],
+      daysOfWeek: formData.recurrence?.daysOfWeek || ["monday"],
+      onPeriods: 0,
+      offPeriods: 0,
+      startDate: formatInAppTimezone(new Date(), "yyyy-MM-dd"),
     }
 
     if (!recurrence.daysOfWeek || recurrence.daysOfWeek.length === 0) {
-      recurrence.daysOfWeek = formData.days || ["monday"]
+      recurrence.daysOfWeek = formData.recurrence?.daysOfWeek || ["monday"]
     }
 
     // Ensure days is in sync with recurrence.daysOfWeek

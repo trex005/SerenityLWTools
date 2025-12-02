@@ -9,7 +9,7 @@
 
 import type React from "react"
 
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect, useRef, useCallback } from "react"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
@@ -111,145 +111,18 @@ export function EmailGenerator({ initialDateRange }: EmailGeneratorProps) {
   // Check localStorage for remembered decision
   const rememberedDecision = scopedLocalStorage.getItem("regenerate-agenda-decision")
 
-  // Load persisted content from localStorage on initial render
-  useEffect(() => {
-    const savedHeader = scopedLocalStorage.getItem("email-header")
-    if (savedHeader) {
-      setHeaderContent(savedHeader)
-    }
-
-    const savedAgenda = scopedLocalStorage.getItem("email-content")
-    if (savedAgenda) {
-      setEditedAgendaContent(savedAgenda)
-    }
-
-    const savedTip = scopedLocalStorage.getItem("tip-content")
-    if (savedTip) {
-      setEditedTipContent(savedTip)
-    }
+  /**
+   * Get day of week string (monday, tuesday, etc.) from a date
+   */
+  const getDayOfWeek = useCallback((date: Date) => {
+    const days = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"]
+    return days[date.getDay()]
   }, [])
-
-  // Save header content to localStorage whenever it changes
-  useEffect(() => {
-    scopedLocalStorage.setItem("email-header", headerContent)
-  }, [headerContent])
-
-  // Save agenda content to localStorage whenever it changes
-  useEffect(() => {
-    scopedLocalStorage.setItem("email-content", editedAgendaContent)
-  }, [editedAgendaContent])
-
-  // Save tip content to localStorage whenever it changes
-  useEffect(() => {
-    scopedLocalStorage.setItem("tip-content", editedTipContent)
-  }, [editedTipContent])
-
-  // Save clear tip preference to localStorage
-  useEffect(() => {
-    scopedLocalStorage.setItem("daily-agenda-clear-tip-preference", JSON.stringify(clearTipOnRegenerate))
-  }, [clearTipOnRegenerate])
-
-  // Check if date range has changed and show regenerate dialog
-  useEffect(() => {
-    // Skip on initial render
-    const prevStart = prevDateRangeRef.current[0]?.getTime()
-    const prevEnd = prevDateRangeRef.current[1]?.getTime()
-    const currentStart = dateRange[0]?.getTime()
-    const currentEnd = dateRange[1]?.getTime()
-
-    if (
-      prevStart !== undefined &&
-      prevEnd !== undefined &&
-      currentStart !== undefined &&
-      currentEnd !== undefined &&
-      (prevStart !== currentStart || prevEnd !== currentEnd)
-    ) {
-      // Check if user has a remembered decision
-      if (rememberedDecision === "regenerate") {
-        generateAgendaContent()
-        setEditedAgendaContent(agendaContent)
-      } else if (rememberedDecision === "keep") {
-        // Do nothing, keep current content
-      } else {
-        // Show dialog if no remembered decision
-        setShowRegenerateDialog(true)
-      }
-    }
-
-    // Update ref with current date range
-    prevDateRangeRef.current = dateRange
-  }, [dateRange, rememberedDecision])
-
-  // Generate email content when date range changes
-  useEffect(() => {
-    if (dateRange[0] && dateRange[1]) {
-      generateAgendaContent()
-    }
-  }, [events]) // Only regenerate when events change, not when date range changes
-
-  // Update editedAgendaContent whenever agendaContent changes
-  useEffect(() => {
-    if (agendaContent && !editedAgendaContent) {
-      setEditedAgendaContent(agendaContent)
-    }
-  }, [agendaContent])
-
-  // Update editedTipContent whenever tipContent changes
-  useEffect(() => {
-    if (tipContent) {
-      setEditedTipContent(tipContent)
-    }
-  }, [tipContent])
-
-  // Generate tip content when selected tip changes
-  useEffect(() => {
-    if (selectedTip) {
-      generateTipContent()
-    }
-  }, [selectedTip])
-
-  // Filter tips based on search term and filter option
-  const filteredTips = tips.filter((tip) => {
-    // First filter by search term
-    if (tipSearchTokens.length > 0 && !matchesSearchTokens(tipSearchTokens, [tip.title, tip.content, tip.customId])) {
-      return false
-    }
-
-    // Filter out tips that can't be used in briefing
-    if (tip.canUseInBriefing === false) {
-      return false
-    }
-
-    // Then filter by usage status
-    if (tipFilterOption === "used" && !tip.lastUsed) {
-      return false
-    }
-    if (tipFilterOption === "unused" && tip.lastUsed) {
-      return false
-    }
-
-    return true
-  })
-
-  // Sort tips by last used date (most recent at bottom)
-  const sortedTips = [...filteredTips].sort((a, b) => {
-    // If neither has been used, sort by content
-    if (!a.lastUsed && !b.lastUsed) {
-      return a.content.localeCompare(b.content)
-    }
-
-    // If only one has been used, put the unused one first
-    if (!a.lastUsed) return -1
-    if (!b.lastUsed) return 1
-
-    // Both have been used, sort by date (oldest first)
-    return new Date(a.lastUsed).getTime() - new Date(b.lastUsed).getTime()
-  })
 
   /**
    * Format description text with proper indentation for multi-line descriptions
    */
-  const formatDescription = (description: string): string => {
+  const formatDescription = useCallback((description: string): string => {
     if (!description) return ""
 
     // Split the description by newlines
@@ -260,12 +133,32 @@ export function EmailGenerator({ initialDateRange }: EmailGeneratorProps) {
 
     // For multi-line descriptions, add two spaces to the beginning of each line after the first
     return lines.map((line) => `  ${line}`).join("\n")
-  }
+  }, [])
+
+  // Add this helper function to get effective value for a property
+  const getEffectiveValue = useCallback((event: any, property: string, day: string, dateString: string) => {
+    // First check for date-specific override
+    if (
+      event.dateOverrides &&
+      event.dateOverrides[dateString] &&
+      event.dateOverrides[dateString][property] !== undefined
+    ) {
+      return event.dateOverrides[dateString][property]
+    }
+
+    // Then check for day-specific variation
+    if (event.variations && event.variations[day] && event.variations[day][property] !== undefined) {
+      return event.variations[day][property]
+    }
+
+    // Fall back to the main event property
+    return event[property]
+  }, [])
 
   /**
    * Check if an event should be included in the export for a specific date
    */
-  const shouldIncludeEventForDate = (event: any, date: Date) => {
+  const shouldIncludeEventForDate = useCallback((event: any, date: Date) => {
     if (event.includeInBriefing === false) {
       return false
     }
@@ -285,12 +178,38 @@ export function EmailGenerator({ initialDateRange }: EmailGeneratorProps) {
 
     // Default to false if no specific setting found
     return false
-  }
+  }, [getDayOfWeek])
+
+  /**
+   * Get dates for an event within a specified range
+   */
+  const getEventDatesInRange = useCallback((event: any, startDate: Date, endDate: Date) => {
+    const dates: Date[] = []
+    // Create a new date to avoid modifying the original
+    const currentDate = new Date(startDate.getTime())
+    const lastDate = new Date(endDate.getTime())
+
+    // Check each date in the range
+    while (currentDate <= lastDate) {
+      // Check if this event should be included for this date
+      if (shouldIncludeEventForDate(event, currentDate)) {
+        // Check if this event occurs on this day based on recurrence pattern
+        if (shouldShowRecurringEvent(event, currentDate)) {
+          // Clone the date to avoid reference issues
+          dates.push(new Date(currentDate.getTime()))
+        }
+      }
+
+      currentDate.setDate(currentDate.getDate() + 1)
+    }
+
+    return dates
+  }, [shouldIncludeEventForDate])
 
   /**
    * Generate agenda content based on selected date range
    */
-  const generateAgendaContent = () => {
+  const generateAgendaContent = useCallback(() => {
     if (!dateRange[0] || !dateRange[1]) return
 
     const includedDescriptions = new Set<string>() // Track which descriptions have been included by content hash
@@ -420,12 +339,12 @@ export function EmailGenerator({ initialDateRange }: EmailGeneratorProps) {
     }
 
     setAgendaContent(content)
-  }
+  }, [dateRange, events, formatDescription, getDayOfWeek, getEventDatesInRange, getEffectiveValue, shouldIncludeEventForDate])
 
   /**
    * Generate tip content based on selected tip
    */
-  const generateTipContent = () => {
+  const generateTipContent = useCallback(() => {
     if (!selectedTip) return
 
     const tip = tips.find((t) => t.id === selectedTip)
@@ -444,133 +363,142 @@ export function EmailGenerator({ initialDateRange }: EmailGeneratorProps) {
         lastUsed: formatInAppTimezone(new Date(), "yyyy-MM-dd'T'HH:mm:ssXXX"),
       })
     }
-  }
+  }, [formatDescription, selectedTip, tips, updateTip])
 
-  // Add this helper function to get effective value for a property
-  const getEffectiveValue = (event: any, property: string, day: string, dateString: string) => {
-    // First check for date-specific override
+  // Load persisted content from localStorage on initial render
+  useEffect(() => {
+    const savedHeader = scopedLocalStorage.getItem("email-header")
+    if (savedHeader) {
+      setHeaderContent(savedHeader)
+    }
+
+    const savedAgenda = scopedLocalStorage.getItem("email-content")
+    if (savedAgenda) {
+      setEditedAgendaContent(savedAgenda)
+    }
+
+    const savedTip = scopedLocalStorage.getItem("tip-content")
+    if (savedTip) {
+      setEditedTipContent(savedTip)
+    }
+  }, [])
+
+  // Save header content to localStorage whenever it changes
+  useEffect(() => {
+    scopedLocalStorage.setItem("email-header", headerContent)
+  }, [headerContent])
+
+  // Save agenda content to localStorage whenever it changes
+  useEffect(() => {
+    scopedLocalStorage.setItem("email-content", editedAgendaContent)
+  }, [editedAgendaContent])
+
+  // Save tip content to localStorage whenever it changes
+  useEffect(() => {
+    scopedLocalStorage.setItem("tip-content", editedTipContent)
+  }, [editedTipContent])
+
+  // Save clear tip preference to localStorage
+  useEffect(() => {
+    scopedLocalStorage.setItem("daily-agenda-clear-tip-preference", JSON.stringify(clearTipOnRegenerate))
+  }, [clearTipOnRegenerate])
+
+  // Check if date range has changed and show regenerate dialog
+  useEffect(() => {
+    // Skip on initial render
+    const prevStart = prevDateRangeRef.current[0]?.getTime()
+    const prevEnd = prevDateRangeRef.current[1]?.getTime()
+    const currentStart = dateRange[0]?.getTime()
+    const currentEnd = dateRange[1]?.getTime()
+
     if (
-      event.dateOverrides &&
-      event.dateOverrides[dateString] &&
-      event.dateOverrides[dateString][property] !== undefined
+      prevStart !== undefined &&
+      prevEnd !== undefined &&
+      currentStart !== undefined &&
+      currentEnd !== undefined &&
+      (prevStart !== currentStart || prevEnd !== currentEnd)
     ) {
-      return event.dateOverrides[dateString][property]
-    }
-
-    // Then check for day-specific variation
-    if (event.variations && event.variations[day] && event.variations[day][property] !== undefined) {
-      return event.variations[day][property]
-    }
-
-    // Fall back to the main event property
-    return event[property]
-  }
-
-  /**
-   * Get dates for an event within a specified range
-   */
-  const getEventDatesInRange = (event: any, startDate: Date, endDate: Date) => {
-    const dates: Date[] = []
-    // Create a new date to avoid modifying the original
-    const currentDate = new Date(startDate.getTime())
-    const lastDate = new Date(endDate.getTime())
-
-    // Check each date in the range
-    while (currentDate <= lastDate) {
-      // Check if this event should be included for this date
-      if (shouldIncludeEventForDate(event, currentDate)) {
-        // Check if this event occurs on this day based on recurrence pattern
-        if (shouldShowRecurringEvent(event, currentDate)) {
-          // Clone the date to avoid reference issues
-          dates.push(new Date(currentDate.getTime()))
-        }
+      // Check if user has a remembered decision
+      if (rememberedDecision === "regenerate") {
+        generateAgendaContent()
+        setEditedAgendaContent(agendaContent)
+      } else if (rememberedDecision === "keep") {
+        // Do nothing, keep current content
+      } else {
+        // Show dialog if no remembered decision
+        setShowRegenerateDialog(true)
       }
-
-      currentDate.setDate(currentDate.getDate() + 1)
     }
 
-    return dates
-  }
+    // Update ref with current date range
+    prevDateRangeRef.current = dateRange
+  }, [agendaContent, dateRange, generateAgendaContent, rememberedDecision])
 
-  /**
-   * Get day of week string (monday, tuesday, etc.) from a date
-   */
-  const getDayOfWeek = (date: Date) => {
-    const days = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"]
-    return days[date.getDay()]
-  }
+  // Generate email content when date range changes
+  useEffect(() => {
+    if (dateRange[0] && dateRange[1]) {
+      generateAgendaContent()
+    }
+  }, [dateRange, events, generateAgendaContent])
 
-  /**
-   * Group events by date
-   */
-  const groupEventsByDate = (events: any[], startDate: Date, endDate: Date) => {
-    const eventsByDate: Record<string, any[]> = {}
+  // Update editedAgendaContent whenever agendaContent changes
+  useEffect(() => {
+    if (agendaContent && !editedAgendaContent) {
+      setEditedAgendaContent(agendaContent)
+    }
+  }, [agendaContent, editedAgendaContent])
 
-    // Initialize all dates in the range
-    const currentDate = new Date(startDate.getTime())
-    while (currentDate <= endDate) {
-      const dateStr = formatInAppTimezone(currentDate, "yyyy-MM-dd")
-      eventsByDate[dateStr] = []
-      // Move to next day
-      currentDate.setDate(currentDate.getDate() + 1)
+  // Update editedTipContent whenever tipContent changes
+  useEffect(() => {
+    if (tipContent) {
+      setEditedTipContent(tipContent)
+    }
+  }, [tipContent])
+
+  // Generate tip content when selected tip changes
+  useEffect(() => {
+    if (selectedTip) {
+      generateTipContent()
+    }
+  }, [generateTipContent, selectedTip])
+
+  // Filter tips based on search term and filter option
+  const filteredTips = tips.filter((tip) => {
+    // First filter by search term
+    if (tipSearchTokens.length > 0 && !matchesSearchTokens(tipSearchTokens, [tip.title, tip.content, tip.customId])) {
+      return false
     }
 
-    // Add events to their respective dates
-    events.forEach((event) => {
-      // Only get dates that are within our selected range
-      const eventDates = getEventDatesInRange(event, startDate, endDate)
+    // Filter out tips that can't be used in briefing
+    if (tip.canUseInBriefing === false) {
+      return false
+    }
 
-      eventDates.forEach((date) => {
-        const dateStr = formatInAppTimezone(date, "yyyy-MM-dd")
-        const dayOfWeek = getDayOfWeek(date)
+    // Then filter by usage status
+    if (tipFilterOption === "used" && !tip.lastUsed) {
+      return false
+    }
+    if (tipFilterOption === "unused" && tip.lastUsed) {
+      return false
+    }
 
-        // Skip if this date is not in our initialized range
-        if (!eventsByDate[dateStr]) {
-          return
-        }
+    return true
+  })
 
-        // Check if this event has a date override for this specific date
-        const dateOverride = event.dateOverrides && event.dateOverrides[dateStr] ? event.dateOverrides[dateStr] : null
+  // Sort tips by last used date (most recent at bottom)
+  const sortedTips = [...filteredTips].sort((a, b) => {
+    // If neither has been used, sort by content
+    if (!a.lastUsed && !b.lastUsed) {
+      return a.content.localeCompare(b.content)
+    }
 
-        // Check if this event has a variation for this day
-        const variation = event.variations && event.variations[dayOfWeek] ? event.variations[dayOfWeek] : null
+    // If only one has been used, put the unused one first
+    if (!a.lastUsed) return -1
+    if (!b.lastUsed) return 1
 
-        // Create a copy of the event with the overrides applied
-        const eventWithOverrides = {
-          ...event,
-          // Date overrides take precedence over day variations
-          isAllDay:
-            dateOverride && dateOverride.isAllDay !== undefined
-              ? dateOverride.isAllDay
-              : variation && variation.isAllDay !== undefined
-                ? variation.isAllDay
-                : event.isAllDay,
-          startTime:
-            dateOverride && dateOverride.startTime !== undefined
-              ? dateOverride.startTime
-              : variation && variation.startTime !== undefined
-                ? variation.startTime
-                : event.startTime,
-          endTime:
-            dateOverride && dateOverride.endTime !== undefined
-              ? dateOverride && dateOverride.endTime !== undefined
-              : variation && variation.endTime !== undefined
-                ? variation.endTime
-                : event.endTime,
-          description:
-            dateOverride && dateOverride.description !== undefined
-              ? dateOverride.description
-              : variation && variation.description !== undefined
-                ? variation.description
-                : event.description,
-        }
-
-        eventsByDate[dateStr].push(eventWithOverrides)
-      })
-    })
-
-    return eventsByDate
-  }
+    // Both have been used, sort by date (oldest first)
+    return new Date(a.lastUsed).getTime() - new Date(b.lastUsed).getTime()
+  })
 
   // Add a new state for character count after the other state declarations
   const [characterCount, setCharacterCount] = useState(0)

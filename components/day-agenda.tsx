@@ -34,7 +34,7 @@ import { GripVertical } from "lucide-react"
 import { shouldShowRecurringEvent } from "@/lib/recurrence-utils"
 import { Switch } from "@/components/ui/switch"
 import { Label } from "@/components/ui/label"
-import { formatInAppTimezone, getDayOfWeek } from "@/lib/date-utils"
+import { formatInAppTimezone } from "@/lib/date-utils"
 
 // Update the props interface and use the setShowLocalTime function
 interface DayAgendaProps {
@@ -87,16 +87,7 @@ export function DayAgenda({ day, date, showLocalTime = false, setShowLocalTime }
     // We need to respect the recurrence pattern even in admin view, but still show events that
     // would be excluded by date-specific overrides
     const dayEvents = events.filter((event) => {
-      // First check if the event is archived
       if (event.archived) return false
-
-      // Check if this day is in the event's days array (basic day check)
-      const dayOfWeek = getDayOfWeek(date)
-      const isOnThisDay = event.days.includes(dayOfWeek)
-
-      if (!isOnThisDay) return false
-
-      // Now check the recurrence pattern - pass adminModeView=true to show all events in admin view
       return shouldShowRecurringEvent(event, date, true)
     })
 
@@ -287,7 +278,7 @@ export function DayAgenda({ day, date, showLocalTime = false, setShowLocalTime }
       {/* Empty state message */}
       {allDayEvents.length === 0 && timeEvents.length === 0 && (
         <div className="text-center py-8 text-muted-foreground">
-          No events scheduled for this day. Click "Add Event" to create one.
+          No events scheduled for this day. Click &quot;Add Event&quot; to create one.
         </div>
       )}
     </div>

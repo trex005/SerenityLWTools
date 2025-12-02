@@ -798,7 +798,8 @@ export function AdminPanel() {
                     {
                       Object.values(
                         events.reduce((acc: Record<string, boolean>, event) => {
-                          event.days.forEach((day) => {
+                          const days = event.recurrence?.daysOfWeek || []
+                          days.forEach((day) => {
                             acc[day] = true
                           })
                           return acc
