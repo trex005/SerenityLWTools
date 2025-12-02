@@ -18,6 +18,13 @@ console.log(
 )
 
 try {
+  // Step 0: Clear stale build artifacts that can corrupt hashes
+  const nextDir = path.join(__dirname, ".next")
+  if (fs.existsSync(nextDir)) {
+    console.log(`${colors.yellow}Step 0: Removing previous .next cache...${colors.reset}`)
+    fs.rmSync(nextDir, { recursive: true, force: true })
+  }
+
   // Step 1: Build the Next.js application
   console.log(`${colors.yellow}Step 1: Building Next.js application...${colors.reset}`)
   execSync("npm run build", { stdio: "inherit" })
