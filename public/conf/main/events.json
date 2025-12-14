@@ -1,5 +1,5 @@
 {
-  "updated": "2025-12-02T00:17:05-02:00",
+  "updated": "2025-12-03T23:20:11-02:00",
   "events": [
     {
       "id": "ev-3",
@@ -8,44 +8,29 @@
       "description": "",
       "isAllDay": false,
       "startTime": "22:15",
-      "endTime": "22:50",
+      "endTime": "",
       "days": [
         "monday",
-        "tuesday",
-        "wednesday",
-        "thursday",
-        "friday",
-        "saturday",
-        "sunday"
+        "thursday"
       ],
       "includeInExport": {
         "monday": true,
-        "tuesday": true,
-        "wednesday": true,
-        "thursday": true,
-        "friday": true,
-        "saturday": true,
-        "sunday": true
+        "thursday": true
       },
       "order": {},
       "recurrence": {
-        "type": "days",
+        "type": "weeks",
         "onPeriods": 1,
-        "offPeriods": 2,
+        "offPeriods": 0,
         "daysOfWeek": [
           "monday",
-          "tuesday",
-          "wednesday",
-          "thursday",
-          "friday",
-          "saturday",
-          "sunday"
+          "thursday"
         ],
-        "startDate": "2025-09-29",
-        "interval": 1
+        "startDate": "2025-09-29"
       },
       "remindTomorrow": true,
-      "includeOnWebsite": true
+      "includeOnWebsite": true,
+      "includeInBriefing": true
     },
     {
       "id": "ev-4",
@@ -55,7 +40,9 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "10:00",
-      "days": ["sunday"],
+      "days": [
+        "sunday"
+      ],
       "includeInExport": {
         "sunday": true,
         "monday": true,
@@ -71,7 +58,9 @@
       },
       "recurrence": {
         "type": "weeks",
-        "daysOfWeek": ["sunday"],
+        "daysOfWeek": [
+          "sunday"
+        ],
         "interval": 1,
         "startDate": "2024-01-01",
         "onPeriods": 1,
@@ -88,7 +77,10 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "10:00",
-      "days": ["monday", "tuesday"],
+      "days": [
+        "monday",
+        "tuesday"
+      ],
       "includeInExport": {
         "monday": true,
         "tuesday": true,
@@ -104,7 +96,10 @@
         "type": "weeks",
         "onPeriods": 1,
         "offPeriods": 0,
-        "daysOfWeek": ["monday", "tuesday"],
+        "daysOfWeek": [
+          "monday",
+          "tuesday"
+        ],
         "startDate": "2025-01-05",
         "interval": 1
       },
@@ -119,7 +114,9 @@
       "isAllDay": false,
       "startTime": "17:50",
       "endTime": "",
-      "days": ["friday"],
+      "days": [
+        "friday"
+      ],
       "includeInExport": {
         "friday": true,
         "monday": true,
@@ -134,7 +131,9 @@
         "type": "weeks",
         "onPeriods": 1,
         "offPeriods": 0,
-        "daysOfWeek": ["friday"],
+        "daysOfWeek": [
+          "friday"
+        ],
         "startDate": "2024-01-05",
         "interval": 1
       },
@@ -150,7 +149,11 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "10:00",
-      "days": ["sunday", "tuesday", "thursday"],
+      "days": [
+        "sunday",
+        "tuesday",
+        "thursday"
+      ],
       "includeInExport": {
         "sunday": true,
         "tuesday": true,
@@ -164,7 +167,11 @@
       },
       "recurrence": {
         "type": "weeks",
-        "daysOfWeek": ["sunday", "tuesday", "thursday"],
+        "daysOfWeek": [
+          "sunday",
+          "tuesday",
+          "thursday"
+        ],
         "interval": 1,
         "startDate": "2024-01-01",
         "onPeriods": 1,
@@ -176,17 +183,18 @@
     {
       "id": "ev-9",
       "archived": false,
-      "title": "VS: Save SHINYs (Starred secret tasks)",
+      "title": "VS: Save SHINYs for Tuesday",
       "description": "",
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "10:00",
-      "days": ["monday", "thursday", "friday"],
+      "days": [
+        "monday",
+        "sunday"
+      ],
       "includeInExport": {
-        "sunday": false,
         "monday": true,
-        "thursday": true,
-        "friday": true
+        "sunday": true
       },
       "variations": {},
       "order": {
@@ -197,14 +205,17 @@
       },
       "recurrence": {
         "type": "weeks",
-        "daysOfWeek": ["monday", "thursday", "friday"],
-        "interval": 3,
-        "startDate": "2025-06-30",
         "onPeriods": 1,
-        "offPeriods": 0
+        "offPeriods": 2,
+        "daysOfWeek": [
+          "monday",
+          "sunday"
+        ],
+        "startDate": "2025-11-30"
       },
       "remindTomorrow": true,
-      "includeOnWebsite": true
+      "includeOnWebsite": true,
+      "includeInBriefing": true
     },
     {
       "id": "ev-10",
@@ -214,7 +225,11 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "10:00",
-      "days": ["monday", "wednesday", "friday"],
+      "days": [
+        "monday",
+        "wednesday",
+        "friday"
+      ],
       "includeInExport": {
         "monday": true,
         "wednesday": true,
@@ -228,7 +243,11 @@
       },
       "recurrence": {
         "type": "weeks",
-        "daysOfWeek": ["monday", "wednesday", "friday"],
+        "daysOfWeek": [
+          "monday",
+          "wednesday",
+          "friday"
+        ],
         "interval": 1,
         "startDate": "2024-01-01",
         "onPeriods": 1,
@@ -246,7 +265,9 @@
       "isAllDay": false,
       "startTime": "12:00",
       "endTime": "",
-      "days": ["sunday"],
+      "days": [
+        "sunday"
+      ],
       "includeInExport": {
         "sunday": true,
         "monday": true,
@@ -260,7 +281,9 @@
       "order": {},
       "recurrence": {
         "type": "weeks",
-        "daysOfWeek": ["sunday"],
+        "daysOfWeek": [
+          "sunday"
+        ],
         "interval": 1,
         "startDate": "2024-01-01",
         "onPeriods": 1,
@@ -277,7 +300,10 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "10:00",
-      "days": ["tuesday", "saturday"],
+      "days": [
+        "tuesday",
+        "saturday"
+      ],
       "includeInExport": {
         "tuesday": true,
         "saturday": true
@@ -289,7 +315,10 @@
       },
       "recurrence": {
         "type": "weeks",
-        "daysOfWeek": ["tuesday", "saturday"],
+        "daysOfWeek": [
+          "tuesday",
+          "saturday"
+        ],
         "interval": 1,
         "startDate": "2024-01-01",
         "onPeriods": 1,
@@ -306,7 +335,9 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "10:00",
-      "days": ["monday"],
+      "days": [
+        "monday"
+      ],
       "includeInExport": {
         "monday": true,
         "tuesday": true,
@@ -322,7 +353,9 @@
       },
       "recurrence": {
         "type": "weeks",
-        "daysOfWeek": ["monday"],
+        "daysOfWeek": [
+          "monday"
+        ],
         "interval": 1,
         "startDate": "2024-01-01",
         "onPeriods": 1,
@@ -339,7 +372,9 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "10:00",
-      "days": ["tuesday"],
+      "days": [
+        "tuesday"
+      ],
       "includeInExport": {
         "tuesday": true,
         "monday": true,
@@ -355,7 +390,9 @@
       },
       "recurrence": {
         "type": "weeks",
-        "daysOfWeek": ["tuesday"],
+        "daysOfWeek": [
+          "tuesday"
+        ],
         "interval": 1,
         "startDate": "2024-01-01",
         "onPeriods": 1,
@@ -372,7 +409,9 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "10:00",
-      "days": ["wednesday"],
+      "days": [
+        "wednesday"
+      ],
       "includeInExport": {
         "wednesday": true
       },
@@ -382,7 +421,9 @@
       },
       "recurrence": {
         "type": "weeks",
-        "daysOfWeek": ["wednesday"],
+        "daysOfWeek": [
+          "wednesday"
+        ],
         "interval": 1,
         "startDate": "2024-01-01",
         "onPeriods": 1,
@@ -395,12 +436,14 @@
     {
       "id": "ev-16",
       "archived": false,
-      "title": "VS: Spend Hero XP, shards, skill medals, exclusive weapon shards (Arms Race 16:00-20:00)",
+      "title": "VS: Hero XP, Shards, Skill Medals, exclusive weapon shards (Arms Race 16:00-20:00)",
       "description": "",
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "10:00",
-      "days": ["thursday"],
+      "days": [
+        "thursday"
+      ],
       "includeInExport": {
         "thursday": true,
         "monday": true,
@@ -416,14 +459,17 @@
       },
       "recurrence": {
         "type": "weeks",
-        "daysOfWeek": ["thursday"],
+        "daysOfWeek": [
+          "thursday"
+        ],
         "interval": 1,
         "startDate": "2024-01-01",
         "onPeriods": 1,
         "offPeriods": 0
       },
       "includeOnWebsite": true,
-      "remindTomorrow": true
+      "remindTomorrow": true,
+      "includeInBriefing": true
     },
     {
       "id": "ev-17",
@@ -433,7 +479,9 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "10:00",
-      "days": ["friday"],
+      "days": [
+        "friday"
+      ],
       "includeInExport": {
         "friday": true,
         "monday": true,
@@ -449,7 +497,9 @@
       },
       "recurrence": {
         "type": "weeks",
-        "daysOfWeek": ["friday"],
+        "daysOfWeek": [
+          "friday"
+        ],
         "interval": 1,
         "startDate": "2024-01-01",
         "onPeriods": 1,
@@ -466,7 +516,9 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "10:00",
-      "days": ["saturday"],
+      "days": [
+        "saturday"
+      ],
       "includeInExport": {
         "saturday": true,
         "monday": true,
@@ -482,7 +534,9 @@
       },
       "recurrence": {
         "type": "weeks",
-        "daysOfWeek": ["saturday"],
+        "daysOfWeek": [
+          "saturday"
+        ],
         "interval": 1,
         "startDate": "2024-01-01",
         "onPeriods": 1,
@@ -499,7 +553,9 @@
       "isAllDay": false,
       "startTime": "00:00",
       "endTime": "",
-      "days": ["saturday"],
+      "days": [
+        "saturday"
+      ],
       "includeInExport": {
         "saturday": true,
         "monday": true,
@@ -513,7 +569,9 @@
       "order": {},
       "recurrence": {
         "type": "weeks",
-        "daysOfWeek": ["saturday"],
+        "daysOfWeek": [
+          "saturday"
+        ],
         "interval": 1,
         "startDate": "2024-01-01",
         "onPeriods": 1,
@@ -533,7 +591,11 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "10:00",
-      "days": ["tuesday", "thursday", "sunday"],
+      "days": [
+        "tuesday",
+        "thursday",
+        "sunday"
+      ],
       "includeInExport": {
         "sunday": true,
         "tuesday": true,
@@ -551,7 +613,11 @@
       },
       "recurrence": {
         "type": "weeks",
-        "daysOfWeek": ["tuesday", "thursday", "sunday"],
+        "daysOfWeek": [
+          "tuesday",
+          "thursday",
+          "sunday"
+        ],
         "interval": 1,
         "startDate": "2025-12-01",
         "onPeriods": 1,
@@ -568,7 +634,11 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "10:00",
-      "days": ["monday", "wednesday", "friday"],
+      "days": [
+        "monday",
+        "wednesday",
+        "friday"
+      ],
       "includeInExport": {
         "monday": true,
         "wednesday": true,
@@ -586,7 +656,11 @@
       },
       "recurrence": {
         "type": "weeks",
-        "daysOfWeek": ["monday", "wednesday", "friday"],
+        "daysOfWeek": [
+          "monday",
+          "wednesday",
+          "friday"
+        ],
         "interval": 1,
         "startDate": "2024-01-01",
         "onPeriods": 1,
@@ -603,7 +677,11 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "10:00",
-      "days": ["wednesday", "thursday", "friday"],
+      "days": [
+        "wednesday",
+        "thursday",
+        "friday"
+      ],
       "includeInExport": {
         "wednesday": true,
         "thursday": true,
@@ -617,11 +695,15 @@
       },
       "recurrence": {
         "type": "weeks",
-        "daysOfWeek": ["wednesday", "thursday", "friday"],
+        "daysOfWeek": [
+          "wednesday",
+          "thursday",
+          "friday"
+        ],
         "interval": 2,
         "startDate": "2025-03-02",
         "onPeriods": 1,
-        "offPeriods": 0
+        "offPeriods": 1
       },
       "includeOnWebsite": true
     },
@@ -633,7 +715,9 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "10:00",
-      "days": ["sunday"],
+      "days": [
+        "sunday"
+      ],
       "includeInExport": {
         "monday": false,
         "tuesday": false,
@@ -651,7 +735,9 @@
         "type": "weeks",
         "onPeriods": 1,
         "offPeriods": 1,
-        "daysOfWeek": ["sunday"],
+        "daysOfWeek": [
+          "sunday"
+        ],
         "startDate": "2025-08-31",
         "interval": 1
       },
@@ -662,12 +748,16 @@
     {
       "id": "ev-1739556987954",
       "archived": false,
-      "title": "General's Trial - Choose ONE level after what you can solo.",
+      "title": "General's Trial - Choose difficulty ONE after you can solo",
       "description": "",
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "10:00",
-      "days": ["wednesday", "thursday", "friday"],
+      "days": [
+        "wednesday",
+        "thursday",
+        "friday"
+      ],
       "includeInExport": {
         "wednesday": true,
         "thursday": true,
@@ -681,14 +771,19 @@
       },
       "recurrence": {
         "type": "weeks",
-        "daysOfWeek": ["wednesday", "thursday", "friday"],
+        "daysOfWeek": [
+          "wednesday",
+          "thursday",
+          "friday"
+        ],
         "interval": 2,
         "startDate": "2025-03-09",
         "onPeriods": 1,
-        "offPeriods": 0
+        "offPeriods": 1
       },
       "remindTomorrow": true,
-      "includeOnWebsite": true
+      "includeOnWebsite": true,
+      "includeInBriefing": true
     },
     {
       "id": "ev-1739558845321",
@@ -698,7 +793,9 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "10:00",
-      "days": ["saturday"],
+      "days": [
+        "saturday"
+      ],
       "includeInExport": {
         "saturday": true,
         "monday": true,
@@ -715,7 +812,9 @@
       },
       "recurrence": {
         "type": "weeks",
-        "daysOfWeek": ["saturday"],
+        "daysOfWeek": [
+          "saturday"
+        ],
         "interval": 1,
         "startDate": "2024-01-01",
         "onPeriods": 1,
@@ -731,7 +830,9 @@
       "isAllDay": false,
       "startTime": "22:50",
       "endTime": "",
-      "days": ["friday"],
+      "days": [
+        "friday"
+      ],
       "includeInExport": {
         "monday": false,
         "tuesday": false,
@@ -747,7 +848,9 @@
         "type": "weeks",
         "onPeriods": 1,
         "offPeriods": 0,
-        "daysOfWeek": ["friday"],
+        "daysOfWeek": [
+          "friday"
+        ],
         "startDate": "2024-01-05",
         "interval": 1
       },
@@ -763,7 +866,9 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "10:00",
-      "days": ["sunday"],
+      "days": [
+        "sunday"
+      ],
       "includeInExport": {
         "sunday": true,
         "monday": true,
@@ -781,7 +886,9 @@
         "type": "weeks",
         "onPeriods": 1,
         "offPeriods": 1,
-        "daysOfWeek": ["sunday"],
+        "daysOfWeek": [
+          "sunday"
+        ],
         "startDate": "2025-09-07",
         "interval": 1
       },
@@ -816,7 +923,7 @@
       },
       "order": {},
       "recurrence": {
-        "type": "daily",
+        "type": "days",
         "daysOfWeek": [
           "monday",
           "sunday",
@@ -954,7 +1061,10 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "10:00",
-      "days": ["monday", "thursday"],
+      "days": [
+        "monday",
+        "thursday"
+      ],
       "includeInExport": {
         "wednesday": true,
         "sunday": true,
@@ -971,7 +1081,10 @@
       },
       "recurrence": {
         "type": "weeks",
-        "daysOfWeek": ["monday", "thursday"],
+        "daysOfWeek": [
+          "monday",
+          "thursday"
+        ],
         "interval": 1,
         "startDate": "2025-03-12",
         "onPeriods": 1,
@@ -987,7 +1100,10 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "10:00",
-      "days": ["tuesday", "friday"],
+      "days": [
+        "tuesday",
+        "friday"
+      ],
       "includeInExport": {
         "wednesday": true,
         "sunday": true,
@@ -1004,7 +1120,10 @@
       },
       "recurrence": {
         "type": "weeks",
-        "daysOfWeek": ["tuesday", "friday"],
+        "daysOfWeek": [
+          "tuesday",
+          "friday"
+        ],
         "interval": 1,
         "startDate": "2025-03-12",
         "onPeriods": 1,
@@ -1020,7 +1139,10 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "10:00",
-      "days": ["wednesday", "saturday"],
+      "days": [
+        "wednesday",
+        "saturday"
+      ],
       "includeInExport": {
         "wednesday": true,
         "sunday": true,
@@ -1037,7 +1159,10 @@
       },
       "recurrence": {
         "type": "weeks",
-        "daysOfWeek": ["wednesday", "saturday"],
+        "daysOfWeek": [
+          "wednesday",
+          "saturday"
+        ],
         "interval": 1,
         "startDate": "2025-03-12",
         "onPeriods": 1,
@@ -1080,7 +1205,7 @@
         "tuesday": 9
       },
       "recurrence": {
-        "type": "daily",
+        "type": "days",
         "daysOfWeek": [
           "sunday",
           "monday",
@@ -1093,7 +1218,7 @@
         "interval": 3,
         "startDate": "2025-03-14",
         "onPeriods": 1,
-        "offPeriods": 0
+        "offPeriods": 2
       },
       "dateIncludeOverrides": {},
       "includeOnWebsite": true
@@ -1101,7 +1226,7 @@
     {
       "id": "7662a10a-144e-4dc5-8ae7-4c8af78b9e12",
       "archived": false,
-      "title": "SHINYs in 974-976, 987-989",
+      "title": "SHINYs in 950, 974-976, 987-989",
       "description": "",
       "isAllDay": true,
       "startTime": "09:00",
@@ -1133,7 +1258,7 @@
         "sunday": 5
       },
       "recurrence": {
-        "type": "daily",
+        "type": "days",
         "daysOfWeek": [
           "sunday",
           "monday",
@@ -1146,7 +1271,7 @@
         "interval": 3,
         "startDate": "2025-03-12",
         "onPeriods": 1,
-        "offPeriods": 0
+        "offPeriods": 2
       },
       "dateIncludeOverrides": {},
       "includeOnWebsite": true
@@ -1185,7 +1310,7 @@
         "friday": 9
       },
       "recurrence": {
-        "type": "daily",
+        "type": "days",
         "daysOfWeek": [
           "sunday",
           "monday",
@@ -1198,7 +1323,7 @@
         "interval": 3,
         "startDate": "2025-03-13",
         "onPeriods": 1,
-        "offPeriods": 0
+        "offPeriods": 2
       },
       "dateIncludeOverrides": {
         "2025-07-05": true
@@ -1213,7 +1338,13 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "",
-      "days": ["tuesday", "wednesday", "thursday", "friday", "saturday"],
+      "days": [
+        "tuesday",
+        "wednesday",
+        "thursday",
+        "friday",
+        "saturday"
+      ],
       "includeInExport": {
         "monday": true,
         "sunday": true,
@@ -1257,7 +1388,13 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "",
-      "days": ["tuesday", "wednesday", "thursday", "friday", "saturday"],
+      "days": [
+        "tuesday",
+        "wednesday",
+        "thursday",
+        "friday",
+        "saturday"
+      ],
       "includeInExport": {
         "monday": true,
         "sunday": true,
@@ -1298,7 +1435,9 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "",
-      "days": ["tuesday"],
+      "days": [
+        "tuesday"
+      ],
       "includeInExport": {
         "sunday": true,
         "monday": true,
@@ -1314,7 +1453,9 @@
       },
       "recurrence": {
         "type": "weeks",
-        "daysOfWeek": ["tuesday"],
+        "daysOfWeek": [
+          "tuesday"
+        ],
         "interval": 1,
         "startDate": "2025-03-30",
         "onPeriods": 1,
@@ -1382,7 +1523,9 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "",
-      "days": ["thursday"],
+      "days": [
+        "thursday"
+      ],
       "includeInExport": {
         "monday": true,
         "sunday": true,
@@ -1398,7 +1541,9 @@
       },
       "recurrence": {
         "type": "weeks",
-        "daysOfWeek": ["thursday"],
+        "daysOfWeek": [
+          "thursday"
+        ],
         "interval": 1,
         "startDate": "2024-01-01",
         "onPeriods": 1,
@@ -1408,13 +1553,18 @@
     },
     {
       "id": "5831a6ec-244d-40d2-88dc-81a7173ecffd",
-      "archived": false,
+      "archived": true,
       "title": "VS: Save SHINYs (Starred secret tasks)",
       "description": "",
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "",
-      "days": ["sunday", "monday", "thursday", "friday"],
+      "days": [
+        "sunday",
+        "monday",
+        "thursday",
+        "friday"
+      ],
       "includeInExport": {
         "friday": true,
         "sunday": true,
@@ -1433,7 +1583,12 @@
       },
       "recurrence": {
         "type": "weeks",
-        "daysOfWeek": ["sunday", "monday", "thursday", "friday"],
+        "daysOfWeek": [
+          "sunday",
+          "monday",
+          "thursday",
+          "friday"
+        ],
         "interval": 3,
         "startDate": "2025-07-06",
         "onPeriods": 1,
@@ -1448,34 +1603,32 @@
     },
     {
       "id": "89b95f35-ae1a-485b-8aee-f012c758fa7b",
-      "archived": false,
-      "title": "VS: Save SHINYs (Starred secret tasks)",
+      "archived": true,
+      "title": "VS: Save SHINYs for Saturday - old",
       "description": "",
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "",
-      "days": ["friday"],
+      "days": [
+        "friday"
+      ],
       "includeInExport": {
-        "friday": true,
-        "sunday": true,
-        "monday": true,
-        "tuesday": true,
-        "wednesday": true,
-        "thursday": true,
-        "saturday": true
+        "friday": true
       },
       "variations": {},
       "order": {},
       "recurrence": {
         "type": "weeks",
-        "daysOfWeek": ["friday"],
-        "interval": 3,
-        "startDate": "2025-07-13",
         "onPeriods": 1,
-        "offPeriods": 0
+        "offPeriods": 2,
+        "daysOfWeek": [
+          "friday"
+        ],
+        "startDate": "2025-11-30"
       },
       "includeOnWebsite": true,
-      "remindTomorrow": true
+      "remindTomorrow": true,
+      "includeInBriefing": true
     },
     {
       "id": "4af5277e-a46b-4407-94cc-66452e907f1d",
@@ -1485,7 +1638,9 @@
       "isAllDay": false,
       "startTime": "21:40",
       "endTime": "",
-      "days": ["thursday"],
+      "days": [
+        "thursday"
+      ],
       "includeInExport": {
         "thursday": true,
         "sunday": true,
@@ -1499,7 +1654,9 @@
       "order": {},
       "recurrence": {
         "type": "weeks",
-        "daysOfWeek": ["thursday"],
+        "daysOfWeek": [
+          "thursday"
+        ],
         "interval": 2,
         "startDate": "2025-07-11",
         "onPeriods": 1,
@@ -1517,7 +1674,9 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "",
-      "days": ["friday"],
+      "days": [
+        "friday"
+      ],
       "includeInExport": {
         "friday": true,
         "sunday": true,
@@ -1533,7 +1692,9 @@
       },
       "recurrence": {
         "type": "weeks",
-        "daysOfWeek": ["friday"],
+        "daysOfWeek": [
+          "friday"
+        ],
         "interval": 1,
         "startDate": "2025-08-22",
         "onPeriods": 1,
@@ -1552,7 +1713,9 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "",
-      "days": ["sunday"],
+      "days": [
+        "sunday"
+      ],
       "includeInExport": {
         "tuesday": true,
         "sunday": true,
@@ -1568,7 +1731,9 @@
         "type": "weeks",
         "onPeriods": 1,
         "offPeriods": 0,
-        "daysOfWeek": ["sunday"],
+        "daysOfWeek": [
+          "sunday"
+        ],
         "startDate": "2024-09-29",
         "interval": 1
       },
@@ -1580,12 +1745,14 @@
       "archived": false,
       "title": "Register for Desert Storm - FINAL DAY (Due 1 hour before reset)",
       "description": "",
-      "remindTomorrow": false,
-      "remindEndOfDay": true,
+      "remindTomorrow": true,
+      "remindEndOfDay": false,
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "",
-      "days": ["wednesday"],
+      "days": [
+        "wednesday"
+      ],
       "includeInExport": {
         "wednesday": true,
         "monday": true,
@@ -1600,7 +1767,9 @@
         "type": "days",
         "onPeriods": 1,
         "offPeriods": 0,
-        "daysOfWeek": ["wednesday"],
+        "daysOfWeek": [
+          "wednesday"
+        ],
         "startDate": "2025-09-17",
         "interval": 1
       },
@@ -1617,7 +1786,9 @@
       "isAllDay": false,
       "startTime": "13:30",
       "endTime": "14:00",
-      "days": ["sunday"],
+      "days": [
+        "sunday"
+      ],
       "includeInExport": {
         "sunday": true,
         "monday": true,
@@ -1633,7 +1804,9 @@
         "type": "weeks",
         "onPeriods": 1,
         "offPeriods": 99,
-        "daysOfWeek": ["sunday"],
+        "daysOfWeek": [
+          "sunday"
+        ],
         "startDate": "2025-09-21",
         "interval": 1
       },
@@ -1649,7 +1822,9 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "",
-      "days": ["sunday"],
+      "days": [
+        "sunday"
+      ],
       "includeInExport": {
         "sunday": true,
         "tuesday": true,
@@ -1664,7 +1839,9 @@
         "type": "weeks",
         "onPeriods": 1,
         "offPeriods": 0,
-        "daysOfWeek": ["sunday"],
+        "daysOfWeek": [
+          "sunday"
+        ],
         "startDate": "2023-12-31",
         "interval": 1
       },
@@ -1736,7 +1913,9 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "",
-      "days": ["monday"],
+      "days": [
+        "monday"
+      ],
       "includeInExport": {
         "monday": true,
         "tuesday": true,
@@ -1754,7 +1933,9 @@
         "type": "weeks",
         "onPeriods": 1,
         "offPeriods": 1,
-        "daysOfWeek": ["monday"],
+        "daysOfWeek": [
+          "monday"
+        ],
         "startDate": "2023-12-31",
         "interval": 1
       }
@@ -1770,7 +1951,9 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "",
-      "days": ["tuesday"],
+      "days": [
+        "tuesday"
+      ],
       "includeInExport": {
         "monday": true,
         "sunday": true,
@@ -1787,7 +1970,9 @@
         "type": "weeks",
         "onPeriods": 1,
         "offPeriods": 1,
-        "daysOfWeek": ["tuesday"],
+        "daysOfWeek": [
+          "tuesday"
+        ],
         "startDate": "2024-01-07",
         "interval": 1
       }
@@ -1803,7 +1988,9 @@
       "isAllDay": false,
       "startTime": "12:00",
       "endTime": "",
-      "days": ["thursday"],
+      "days": [
+        "thursday"
+      ],
       "includeInExport": {
         "wednesday": true,
         "sunday": true,
@@ -1820,7 +2007,9 @@
         "type": "weeks",
         "onPeriods": 1,
         "offPeriods": 0,
-        "daysOfWeek": ["thursday"],
+        "daysOfWeek": [
+          "thursday"
+        ],
         "startDate": "2023-12-31",
         "interval": 1
       }
@@ -1885,7 +2074,9 @@
       "isAllDay": false,
       "startTime": "12:00",
       "endTime": "",
-      "days": ["friday"],
+      "days": [
+        "friday"
+      ],
       "includeInExport": {
         "monday": true,
         "sunday": true,
@@ -1902,7 +2093,9 @@
         "type": "weeks",
         "onPeriods": 1,
         "offPeriods": 0,
-        "daysOfWeek": ["friday"],
+        "daysOfWeek": [
+          "friday"
+        ],
         "startDate": "2025-11-12",
         "interval": 1
       }
@@ -1918,7 +2111,9 @@
       "isAllDay": false,
       "startTime": "23:00",
       "endTime": "",
-      "days": ["thursday"],
+      "days": [
+        "thursday"
+      ],
       "includeInExport": {
         "thursday": true,
         "sunday": true,
@@ -1935,7 +2130,9 @@
         "type": "weeks",
         "onPeriods": 1,
         "offPeriods": 0,
-        "daysOfWeek": ["thursday"],
+        "daysOfWeek": [
+          "thursday"
+        ],
         "startDate": "2023-12-31",
         "interval": 1
       }
@@ -1993,7 +2190,10 @@
       "isAllDay": false,
       "startTime": "12:00",
       "endTime": "13:00",
-      "days": ["tuesday", "friday"],
+      "days": [
+        "tuesday",
+        "friday"
+      ],
       "includeInExport": {
         "tuesday": false,
         "friday": false
@@ -2003,7 +2203,10 @@
       "archived": true,
       "recurrence": {
         "type": "weeks",
-        "daysOfWeek": ["tuesday", "friday"],
+        "daysOfWeek": [
+          "tuesday",
+          "friday"
+        ],
         "interval": 1,
         "startDate": "2025-12-01",
         "onPeriods": 1,
@@ -2019,7 +2222,9 @@
       "isAllDay": false,
       "startTime": "12:00",
       "endTime": "",
-      "days": ["saturday"],
+      "days": [
+        "saturday"
+      ],
       "includeInExport": {
         "wednesday": true,
         "sunday": true,
@@ -2034,7 +2239,9 @@
       "archived": true,
       "recurrence": {
         "type": "weeks",
-        "daysOfWeek": ["saturday"],
+        "daysOfWeek": [
+          "saturday"
+        ],
         "interval": 1,
         "startDate": "2025-03-12",
         "onPeriods": 1,
@@ -2052,7 +2259,10 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "",
-      "days": ["tuesday", "monday"],
+      "days": [
+        "tuesday",
+        "monday"
+      ],
       "includeInExport": {
         "monday": true,
         "sunday": true,
@@ -2070,7 +2280,10 @@
       "archived": true,
       "recurrence": {
         "type": "weeks",
-        "daysOfWeek": ["tuesday", "monday"],
+        "daysOfWeek": [
+          "tuesday",
+          "monday"
+        ],
         "interval": 2,
         "startDate": "2024-01-01",
         "onPeriods": 1,
@@ -2086,7 +2299,12 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "",
-      "days": ["monday", "tuesday", "wednesday", "thursday"],
+      "days": [
+        "monday",
+        "tuesday",
+        "wednesday",
+        "thursday"
+      ],
       "includeInExport": {
         "monday": false,
         "sunday": true,
@@ -2103,7 +2321,12 @@
       "archived": true,
       "recurrence": {
         "type": "weeks",
-        "daysOfWeek": ["monday", "tuesday", "wednesday", "thursday"],
+        "daysOfWeek": [
+          "monday",
+          "tuesday",
+          "wednesday",
+          "thursday"
+        ],
         "interval": 1,
         "startDate": "2024-01-01",
         "onPeriods": 1,
@@ -2152,7 +2375,7 @@
       },
       "archived": true,
       "recurrence": {
-        "type": "daily",
+        "type": "days",
         "daysOfWeek": [
           "sunday",
           "monday",
@@ -2195,7 +2418,9 @@
       "isAllDay": false,
       "startTime": "00:10",
       "endTime": "00:40",
-      "days": ["saturday"],
+      "days": [
+        "saturday"
+      ],
       "includeInExport": {
         "saturday": true,
         "sunday": true,
@@ -2210,7 +2435,9 @@
       "archived": true,
       "recurrence": {
         "type": "weeks",
-        "daysOfWeek": ["saturday"],
+        "daysOfWeek": [
+          "saturday"
+        ],
         "interval": 1,
         "startDate": "2024-01-01",
         "onPeriods": 1,
@@ -2231,7 +2458,9 @@
       "isAllDay": false,
       "startTime": "12:30",
       "endTime": "13:00",
-      "days": ["saturday"],
+      "days": [
+        "saturday"
+      ],
       "includeInExport": {
         "saturday": true,
         "sunday": true,
@@ -2246,7 +2475,9 @@
       "archived": true,
       "recurrence": {
         "type": "weeks",
-        "daysOfWeek": ["saturday"],
+        "daysOfWeek": [
+          "saturday"
+        ],
         "interval": 1,
         "startDate": "2025-05-03",
         "onPeriods": 1,
@@ -2267,7 +2498,10 @@
       "isAllDay": false,
       "startTime": "12:00",
       "endTime": "12:35",
-      "days": ["tuesday", "friday"],
+      "days": [
+        "tuesday",
+        "friday"
+      ],
       "includeInExport": {
         "thursday": true,
         "sunday": true,
@@ -2282,7 +2516,10 @@
       "archived": true,
       "recurrence": {
         "type": "weeks",
-        "daysOfWeek": ["tuesday", "friday"],
+        "daysOfWeek": [
+          "tuesday",
+          "friday"
+        ],
         "interval": 1,
         "startDate": "2025-05-22",
         "onPeriods": 1,
@@ -2297,7 +2534,10 @@
       "isAllDay": false,
       "startTime": "12:30",
       "endTime": "13:10",
-      "days": ["wednesday", "saturday"],
+      "days": [
+        "wednesday",
+        "saturday"
+      ],
       "includeInExport": {
         "thursday": true,
         "sunday": true,
@@ -2312,7 +2552,10 @@
       "archived": true,
       "recurrence": {
         "type": "weeks",
-        "daysOfWeek": ["wednesday", "saturday"],
+        "daysOfWeek": [
+          "wednesday",
+          "saturday"
+        ],
         "interval": 1,
         "startDate": "2025-05-22",
         "onPeriods": 1,
@@ -2327,7 +2570,9 @@
       "isAllDay": false,
       "startTime": "21:40",
       "endTime": "",
-      "days": ["friday"],
+      "days": [
+        "friday"
+      ],
       "includeInExport": {
         "wednesday": true,
         "sunday": true,
@@ -2344,7 +2589,9 @@
         "type": "weeks",
         "onPeriods": 1,
         "offPeriods": 1,
-        "daysOfWeek": ["friday"],
+        "daysOfWeek": [
+          "friday"
+        ],
         "startDate": "2025-08-06",
         "interval": 1
       },
@@ -2359,7 +2606,10 @@
       "isAllDay": false,
       "startTime": "11:00",
       "endTime": "11:30",
-      "days": ["tuesday", "friday"],
+      "days": [
+        "tuesday",
+        "friday"
+      ],
       "includeInExport": {
         "thursday": true,
         "sunday": true,
@@ -2374,7 +2624,10 @@
       "archived": true,
       "recurrence": {
         "type": "weeks",
-        "daysOfWeek": ["tuesday", "friday"],
+        "daysOfWeek": [
+          "tuesday",
+          "friday"
+        ],
         "interval": 1,
         "startDate": "2025-09-04",
         "onPeriods": 1,
@@ -2393,7 +2646,10 @@
       "isAllDay": false,
       "startTime": "12:30",
       "endTime": "",
-      "days": ["wednesday", "saturday"],
+      "days": [
+        "wednesday",
+        "saturday"
+      ],
       "includeInExport": {
         "tuesday": true,
         "sunday": true,
@@ -2410,7 +2666,10 @@
         "type": "weeks",
         "onPeriods": 1,
         "offPeriods": 0,
-        "daysOfWeek": ["wednesday", "saturday"],
+        "daysOfWeek": [
+          "wednesday",
+          "saturday"
+        ],
         "startDate": "2025-09-16",
         "interval": 1
       },
@@ -2425,7 +2684,9 @@
       "isAllDay": false,
       "startTime": "11:00",
       "endTime": "",
-      "days": ["thursday"],
+      "days": [
+        "thursday"
+      ],
       "includeInExport": {
         "monday": true,
         "sunday": true,
@@ -2442,7 +2703,9 @@
         "type": "weeks",
         "onPeriods": 1,
         "offPeriods": 0,
-        "daysOfWeek": ["thursday"],
+        "daysOfWeek": [
+          "thursday"
+        ],
         "startDate": "2025-09-11",
         "interval": 1
       },
@@ -2474,7 +2737,7 @@
       "order": {},
       "archived": true,
       "recurrence": {
-        "type": "daily",
+        "type": "days",
         "daysOfWeek": [
           "sunday",
           "monday",
@@ -2490,6 +2753,102 @@
         "offPeriods": 0
       },
       "includeOnWebsite": true
+    },
+    {
+      "id": "516e99c1-b08f-49fb-afa4-825b76080229",
+      "title": "VS: Save SHINYs for Saturday",
+      "description": "",
+      "remindTomorrow": true,
+      "remindEndOfDay": false,
+      "includeInBriefing": true,
+      "includeOnWebsite": true,
+      "isAllDay": true,
+      "startTime": "09:00",
+      "endTime": "",
+      "days": [
+        "friday"
+      ],
+      "includeInExport": {
+        "friday": true
+      },
+      "variations": {},
+      "order": {},
+      "archived": false,
+      "recurrence": {
+        "type": "weeks",
+        "onPeriods": 1,
+        "offPeriods": 2,
+        "daysOfWeek": [
+          "friday"
+        ],
+        "startDate": "2025-11-30"
+      }
+    },
+    {
+      "id": "f948a0fc-4ef5-4ba0-8458-8612c29a4537",
+      "title": "Register for Canyon Storm",
+      "description": "Events → Canyon Storm →\nManage → Request To Battle →\nSelect preferred times → Confirm",
+      "remindTomorrow": true,
+      "remindEndOfDay": false,
+      "includeInBriefing": true,
+      "includeOnWebsite": true,
+      "isAllDay": true,
+      "startTime": "09:00",
+      "endTime": "",
+      "days": [
+        "sunday"
+      ],
+      "includeInExport": {
+        "monday": true,
+        "sunday": true
+      },
+      "variations": {},
+      "order": {
+              "sunday": 1
+      },
+      "archived": false,
+      "recurrence": {
+        "type": "weeks",
+        "onPeriods": 1,
+        "offPeriods": 0,
+        "daysOfWeek": [
+          "monday",
+          "sunday"
+        ],
+        "startDate": "2024-01-01"
+      }
+    },
+    {
+      "id": "183e0c1e-249f-47f6-8324-b155e4efb389",
+      "title": "Register for Canyon Storm - Due 1 hour before reset",
+      "description": "",
+      "remindTomorrow": true,
+      "remindEndOfDay": false,
+      "includeInBriefing": true,
+      "includeOnWebsite": true,
+      "isAllDay": true,
+      "startTime": "09:00",
+      "endTime": "",
+      "days": [
+        "monday"
+      ],
+      "includeInExport": {
+        "monday": true
+      },
+      "variations": {},
+      "order": {
+              "monday": 1
+      },
+      "archived": false,
+      "recurrence": {
+        "type": "weeks",
+        "onPeriods": 1,
+        "offPeriods": 0,
+        "daysOfWeek": [
+          "monday"
+        ],
+        "startDate": "2024-01-01"
+      }
     }
   ]
 }

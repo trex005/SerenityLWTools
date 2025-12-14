@@ -18,10 +18,11 @@ import { sanitizeHtml, extractTextFromHtml } from "@/lib/html-utils"
 import { useInView } from "react-intersection-observer"
 import { EmbeddedContent } from "@/components/embedded-content"
 import { matchesSearchTokens, tokenizeSearchTerm } from "@/lib/search-utils"
+import { getTipIdFromLocation } from "@/lib/hash-navigation"
 
 // Add a new prop to force the component to check for tip ID in URL
 export function ReadOnlyTips({ forceRefresh }: { forceRefresh?: string }) {
-  const { tips, isLoaded, reload } = useConfigData()
+  const { tips, isLoaded, reload } = useConfigData({ dataTypes: ["tips"] })
   const { adminMode } = useAdminState() // Add this line to get admin state
 
   // State for search term
@@ -42,6 +43,7 @@ export function ReadOnlyTips({ forceRefresh }: { forceRefresh?: string }) {
 
   // Add state to track if we're processing a hash
   const [processingHash, setProcessingHash] = useState(false)
+  const [pendingTipId, setPendingTipId] = useState<string | null>(() => getTipIdFromLocation())
 
   // State for full-screen image viewing
   const [fullScreenImage, setFullScreenImage] = useState<string | null>(null)
@@ -57,6 +59,8 @@ export function ReadOnlyTips({ forceRefresh }: { forceRefresh?: string }) {
 
   // Keep track of whether we've processed the hash
   const hashProcessedRef = useRef(false)
+  const reloadAttemptedRef = useRef(false)
+  const processingHashRef = useRef(false)
 
   const [filterOption, setFilterOption] = useState<"all" | "used" | "unused">("all")
 
@@ -141,84 +145,88 @@ export function ReadOnlyTips({ forceRefresh }: { forceRefresh?: string }) {
     }
   }, [copiedLinkId])
 
-  // Function to process the hash and highlight the tip
-  const processHash = useCallback(() => {
-    if (typeof window === "undefined") return
+  // Process the pending tip once data is ready
+  const processPendingTip = useCallback(
+    (tipId: string) => {
+      setShowAllTips(false)
+      setProcessingHash(true)
+      processingHashRef.current = true
 
-    const hash = window.location.hash
-    if (!hash || !hash.startsWith("#tip-")) {
-      // If there's no hash, show all tips
-      setShowAllTips(true)
-      return
-    }
+      console.log(`Processing hash for tip: ${tipId}`)
 
-    // If there is a hash, only show the linked tip initially
-    setShowAllTips(false)
-    setProcessingHash(true)
+      // Find the tip by customId first, then by id
+      const tipWithCustomId = tips.find((tip) => tip.customId === tipId)
+      const tipWithId = tips.find((tip) => tip.id === tipId)
 
-    // Force reload the data if needed
-    if (!isLoaded || tips.length === 0) {
-      console.log("Reloading data for hash processing...")
-      reload(true).catch(console.error)
-    }
-
-    const tipId = hash.substring(5) // Remove '#tip-' prefix
-    console.log(`Processing hash for tip: ${tipId}`)
-
-    // Find the tip by customId first, then by id
-    const tipWithCustomId = tips.find((tip) => tip.customId === tipId)
-    const tipWithId = tips.find((tip) => tip.id === tipId)
-
-    // Set the highlighted tip ID to the actual tip ID (not the custom ID)
-    if (tipWithCustomId) {
-      setHighlightedTipId(tipWithCustomId.id)
-      setTopTipId(tipWithCustomId.id) // Set this tip to appear at the top
-    } else if (tipWithId) {
-      setHighlightedTipId(tipWithId.id)
-      setTopTipId(tipWithId.id) // Set this tip to appear at the top
-    } else {
-      setHighlightedTipId(tipId)
-      setTopTipId(tipId) // Set this tip to appear at the top
-    }
-
-    // Scroll to the tip after a short delay to ensure it's rendered
-    setTimeout(() => {
-      // Try to find the element by ID first
-      let tipElement = document.getElementById(`tip-${tipId}`)
-
-      // If not found and we have a tip with custom ID, try the actual ID
-      if (!tipElement && tipWithCustomId) {
-        tipElement = document.getElementById(`tip-${tipWithCustomId.id}`)
-      }
-
-      if (tipElement) {
-        tipElement.scrollIntoView({ behavior: "smooth", block: "start" })
-        tipElement.classList.add("border-primary", "bg-primary/5")
-
-        // Remove highlight after a few seconds
-        setTimeout(() => {
-          tipElement.classList.remove("border-primary", "bg-primary/5")
-        }, 3000)
+      // Set the highlighted tip ID to the actual tip ID (not the custom ID)
+      if (tipWithCustomId) {
+        setHighlightedTipId(tipWithCustomId.id)
+        setTopTipId(tipWithCustomId.id) // Set this tip to appear at the top
+      } else if (tipWithId) {
+        setHighlightedTipId(tipWithId.id)
+        setTopTipId(tipWithId.id) // Set this tip to appear at the top
       } else {
-        console.warn(`Tip element not found for ID: ${tipId}`)
+        setHighlightedTipId(tipId)
+        setTopTipId(tipId) // Set this tip to appear at the top
       }
 
-      setProcessingHash(false)
-    }, 500)
-  }, [isLoaded, reload, tips])
+      // Scroll to the tip after a short delay to ensure it's rendered
+      setTimeout(() => {
+        // Try to find the element by ID first
+        let tipElement = document.getElementById(`tip-${tipId}`)
+
+        // If not found and we have a tip with custom ID, try the actual ID
+        if (!tipElement && tipWithCustomId) {
+          tipElement = document.getElementById(`tip-${tipWithCustomId.id}`)
+        }
+
+        if (tipElement) {
+          tipElement.scrollIntoView({ behavior: "smooth", block: "start" })
+          tipElement.classList.add("border-primary", "bg-primary/5")
+
+          // Remove highlight after a few seconds
+          setTimeout(() => {
+            tipElement.classList.remove("border-primary", "bg-primary/5")
+          }, 3000)
+        } else {
+          console.warn(`Tip element not found for ID: ${tipId}`)
+        }
+
+        hashProcessedRef.current = true
+        processingHashRef.current = false
+        setProcessingHash(false)
+      }, 500)
+    },
+    [tips],
+  )
 
   // Process hash when component mounts or when forceRefresh changes
   useEffect(() => {
-    // Reset the hash processed flag when forceRefresh changes
     if (forceRefresh) {
       hashProcessedRef.current = false
+      reloadAttemptedRef.current = false
+      processingHashRef.current = false
+      setPendingTipId(getTipIdFromLocation())
     }
+  }, [forceRefresh])
 
-    // Process the hash if we have data
-    if (isLoaded && tips.length > 0) {
-      processHash()
+  // Kick off a reload if we need data for a pending tip
+  useEffect(() => {
+    if (pendingTipId && (!isLoaded || tips.length === 0) && !reloadAttemptedRef.current) {
+      reloadAttemptedRef.current = true
+      reload(true).catch(console.error)
     }
-  }, [forceRefresh, isLoaded, processHash, tips])
+  }, [pendingTipId, isLoaded, tips.length, reload])
+
+  // Once data is present, process the pending tip exactly once
+  useEffect(() => {
+    if (!pendingTipId) return
+    if (!isLoaded || tips.length === 0) return
+    if (hashProcessedRef.current || processingHashRef.current) return
+
+    processPendingTip(pendingTipId)
+    setPendingTipId(null)
+  }, [pendingTipId, isLoaded, tips.length, processPendingTip])
 
   // Handle copying tip content to clipboard
   const handleCopyTip = (tipId: string, content: string, title?: string, isHtml?: boolean, altText?: string) => {
@@ -240,12 +248,15 @@ export function ReadOnlyTips({ forceRefresh }: { forceRefresh?: string }) {
   // Handle copying link to tip
   const handleCopyLink = (tipId: string, customId?: string) => {
     if (typeof window !== "undefined") {
-      const baseUrl = window.location.href.split("#")[0]
+      const url = new URL(window.location.href)
       // Use customId if available, otherwise use the UUID
       const linkId = customId || tipId
 
-      // Create the tip URL
-      let tipUrl = `${baseUrl}#tip-${linkId}`
+      // Create the tip URL in /t/{id} format
+      url.pathname = `/t/${linkId}`
+      url.hash = ""
+      url.search = ""
+      let tipUrl = url.toString()
 
       // Replace any case variation of lwserenity.com with the correct casing
       tipUrl = tipUrl.replace(/lwserenity\.com/i, "LWSerenity.com")

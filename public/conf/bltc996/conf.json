@@ -1,4 +1,8 @@
 {
-  "updated": "2025-10-28T07:44:51.899Z",
-  "parent": "996"
+  "updated": "2025-12-14T12:43:37.648Z",
+  "parent": "996",
+  "brand": {
+    "name": "BLTC 996",
+    "favicon": "/conf/bltc996/favicon.ico"
+  }
 }

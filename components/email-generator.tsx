@@ -64,11 +64,15 @@ export function EmailGenerator({ initialDateRange }: EmailGeneratorProps) {
   const { events } = useEvents()
   const { tips, updateTip } = useTips()
 
-  // State for date range - ALWAYS default to today and tomorrow in UTC-2
+  // State for date range - default to today + next two days in UTC-2
   const [dateRange, setDateRange] = useState<[Date | undefined, Date | undefined]>(() => {
+    if (initialDateRange?.[0] && initialDateRange?.[1]) {
+      return initialDateRange
+    }
+
     const today = getAppToday()
-    const tomorrow = getEndOfAppDay(addAppDays(today, 1))
-    return [today, tomorrow] // Default to today and tomorrow in UTC-2
+    const threeDayEnd = getEndOfAppDay(addAppDays(today, 2))
+    return [today, threeDayEnd] // Default to a three-day window (today + next 2 days) in UTC-2
   })
 
   // State for selected tip
@@ -209,7 +213,7 @@ export function EmailGenerator({ initialDateRange }: EmailGeneratorProps) {
   /**
    * Generate agenda content based on selected date range
    */
-  const generateAgendaContent = useCallback(() => {
+  const generateAgendaContent = useCallback((alsoUpdateEdited = false) => {
     if (!dateRange[0] || !dateRange[1]) return
 
     const includedDescriptions = new Set<string>() // Track which descriptions have been included by content hash
@@ -339,6 +343,13 @@ export function EmailGenerator({ initialDateRange }: EmailGeneratorProps) {
     }
 
     setAgendaContent(content)
+
+    // Optionally mirror the generated content into the editable field so we don't show stale text
+    if (alsoUpdateEdited) {
+      setEditedAgendaContent(content)
+    }
+
+    return content
   }, [dateRange, events, formatDescription, getDayOfWeek, getEventDatesInRange, getEffectiveValue, shouldIncludeEventForDate])
 
   /**
@@ -420,8 +431,7 @@ export function EmailGenerator({ initialDateRange }: EmailGeneratorProps) {
     ) {
       // Check if user has a remembered decision
       if (rememberedDecision === "regenerate") {
-        generateAgendaContent()
-        setEditedAgendaContent(agendaContent)
+        generateAgendaContent(true)
       } else if (rememberedDecision === "keep") {
         // Do nothing, keep current content
       } else {
@@ -621,8 +631,7 @@ export function EmailGenerator({ initialDateRange }: EmailGeneratorProps) {
    * Handle regenerate button click
    */
   const handleRegenerateAgenda = () => {
-    generateAgendaContent()
-    setEditedAgendaContent(agendaContent)
+    generateAgendaContent(true)
   }
 
   /**
@@ -632,8 +641,7 @@ export function EmailGenerator({ initialDateRange }: EmailGeneratorProps) {
     if (rememberDecision) {
       scopedLocalStorage.setItem("regenerate-agenda-decision", "regenerate")
     }
-    generateAgendaContent()
-    setEditedAgendaContent(agendaContent)
+    generateAgendaContent(true)
 
     if (clearTipOnRegenerate) {
       setSelectedTip(null)

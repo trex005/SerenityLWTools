@@ -1,4 +1,8 @@
 {
-  "updated": "2025-10-28T07:44:51.899Z",
-  "parent": "1901"
+  "updated": "2025-12-14T12:43:37.648Z",
+  "parent": "1901",
+  "brand": {
+    "name": "ARES, Heroes of 1901",
+    "favicon": "/conf/ares1901/favicon.ico"
+  }
 }

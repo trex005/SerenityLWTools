@@ -268,10 +268,13 @@ export function TipsManagement({ forceRefresh }: { forceRefresh?: string }) {
       return
     }
 
-    const baseUrl = window.location.href.split("#")[0]
+    const url = new URL(window.location.href)
     const linkId = tip.customId || tip.id
 
-    let tipUrl = `${baseUrl}#tip-${linkId}`
+    url.pathname = `/t/${linkId}`
+    url.hash = ""
+    url.search = ""
+    let tipUrl = url.toString()
     tipUrl = tipUrl.replace(/lwserenity\.com/i, "LWSerenity.com")
 
     navigator.clipboard.writeText(tipUrl).then(() => {

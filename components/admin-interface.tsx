@@ -14,12 +14,13 @@ import { EmailGenerator } from "@/components/email-generator"
 import { Reminders } from "@/components/reminders"
 import { useAdminState } from "@/hooks/use-admin-state"
 import { Button } from "@/components/ui/button"
-import { setupTipHashNavigation } from "@/lib/hash-navigation"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { scopedLocalStorage } from "@/lib/scoped-storage"
 import { OverrideDiffProvider } from "@/hooks/use-override-diff"
+import { useTagData } from "@/hooks/use-tag-data"
 
 export function AdminInterface() {
+  const { ensureAllData } = useTagData()
   // State to track which main tab is currently active
   const [activeTab, setActiveTab] = useState("schedule")
   const { exitAdminMode } = useAdminState()
@@ -41,14 +42,11 @@ export function AdminInterface() {
     scopedLocalStorage.setItem("show-local-time", JSON.stringify(showLocalTime))
   }, [showLocalTime])
 
-  // Set up hash navigation when component mounts
   useEffect(() => {
-    // Set up the polling for hash navigation
-    const cleanup = setupTipHashNavigation(setActiveTab, forceRefreshTips)
-
-    // Clean up when component unmounts
-    return cleanup
-  }, [])
+    if (activeTab !== "tips") {
+      ensureAllData()
+    }
+  }, [activeTab, ensureAllData])
 
   // State for date range - now defaults to next 7 days in UTC-2 to match read-only view
   const [dateRange, setDateRange] = useState<[Date | undefined, Date | undefined]>(() => {

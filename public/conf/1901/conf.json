@@ -1,4 +1,8 @@
 {
-  "updated": "2025-10-28T07:44:51.899Z",
-  "parent": "main"
+  "updated": "2025-12-14T12:43:37.648Z",
+  "parent": "main",
+  "brand": {
+    "name": "Server 1901",
+    "favicon": "/conf/1901/favicon.ico"
+  }
 }

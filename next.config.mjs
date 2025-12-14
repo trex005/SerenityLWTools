@@ -29,6 +29,17 @@ const nextConfig = {
     parallelServerBuildTraces: false,
     parallelServerCompiles: false,
   },
+  async rewrites() {
+    const rules = []
+    // During local dev, route /t/* to the app shell so SPA routing can hydrate tips deep links.
+    if (process.env.NODE_ENV === 'development') {
+      rules.push({
+        source: '/t/:path*',
+        destination: '/',
+      })
+    }
+    return rules
+  },
   webpack: (config) => {
     // Force a stable crypto hash function to avoid WasmHash crashes seen in the default pipeline.
     config.output.hashFunction = 'sha256'

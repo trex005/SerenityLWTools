@@ -39,6 +39,7 @@ export interface TagBundle {
 export type FetchOptions = {
   includeAncestorLocalOverrides?: boolean
   currentTag?: string
+  dataTypes?: DataType[]
 }
 
 type TagLayer = {
@@ -80,6 +81,16 @@ type CachedEntry<T> = {
 }
 
 type CacheStore<T> = Record<CacheVariant, Map<string, T>>
+
+const normalizeTypes = (types?: DataType[]): DataType[] => {
+  if (!types || types.length === 0) return ["events", "tips"]
+  return Array.from(new Set(types)).sort()
+}
+
+const buildLayerCacheKey = (tag: string, types?: DataType[]): string => {
+  const normalizedTag = sanitizeTag(tag) || tag
+  return `${normalizedTag}|${normalizeTypes(types).join(",")}`
+}
 
 const layerCache = new Map<string, CachedEntry<TagLayer>>()
 const layerInFlight = new Map<string, Promise<TagLayer>>()
@@ -245,15 +256,19 @@ const resolveTag = (root: RootConfig): string => {
   throw new Error("Unable to resolve configuration tag")
 }
 
-const fetchLayerFromSource = async (tag: string): Promise<TagLayer> => {
+const fetchLayerFromSource = async (tag: string, types?: DataType[]): Promise<TagLayer> => {
+  const normalizedTypes = normalizeTypes(types)
+  const wantsEvents = normalizedTypes.includes("events")
+  const wantsTips = normalizedTypes.includes("tips")
+
   const [configPayload, eventsPayload, tipsPayload] = await Promise.all([
     fetchJson(`${tag}/conf.json`),
-    fetchJson(`${tag}/events.json`),
-    fetchJson(`${tag}/tips.json`),
+    wantsEvents ? fetchJson(`${tag}/events.json`) : Promise.resolve(null),
+    wantsTips ? fetchJson(`${tag}/tips.json`) : Promise.resolve(null),
   ])
 
-  const eventsObj = extractArray(eventsPayload, "events")
-  const tipsObj = extractArray(tipsPayload, "tips")
+  const eventsObj = wantsEvents ? extractArray(eventsPayload, "events") : { items: [], updated: null }
+  const tipsObj = wantsTips ? extractArray(tipsPayload, "tips") : { items: [], updated: null }
 
   const events = normalizeEvents(eventsObj.items || [])
   const tips = Array.isArray(tipsObj.items) ? tipsObj.items : []
@@ -280,37 +295,43 @@ const fetchLayerFromSource = async (tag: string): Promise<TagLayer> => {
   }
 }
 
-const getLayer = async (tag: string, force = false): Promise<TagLayer> => {
+const getLayer = async (tag: string, force = false, types?: DataType[]): Promise<TagLayer> => {
   const normalizedTag = sanitizeTag(tag) || tag
   if (!normalizedTag) {
     throw new Error("Invalid tag provided")
   }
 
+  const cacheKey = buildLayerCacheKey(normalizedTag, types)
+
   if (force) {
-    layerCache.delete(normalizedTag)
-    layerInFlight.delete(normalizedTag)
+    for (const key of Array.from(layerCache.keys())) {
+      if (key.startsWith(`${normalizedTag}|`)) layerCache.delete(key)
+    }
+    for (const key of Array.from(layerInFlight.keys())) {
+      if (key.startsWith(`${normalizedTag}|`)) layerInFlight.delete(key)
+    }
   } else {
-    const cached = layerCache.get(normalizedTag)
+    const cached = layerCache.get(cacheKey)
     if (isCacheEntryValid(cached)) {
       return cached!.snapshot
     }
-    const pending = layerInFlight.get(normalizedTag)
+    const pending = layerInFlight.get(cacheKey)
     if (pending) {
       return pending
     }
   }
 
   const promise = (async () => {
-    const data = await fetchLayerFromSource(normalizedTag)
-    layerCache.set(normalizedTag, { snapshot: data, timestamp: Date.now() })
+    const data = await fetchLayerFromSource(normalizedTag, types)
+    layerCache.set(cacheKey, { snapshot: data, timestamp: Date.now() })
     return data
   })()
 
-  layerInFlight.set(normalizedTag, promise)
+  layerInFlight.set(cacheKey, promise)
   try {
     return await promise
   } finally {
-    layerInFlight.delete(normalizedTag)
+    layerInFlight.delete(cacheKey)
   }
 }
 
@@ -370,6 +391,7 @@ type ResolveOptions = {
   includeLocalOverrides?: boolean
   force?: boolean
   currentTag?: string
+  types?: DataType[]
 }
 
 const getTagDataSnapshot = async (
@@ -401,7 +423,7 @@ const getTagDataSnapshot = async (
   }
 
   const promise = (async () => {
-    const layer = await getLayer(normalizedTag, options.force)
+    const layer = await getLayer(normalizedTag, options.force, options.types || [type])
     const parent = getParentTag(layer)
     const baseItems = (type === "events" ? layer.events : layer.tips) || []
     const filtered = baseItems.filter((item: any) => item && item.deleted !== true)
@@ -563,15 +585,26 @@ const fetchBundleForTag = async (tag: string, force = false, options?: FetchOpti
     throw new Error("Invalid tag provided")
   }
 
+  const requestedTypes = normalizeTypes(options?.dataTypes)
+  const includeEvents = requestedTypes.includes("events")
+  const includeTips = requestedTypes.includes("tips")
+  const cacheable = includeEvents && includeTips
+
   const now = Date.now()
   if (!force) {
     const cached = cacheByTag.get(normalizedTag)
     if (cached && now - cached.timestamp < CACHE_TTL) {
-      return cached.data
+        return {
+          ...cached.data,
+          events: includeEvents ? cached.data.events : [],
+          tips: includeTips ? cached.data.tips : [],
+        }
     }
-    const inFlight = inFlightByTag.get(normalizedTag)
-    if (inFlight) {
-      return inFlight
+    if (cacheable) {
+      const inFlight = inFlightByTag.get(normalizedTag)
+      if (inFlight) {
+        return inFlight
+      }
     }
   } else {
     inFlightByTag.delete(normalizedTag)
@@ -584,30 +617,39 @@ const fetchBundleForTag = async (tag: string, force = false, options?: FetchOpti
       includeLocalOverrides,
       force,
       currentTag: options?.currentTag || getActiveTag(),
+      types: requestedTypes,
     }
-    const eventsSnapshot = await getResolvedSnapshot("events", normalizedTag, resolveOptions)
-    const tipsSnapshot = await getResolvedSnapshot("tips", normalizedTag, resolveOptions)
-    const layer = await getLayer(normalizedTag, force)
+    const eventsSnapshot = includeEvents
+      ? await getResolvedSnapshot("events", normalizedTag, resolveOptions)
+      : { itemsById: {}, updated: null, tag: normalizedTag }
+    const tipsSnapshot = includeTips
+      ? await getResolvedSnapshot("tips", normalizedTag, resolveOptions)
+      : { itemsById: {}, updated: null, tag: normalizedTag }
+    const layer = await getLayer(normalizedTag, force, requestedTypes)
     const tagConfig = layer?.config || null
     const data: TagBundle = {
       tag: normalizedTag,
       tagConfig,
-      events: idMapToArray(eventsSnapshot.itemsById),
-      tips: idMapToArray(tipsSnapshot.itemsById),
+      events: includeEvents ? idMapToArray(eventsSnapshot.itemsById) : [],
+      tips: includeTips ? idMapToArray(tipsSnapshot.itemsById) : [],
       updated: {
         root: null,
         tagConfig: typeof tagConfig?.updated === "string" ? tagConfig.updated : null,
-        events: eventsSnapshot.updated,
-        tips: tipsSnapshot.updated,
+        events: includeEvents ? eventsSnapshot.updated : null,
+        tips: includeTips ? tipsSnapshot.updated : null,
       },
     }
     return data
   })()
 
-  inFlightByTag.set(normalizedTag, promise)
+  if (cacheable) {
+    inFlightByTag.set(normalizedTag, promise)
+  }
   const data = await promise
-  cacheByTag.set(normalizedTag, { data, timestamp: Date.now() })
-  inFlightByTag.delete(normalizedTag)
+  if (cacheable) {
+    cacheByTag.set(normalizedTag, { data, timestamp: Date.now() })
+    inFlightByTag.delete(normalizedTag)
+  }
 
   return data
 }
@@ -700,7 +742,10 @@ export const invalidateTipCacheForTag = (_tag: string) => invalidateCachesForTyp
 
 if (typeof window !== "undefined") {
   setTimeout(() => {
-    fetchConfig().catch((error) => {
+    const pathname = window.location.pathname || ""
+    const isTipPath = pathname.startsWith("/t/")
+    const preloadOptions = isTipPath ? { dataTypes: ["tips"] as DataType[] } : undefined
+    fetchConfig(false, preloadOptions).catch((error) => {
       console.error("Error during initial config preload:", error)
     })
   }, 100)

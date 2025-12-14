@@ -13,13 +13,16 @@ import {
 } from "@/lib/date-utils"
 import { ReadOnlyDayAgenda } from "@/components/read-only-day-agenda"
 import { ReadOnlyTips } from "@/components/read-only-tips"
-import { setupTipHashNavigation } from "@/lib/hash-navigation"
+import { getTipIdFromLocation, setupTipHashNavigation } from "@/lib/hash-navigation"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { scopedLocalStorage } from "@/lib/scoped-storage"
+import { useTagData } from "@/hooks/use-tag-data"
 
 export function UserInterface() {
+  const { ensureAllData } = useTagData()
   // State to track which main tab is currently active
-  const [activeTab, setActiveTab] = useState("schedule")
+  const defaultTab = typeof window !== "undefined" && getTipIdFromLocation() ? "tips" : "schedule"
+  const [activeTab, setActiveTab] = useState(defaultTab)
   const [showLocalTime, setShowLocalTime] = useState(() => {
     const saved = scopedLocalStorage.getItem("show-local-time")
     return saved ? JSON.parse(saved) : true
@@ -64,6 +67,12 @@ export function UserInterface() {
   useEffect(() => {
     scopedLocalStorage.setItem("show-local-time", JSON.stringify(showLocalTime))
   }, [showLocalTime])
+
+  useEffect(() => {
+    if (activeTab !== "tips") {
+      ensureAllData()
+    }
+  }, [activeTab, ensureAllData])
 
   const dayTabs = useMemo(() => {
     if (!dateRange[0] || !dateRange[1]) {

@@ -1,13 +1,103 @@
-﻿{
-  "updated": "2025-10-28T17:36:51.391Z",
-  "events": [
-    {
+﻿    {
       "id": "5870d28b-5d10-4dd9-83fb-612e4c28e0b0",
       "archived": false
     },
     {
       "id": "a061f2df-34c9-4bdd-9fa2-a95e11470268",
       "archived": false
+    }
+{
+  "updated": "2025-12-12T01:06:08-02:00",
+  "events": [
+    {
+      "id": "ev-10",
+      "order": {
+        "friday": 0
+      }
+    },
+    {
+      "id": "ev-17",
+      "order": {
+        "friday": 1
+      }
+    },
+    {
+      "id": "ev-1739556209550",
+      "order": {
+        "friday": 3
+      }
+    },
+    {
+      "id": "ev-1739556688004",
+      "order": {
+        "thursday": 5,
+        "friday": 4
+      }
+    },
+    {
+      "id": "4329a998-b697-4b0d-ae72-c629390328b4",
+      "order": {
+        "friday": 5,
+        "thursday": 4
+      }
+    },
+    {
+      "id": "dfb867b9-9ffc-4a60-baf2-bd89a1d18681",
+      "order": {
+        "friday": 9
+      }
+    },
+    {
+      "id": "41b7230f-eac7-478d-8f95-2955050d1da0",
+      "archived": false,
+      "order": {
+        "friday": 7,
+        "thursday": 7
+      }
+    },
+    {
+      "id": "9773fd5b-5070-4f05-b232-f527556751ab",
+      "order": {
+        "friday": 2
+      }
+    },
+    {
+      "id": "2b5913ee-523d-4ad7-bd0a-5ace984c1e01",
+      "title": "Hot deals → Decorate your dreams",
+      "description": "• Save up 20 tokens to get a wish decoration",
+      "remindTomorrow": false,
+      "remindEndOfDay": false,
+      "includeInBriefing": true,
+      "includeOnWebsite": true,
+      "isAllDay": true,
+      "startTime": "09:00",
+      "endTime": "",
+      "days": [
+        "friday",
+        "saturday",
+        "sunday"
+      ],
+      "includeInExport": {
+        "friday": true,
+        "saturday": true,
+        "sunday": true
+      },
+      "variations": {},
+      "order": {
+        "friday": 8
+      },
+      "archived": false,
+      "recurrence": {
+        "type": "weeks",
+        "onPeriods": 1,
+        "offPeriods": 4,
+        "daysOfWeek": [
+          "friday",
+          "saturday",
+          "sunday"
+        ],
+        "startDate": "2025-12-12"
+      }
     }
   ]
 }
