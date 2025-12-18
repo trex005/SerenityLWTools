@@ -91,7 +91,6 @@ export function EventDialog({ event, open, onOpenChange, initialDay = "monday", 
   const initializeFormFromEvent = useCallback(
     (sourceEvent: any) => {
       if (!sourceEvent) return
-      let includeInExport: Record<string, boolean> = {}
       const recurrence = sourceEvent.recurrence
         ? {
             ...sourceEvent.recurrence,
@@ -115,15 +114,6 @@ export function EventDialog({ event, open, onOpenChange, initialDay = "monday", 
           }
       const recurrenceDays = recurrence.daysOfWeek
 
-      if (typeof sourceEvent.includeInExport === "object" && sourceEvent.includeInExport !== null) {
-        includeInExport = { ...sourceEvent.includeInExport }
-      } else {
-        const boolValue = !!sourceEvent.includeInExport
-        recurrenceDays.forEach((d: string) => {
-          includeInExport[d] = boolValue
-        })
-      }
-
       const hasEndTimeValue = !!(sourceEvent.endTime && sourceEvent.endTime.trim() !== "")
       setIncludeEndTime(hasEndTimeValue)
 
@@ -144,13 +134,10 @@ export function EventDialog({ event, open, onOpenChange, initialDay = "monday", 
       })
           setHasVariation(variationFlags)
 
-      setIncludeInExportByDefault(Object.values(includeInExport).length > 0 ? Object.values(includeInExport)[0] : true)
-
       setFormData({
         ...sourceEvent,
         includeInBriefing: sourceEvent.includeInBriefing ?? true,
         includeOnWebsite: sourceEvent.includeOnWebsite ?? true,
-        includeInExport,
         endTime: hasEndTimeValue ? sourceEvent.endTime : "",
         archived: sourceEvent.archived ?? false,
         recurrence,
@@ -161,9 +148,6 @@ export function EventDialog({ event, open, onOpenChange, initialDay = "monday", 
   )
 
   const initializeFormForNewEvent = useCallback(() => {
-    const initialIncludeInExport: Record<string, boolean> = {}
-    initialIncludeInExport[initialDay] = true
-
     const startDate = initialDate ? formatInAppTimezone(initialDate, "yyyy-MM-dd") : undefined
     const recurrenceDays = [initialDay]
 
@@ -179,7 +163,6 @@ export function EventDialog({ event, open, onOpenChange, initialDay = "monday", 
       startTime: "09:00",
       endTime: "",
       days: [...recurrenceDays],
-      includeInExport: initialIncludeInExport,
       variations: {},
       order: {},
       archived: false,
@@ -192,7 +175,6 @@ export function EventDialog({ event, open, onOpenChange, initialDay = "monday", 
         endDate: undefined,
       },
     })
-    setIncludeInExportByDefault(true)
     setIncludeEndTime(false)
     setIncludeEndTimeVariation({})
     setHasVariation({})
@@ -211,7 +193,6 @@ export function EventDialog({ event, open, onOpenChange, initialDay = "monday", 
     startTime: "09:00",
     endTime: "",
     days: [] as string[],
-    includeInExport: {} as Record<string, boolean>,
     variations: {} as Record<string, any>,
     order: {} as Record<string, number>,
     archived: false, // Add the archived property
@@ -221,7 +202,6 @@ export function EventDialog({ event, open, onOpenChange, initialDay = "monday", 
   // State for UI elements
   const [activeTab, setActiveTab] = useState("settings")
   const [hasVariation, setHasVariation] = useState<Record<string, boolean>>({})
-  const [includeInExportByDefault, setIncludeInExportByDefault] = useState(true)
   const [includeEndTime, setIncludeEndTime] = useState(false)
   const [includeEndTimeVariation, setIncludeEndTimeVariation] = useState<Record<string, boolean>>({})
   const [isResetting, setIsResetting] = useState(false)
@@ -317,18 +297,9 @@ export function EventDialog({ event, open, onOpenChange, initialDay = "monday", 
   const handleDayToggle = (day: string) => {
     setFormData((prev) => {
       const newDays = prev.days.includes(day) ? prev.days.filter((d) => d !== day) : [...prev.days, day]
-
-      // Also update includeInExport when adding a day
-      const newIncludeInExport = { ...prev.includeInExport }
-
-      if (!prev.days.includes(day) && !newIncludeInExport[day]) {
-        newIncludeInExport[day] = includeInExportByDefault
-      }
-
       return {
         ...prev,
         days: newDays,
-        includeInExport: newIncludeInExport,
       }
     })
   }
@@ -400,26 +371,6 @@ export function EventDialog({ event, open, onOpenChange, initialDay = "monday", 
   }
 
   /**
-   * Handle toggling the includeInExport setting
-   */
-  const handleIncludeInExportToggle = (checked: boolean) => {
-    setIncludeInExportByDefault(checked)
-    setFormData((prev) => {
-      // Update all selected days with the new value
-      const newIncludeInExport = { ...prev.includeInExport }
-      const selectedDays = prev.recurrence?.daysOfWeek || prev.days
-      selectedDays.forEach((day) => {
-        newIncludeInExport[day] = checked
-      })
-
-      return {
-        ...prev,
-        includeInExport: newIncludeInExport,
-      }
-    })
-  }
-
-  /**
    * Handle toggling whether to include an end time
    */
   const handleIncludeEndTimeToggle = (checked: boolean, day?: string) => {
@@ -483,18 +434,10 @@ export function EventDialog({ event, open, onOpenChange, initialDay = "monday", 
       const allowedDays = new Set(newRecurrence.daysOfWeek)
       const newDays = [...allowedDays]
 
-      // Keep includeInExport aligned with selected days
-      const newIncludeInExport: Record<string, boolean> = {}
-      newDays.forEach((day: string) => {
-        const previous = prev.includeInExport[day]
-        newIncludeInExport[day] = previous !== undefined ? previous : includeInExportByDefault
-      })
-
       return {
         ...prev,
         days: newDays,
         recurrence: newRecurrence,
-        includeInExport: newIncludeInExport,
       }
     })
   }
@@ -538,16 +481,17 @@ export function EventDialog({ event, open, onOpenChange, initialDay = "monday", 
       recurrence,
     }
 
-
+    // Strip deprecated includeInExport field if present
+    const { includeInExport: _unusedIncludeInExport, ...cleanedFormData } = syncedFormData as any
     const targetTag = selectedTag || activeTag
 
     try {
-      await saveEventForTag(targetTag, syncedFormData)
+      await saveEventForTag(targetTag, cleanedFormData)
       if (targetTag === activeTag) {
         if (isEditing) {
-          updateEvent(syncedFormData)
+          updateEvent(cleanedFormData)
         } else {
-          addEvent(syncedFormData)
+          addEvent(cleanedFormData)
         }
       } else {
         toast({
@@ -906,21 +850,9 @@ export function EventDialog({ event, open, onOpenChange, initialDay = "monday", 
                   <div className="grid gap-2">
                     <Label className="flex items-center gap-2">
                       Include in
-                      {renderOverridePill(["includeInExport", "includeOnWebsite", "includeInBriefing"])}
+                      {renderOverridePill(["includeOnWebsite", "includeInBriefing"])}
                     </Label>
                     <div className="space-y-2">
-                      <div className="flex items-center space-x-2">
-                        <Checkbox
-                          id="includeScheduled"
-                          checked={includeInExportByDefault}
-                          onCheckedChange={(checked) => handleIncludeInExportToggle(!!checked)}
-                        />
-                        <Label htmlFor="includeScheduled" className="flex items-center gap-2">
-                          Scheduled
-                          {renderOverridePill("includeInExport")}
-                        </Label>
-                      </div>
-
                       <div className="flex items-center space-x-2">
                         <Checkbox
                           id="includeWebsite"

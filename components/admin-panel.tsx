@@ -190,12 +190,17 @@ export function AdminPanel() {
   }
 
   /**
-   * Prepare data for export by ensuring empty end times are preserved
+   * Prepare data for export by ensuring empty end times are preserved and deprecated fields are stripped
    */
   const prepareDataForExport = (events: any[], options?: { stripArchivedFlag?: boolean }) => {
     return events.map((event) => {
       // Create a deep copy of the event to avoid modifying the original
       const eventCopy = JSON.parse(JSON.stringify(event))
+
+      // Remove deprecated includeInExport before export
+      if ("includeInExport" in eventCopy) {
+        delete eventCopy.includeInExport
+      }
 
       // Ensure empty end times are explicitly set to empty strings
       if (!eventCopy.endTime) {
@@ -218,6 +223,8 @@ export function AdminPanel() {
       return eventCopy
     })
   }
+
+  const stripDeprecatedFields = (eventsToClean: any[]) => prepareDataForExport(eventsToClean)
 
   /**
    * Helper to generate a timestamp suitable for filenames
@@ -274,7 +281,8 @@ export function AdminPanel() {
           loadStoredEventsForTag(tag),
           loadStoredTipsForTag(tag),
         ])
-        const deltas = await buildChildDeltaFiles(tagEvents, tagTips, tag)
+        const cleanedEvents = stripDeprecatedFields(tagEvents)
+        const deltas = await buildChildDeltaFiles(cleanedEvents, tagTips, tag)
 
         tagFolder.file("conf.json", JSON.stringify(deltas.config, null, 2))
         tagFolder.file("events.json", JSON.stringify(deltas.events, null, 2))
@@ -403,7 +411,8 @@ export function AdminPanel() {
     setIsExportingData(true)
     try {
       // Build child-only deltas against parent chain
-      const deltas = await buildChildDeltaFiles(events, tips, tag)
+      const cleanedEvents = stripDeprecatedFields(events)
+      const deltas = await buildChildDeltaFiles(cleanedEvents, tips, tag)
 
       if (exportOption === "all") {
         await exportAllFiles(tag, timestamp, deltas)

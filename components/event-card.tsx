@@ -26,8 +26,6 @@ import {
 import { formatRecurrence } from "@/lib/recurrence-utils"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
-import { Switch } from "@/components/ui/switch"
-import { Label } from "@/components/ui/label"
 import type { DiffInfo } from "@/lib/config-diff"
 import { formatInAppTimezone } from "@/lib/date-utils"
 
@@ -58,8 +56,7 @@ export function EventCard({ event, day, date, showLocalTime = false, overrideInf
   const timeEditorRef = useRef<HTMLDivElement>(null)
 
   // Get delete function from store
-  // Add access to the updateDateIncludeOverride function from the store
-  const { deleteEvent, archiveEvent, updateDateOverride, updateDateIncludeOverride } = useEvents()
+  const { deleteEvent, archiveEvent, updateDateOverride } = useEvents()
 
   // Get timezone preferences
   // Remove: const { useLocalTimeZone, convertToLocalTime, formatTimeDisplay, convertToServerTime } = useTimeZone()
@@ -72,8 +69,6 @@ export function EventCard({ event, day, date, showLocalTime = false, overrideInf
 
   // Check if there's a date override for this specific date
   const hasDateOverride = event.dateOverrides && event.dateOverrides[dateString]
-
-  const hasDateIncludeOverride = event.dateIncludeOverrides && event.dateIncludeOverrides[dateString] !== undefined
 
   const overrideKeys = overrideInfo?.overrideKeys ?? []
   const hasOverrides = overrideKeys.length > 0
@@ -151,32 +146,13 @@ export function EventCard({ event, day, date, showLocalTime = false, overrideInf
   }, [isEditingTime])
 
   /**
-   * Helper function to check if the event is scheduled for the current day/date
-   */
-  const isScheduledForDate = () => {
-    // First check for date-specific override
-    if (event.dateIncludeOverrides && event.dateIncludeOverrides[dateString] !== undefined) {
-      return event.dateIncludeOverrides[dateString]
-    }
-
-    // Then check global setting
-    if (typeof event.includeInExport === "boolean") {
-      return event.includeInExport
-    } else if (typeof event.includeInExport === "object" && event.includeInExport !== null) {
-      // Check if this specific day is set to true, or if any day is true
-      return event.includeInExport[day] === true || Object.values(event.includeInExport).some((value) => value === true)
-    }
-    return false
-  }
-
-  /**
    * Helper function to check if the event is included on the website for the current day/date
    */
   const isIncludedOnWebsite = () => {
     if (event.includeOnWebsite === false) {
       return false
     }
-    return isScheduledForDate()
+    return true
   }
 
   /**
@@ -186,7 +162,7 @@ export function EventCard({ event, day, date, showLocalTime = false, overrideInf
     if (event.includeInBriefing === false) {
       return false
     }
-    return isScheduledForDate()
+    return true
   }
 
   /**
@@ -298,14 +274,6 @@ export function EventCard({ event, day, date, showLocalTime = false, overrideInf
     return { value: minute, label: minute }
   })
 
-  // Add a new function to handle toggling include in export for this specific date
-  /**
-   * Function to handle toggling whether to include this event in export for this specific date
-   */
-  const handleIncludeInExportToggle = (checked: boolean) => {
-    updateDateIncludeOverride(event.id, dateString, checked)
-  }
-
   // Add a function to convert and format time to local time
   const formatLocalTime = (timeString: string): string => {
     if (!timeString) return ""
@@ -383,17 +351,6 @@ export function EventCard({ event, day, date, showLocalTime = false, overrideInf
                         </Tooltip>
                       </TooltipProvider>
                     )}
-                    <div className="flex items-center gap-2 ml-1">
-                      <Switch
-                        id={`include-export-${event.id}`}
-                        checked={isScheduledForDate()}
-                        onCheckedChange={handleIncludeInExportToggle}
-                        className="mt-[-2px] data-[state=checked]:bg-primary/40"
-                      />
-                      <Label htmlFor={`include-export-${event.id}`} className="text-xs text-muted-foreground">
-                        Scheduled
-                      </Label>
-                    </div>
                   </div>
                   {!isAllDay && startTime && (
                     <div className="text-sm text-muted-foreground relative">

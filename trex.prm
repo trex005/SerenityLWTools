@@ -814,3 +814,23 @@ has a timestamp of:
 2025-03-12T04:00:00.000Z
 If I am looking at the day 2025-03-12 no matter what timezone my computer is set to, that event should be showing up, because it falls on 2025-03-12 in GMT-2.
 However if I am looking at it from a browser in GMT-5 it is showing up, but GMT-8 it is not.
+--------------
+** Mail using different function to determine display? **
+
+I would like them to all use a core function to determine if that event applies to that date. This function should take an argument scheduled_only which defaults to true. remove "includeInExport" functionality completely.
+
+Each Type should filter like should filter like so:
+
+Website agenda in read only mode:
+includeOnWebsite = true
+
+Website agenda in admin mode:
+core function with scheduled_only set to false
+No other filters
+
+Previous day reminders:
+Uses the core function on the following day
+remindTomorrow = true
+
+End of day reminders:
+remindEndOfDay = true

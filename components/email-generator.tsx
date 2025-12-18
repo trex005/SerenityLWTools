@@ -170,18 +170,21 @@ export function EmailGenerator({ initialDateRange }: EmailGeneratorProps) {
     const dateStr = formatInAppTimezone(date, "yyyy-MM-dd")
     const dayOfWeek = getDayOfWeek(date)
 
-    // Check date-specific override first
+    if (event.dateOverrides?.[dateStr]?.hidden === true) {
+      return false
+    }
+
+    if (event.variations?.[dayOfWeek]?.hidden === true) {
+      return false
+    }
+
+    // Allow explicit per-date include/exclude overrides
     if (event.dateIncludeOverrides && dateStr in event.dateIncludeOverrides) {
       return event.dateIncludeOverrides[dateStr]
     }
 
-    // Then check day-specific setting
-    if (event.includeInExport && dayOfWeek in event.includeInExport) {
-      return event.includeInExport[dayOfWeek]
-    }
-
-    // Default to false if no specific setting found
-    return false
+    // If not explicitly excluded, include for briefing
+    return true
   }, [getDayOfWeek])
 
   /**

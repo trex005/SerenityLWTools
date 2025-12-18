@@ -51,34 +51,8 @@ const getEffectiveValue = (event: any, date: Date, dayKey: string, property: str
   return event?.[property]
 }
 
-const isScheduledForDate = (event: any, date: Date, dayKey: string): boolean => {
-  const dateKey = getDateKey(date)
-
-  if (event?.dateIncludeOverrides && event.dateIncludeOverrides[dateKey] !== undefined) {
-    return Boolean(event.dateIncludeOverrides[dateKey])
-  }
-
-  if (typeof event?.includeInExport === "boolean") {
-    return event.includeInExport
-  }
-
-  if (event?.includeInExport && event.includeInExport[dayKey] !== undefined) {
-    return Boolean(event.includeInExport[dayKey])
-  }
-
-  if (event?.includeInExport && typeof event.includeInExport === "object") {
-    return Object.values(event.includeInExport).some((value) => value === true)
-  }
-
-  return false
-}
-
 const shouldIncludeEventOnDate = (event: any, date: Date, dayKey: string): boolean => {
   if (!event || event.archived) return false
-
-  if (!isScheduledForDate(event, date, dayKey)) {
-    return false
-  }
 
   if (!shouldShowRecurringEvent(event, date, false)) {
     return false

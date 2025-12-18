@@ -81,19 +81,9 @@ export function ReadOnlyDayAgenda({ day, date, showLocalTime = false, setShowLoc
         return false
       }
 
-      // Check includeInExport property - if it's false for this day, don't show the event
-      // This check is ONLY applied in the read-only view
-      if (event.includeInExport) {
-        // Check date-specific override first
-        if (event.dateIncludeOverrides && event.dateIncludeOverrides[dateKey] !== undefined) {
-          if (event.dateIncludeOverrides[dateKey] === false) {
-            return false
-          }
-        }
-        // Then check day-specific setting
-        else if (event.includeInExport[day] === false) {
-          return false
-        }
+      // Allow per-date include overrides to hide the event
+      if (event.dateIncludeOverrides && event.dateIncludeOverrides[dateKey] === false) {
+        return false
       }
 
       return true

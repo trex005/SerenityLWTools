@@ -13,13 +13,6 @@ export const initialConfig = {
       days: ["monday", "tuesday", "wednesday", "thursday", "friday"],
       remindTomorrow: false,
       remindEndOfDay: false,
-      includeInExport: {
-        monday: true,
-        tuesday: true,
-        wednesday: true,
-        thursday: true,
-        friday: true,
-      },
       variations: {},
       dateOverrides: {},
       dateIncludeOverrides: {},

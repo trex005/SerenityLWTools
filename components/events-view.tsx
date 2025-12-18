@@ -385,32 +385,12 @@ function EventCard({
   const parentExists = overrideInfo?.parentExists ?? false
 
 
-  /**
-   * Helper function to check if an event is scheduled at all
-   */
-  function isScheduled(event: any) {
-    // Handle both boolean and object formats
-    if (typeof event.includeInExport === "boolean") {
-      return event.includeInExport
-    } else if (typeof event.includeInExport === "object" && event.includeInExport !== null) {
-      // If it's an object (old format), check if any day is set to true
-      return Object.values(event.includeInExport).some((value) => value === true)
-    }
-    return false
-  }
-
   function isWebsiteEnabled(event: any) {
-    if (event.includeOnWebsite === false) {
-      return false
-    }
-    return isScheduled(event)
+    return event.includeOnWebsite !== false
   }
 
   function isBriefingEnabled(event: any) {
-    if (event.includeInBriefing === false) {
-      return false
-    }
-    return isScheduled(event)
+    return event.includeInBriefing !== false
   }
 
   return (
