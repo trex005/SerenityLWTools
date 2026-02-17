@@ -11,7 +11,7 @@ import { Search, X, Copy, Check, Link, Loader2, ZoomIn, ChevronDown } from "luci
 import { useState, useEffect, useRef, useCallback } from "react"
 import { useDebounce } from "@/hooks/use-debounce"
 import { useAdminState } from "@/hooks/use-admin-state"
-import { Dialog, DialogContent } from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog"
 
 // Add these imports at the top
 import { sanitizeHtml, extractTextFromHtml } from "@/lib/html-utils"
@@ -579,6 +579,9 @@ export function ReadOnlyTips({ forceRefresh }: { forceRefresh?: string }) {
           aria-label="Full-size image view"
           onClick={handleBackdropClick}
         >
+          <DialogTitle asChild>
+            <span className="sr-only">Full-size image view</span>
+          </DialogTitle>
           {fullScreenImage && (
             <div
               className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex items-center justify-center"

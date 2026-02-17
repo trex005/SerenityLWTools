@@ -2,7 +2,7 @@
 "use client"
 
 import type React from "react"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { v4 as uuidv4 } from "uuid"
 
 import { useTips } from "@/hooks/use-tips"
@@ -12,11 +12,11 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Badge } from "@/components/ui/badge"
-import { Plus, Edit2, Trash2, Copy, Check, X, Search, Link as LinkIcon } from "lucide-react"
+import { Plus, Edit2, Trash2, Copy, Check, X, Search, Link as LinkIcon, ZoomIn } from "lucide-react"
 import { EmbeddedContent } from "@/components/embedded-content"
 import { sanitizeHtml, extractTextFromHtml } from "@/lib/html-utils"
 import { matchesSearchTokens, tokenizeSearchTerm } from "@/lib/search-utils"
+import { useDebounce } from "@/hooks/use-debounce"
 import { useOverrideDiff } from "@/hooks/use-override-diff"
 import { useToast } from "@/hooks/use-toast"
 import { listAdminEnabledTags } from "@/lib/scoped-storage"
@@ -33,6 +33,308 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog"
+
+type TipContentType = "text" | "html" | "image" | "embedded"
+type TipFormFieldsState = {
+  title: string
+  content: string
+  customId: string
+  imageUrl: string
+  type: TipContentType
+  embedUrl: string
+}
+
+type NewTipState = TipFormFieldsState & {
+  adminOnly: boolean
+  canUseInBriefing: boolean
+  unlisted: boolean
+  isHtml: boolean
+  altText: string
+}
+
+const createEmptyNewTip = (): NewTipState => ({
+  title: "",
+  content: "",
+  customId: "",
+  imageUrl: "",
+  adminOnly: false,
+  canUseInBriefing: true,
+  unlisted: false,
+  isHtml: false,
+  altText: "",
+  type: "text",
+  embedUrl: "",
+})
+
+const areTipFormValuesEqual = (left: TipFormFieldsState, right: TipFormFieldsState): boolean => {
+  return (
+    left.title === right.title &&
+    left.content === right.content &&
+    left.customId === right.customId &&
+    left.imageUrl === right.imageUrl &&
+    left.type === right.type &&
+    left.embedUrl === right.embedUrl
+  )
+}
+
+function TipTypeSelect({
+  value,
+  onValueChange,
+}: {
+  value: TipContentType
+  onValueChange: (value: TipContentType) => void
+}) {
+  return (
+    <Select value={value} onValueChange={(value) => onValueChange(value as TipContentType)}>
+      <SelectTrigger>
+        <SelectValue placeholder="Select content type" />
+      </SelectTrigger>
+      <SelectContent>
+        <SelectItem value="text">Text</SelectItem>
+        <SelectItem value="html">HTML</SelectItem>
+        <SelectItem value="image">Image</SelectItem>
+        <SelectItem value="embedded">Embedded Content</SelectItem>
+      </SelectContent>
+    </Select>
+  )
+}
+
+function TipFormFields({
+  idPrefix,
+  values,
+  onValuesChange,
+  renderOverridePill,
+  sanitizeCustomId,
+  contentPlaceholder = "Enter content...",
+  contentMinHeightClass = "min-h-[100px]",
+  showEmbedHint = false,
+  showEmbedPreview = false,
+  debounceMs = 3000,
+}: {
+  idPrefix: string
+  values: TipFormFieldsState
+  onValuesChange: (values: TipFormFieldsState) => void
+  renderOverridePill?: (key: string) => React.ReactNode
+  sanitizeCustomId?: (value: string) => string
+  contentPlaceholder?: string
+  contentMinHeightClass?: string
+  showEmbedHint?: boolean
+  showEmbedPreview?: boolean
+  debounceMs?: number
+}) {
+  const maybePill = (key: string) => (renderOverridePill ? renderOverridePill(key) : null)
+  const [localValues, setLocalValues] = useState<TipFormFieldsState>(values)
+  const debouncedValues = useDebounce(localValues, debounceMs)
+  const onValuesChangeRef = useRef(onValuesChange)
+
+  useEffect(() => {
+    onValuesChangeRef.current = onValuesChange
+  }, [onValuesChange])
+
+  useEffect(() => {
+    const nextValues: TipFormFieldsState = {
+      title: values.title,
+      content: values.content,
+      customId: values.customId,
+      imageUrl: values.imageUrl,
+      type: values.type,
+      embedUrl: values.embedUrl,
+    }
+    setLocalValues((prev) => {
+      if (areTipFormValuesEqual(prev, nextValues)) {
+        return prev
+      }
+      return nextValues
+    })
+  }, [values.title, values.content, values.customId, values.imageUrl, values.type, values.embedUrl])
+
+  useEffect(() => {
+    onValuesChangeRef.current(debouncedValues)
+  }, [debouncedValues])
+
+  const updateLocalField = (field: keyof TipFormFieldsState, value: string) => {
+    setLocalValues((prev) => {
+      if (field === "type") {
+        return {
+          ...prev,
+          type: value as TipContentType,
+        }
+      }
+      return {
+        ...prev,
+        [field]: value,
+      }
+    })
+  }
+
+  const commitNow = (nextValues?: TipFormFieldsState) => {
+    onValuesChangeRef.current(nextValues ?? localValues)
+  }
+
+  const handleTitleBlur = () => {
+    if (!sanitizeCustomId) {
+      commitNow()
+      return
+    }
+    const existingCustomId = localValues.customId.trim()
+    const titleValue = localValues.title.trim()
+    if (existingCustomId || !titleValue) {
+      commitNow()
+      return
+    }
+    const nextValues = {
+      ...localValues,
+      customId: sanitizeCustomId(titleValue),
+    }
+    setLocalValues(nextValues)
+    commitNow(nextValues)
+  }
+
+  const handleCustomIdBlur = () => {
+    if (!sanitizeCustomId) {
+      commitNow()
+      return
+    }
+    const currentCustomId = localValues.customId
+    if (!currentCustomId) {
+      commitNow()
+      return
+    }
+    const cleaned = sanitizeCustomId(currentCustomId)
+    if (cleaned === currentCustomId) {
+      commitNow()
+      return
+    }
+    const nextValues = {
+      ...localValues,
+      customId: cleaned,
+    }
+    setLocalValues(nextValues)
+    commitNow(nextValues)
+  }
+
+  return (
+    <>
+      <div>
+        <Label htmlFor={`${idPrefix}-title`} className="flex items-center gap-2">
+          Title
+          {maybePill("title")}
+        </Label>
+        <Input
+          id={`${idPrefix}-title`}
+          value={localValues.title}
+          onChange={(e) => updateLocalField("title", e.target.value)}
+          onBlur={handleTitleBlur}
+          placeholder="Enter title..."
+        />
+      </div>
+
+      <div>
+        <Label htmlFor={`${idPrefix}-custom-id`} className="flex items-center gap-2">
+          Custom ID
+          {maybePill("customId")}
+        </Label>
+        <Input
+          id={`${idPrefix}-custom-id`}
+          value={localValues.customId}
+          onChange={(e) => updateLocalField("customId", e.target.value)}
+          onBlur={handleCustomIdBlur}
+          placeholder="auto-generated from title"
+        />
+      </div>
+
+      <div>
+        <Label className="flex items-center gap-2">
+          Content Type
+          {maybePill("type")}
+        </Label>
+        <TipTypeSelect
+          value={localValues.type}
+          onValueChange={(value) => {
+            updateLocalField("type", value)
+            commitNow({ ...localValues, type: value })
+          }}
+        />
+      </div>
+
+      <div>
+        <Label htmlFor={`${idPrefix}-image-url`} className="flex items-center gap-2">
+          Image URL
+          {maybePill("imageUrl")}
+        </Label>
+        <Input
+          id={`${idPrefix}-image-url`}
+          value={localValues.imageUrl}
+          onChange={(e) => updateLocalField("imageUrl", e.target.value)}
+          onBlur={() => commitNow()}
+          placeholder="https://example.com/image.jpg"
+        />
+      </div>
+
+      {localValues.imageUrl && (
+        <div>
+          <Label>Image Preview</Label>
+          <div className="mt-2">
+            <img
+              src={localValues.imageUrl}
+              alt={localValues.title || "Tip image"}
+              className="max-h-48 rounded border border-border object-contain"
+              onError={(e) => {
+                ;(e.target as HTMLImageElement).style.display = "none"
+              }}
+            />
+          </div>
+        </div>
+      )}
+
+      {localValues.type === "embedded" && (
+        <div>
+          <Label htmlFor={`${idPrefix}-embed-url`} className="flex items-center gap-2">
+            Embed URL
+            {maybePill("embedUrl")}
+          </Label>
+          <Input
+            id={`${idPrefix}-embed-url`}
+            value={localValues.embedUrl}
+            onChange={(e) => updateLocalField("embedUrl", e.target.value)}
+            onBlur={() => commitNow()}
+            placeholder="/server_birthday.html"
+          />
+          {showEmbedHint && (
+            <p className="mt-1 text-xs text-muted-foreground">
+              Enter a relative URL to HTML content (e.g., /server_birthday.html)
+            </p>
+          )}
+        </div>
+      )}
+
+      {showEmbedPreview && localValues.type === "embedded" && localValues.embedUrl && (
+        <div>
+          <Label>Preview</Label>
+          <EmbeddedContent url={localValues.embedUrl} className="mt-2" />
+        </div>
+      )}
+
+      {localValues.type !== "embedded" && (
+        <div>
+          <Label htmlFor={`${idPrefix}-content`} className="flex items-center gap-2">
+            Content
+            {maybePill("content")}
+          </Label>
+          <Textarea
+            id={`${idPrefix}-content`}
+            value={localValues.content}
+            onChange={(e) => updateLocalField("content", e.target.value)}
+            onBlur={() => commitNow()}
+            placeholder={contentPlaceholder}
+            className={contentMinHeightClass}
+          />
+        </div>
+      )}
+    </>
+  )
+}
 
 function TipHtmlPreview({ html }: { html: string }) {
   return (
@@ -52,19 +354,8 @@ export function TipsManagement({ forceRefresh }: { forceRefresh?: string }) {
   const { tips, addTip, updateTip, deleteTip, activeTag } = useTips()
 
   // State for new tip form
-  const [newTip, setNewTip] = useState({
-    title: "",
-    content: "",
-    customId: "",
-    imageUrl: "",
-    adminOnly: false,
-    canUseInBriefing: true,
-    unlisted: false,
-    isHtml: false,
-    altText: "",
-    type: "text" as "text" | "html" | "image" | "embedded",
-    embedUrl: "",
-  })
+  const [newTip, setNewTip] = useState<NewTipState>(() => createEmptyNewTip())
+  const [newTipTargetTag, setNewTipTargetTag] = useState<string>(() => activeTag)
 
   const [showAddForm, setShowAddForm] = useState(false)
   const [tipToDelete, setTipToDelete] = useState<string | null>(null)
@@ -78,6 +369,7 @@ export function TipsManagement({ forceRefresh }: { forceRefresh?: string }) {
   const [availableAdminTags, setAvailableAdminTags] = useState<string[]>([])
   const [tipTargetTags, setTipTargetTags] = useState<Record<string, string>>({})
   const [tipMissingForTags, setTipMissingForTags] = useState<Record<string, boolean>>({})
+  const [fullScreenImage, setFullScreenImage] = useState<string | null>(null)
   const { toast } = useToast()
 
   const searchTokens = tokenizeSearchTerm(searchTerm)
@@ -93,6 +385,15 @@ export function TipsManagement({ forceRefresh }: { forceRefresh?: string }) {
       .trim()
       .replace(/\b\w/g, (char) => char.toUpperCase())
 
+  const sanitizeCustomId = (value: string) =>
+    value
+      .toLowerCase()
+      .trim()
+      .replace(/\s+/g, "-")
+      .replace(/[^a-z0-9-]/g, "")
+      .replace(/-+/g, "-")
+      .replace(/^-+|-+$/g, "")
+
   const buildDraftFromTip = (tip: any) => {
     const inferredType = (
       tip.type ||
@@ -104,6 +405,7 @@ export function TipsManagement({ forceRefresh }: { forceRefresh?: string }) {
       type: inferredType,
       embedUrl: tip.embedUrl || "",
       imageUrl: tip.imageUrl || "",
+      customId: tip.customId || "",
     }
   }
 
@@ -132,6 +434,16 @@ export function TipsManagement({ forceRefresh }: { forceRefresh?: string }) {
     setAvailableAdminTags(Array.from(normalized).sort())
   }, [activeTag])
 
+  useEffect(() => {
+    if (availableAdminTags.length === 0) {
+      setNewTipTargetTag(activeTag)
+      return
+    }
+    if (!availableAdminTags.includes(newTipTargetTag)) {
+      setNewTipTargetTag(activeTag)
+    }
+  }, [activeTag, availableAdminTags, newTipTargetTag])
+
   // Start editing a tip
   const startEditing = (tip: any) => {
     setEditingTips((prev) => ({ ...prev, [tip.id]: true }))
@@ -151,6 +463,7 @@ export function TipsManagement({ forceRefresh }: { forceRefresh?: string }) {
     }
     const targetTag = tipTargetTags[tip.id] ?? activeTag
     const nextType = (edited.type || "text") as "text" | "html" | "image" | "embedded"
+    const rawCustomId = edited.customId ?? tip.customId ?? ""
     const payload = {
       ...tip,
       title: edited.title.trim(),
@@ -159,6 +472,7 @@ export function TipsManagement({ forceRefresh }: { forceRefresh?: string }) {
       isHtml: nextType === "html",
       embedUrl: edited.embedUrl?.trim() || undefined,
       imageUrl: edited.imageUrl?.trim() || undefined,
+      customId: rawCustomId ? sanitizeCustomId(rawCustomId) || undefined : undefined,
     }
     try {
       await saveTipForTag(targetTag, payload)
@@ -222,15 +536,10 @@ export function TipsManagement({ forceRefresh }: { forceRefresh?: string }) {
     })
   }
 
-  // Handle content change during editing
-  const handleEditContentChange = (tipId: string, field: string, value: string) => {
-    setEditedContent(prev => ({
-      ...prev,
-      [tipId]: {
-        ...prev[tipId],
-        [field]: value,
-      }
-    }))
+  const resetAddForm = () => {
+    setNewTip(createEmptyNewTip())
+    setNewTipTargetTag(activeTag)
+    setShowAddForm(false)
   }
 
   const handleCopyContent = (tip: any) => {
@@ -305,14 +614,18 @@ export function TipsManagement({ forceRefresh }: { forceRefresh?: string }) {
   }
 
   // Handle adding new tip
-  const handleAddTip = () => {
-    if (newTip.content.trim() || newTip.imageUrl.trim() || newTip.embedUrl.trim()) {
-      addTip({
-        id: uuidv4(),
-        title: newTip.title.trim(),
-        content: newTip.content.trim(),
-        customId: newTip.customId.trim() || undefined,
-        imageUrl: newTip.imageUrl.trim() || undefined,
+  const handleAddTip = async () => {
+    if (!newTip.content.trim() && !newTip.imageUrl.trim() && !newTip.embedUrl.trim()) {
+      return
+    }
+
+    const cleanedCustomId = sanitizeCustomId(newTip.customId)
+    const payload = {
+      id: uuidv4(),
+      title: newTip.title.trim(),
+      content: newTip.content.trim(),
+      customId: cleanedCustomId || undefined,
+      imageUrl: newTip.imageUrl.trim() || undefined,
       adminOnly: newTip.adminOnly,
       canUseInBriefing: newTip.canUseInBriefing,
       unlisted: newTip.unlisted,
@@ -320,23 +633,40 @@ export function TipsManagement({ forceRefresh }: { forceRefresh?: string }) {
       altText: newTip.altText.trim() || undefined,
       type: newTip.type,
       embedUrl: newTip.embedUrl.trim() || undefined,
-      })
-
-      setNewTip({
-        title: "",
-        content: "",
-        customId: "",
-        imageUrl: "",
-        adminOnly: false,
-        canUseInBriefing: true,
-        unlisted: false,
-        isHtml: false,
-        altText: "",
-        type: "text" as "text" | "html" | "image" | "embedded",
-        embedUrl: "",
-      })
-      setShowAddForm(false)
     }
+
+    const targetTag = newTipTargetTag || activeTag
+
+    try {
+      if (targetTag === activeTag) {
+        addTip(payload)
+      } else {
+        await saveTipForTag(targetTag, payload)
+        clearConfigCache()
+        toast({
+          title: "Tip added",
+          description: `Added tip to ${targetTag} without switching tags.`,
+          variant: "success",
+        })
+      }
+      resetAddForm()
+    } catch (error) {
+      console.error("Failed to add tip", error)
+      toast({
+        title: "Add failed",
+        description: "Could not add the tip for the selected tag.",
+        variant: "destructive",
+      })
+    }
+  }
+
+  const openFullScreenImage = (url: string) => {
+    if (!url) return
+    setFullScreenImage(url)
+  }
+
+  const handleBackdropClick = () => {
+    setFullScreenImage(null)
   }
 
   return (
@@ -356,122 +686,61 @@ export function TipsManagement({ forceRefresh }: { forceRefresh?: string }) {
       {showAddForm && (
         <Card>
           <CardContent className="p-4">
-            <div className="space-y-4">
-              <div>
-                <Label htmlFor="new-tip-title">Title</Label>
-                <Input
-                  id="new-tip-title"
-                  value={newTip.title}
-                  onChange={(e) => setNewTip((prev) => ({ ...prev, title: e.target.value }))}
-                  placeholder="Enter a title..."
-                />
-              </div>
-
-              <div>
-                <Label>Content Type</Label>
-                <Select
-                  value={newTip.type}
-                  onValueChange={(value) =>
-                    setNewTip((prev) => ({
-                      ...prev,
-                      type: value as "text" | "html" | "image" | "embedded",
-                      isHtml: value === "html",
-                    }))
-                  }
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select content type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="text">Text</SelectItem>
-                    <SelectItem value="html">HTML</SelectItem>
-                    <SelectItem value="image">Image</SelectItem>
-                    <SelectItem value="embedded">Embedded Content</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              {newTip.type === "embedded" && (
-                <div>
-                  <Label htmlFor="new-tip-embed-url">Embed URL</Label>
-                  <Input
-                    id="new-tip-embed-url"
-                    value={newTip.embedUrl}
-                    onChange={(e) => setNewTip((prev) => ({ ...prev, embedUrl: e.target.value }))}
-                    placeholder="/server_birthday.html"
-                  />
-                  <p className="text-xs text-muted-foreground mt-1">
-                    Enter a relative URL to HTML content (e.g., /server_birthday.html)
+            <div className="space-y-2">
+              {availableAdminTags.length > 1 && (
+                <div className="space-y-1">
+                  <Label className="flex items-center gap-2 text-xs">Add to tag</Label>
+                  <Select value={newTipTargetTag} onValueChange={setNewTipTargetTag}>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {availableAdminTags.map((tag) => (
+                        <SelectItem key={tag} value={tag}>
+                          {tag}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <p className="text-[11px] text-muted-foreground">
+                    New tip is saved to the selected tag without switching Command mode.
                   </p>
                 </div>
               )}
 
-              {newTip.type === "embedded" && newTip.embedUrl && (
-                <div>
-                  <Label>Preview</Label>
-                  <EmbeddedContent url={newTip.embedUrl} className="mt-2" />
-                </div>
-              )}
-
-              <div>
-                <Label htmlFor="new-tip-image-url">Image URL</Label>
-                <Input
-                  id="new-tip-image-url"
-                  value={newTip.imageUrl}
-                  onChange={(e) => setNewTip((prev) => ({ ...prev, imageUrl: e.target.value }))}
-                  placeholder="https://example.com/image.jpg"
-                />
-              </div>
-
-              {newTip.imageUrl && (
-                <div>
-                  <Label>Image Preview</Label>
-                  <div className="mt-2">
-                    <img
-                      src={newTip.imageUrl}
-                      alt={newTip.title || "Tip preview image"}
-                      className="max-h-48 rounded border border-border object-contain"
-                      onError={(e) => {
-                        ;(e.target as HTMLImageElement).style.display = "none"
-                      }}
-                    />
-                  </div>
-                </div>
-              )}
-
-              {newTip.type !== "embedded" && (
-                <div>
-                  <Label htmlFor="new-tip-content">Content</Label>
-                  <Textarea
-                    id="new-tip-content"
-                    value={newTip.content}
-                    onChange={(e) => setNewTip((prev) => ({ ...prev, content: e.target.value }))}
-                    placeholder="Enter tip content..."
-                    className="min-h-[120px]"
-                  />
-                </div>
-              )}
+              <TipFormFields
+                idPrefix="new-tip"
+                values={newTip}
+                onValuesChange={(nextValues) =>
+                  setNewTip((prev) => {
+                    const currentValues: TipFormFieldsState = {
+                      title: prev.title,
+                      content: prev.content,
+                      customId: prev.customId,
+                      imageUrl: prev.imageUrl,
+                      type: prev.type,
+                      embedUrl: prev.embedUrl,
+                    }
+                    if (areTipFormValuesEqual(currentValues, nextValues) && prev.isHtml === (nextValues.type === "html")) {
+                      return prev
+                    }
+                    return {
+                      ...prev,
+                      ...nextValues,
+                      isHtml: nextValues.type === "html",
+                    }
+                  })
+                }
+                sanitizeCustomId={sanitizeCustomId}
+                contentPlaceholder="Enter tip content..."
+                contentMinHeightClass="min-h-[120px]"
+                showEmbedHint
+                showEmbedPreview
+                debounceMs={3000}
+              />
 
               <div className="flex justify-end gap-2">
-                <Button
-                  variant="outline"
-                  onClick={() => {
-                    setShowAddForm(false)
-                    setNewTip({
-                      title: "",
-                      content: "",
-                      customId: "",
-                      imageUrl: "",
-                      adminOnly: false,
-                      canUseInBriefing: true,
-                      unlisted: false,
-                      isHtml: false,
-                      altText: "",
-                      type: "text" as "text" | "html" | "image" | "embedded",
-                      embedUrl: "",
-                    })
-                  }}
-                >
+                <Button variant="outline" onClick={resetAddForm}>
                   Cancel
                 </Button>
                 <Button onClick={handleAddTip}>
@@ -524,36 +793,15 @@ export function TipsManagement({ forceRefresh }: { forceRefresh?: string }) {
               }
               const isHtmlContent = tip.type === "html" || tip.isHtml
               const draft = editedContent[tip.id]
-              const currentImageUrl = draft?.imageUrl ?? tip.imageUrl ?? ""
               return (
                 <Card key={tip.id}>
                   <CardContent className="p-4">
-                    <div className="flex justify-between items-start gap-2">
-                      <div className="flex-1">
-                      {!editingTips[tip.id] ? (
-                        <>
-                          {tip.title && (
-                            <div className="font-medium mb-2 flex items-center gap-2">
-                              {tip.title}
-                              {hasOverrides && (
-                                <Badge className="text-muted-foreground border-border bg-muted/60 dark:bg-muted/40">
-                                  Overridden
-                                </Badge>
-                              )}
-                            </div>
-                          )}
-                          {tip.type === "embedded" && (
-                            <span className="px-2 py-0.5 bg-green-100 text-green-800 rounded-full text-xs mb-2 inline-block">
-                              Embedded
-                            </span>
-                          )}
-                          {tip.type === "embedded" && tip.embedUrl && (
-                            <div className="mt-2">
-                              <EmbeddedContent url={tip.embedUrl} />
-                            </div>
-                          )}
-                          {tip.content && tip.type !== "embedded" && (
-                            <div className="py-1">
+                    {!editingTips[tip.id] ? (
+                      <div className="flex justify-between items-start gap-2">
+                        <div className="flex-1">
+                          {tip.title && <div className="font-medium mb-2">{tip.title}</div>}
+                          {tip.content && (
+                            <div className={isHtmlContent ? "" : "whitespace-pre-wrap break-words text-sm"}>
                               {isHtmlContent ? (
                                 <TipHtmlPreview html={tip.content} />
                               ) : (
@@ -561,164 +809,37 @@ export function TipsManagement({ forceRefresh }: { forceRefresh?: string }) {
                               )}
                             </div>
                           )}
-                          {tip.imageUrl && (
+                          {!isHtmlContent && tip.imageUrl && (
                             <div className={`${tip.content ? "mt-2" : ""}`}>
-                              <img
-                                src={tip.imageUrl}
-                                alt={tip.title || "Tip image"}
-                                className="max-h-48 rounded border border-border object-contain"
-                                loading="lazy"
-                                onError={(e) => {
-                                  ;(e.target as HTMLImageElement).style.display = "none"
-                                }}
-                              />
-                            </div>
-                          )}
-                        </>
-                      ) : (
-                        <div className="space-y-2">
-                          {hasOverrides && (
-                            <div className="rounded border border-amber-200 bg-amber-50 p-2 text-xs text-amber-900">
-                              <p className="font-medium">Overridden fields</p>
-                              <ul className="mt-1 list-disc space-y-0.5 pl-4">
-                                {overrideKeys.map((key) => (
-                                  <li key={key}>{formatOverrideKey(key)}</li>
-                                ))}
-                              </ul>
-                            </div>
-                          )}
-                          {availableAdminTags.filter((tag) => tag !== activeTag).length > 0 && (
-                            <div className="space-y-1">
-                              <Label className="flex items-center gap-2 text-xs">
-                                Apply changes to tag
-                              </Label>
-                              <Select
-                                value={tipTargetTags[tip.id] ?? activeTag}
-                                onValueChange={(value) => handleTipTargetSelection(tip, value)}
+                              <div
+                                className="relative inline-block cursor-pointer group"
+                                onClick={() => openFullScreenImage(tip.imageUrl!)}
                               >
-                                <SelectTrigger>
-                                  <SelectValue />
-                                </SelectTrigger>
-                                <SelectContent>
-                                  {availableAdminTags.map((tag) => (
-                                    <SelectItem key={tag} value={tag}>
-                                      {tag}
-                                    </SelectItem>
-                                  ))}
-                                </SelectContent>
-                              </Select>
-                              <p className="text-[11px] text-muted-foreground">
-                                The selected tag receives these edits without leaving Command mode.
-                              </p>
-                              {tipMissingForTags[tip.id] && (
-                                <p className="text-[11px] text-amber-600">
-                                  This tip does not exist for the selected tag; saving will create it with the current
-                                  content.
-                                </p>
-                              )}
-                            </div>
-                          )}
-                          <div>
-                            <Label className="flex items-center gap-2">
-                              Title
-                              {renderOverridePill("title")}
-                            </Label>
-                            <Input
-                              value={draft?.title ?? tip.title ?? ""}
-                              onChange={(e) => handleEditContentChange(tip.id, "title", e.target.value)}
-                              placeholder="Enter title..."
-                            />
-                          </div>
-                          
-                          <div>
-                            <Label className="flex items-center gap-2">
-                              Content Type
-                              {renderOverridePill("type")}
-                            </Label>
-                            <Select
-                              value={draft?.type ?? tip.type ?? "text"}
-                              onValueChange={(value) => handleEditContentChange(tip.id, "type", value)}
-                            >
-                              <SelectTrigger>
-                                <SelectValue />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectItem value="text">Text</SelectItem>
-                                <SelectItem value="html">HTML</SelectItem>
-                                <SelectItem value="image">Image</SelectItem>
-                                <SelectItem value="embedded">Embedded Content</SelectItem>
-                              </SelectContent>
-                            </Select>
-                          </div>
-
-                          <div>
-                            <Label className="flex items-center gap-2">
-                              Image URL
-                              {renderOverridePill("imageUrl")}
-                            </Label>
-                            <Input
-                              value={draft?.imageUrl ?? tip.imageUrl ?? ""}
-                              onChange={(e) => handleEditContentChange(tip.id, "imageUrl", e.target.value)}
-                              placeholder="https://example.com/image.jpg"
-                            />
-                          </div>
-
-                          {currentImageUrl && (
-                            <div>
-                              <Label>Image Preview</Label>
-                              <div className="mt-2">
                                 <img
-                                  src={currentImageUrl}
-                                  alt={draft?.title || tip.title || "Tip image"}
-                                  className="max-h-48 rounded border border-border object-contain"
+                                  src={tip.imageUrl}
+                                  alt={tip.title || "Tip image"}
+                                  className="max-w-full max-h-[400px] rounded-md border border-border object-contain"
+                                  loading="lazy"
+                                  onError={(e) => {
+                                    ;(e.target as HTMLImageElement).style.display = "none"
+                                  }}
                                 />
+                                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 hover:opacity-100 transition-opacity bg-black/20 rounded-md">
+                                  <ZoomIn className="h-6 w-6 text-white drop-shadow-md" />
+                                </div>
                               </div>
                             </div>
                           )}
-
-                          {(draft?.type ?? tip.type) === "embedded" && (
-                            <div>
-                              <Label className="flex items-center gap-2">
-                                Embed URL
-                                {renderOverridePill("embedUrl")}
-                              </Label>
-                              <Input
-                                value={draft?.embedUrl ?? tip.embedUrl ?? ""}
-                                onChange={(e) => handleEditContentChange(tip.id, "embedUrl", e.target.value)}
-                                placeholder="/server_birthday.html"
-                              />
+                          {tip.type === "embedded" && tip.embedUrl && (
+                            <div className={`${tip.content ? "mt-2" : ""}`}>
+                              <EmbeddedContent url={tip.embedUrl} />
                             </div>
                           )}
-
-                          {(draft?.type ?? tip.type) !== "embedded" && (
-                            <div>
-                              <Label className="flex items-center gap-2">
-                                Content
-                                {renderOverridePill("content")}
-                              </Label>
-                              <Textarea
-                                value={draft?.content ?? tip.content ?? ""}
-                                onChange={(e) => handleEditContentChange(tip.id, "content", e.target.value)}
-                                placeholder="Enter content..."
-                                className="min-h-[100px]"
-                              />
-                            </div>
+                          {tip.altText && (
+                            <div className="mt-2 text-xs text-muted-foreground italic">Alt text: {tip.altText}</div>
                           )}
-
-                          <div className="flex gap-2">
-                            <Button onClick={() => saveEditedTip(tip)} size="sm">
-                              Save
-                            </Button>
-                            <Button onClick={() => cancelEditing(tip.id)} variant="outline" size="sm">
-                              Cancel
-                            </Button>
-                          </div>
                         </div>
-                      )}
-                    </div>
-                    <div className="flex gap-1">
-                      {!editingTips[tip.id] && (
-                        <>
+                        <div className="flex flex-col gap-2">
                           <Button
                             variant="ghost"
                             size="icon"
@@ -745,29 +866,122 @@ export function TipsManagement({ forceRefresh }: { forceRefresh?: string }) {
                           >
                             {copiedLinkId === tip.id ? <Check size={16} /> : <LinkIcon size={16} />}
                           </Button>
+                          <Button variant="ghost" size="icon" onClick={() => startEditing(tip)}>
+                            <Edit2 size={16} />
+                          </Button>
                           <Button
                             variant="ghost"
                             size="icon"
-                            onClick={() => startEditing(tip)}
+                            onClick={() => setTipToDelete(tip.id)}
+                            className="text-destructive hover:text-destructive"
                           >
-                            <Edit2 size={16} />
+                            <Trash2 size={16} />
                           </Button>
-                        </>
-                      )}
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => setTipToDelete(tip.id)}
-                        className="text-destructive hover:text-destructive"
-                      >
-                        <Trash2 size={16} />
-                      </Button>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            )
-          })}
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="flex justify-between items-start gap-2">
+                        <div className="flex-1 space-y-2">
+                          {hasOverrides && (
+                            <div className="rounded border border-amber-200 bg-amber-50 p-2 text-xs text-amber-900">
+                              <p className="font-medium">Overridden fields</p>
+                              <ul className="mt-1 list-disc space-y-0.5 pl-4">
+                                {overrideKeys.map((key) => (
+                                  <li key={key}>{formatOverrideKey(key)}</li>
+                                ))}
+                              </ul>
+                            </div>
+                          )}
+                          {availableAdminTags.filter((tag) => tag !== activeTag).length > 0 && (
+                            <div className="space-y-1">
+                              <Label className="flex items-center gap-2 text-xs">Apply changes to tag</Label>
+                              <Select
+                                value={tipTargetTags[tip.id] ?? activeTag}
+                                onValueChange={(value) => handleTipTargetSelection(tip, value)}
+                              >
+                                <SelectTrigger>
+                                  <SelectValue />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  {availableAdminTags.map((tag) => (
+                                    <SelectItem key={tag} value={tag}>
+                                      {tag}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                              <p className="text-[11px] text-muted-foreground">
+                                The selected tag receives these edits without leaving Command mode.
+                              </p>
+                              {tipMissingForTags[tip.id] && (
+                                <p className="text-[11px] text-amber-600">
+                                  This tip does not exist for the selected tag; saving will create it with the current
+                                  content.
+                                </p>
+                              )}
+                            </div>
+                          )}
+                          <TipFormFields
+                            idPrefix={`edit-tip-${tip.id}`}
+                            values={{
+                              title: draft?.title ?? tip.title ?? "",
+                              content: draft?.content ?? tip.content ?? "",
+                              customId: draft?.customId ?? tip.customId ?? "",
+                              imageUrl: draft?.imageUrl ?? tip.imageUrl ?? "",
+                              type: (draft?.type ?? tip.type ?? "text") as TipContentType,
+                              embedUrl: draft?.embedUrl ?? tip.embedUrl ?? "",
+                            }}
+                            onValuesChange={(nextValues) =>
+                              setEditedContent((prev) => {
+                                const currentValues: TipFormFieldsState = {
+                                  title: prev[tip.id]?.title ?? tip.title ?? "",
+                                  content: prev[tip.id]?.content ?? tip.content ?? "",
+                                  customId: prev[tip.id]?.customId ?? tip.customId ?? "",
+                                  imageUrl: prev[tip.id]?.imageUrl ?? tip.imageUrl ?? "",
+                                  type: (prev[tip.id]?.type ?? tip.type ?? "text") as TipContentType,
+                                  embedUrl: prev[tip.id]?.embedUrl ?? tip.embedUrl ?? "",
+                                }
+                                if (areTipFormValuesEqual(currentValues, nextValues)) {
+                                  return prev
+                                }
+                                return {
+                                  ...prev,
+                                  [tip.id]: {
+                                    ...prev[tip.id],
+                                    ...nextValues,
+                                  },
+                                }
+                              })
+                            }
+                            renderOverridePill={renderOverridePill}
+                            sanitizeCustomId={sanitizeCustomId}
+                            debounceMs={3000}
+                          />
+                          <div className="flex gap-2">
+                            <Button onClick={() => saveEditedTip(tip)} size="sm">
+                              Save
+                            </Button>
+                            <Button onClick={() => cancelEditing(tip.id)} variant="outline" size="sm">
+                              Cancel
+                            </Button>
+                          </div>
+                        </div>
+                        <div className="flex flex-col gap-2">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => setTipToDelete(tip.id)}
+                            className="text-destructive hover:text-destructive"
+                          >
+                            <Trash2 size={16} />
+                          </Button>
+                        </div>
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              )
+            })}
           </>
         ) : (
           <Card>
@@ -804,6 +1018,34 @@ export function TipsManagement({ forceRefresh }: { forceRefresh?: string }) {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      {/* Full Screen Image Dialog */}
+      <Dialog open={!!fullScreenImage} onOpenChange={(open) => !open && setFullScreenImage(null)}>
+        <DialogContent
+          className="p-0 overflow-hidden bg-black/50 border-0 shadow-xl"
+          style={{
+            maxWidth: "100vw",
+            maxHeight: "100vh",
+            width: "100vw",
+            height: "100vh",
+          }}
+          aria-label="Full-size image view"
+          onClick={handleBackdropClick}
+        >
+          <DialogTitle asChild>
+            <span className="sr-only">Full-size image view</span>
+          </DialogTitle>
+          {fullScreenImage && (
+            <div className="absolute inset-0 flex items-center justify-center">
+              <img
+                src={fullScreenImage}
+                alt="Full screen view"
+                className="max-w-full max-h-full object-contain"
+              />
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }
