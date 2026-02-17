@@ -494,7 +494,7 @@ const getResolvedSnapshot = async (
     throw new Error("Invalid tag provided")
   }
 
-  const variant = getVariantForTag(normalizedTag, options.includeLocalOverrides)
+  const variant = getVariantForTag(normalizedTag, options)
   const cache = resolvedCacheByType[type][variant]
   const inFlight = resolvedInFlightByType[type][variant]
 

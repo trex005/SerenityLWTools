@@ -20,9 +20,14 @@ console.log(
 try {
   // Step 0: Clear stale build artifacts that can corrupt hashes
   const nextDir = path.join(__dirname, ".next")
+  const outDir = path.join(__dirname, "out")
   if (fs.existsSync(nextDir)) {
     console.log(`${colors.yellow}Step 0: Removing previous .next cache...${colors.reset}`)
     fs.rmSync(nextDir, { recursive: true, force: true })
+  }
+  if (fs.existsSync(outDir)) {
+    console.log(`${colors.yellow}Step 0: Removing previous out export...${colors.reset}`)
+    fs.rmSync(outDir, { recursive: true, force: true })
   }
 
   // Step 1: Build the Next.js application
@@ -32,7 +37,6 @@ try {
 
   // Step 2: Check if the out directory exists
   console.log(`${colors.yellow}Step 2: Verifying output directory...${colors.reset}`)
-  const outDir = path.join(__dirname, "out")
   if (fs.existsSync(outDir)) {
     console.log(`${colors.green}✓ Output directory created at: ${outDir}${colors.reset}\n`)
   } else {
