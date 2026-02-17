@@ -3,6 +3,11 @@
   "parent": "996",
   "brand": {
     "name": "BLTC 996",
-    "favicon": "/conf/bltc996/favicon.ico"
-  }
+    "favicon": "/conf/bltc996/favicon.ico",
+    "backgroundImage": "/conf/bltc996/sswc.png"
+  },
+  "storage": {
+  "eventsSuffix": "v2",
+  "tipsSuffix": "v2"
+}
 }

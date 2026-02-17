@@ -55,6 +55,23 @@
   }
   body {
     @apply bg-background text-foreground;
+    position: relative;
+  }
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    background-image: var(--brand-bg-image, none);
+    background-size: var(--brand-bg-size, cover);
+    background-repeat: var(--brand-bg-repeat, no-repeat);
+    background-position: var(--brand-bg-position, center);
+    opacity: var(--brand-bg-opacity, 1);
+    pointer-events: none;
+  }
+  body > * {
+    position: relative;
+    z-index: 1;
   }
 }
 

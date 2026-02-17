@@ -2,7 +2,14 @@
 
 import { useEffect, useMemo } from "react"
 import { useTagData } from "@/hooks/use-tag-data"
-import { buildBrandTitle, DEFAULT_BRAND_FAVICON } from "@/lib/branding"
+import {
+  buildBrandTitle,
+  DEFAULT_BRAND_BACKGROUND_POSITION,
+  DEFAULT_BRAND_BACKGROUND_REPEAT,
+  DEFAULT_BRAND_BACKGROUND_SIZE,
+  DEFAULT_BRAND_BACKGROUND_OPACITY,
+  DEFAULT_BRAND_FAVICON,
+} from "@/lib/branding"
 
 export function BrandHead() {
   const { brand } = useTagData()
@@ -37,7 +44,24 @@ export function BrandHead() {
     setMeta('meta[property="og:site_name"]')
     setMeta('meta[property="og:title"]')
     setMeta('meta[name="twitter:title"]')
-  }, [brandTitle, favicon])
+
+    const bodyStyle = document.body.style
+    const backgroundImage = brand?.backgroundImage ? `url("${brand.backgroundImage}")` : "none"
+    bodyStyle.setProperty("--brand-bg-image", backgroundImage)
+    bodyStyle.setProperty("--brand-bg-size", brand?.backgroundSize || DEFAULT_BRAND_BACKGROUND_SIZE)
+    bodyStyle.setProperty("--brand-bg-repeat", brand?.backgroundRepeat || DEFAULT_BRAND_BACKGROUND_REPEAT)
+    bodyStyle.setProperty("--brand-bg-position", brand?.backgroundPosition || DEFAULT_BRAND_BACKGROUND_POSITION)
+    const opacity = brand?.backgroundOpacity ?? DEFAULT_BRAND_BACKGROUND_OPACITY
+    bodyStyle.setProperty("--brand-bg-opacity", String(opacity))
+  }, [
+    brandTitle,
+    favicon,
+    brand?.backgroundImage,
+    brand?.backgroundPosition,
+    brand?.backgroundRepeat,
+    brand?.backgroundSize,
+    brand?.backgroundOpacity,
+  ])
 
   return null
 }
