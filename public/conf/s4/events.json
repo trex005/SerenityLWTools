@@ -1,0 +1,340 @@
+{
+  "updated": "2026-01-03T15:28:02-02:00",
+  "events": [
+    {
+      "id": "ev-11",
+      "startTime": "10:00",
+      "includeInBriefing": true
+    },
+    {
+      "id": "41b7230f-eac7-478d-8f95-2955050d1da0",
+      "archived": false,
+      "recurrence": {
+        "startDate": "2026-01-06"
+      },
+      "includeInBriefing": true
+    },
+    {
+      "id": "fe4d455d-6f36-45b2-92c2-24c32521473f",
+      "recurrence": {
+        "startDate": "2025-12-30"
+      }
+    },
+    {
+      "id": "04434cb7-53c9-4aa5-b7a7-0dac1f6239c1",
+      "archived": true
+    },
+    {
+      "id": "d60cae98-2318-4856-a8e0-b68c567f8306",
+      "archived": true
+    },
+    {
+      "id": "e05c1e28-c800-48d1-8d3a-53898d5f2923",
+      "archived": true
+    },
+    {
+      "id": "226d3b1b-ce75-444f-ac11-5ee3fe3af4b4",
+      "days": [
+        "tuesday",
+        "wednesday",
+        "thursday",
+        "friday",
+        "saturday",
+        "sunday"
+      ],
+      "archived": false,
+      "recurrence": {
+        "type": "weeks",
+        "daysOfWeek": [
+          "tuesday",
+          "wednesday",
+          "thursday",
+          "friday",
+          "saturday",
+          "sunday"
+        ],
+        "startDate": "2025-12-23",
+        "offPeriods": 3,
+        "endDate": "2026-01-26"
+      },
+      "includeInBriefing": true
+    },
+    {
+      "id": "f948a0fc-4ef5-4ba0-8458-8612c29a4537",
+      "archived": true
+    },
+    {
+      "id": "183e0c1e-249f-47f6-8324-b155e4efb389",
+      "archived": true
+    },
+    {
+      "id": "048dbc91-fd90-4b78-9542-63810db6d450",
+      "title": "Blood Night (Also 10:30 & 18:30)",
+      "description": "",
+      "remindTomorrow": true,
+      "remindEndOfDay": false,
+      "includeInBriefing": true,
+      "includeOnWebsite": true,
+      "isAllDay": false,
+      "startTime": "02:30",
+      "endTime": "",
+      "days": [
+        "sunday",
+        "monday",
+        "tuesday",
+        "wednesday",
+        "thursday",
+        "friday",
+        "saturday"
+      ],
+      "variations": {},
+      "order": {},
+      "archived": false,
+      "recurrence": {
+        "type": "days",
+        "onPeriods": 1,
+        "offPeriods": 0,
+        "daysOfWeek": [
+          "sunday",
+          "monday",
+          "tuesday",
+          "wednesday",
+          "thursday",
+          "friday",
+          "saturday"
+        ],
+        "startDate": "2025-12-15"
+      }
+    },
+    {
+      "id": "b3fe6ebf-d529-4e2a-ae39-d464518e2981",
+      "title": "Trade Posts Level 1 & 2",
+      "description": "",
+      "remindTomorrow": true,
+      "remindEndOfDay": false,
+      "includeInBriefing": true,
+      "includeOnWebsite": true,
+      "isAllDay": false,
+      "startTime": "12:00",
+      "endTime": "",
+      "days": [
+        "tuesday"
+      ],
+      "variations": {},
+      "order": {},
+      "archived": false,
+      "recurrence": {
+        "type": "weeks",
+        "onPeriods": 1,
+        "offPeriods": 0,
+        "daysOfWeek": [
+          "tuesday"
+        ],
+        "startDate": "2025-12-30"
+      }
+    },
+    {
+      "id": "d30d51a9-9323-4173-ac6d-5ccfd76dabd8",
+      "title": "Trade Posts Level 3 & 4",
+      "description": "",
+      "remindTomorrow": true,
+      "remindEndOfDay": false,
+      "includeInBriefing": true,
+      "includeOnWebsite": true,
+      "isAllDay": false,
+      "startTime": "12:00",
+      "endTime": "",
+      "days": [
+        "friday"
+      ],
+      "variations": {},
+      "order": {},
+      "archived": false,
+      "recurrence": {
+        "type": "weeks",
+        "onPeriods": 1,
+        "offPeriods": 0,
+        "daysOfWeek": [
+          "friday"
+        ],
+        "startDate": "2026-01-02"
+      }
+    },
+    {
+      "id": "ea06e966-cb21-4bbb-ada4-804ad9058e5a",
+      "title": "Magatama Shop FINAL DAY",
+      "description": "",
+      "remindTomorrow": true,
+      "remindEndOfDay": true,
+      "includeInBriefing": true,
+      "includeOnWebsite": true,
+      "isAllDay": true,
+      "startTime": "09:00",
+      "endTime": "",
+      "days": [
+        "sunday"
+      ],
+      "variations": {},
+      "order": {
+        "sunday": -3
+      },
+      "archived": false,
+      "recurrence": {
+        "type": "weeks",
+        "onPeriods": 1,
+        "offPeriods": 0,
+        "daysOfWeek": [
+          "sunday"
+        ],
+        "startDate": "2025-12-21"
+      }
+    },
+    {
+      "id": "b7402058-f966-46f3-ad4b-c0752de3e9a5",
+      "title": "Blood Night Hunter FIRST DAY",
+      "description": "",
+      "remindTomorrow": true,
+      "remindEndOfDay": false,
+      "includeInBriefing": true,
+      "includeOnWebsite": true,
+      "isAllDay": false,
+      "startTime": "02:30",
+      "endTime": "",
+      "days": [
+        "monday"
+      ],
+      "variations": {},
+      "order": {},
+      "archived": false,
+      "recurrence": {
+        "type": "weeks",
+        "onPeriods": 1,
+        "offPeriods": 0,
+        "daysOfWeek": [
+          "monday"
+        ],
+        "startDate": "2025-12-22",
+        "endDate": "2025-12-22"
+      }
+    },
+    {
+      "id": "0057122e-78a1-4a4f-99c4-c872979eb63c",
+      "title": "Divine Tree",
+      "description": "",
+      "remindTomorrow": false,
+      "remindEndOfDay": true,
+      "includeInBriefing": true,
+      "includeOnWebsite": true,
+      "isAllDay": true,
+      "startTime": "09:00",
+      "endTime": "",
+      "days": [
+        "tuesday",
+        "wednesday",
+        "thursday",
+        "friday",
+        "saturday"
+      ],
+      "variations": {},
+      "order": {
+        "monday": -1,
+        "tuesday": -1,
+        "wednesday": -1,
+        "thursday": -1,
+        "friday": -1,
+        "saturday": -1,
+        "sunday": -1
+      },
+      "archived": false,
+      "recurrence": {
+        "type": "weeks",
+        "onPeriods": 1,
+        "offPeriods": 0,
+        "daysOfWeek": [
+          "tuesday",
+          "wednesday",
+          "thursday",
+          "friday",
+          "saturday"
+        ],
+        "startDate": "2025-12-23"
+      }
+    },
+    {
+      "id": "348dc5be-2b8c-4bca-a60f-e13c13dfed33",
+      "title": "Copper Conquest",
+      "description": "",
+      "remindTomorrow": true,
+      "remindEndOfDay": false,
+      "includeInBriefing": true,
+      "includeOnWebsite": true,
+      "isAllDay": false,
+      "startTime": "12:00",
+      "endTime": "",
+      "days": [
+        "wednesday",
+        "saturday"
+      ],
+      "variations": {},
+      "order": {},
+      "archived": false,
+      "recurrence": {
+        "type": "weeks",
+        "onPeriods": 1,
+        "offPeriods": 0,
+        "daysOfWeek": [
+          "wednesday",
+          "saturday"
+        ],
+        "startDate": "2026-01-07",
+        "endDate": "2026-02-04"
+      }
+    },
+    {
+      "id": "99b985e4-470d-4334-8982-b7fa20cd7698",
+      "title": "Faction Duel Contest",
+      "description": "",
+      "remindTomorrow": true,
+      "remindEndOfDay": false,
+      "includeInBriefing": true,
+      "includeOnWebsite": true,
+      "isAllDay": true,
+      "startTime": "09:00",
+      "endTime": "",
+      "days": [
+        "monday",
+        "tuesday",
+        "wednesday",
+        "thursday",
+        "friday",
+        "saturday"
+      ],
+      "variations": {},
+      "order": {
+        "monday": -2,
+        "tuesday": -2,
+        "wednesday": -2,
+        "thursday": -2,
+        "friday": -2,
+        "saturday": -2,
+        "sunday": -2
+      },
+      "archived": false,
+      "recurrence": {
+        "type": "weeks",
+        "onPeriods": 1,
+        "offPeriods": 0,
+        "daysOfWeek": [
+          "monday",
+          "tuesday",
+          "wednesday",
+          "thursday",
+          "friday",
+          "saturday"
+        ],
+        "startDate": "2026-01-26",
+        "endDate": "2026-01-31"
+      }
+    }
+  ]
+}

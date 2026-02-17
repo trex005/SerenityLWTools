@@ -1,0 +1,30 @@
+{
+  "updated": "2025-12-20T06:12:46-02:00",
+  "tips": [
+    {
+      "id": "4fb623b6-7750-4623-8d6b-ed7048426eb2",
+      "title": "Blood Night Guide - Being Assisted",
+      "content": "<p dir=\"ltr\">Prep:</p>\n<ul>\n<li dir=\"ltr\">Always upgrade workshops as much as possible before gathering quartz (max 23 hours)</li>\n<li dir=\"ltr\">Park all but one electrician in bases that are lighting hive (image below)</li>\n<li dir=\"ltr\">Equip your best PVE tactics cards (ignore +tactics card packs)</li>\n<li dir=\"ltr\">Arrange with someone to push you as high with DEs as possible</li>\n<li dir=\"ltr\">Reduce squads 2-4 to one hero</li>\n<li dir=\"ltr\">One at a time, send S1 &amp; S2 somewhere illuminated (check the box in the select squad screen) Then send 3-4 out making sure the illumination box is NOT checked</li>\n</ul>\n<p dir=\"ltr\">Night Fall:</p>\n<ol>\n<li dir=\"ltr\">While waiting your turn for DEs:\n<ul>\n<li dir=\"ltr\">Speed other rallies by joining with S3-4 (illumination off)</li>\n<li dir=\"ltr\">Zombie level with S1 (illumination on). Be sure to select type that your S1 counters. (image below)</li>\n</ul>\n</li>\n<li dir=\"ltr\">When it is your turn for rally help, rally with S2 (illumination on)</li>\n<li dir=\"ltr\">Upgrade workshops and collect quartz if it will give you another lab level, if so, repeat step 1</li>\n<li dir=\"ltr\">Send last electrician to lighting bases</li>\n<li dir=\"ltr\">keep speeding along other rallies with S2-4</li>\n</ol>\n<img src=\"/img/s4/send_illuminated.png\" style=\"float:left\"  loading=\"lazy\" alt=\"Send Electricians\"><img src=\"/img/s4/zombie_type.png\" style=\"float:left\" width=\"300\" loading=\"lazy\" alt=\"Zombie Type\"><img src=\"/img/s4/send_electrician.png\" style=\"float:left\" width=\"300\" loading=\"lazy\" alt=\"Send Electricians\">",
+      "adminOnly": false,
+      "canUseInBriefing": true,
+      "unlisted": false,
+      "isHtml": true,
+      "type": "html",
+      "customId": "blood-night-guide"
+      
+    },
+        {
+      "id": "8cb534b5-4302-48fc-ae1e-80249ca09850",
+      "title": "Blood Hunter Overview",
+      "content": "You must acquire three separate Blood Hunter skills on the right side of the skill tree before participating.\n\nBlood Hunter can only be activated once every 72 hours, so choose your timing carefully.\n\nAdvance Teleports stack at a rate of one per minute and can be used to move around within a specific server.\n\nServer-to-server teleports are limited to once every five minutes and are subject to a cooldown.\n\nPay close attention to system prompts that notify you when a server is preparing to close.\n\nIf you remain inside a server when it closes, you are immediately disqualified from the event.\n\nYou have three total “lives.” After taking three hits from a whale, you are knocked out of Blood Hunter.\n\nTips and Tricks\n\nAs soon as you activate Blood Hunter and return to the world map, look in the upper-left corner of the screen beneath the Blood Night notice.\n\nYou will see a small box—click it. This window shows how many hunters are currently active on each server.\n\nUse this information to select a server strategically, then teleport in.\n\nKey Reminders\n\nAlways watch your timers.\n\nKeep track of how many teleports you have available.\n\nMonitor server closing countdowns closely.\n\nMove quickly and decisively.\n\nGood luck out there, everyone. Run fast, don’t blink, and may your ports be smooth and your whales distracted.",
+      "adminOnly": false,
+      "canUseInBriefing": true,
+      "unlisted": false,
+      "isHtml": false,
+      "type": "text",
+            "customId": "blood-night-hunter"
+
+    }
+
+  ]
+}

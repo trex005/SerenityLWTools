@@ -9,6 +9,32 @@
       "unlisted": false,
       "isHtml": false,
       "type": "text",      "customId": "s4-day-1"
+    },
+        {
+      "id": "a59be4c3-d703-4db2-b431-c5f82610c022",
+      "title": "Chekka's Tradepost Proposal",
+      "content": "Regardless of the faction assignments, the top 5 servers as listed below would be off limits to trade post battles (unless internal ie 947 battling 947). The bottom 3 servers will have all northern trade posts as battle grounds. ANYONE can attempt to fight for those from any server. ALL southern trade posts are protected and assigned to the home server only.\n\nIf someone chooses to break the agreement, it will be the responsibility of the top alliances to assist in enforcement. (ie if an alliance from my server goes to take a protected one from 996 I will ash them, or Brian, or Zilla, or Destructo, or Jcray, etc - whoever is strong and available to assist) \n\n956\n947\n985\n970\n987\n933\n977\n996\n\nAnything marked in GREEN on the map below cannot be taken by anyone OFF server. It belongs to the home server. Anything in RED is free for all and where the battles will take place – on 933, 977, 996.\n\nFor this to work, we all need to be in agreement. Or come up with another reasonable solution that will protect the lower servers from being bullied out of all of their trade posts.",
+      "imageUrl": "/img/996/s4/chekka-proposal-map.png",
+      "adminOnly": false,
+      "canUseInBriefing": true,
+      "unlisted": true,
+      "isHtml": false,
+      "type": "text",
+	"customId": "chekka-tradepost-proposal"
+    },
+        {
+      "id": "e77377d2-4d44-4882-a258-fbac393cfe5a",
+      "title": "Season 4 Trade Post Agreement",
+      "content": "Regardless of the faction assignments, the top 4 servers as listed below would be off limits to trade post battles (unless internal ie 947 battling 947 for fun). \n\nThe bottom 4 servers will have all northern trade posts as battle grounds. ALL southern trade posts are protected and assigned to the home server only. \nANYONE including the home server can attempt to fight for the northern trade posts from any server.\n\n956 - protected \n947 - protected \n985 - protected \n970 - protected \n933 – battle ground\n987 – battle ground \n 977 – battle ground \n996 – battle ground \n\nFor this to work, we all need to be in agreement. That being said, if there are 1-2 servers that do not agree, the majority will unify and agree to the protections. \n\nThe 1-2 servers in disagreement will have no protections and become a full battlegrounds open to everyone regardless of faction outcomes. If they later decide to participate in unification, protections can and will be restored.",
+      "imageUrl": "/img/996/s4/chekka-proposal-map.png",
+      "adminOnly": false,
+      "canUseInBriefing": true,
+      "unlisted": true,
+      "isHtml": false,
+      "type": "text",
+      	"customId": "s4-tradepost-agreement"
+
     }
+
 ]
 }

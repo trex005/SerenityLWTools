@@ -1,4 +1,21 @@
 {
-  "updated": "2025-10-28T17:36:51.391Z",
-  "events": []
+  "updated": "2026-01-03T15:21:22-02:00",
+  "events": [
+    {
+      "id": "ev-3",
+      "startTime": "19:30",
+      "days": [
+        "monday"
+      ],
+      "recurrence": {
+        "daysOfWeek": [
+          "monday"
+        ]
+      }
+    },
+    {
+      "id": "1ae7c08b-29e3-4ef3-a00f-ccc19f155ddb",
+      "startTime": "19:00"
+    }
+  ]
 }

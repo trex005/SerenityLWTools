@@ -1,12 +1,4 @@
-﻿    {
-      "id": "5870d28b-5d10-4dd9-83fb-612e4c28e0b0",
-      "archived": false
-    },
-    {
-      "id": "a061f2df-34c9-4bdd-9fa2-a95e11470268",
-      "archived": false
-    }
-{
+﻿{
   "updated": "2025-12-12T01:06:08-02:00",
   "events": [
     {
@@ -72,11 +64,7 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "",
-      "days": [
-        "friday",
-        "saturday",
-        "sunday"
-      ],
+      "days": ["friday", "saturday", "sunday"],
       "includeInExport": {
         "friday": true,
         "saturday": true,
@@ -91,11 +79,7 @@
         "type": "weeks",
         "onPeriods": 1,
         "offPeriods": 4,
-        "daysOfWeek": [
-          "friday",
-          "saturday",
-          "sunday"
-        ],
+        "daysOfWeek": ["friday", "saturday", "sunday"],
         "startDate": "2025-12-12"
       }
     }
