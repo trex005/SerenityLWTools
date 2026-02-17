@@ -503,10 +503,23 @@ export const useEvents = create<EventsState>()(
       onRehydrateStorage: () => () => {
         // Mark store as hydrated after rehydration completes
         useEvents.setState({ hydrated: true })
+        useEvents
+          .getState()
+          .initializeFromConfig(false)
+          .catch((error) => {
+            console.error("Failed to initialize events after hydration", error)
+          })
       },
     },
   ),
 )
+
+const triggerEventsRehydrate = () => {
+  const hydrator = useEvents.persist?.rehydrate?.()
+  if (hydrator && typeof (hydrator as Promise<void>).then === "function") {
+    ;(hydrator as Promise<void>).catch(() => undefined)
+  }
+}
 
 onTagChange((nextTag) => {
   useEvents.setState({
@@ -522,31 +535,10 @@ onTagChange((nextTag) => {
     hydrated: false,
   })
 
-  const runInit = () => {
-    useEvents
-      .getState()
-      .initializeFromConfig(false)
-      .catch((error) => {
-        console.error("Failed to load events for tag", nextTag, error)
-      })
-  }
-
-  const unsubscribe = useEvents.subscribe(
-    (state) => state.hydrated,
-    (hydrated) => {
-      if (!hydrated) return
-      unsubscribe()
-      runInit()
-    },
-  )
-
   primeTagStorageSuffixes(nextTag)
     .catch(() => undefined)
     .finally(() => {
-      const hydrator = useEvents.persist?.rehydrate?.()
-      if (hydrator && typeof (hydrator as Promise<void>).then === "function") {
-        ;(hydrator as Promise<void>).catch(() => undefined)
-      }
+      triggerEventsRehydrate()
     })
 })
 
@@ -560,36 +552,20 @@ export const invalidateAndRefreshEvents = async () => {
 }
 
 const bootstrapEventsStore = () => {
-  const runInit = () => {
+  if (useEvents.getState().hydrated) {
     useEvents
       .getState()
       .initializeFromConfig(false)
       .catch((error) => {
         console.error("Failed to bootstrap events store", error)
       })
-  }
-
-  if (useEvents.getState().hydrated) {
-    runInit()
     return
   }
-
-  const unsubscribe = useEvents.subscribe(
-    (state) => state.hydrated,
-    (hydrated) => {
-      if (!hydrated) return
-      unsubscribe()
-      runInit()
-    },
-  )
 
   primeTagStorageSuffixes()
     .catch(() => undefined)
     .finally(() => {
-      const hydrator = useEvents.persist?.rehydrate?.()
-      if (hydrator && typeof (hydrator as Promise<void>).then === "function") {
-        ;(hydrator as Promise<void>).catch(() => undefined)
-      }
+      triggerEventsRehydrate()
     })
 }
 

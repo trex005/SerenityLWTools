@@ -334,10 +334,23 @@ export const useTips = create<TipsState>()(
       // Disable automatic rehydration initialization
       onRehydrateStorage: () => () => {
         useTips.setState({ hydrated: true })
+        useTips
+          .getState()
+          .initializeFromConfig(false)
+          .catch((error) => {
+            console.error("Failed to initialize tips after hydration", error)
+          })
       },
     },
   ),
 )
+
+const triggerTipsRehydrate = () => {
+  const hydrator = useTips.persist?.rehydrate?.()
+  if (hydrator && typeof (hydrator as Promise<void>).then === "function") {
+    ;(hydrator as Promise<void>).catch(() => undefined)
+  }
+}
 
 onTagChange((nextTag) => {
   useTips.setState({
@@ -353,31 +366,10 @@ onTagChange((nextTag) => {
     hydrated: false,
   })
 
-  const runInit = () => {
-    useTips
-      .getState()
-      .initializeFromConfig(false)
-      .catch((error) => {
-        console.error("Failed to load tips for tag", nextTag, error)
-      })
-  }
-
-  const unsubscribe = useTips.subscribe(
-    (state) => state.hydrated,
-    (hydrated) => {
-      if (!hydrated) return
-      unsubscribe()
-      runInit()
-    },
-  )
-
   primeTagStorageSuffixes(nextTag)
     .catch(() => undefined)
     .finally(() => {
-      const hydrator = useTips.persist?.rehydrate?.()
-      if (hydrator && typeof (hydrator as Promise<void>).then === "function") {
-        ;(hydrator as Promise<void>).catch(() => undefined)
-      }
+      triggerTipsRehydrate()
     })
 })
 
@@ -391,36 +383,20 @@ export const invalidateAndRefreshTips = async () => {
 }
 
 const bootstrapTipsStore = () => {
-  const runInit = () => {
+  if (useTips.getState().hydrated) {
     useTips
       .getState()
       .initializeFromConfig(false)
       .catch((error) => {
         console.error("Failed to bootstrap tips store", error)
       })
-  }
-
-  if (useTips.getState().hydrated) {
-    runInit()
     return
   }
-
-  const unsubscribe = useTips.subscribe(
-    (state) => state.hydrated,
-    (hydrated) => {
-      if (!hydrated) return
-      unsubscribe()
-      runInit()
-    },
-  )
 
   primeTagStorageSuffixes()
     .catch(() => undefined)
     .finally(() => {
-      const hydrator = useTips.persist?.rehydrate?.()
-      if (hydrator && typeof (hydrator as Promise<void>).then === "function") {
-        ;(hydrator as Promise<void>).catch(() => undefined)
-      }
+      triggerTipsRehydrate()
     })
 }
 
