@@ -834,3 +834,16 @@ remindTomorrow = true
 
 End of day reminders:
 remindEndOfDay = true
+
+------------------
+** Data Loss on add event **
+When adding a new event all previous changes made to events
+
+------
+** Tip Admin UI **
+When rewriting the admin cards for Tips, the following features were lost:
+1. Before entering Edit Mode, it should use the same display card as when we are not in admin mode. The only difference should be that the edit and delete icons exist
+2. In edit mode, there should be a field directly below the title for customId. When the title field loses focus, if the customId field is empty, it should populate with a sanitized version of the title.
+   • lowercase
+   • replace all spaces with "-"
+   • remove all non alphanumeric and "-"

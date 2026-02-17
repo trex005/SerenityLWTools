@@ -7,10 +7,12 @@
 - `lib/` collects TypeScript helpers (`date-utils.ts`, `config-fetcher.ts`) and should remain framework-agnostic.
 - Styling lives in `styles/` and `app/globals.css`; static assets go in `public/`.
 - Configs live in `next.config.mjs`, `tailwind.config.ts`, `postcss.config.mjs`, and `tsconfig.json`.
-- Branding (name/icon) comes from the `brand` block in `/public/conf/{tag}/conf.json`; use `useTagData.brand`/`brandLabel`, `BrandLogo`, and `BrandHead` instead of hardcoding strings.
+- Branding (name/icon/background) comes from the `brand` block in `/public/conf/{tag}/conf.json`; use `useTagData.brand`/`brandLabel`, `BrandLogo`, and `BrandHead` instead of hardcoding strings. `brand.backgroundOpacity` controls the image opacity.
+- Tag configs can set `storage.eventsSuffix` and `storage.tipsSuffix` to invalidate persisted admin overrides for events/tips.
 - `lib/scoped-storage.ts` gates persistence behind Command (admin) modeÃ¢â‚¬â€keep events/tips storage writes aligned with that guard.
 - Admin edits are stored as per-tag overrides: the `use-events`/`use-tips` stores compose fetched configs with stored overrides and deletion markers so parent updates continue to flow even when local drafts exist.
 - Event and tip editors surface a tag dropdown whenever multiple admin-enabled tags exist; select the target tag to apply overrides without switching the main app context.
+- Tip admin cards mirror the public tip layout; in add/edit flows the customId input sits under the title and auto-fills from a sanitized title (lowercase, hyphenated, alphanumeric only) when left blank.
 - Tag configs under `public/conf/{tag}/` now only ship `config.json`, `events.json`, and `tips.json`; archived entries stay in `events.json` via `archived: true`.
 - Event admin dialog consolidates "Include in" toggles (Scheduled, Website, Briefing, Previous Day, End of Day); keep Scheduled on to surface the event anywhere, and use Website to control the public briefing tab while Briefing/Reminder toggles gate their respective outputs.
 - All scheduling logic, exports, and timestamps must run in the app timezone (GMT-2). Use the helpers in `lib/date-utils.ts` (`formatInAppTimezone`, `getStartOfAppDay`, `getEndOfAppDay`, `addAppDays`) for any date math or formatting; only the optional local-time display for event times should use the user's timezone.
@@ -53,5 +55,3 @@
 - Read `DEPLOYMENT.md` and helper scripts (`deploy-static.js`, `build-static.js`) before releasing; they expect bundles in `out/`.
 - Update S3/CloudFront JSON policies in-repo first, then apply them through the deployment pipeline.
 - Document new env keys beside the code that needs them.
-
-
