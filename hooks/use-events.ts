@@ -8,9 +8,9 @@
 
 import { create } from "zustand"
 import { persist } from "zustand/middleware"
-import { fetchComposedForTag, clearConfigCache } from "@/lib/config-fetcher"
+import { fetchComposedForTag, clearConfigCache, primeTagStorageSuffixes } from "@/lib/config-fetcher"
 import { fetchParentEvent } from "@/lib/config-diff"
-import { scopedStateStorage } from "@/lib/scoped-storage"
+import { scopedStateStorage, isAdminModeEnabledForTag } from "@/lib/scoped-storage"
 import { getActiveTag, onTagChange } from "@/lib/config-tag"
 import { matchesSearchTokens, tokenizeSearchTerm } from "@/lib/search-utils"
 import { useAdminStore } from "@/hooks/use-admin-state"
@@ -224,8 +224,9 @@ export const useEvents = create<EventsState>()(
         }
 
         try {
-          const includeAncestorLocalOverrides = useAdminStore.getState().adminMode
           const targetTag = getActiveTag()
+          const includeAncestorLocalOverrides =
+            useAdminStore.getState().adminMode || isAdminModeEnabledForTag(targetTag)
           const config = await fetchComposedForTag(targetTag, forceRefresh, {
             includeAncestorLocalOverrides,
             currentTag: targetTag,
@@ -539,10 +540,14 @@ onTagChange((nextTag) => {
     },
   )
 
-  const hydrator = useEvents.persist?.rehydrate?.()
-  if (hydrator && typeof (hydrator as Promise<void>).then === "function") {
-    ;(hydrator as Promise<void>).catch(() => undefined)
-  }
+  primeTagStorageSuffixes(nextTag)
+    .catch(() => undefined)
+    .finally(() => {
+      const hydrator = useEvents.persist?.rehydrate?.()
+      if (hydrator && typeof (hydrator as Promise<void>).then === "function") {
+        ;(hydrator as Promise<void>).catch(() => undefined)
+      }
+    })
 })
 
 export const refreshEventsStore = async (forceRefresh = true) => {
@@ -578,10 +583,14 @@ const bootstrapEventsStore = () => {
     },
   )
 
-  const hydrator = useEvents.persist?.rehydrate?.()
-  if (hydrator && typeof (hydrator as Promise<void>).then === "function") {
-    ;(hydrator as Promise<void>).catch(() => undefined)
-  }
+  primeTagStorageSuffixes()
+    .catch(() => undefined)
+    .finally(() => {
+      const hydrator = useEvents.persist?.rehydrate?.()
+      if (hydrator && typeof (hydrator as Promise<void>).then === "function") {
+        ;(hydrator as Promise<void>).catch(() => undefined)
+      }
+    })
 }
 
 if (typeof window !== "undefined") {

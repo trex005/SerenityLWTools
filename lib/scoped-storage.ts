@@ -1,14 +1,56 @@
 "use client"
 
 import type { StateStorage } from "zustand/middleware"
-import { getActiveTag } from "./config-tag"
+import { getActiveTag, sanitizeTag } from "./config-tag"
 
 const STORAGE_PREFIX = "lw-tools"
 const DEFAULT_DATA_KEYS = ["events", "tips"] as const
 
+type StorageSuffixes = {
+  events: string
+  tips: string
+}
+
+const storageSuffixesByTag = new Map<string, StorageSuffixes>()
+
+const normalizeStorageSuffix = (value: unknown): string => {
+  if (typeof value !== "string") return ""
+  return value.trim()
+}
+
+const applyStorageSuffix = (key: string, suffix: string): string => {
+  if (!suffix) return key
+  return `${key}:${suffix}`
+}
+
+const getStorageSuffixForTag = (tag: string, key: string): string => {
+  if (key !== "events" && key !== "tips") return ""
+  const normalizedTag = sanitizeTag(tag) || tag
+  if (!normalizedTag) return ""
+  const suffixes = storageSuffixesByTag.get(normalizedTag)
+  if (!suffixes) return ""
+  return key === "events" ? suffixes.events : suffixes.tips
+}
+
+export const registerTagStorageSuffixes = (
+  tag: string,
+  suffixes?: Partial<StorageSuffixes> | null,
+) => {
+  const normalizedTag = sanitizeTag(tag) || tag
+  if (!normalizedTag) return
+  const current = storageSuffixesByTag.get(normalizedTag) || { events: "", tips: "" }
+  const next = {
+    events: normalizeStorageSuffix(suffixes?.events ?? current.events),
+    tips: normalizeStorageSuffix(suffixes?.tips ?? current.tips),
+  }
+  storageSuffixesByTag.set(normalizedTag, next)
+}
+
 const buildScopedKey = (key: string): string => {
   const tag = getActiveTag()
-  return `${STORAGE_PREFIX}:${tag}:${key}`
+  const suffix = getStorageSuffixForTag(tag, key)
+  const keyWithSuffix = applyStorageSuffix(key, suffix)
+  return `${STORAGE_PREFIX}:${tag}:${keyWithSuffix}`
 }
 
 const getClientStorage = (): Storage | null => {
@@ -154,7 +196,11 @@ export const hasAdminAccessForTag = (tag: string): boolean => readScopedFlagForT
 
 export const isAdminModeEnabledForTag = (tag: string): boolean => readScopedFlagForTag(tag, "adminMode")
 
-const buildKeyForTag = (tag: string, key: string): string => `${STORAGE_PREFIX}:${tag}:${key}`
+const buildKeyForTag = (tag: string, key: string): string => {
+  const suffix = getStorageSuffixForTag(tag, key)
+  const keyWithSuffix = applyStorageSuffix(key, suffix)
+  return `${STORAGE_PREFIX}:${tag}:${keyWithSuffix}`
+}
 
 const parseTagFromScopedKey = (rawKey: string): { tag: string; key: string } | null => {
   const prefix = `${STORAGE_PREFIX}:`

@@ -8,6 +8,7 @@ import {
   type StoredOverrideSnapshot,
   hasAdminAccessForTag,
   isAdminModeEnabledForTag,
+  registerTagStorageSuffixes,
 } from "./scoped-storage"
 import { formatInAppTimezone } from "./date-utils"
 
@@ -83,8 +84,23 @@ type CachedEntry<T> = {
 type CacheStore<T> = Record<CacheVariant, Map<string, T>>
 
 const normalizeTypes = (types?: DataType[]): DataType[] => {
-  if (!types || types.length === 0) return ["events", "tips"]
+  if (!types) return ["events", "tips"]
+  if (types.length === 0) return []
   return Array.from(new Set(types)).sort()
+}
+
+const extractStorageSuffixes = (config: any): { events: string; tips: string } => {
+  if (!config || typeof config !== "object") {
+    return { events: "", tips: "" }
+  }
+  const storage = (config as any).storage
+  if (!storage || typeof storage !== "object") {
+    return { events: "", tips: "" }
+  }
+  return {
+    events: typeof storage.eventsSuffix === "string" ? storage.eventsSuffix.trim() : "",
+    tips: typeof storage.tipsSuffix === "string" ? storage.tipsSuffix.trim() : "",
+  }
 }
 
 const buildLayerCacheKey = (tag: string, types?: DataType[]): string => {
@@ -266,6 +282,8 @@ const fetchLayerFromSource = async (tag: string, types?: DataType[]): Promise<Ta
     wantsEvents ? fetchJson(`${tag}/events.json`) : Promise.resolve(null),
     wantsTips ? fetchJson(`${tag}/tips.json`) : Promise.resolve(null),
   ])
+
+  registerTagStorageSuffixes(tag, extractStorageSuffixes(configPayload))
 
   const eventsObj = wantsEvents ? extractArray(eventsPayload, "events") : { items: [], updated: null }
   const tipsObj = wantsTips ? extractArray(tipsPayload, "tips") : { items: [], updated: null }
@@ -684,6 +702,16 @@ export const fetchConfig = async (force = false, options?: FetchOptions): Promis
   } catch (error) {
     console.error("Error fetching configuration bundle:", error)
     return emptyBundle()
+  }
+}
+
+export const primeTagStorageSuffixes = async (tag?: string): Promise<void> => {
+  const resolvedTag = sanitizeTag(tag) || tag || getActiveTag()
+  if (!resolvedTag) return
+  try {
+    await getLayer(resolvedTag, false, [])
+  } catch (error) {
+    console.warn(`Error priming storage suffixes for tag "${resolvedTag}":`, error)
   }
 }
 
