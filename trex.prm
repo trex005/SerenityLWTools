@@ -847,3 +847,9 @@ When rewriting the admin cards for Tips, the following features were lost:
    • lowercase
    • replace all spaces with "-"
    • remove all non alphanumeric and "-"
+-------------
+When I run the dev server, everything is working as expected, however when I build the final app and run it using `npm serve out` I am having the bug we fixed where loading the app while already in admin mode is not loading the tips or events.
+I'm not sure if there is a cache issue or something else. Is there something I can do to make sure the cached is cleaned?
+You can access the built version here:
+http://localhost:58920/
+or in this project in the out directory
