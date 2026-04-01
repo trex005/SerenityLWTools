@@ -32,6 +32,7 @@ import { RecurrenceEditor } from "@/components/recurrence-editor"
 import { formatInAppTimezone } from "@/lib/date-utils"
 import { useOverrideDiff } from "@/hooks/use-override-diff"
 import { useToast } from "@/hooks/use-toast"
+import { useTagData } from "@/hooks/use-tag-data"
 import { listAdminEnabledTags } from "@/lib/scoped-storage"
 import { loadEventForTag, saveEventForTag } from "@/lib/tag-overrides"
 import { clearConfigCache } from "@/lib/config-fetcher"
@@ -56,6 +57,7 @@ export function EventDialog({ event, open, onOpenChange, initialDay = "monday", 
   const { addEvent, updateEvent, resetEventOverrides, activeTag } = useEvents()
   const { diffIndex } = useOverrideDiff()
   const { toast } = useToast()
+  const { tagConfig } = useTagData()
 
   // Check if we're editing an existing event
   const isEditing = !!event
@@ -418,7 +420,6 @@ export function EventDialog({ event, open, onOpenChange, initialDay = "monday", 
 
   // Handle recurrence change - now the primary way to select days
   const handleRecurrenceChange = (recurrence: any) => {
-    // Create a deep copy to avoid reference issues
     const newRecurrence = recurrence
       ? JSON.parse(JSON.stringify(recurrence))
       : {
@@ -426,36 +427,20 @@ export function EventDialog({ event, open, onOpenChange, initialDay = "monday", 
           daysOfWeek: ["monday"],
           onPeriods: 1,
           offPeriods: 0,
-          startDate: formatInAppTimezone(new Date(), "yyyy-MM-dd"),
+          startTag: selectedTag || activeTag,
+          startOffset: 0,
         }
-
-    // Update the form data
     setFormData((prev) => {
       const allowedDays = new Set(newRecurrence.daysOfWeek)
-      const newDays = [...allowedDays]
-
       return {
         ...prev,
-        days: newDays,
+        days: [...allowedDays],
         recurrence: newRecurrence,
       }
     })
   }
 
-  const normalizeRecurrenceDates = (recurrence: any) => {
-    if (!recurrence) return recurrence
-    const normalizeDate = (value?: string) => {
-      if (!value) return undefined
-      const match = value.match(/^(\d{4}-\d{2}-\d{2})/)
-      return match ? match[1] : value
-    }
-
-    return {
-      ...recurrence,
-      startDate: normalizeDate(recurrence.startDate) ?? formatInAppTimezone(new Date(), "yyyy-MM-dd"),
-      endDate: normalizeDate(recurrence.endDate),
-    }
-  }
+  const normalizeRecurrenceDates = (recurrence: any) => recurrence
 
   // In the handleSubmit function, ensure days is in sync with recurrence.daysOfWeek
   const handleSubmit = async (e: React.FormEvent) => {
@@ -467,7 +452,8 @@ export function EventDialog({ event, open, onOpenChange, initialDay = "monday", 
       daysOfWeek: formData.recurrence?.daysOfWeek || ["monday"],
       onPeriods: 0,
       offPeriods: 0,
-      startDate: formatInAppTimezone(new Date(), "yyyy-MM-dd"),
+      startTag: selectedTag || activeTag,
+      startOffset: 0,
     }
 
     if (!recurrence.daysOfWeek || recurrence.daysOfWeek.length === 0) {
@@ -813,7 +799,13 @@ export function EventDialog({ event, open, onOpenChange, initialDay = "monday", 
                 <div className="space-y-4">
                   <h3 className="text-lg font-medium">Frequency</h3>
                   <div className="grid gap-2">
-                    <RecurrenceEditor value={formData.recurrence} onChange={handleRecurrenceChange} isNewEvent={!isEditing} />
+                    <RecurrenceEditor
+                      value={formData.recurrence}
+                      onChange={handleRecurrenceChange}
+                      isNewEvent={!isEditing}
+                      tagConfig={tagConfig ?? {}}
+                      activeTag={selectedTag || activeTag}
+                    />
                   </div>
                 </div>
 
