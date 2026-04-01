@@ -94,18 +94,22 @@ export function shouldShowRecurringEvent(
 
   const normalizedTargetDate = normalizeToAppDay(date)
 
-  if (event.recurrence?.startTag !== undefined && event.recurrence?.startOffset !== undefined) {
-    const startDate = normalizeToAppDay(
-      resolveRecurrenceDate(event.recurrence.startTag, event.recurrence.startOffset, tagConfig),
-    )
-    if (normalizedTargetDate.getTime() < startDate.getTime()) return false
-  }
+  try {
+    if (event.recurrence?.startTag !== undefined && event.recurrence?.startOffset !== undefined) {
+      const startDate = normalizeToAppDay(
+        resolveRecurrenceDate(event.recurrence.startTag, event.recurrence.startOffset, tagConfig),
+      )
+      if (normalizedTargetDate.getTime() < startDate.getTime()) return false
+    }
 
-  if (event.recurrence?.endOffset !== undefined) {
-    const endDate = normalizeToAppDay(
-      resolveRecurrenceDate(event.recurrence.startTag, event.recurrence.endOffset, tagConfig),
-    )
-    if (normalizedTargetDate.getTime() > endDate.getTime()) return false
+    if (event.recurrence?.endOffset !== undefined && event.recurrence?.startTag !== undefined) {
+      const endDate = normalizeToAppDay(
+        resolveRecurrenceDate(event.recurrence.startTag, event.recurrence.endOffset, tagConfig),
+      )
+      if (normalizedTargetDate.getTime() > endDate.getTime()) return false
+    }
+  } catch {
+    // startTag not resolvable in tagConfig — treat as no bounds restriction
   }
 
   if (!event.recurrence || event.recurrence.type === "none") {
@@ -162,25 +166,27 @@ function convertNewRecurrenceFormat(
     return null
   }
 
-  let endDate: Date | undefined
-  if (event.recurrence.endOffset !== undefined) {
-    endDate = normalizeToAppDay(
-      resolveRecurrenceDate(event.recurrence.startTag, event.recurrence.endOffset, tagConfig),
-    )
-  }
-
-  return {
-    startDate: normalizeToAppDay(
-      resolveRecurrenceDate(event.recurrence.startTag, event.recurrence.startOffset, tagConfig),
-    ),
-    periodDays,
-    onPeriods: event.recurrence.onPeriods,
-    offPeriods: event.recurrence.offPeriods,
-    allowedWeekdays:
-      event.recurrence.daysOfWeek && event.recurrence.daysOfWeek.length > 0
-        ? event.recurrence.daysOfWeek
-        : undefined,
-    endDate,
+  try {
+    return {
+      startDate: normalizeToAppDay(
+        resolveRecurrenceDate(event.recurrence.startTag, event.recurrence.startOffset, tagConfig),
+      ),
+      periodDays,
+      onPeriods: event.recurrence.onPeriods,
+      offPeriods: event.recurrence.offPeriods,
+      allowedWeekdays:
+        event.recurrence.daysOfWeek && event.recurrence.daysOfWeek.length > 0
+          ? event.recurrence.daysOfWeek
+          : undefined,
+      endDate:
+        event.recurrence.endOffset !== undefined
+          ? normalizeToAppDay(
+              resolveRecurrenceDate(event.recurrence.startTag, event.recurrence.endOffset, tagConfig),
+            )
+          : undefined,
+    }
+  } catch {
+    return null
   }
 }
 
