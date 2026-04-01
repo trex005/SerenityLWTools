@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Edit, Trash2, Archive, X, Clock, Mail, Globe } from "lucide-react"
 import { useEvents } from "@/hooks/use-events"
+import { useTagData } from "@/hooks/use-tag-data"
 import { useState, type MouseEvent, useRef, useEffect } from "react"
 import { EventDialog } from "@/components/event-dialog"
 import {
@@ -57,6 +58,7 @@ export function EventCard({ event, day, date, showLocalTime = false, overrideInf
 
   // Get delete function from store
   const { deleteEvent, archiveEvent, updateDateOverride } = useEvents()
+  const { tagConfig } = useTagData()
 
   // Get timezone preferences
   // Remove: const { useLocalTimeZone, convertToLocalTime, formatTimeDisplay, convertToServerTime } = useTimeZone()
@@ -526,9 +528,9 @@ export function EventCard({ event, day, date, showLocalTime = false, overrideInf
               {description && <p className="text-sm mt-2 text-muted-foreground whitespace-pre-line">{description}</p>}
 
               {/* Recurrence Information */}
-              {formatRecurrence(event) && (
+              {formatRecurrence(event, tagConfig ?? {}) && (
                 <div className="text-xs text-primary/70 mt-1 flex items-center">
-                  <span className="mr-1">↻</span> {formatRecurrence(event)}
+                  <span className="mr-1">↻</span> {formatRecurrence(event, tagConfig ?? {})}
                 </div>
               )}
             </div>

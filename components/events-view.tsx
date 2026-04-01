@@ -30,6 +30,7 @@ import { EventDialog } from "@/components/event-dialog"
 import { AddEventButton } from "@/components/add-event-button"
 import { matchesSearchTokens, tokenizeSearchTerm } from "@/lib/search-utils"
 import { useOverrideDiff } from "@/hooks/use-override-diff"
+import { useTagData } from "@/hooks/use-tag-data"
 import type { DiffInfo } from "@/lib/config-diff"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import { useToast } from "@/hooks/use-toast"
@@ -42,6 +43,7 @@ export function EventsView() {
   // Access events store
   const { events, archiveEvent, restoreEvent, deleteEvent, resetEventOverrides } = useEvents()
   const { diffIndex } = useOverrideDiff()
+  const { tagConfig } = useTagData()
   const { toast } = useToast()
 
   // State for filter input
@@ -517,9 +519,9 @@ function EventCard({
             {description && <p className="text-sm mt-2 text-muted-foreground whitespace-pre-line">{description}</p>}
 
             {/* Recurrence Information */}
-            {formatRecurrence(event) && (
+            {formatRecurrence(event, tagConfig ?? {}) && (
               <div className="text-xs text-primary/70 mt-1 flex items-center">
-                <span className="mr-1">↻</span> {formatRecurrence(event)}
+                <span className="mr-1">↻</span> {formatRecurrence(event, tagConfig ?? {})}
               </div>
             )}
           </div>

@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import { Card, CardContent } from "@/components/ui/card"
 import { useConfigData } from "@/hooks/use-config-data"
+import { useTagData } from "@/hooks/use-tag-data"
 import { shouldShowRecurringEvent } from "@/lib/recurrence-utils"
 import { Switch } from "@/components/ui/switch"
 import { Label } from "@/components/ui/label"
@@ -20,6 +21,7 @@ interface ReadOnlyDayAgendaProps {
 export function ReadOnlyDayAgenda({ day, date, showLocalTime = false, setShowLocalTime }: ReadOnlyDayAgendaProps) {
   // Access events data from config
   const { events, isLoaded } = useConfigData()
+  const { tagConfig } = useTagData()
 
   // State to manage all-day and time-specific events
   const [allDayEvents, setAllDayEvents] = useState<any[]>([])
@@ -60,7 +62,7 @@ export function ReadOnlyDayAgenda({ day, date, showLocalTime = false, setShowLoc
     const dayEvents = events.filter((event) => {
       // First check if the event should be shown based on recurrence pattern
       // Pass adminModeView=false to respect all exclusions in the read-only view
-      const shouldShow = !event.archived && shouldShowRecurringEvent(event, date, false)
+      const shouldShow = !event.archived && shouldShowRecurringEvent(event, date, false, tagConfig ?? {})
 
       // If the basic check fails, don't show the event
       if (!shouldShow) return false
@@ -149,7 +151,7 @@ export function ReadOnlyDayAgenda({ day, date, showLocalTime = false, setShowLoc
 
     setTimeEvents(timed)
     setAllDayEvents(allDay)
-  }, [events, day, date, isLoaded])
+  }, [events, day, date, isLoaded, tagConfig])
 
   // Function to format local time
   const formatLocalTime = (timeString: string): string => {

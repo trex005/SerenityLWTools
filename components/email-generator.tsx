@@ -16,6 +16,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { DateRangeSelector } from "@/components/date-range-selector"
 import { useEvents } from "@/hooks/use-events"
 import { useTips } from "@/hooks/use-tips"
+import { useTagData } from "@/hooks/use-tag-data"
 import {
   addAppDays,
   formatInAppTimezone,
@@ -63,6 +64,7 @@ export function EmailGenerator({ initialDateRange }: EmailGeneratorProps) {
   // Access events and tips from stores
   const { events } = useEvents()
   const { tips, updateTip } = useTips()
+  const { tagConfig } = useTagData()
 
   // State for date range - default to today + next two days in UTC-2
   const [dateRange, setDateRange] = useState<[Date | undefined, Date | undefined]>(() => {
@@ -201,7 +203,7 @@ export function EmailGenerator({ initialDateRange }: EmailGeneratorProps) {
       // Check if this event should be included for this date
       if (shouldIncludeEventForDate(event, currentDate)) {
         // Check if this event occurs on this day based on recurrence pattern
-        if (shouldShowRecurringEvent(event, currentDate)) {
+        if (shouldShowRecurringEvent(event, currentDate, false, tagConfig ?? {})) {
           // Clone the date to avoid reference issues
           dates.push(new Date(currentDate.getTime()))
         }
@@ -211,7 +213,7 @@ export function EmailGenerator({ initialDateRange }: EmailGeneratorProps) {
     }
 
     return dates
-  }, [shouldIncludeEventForDate])
+  }, [shouldIncludeEventForDate, tagConfig])
 
   /**
    * Generate agenda content based on selected date range
@@ -252,7 +254,7 @@ export function EmailGenerator({ initialDateRange }: EmailGeneratorProps) {
 
       // Get events for this specific date
       const dateEvents = filteredEvents.filter((event) => {
-        return shouldShowRecurringEvent(event, currentDate) && shouldIncludeEventForDate(event, currentDate)
+        return shouldShowRecurringEvent(event, currentDate, false, tagConfig ?? {}) && shouldIncludeEventForDate(event, currentDate)
       })
 
       // Only add the date if there are events for it
@@ -353,7 +355,7 @@ export function EmailGenerator({ initialDateRange }: EmailGeneratorProps) {
     }
 
     return content
-  }, [dateRange, events, formatDescription, getDayOfWeek, getEventDatesInRange, getEffectiveValue, shouldIncludeEventForDate])
+  }, [dateRange, events, formatDescription, getDayOfWeek, getEventDatesInRange, getEffectiveValue, shouldIncludeEventForDate, tagConfig])
 
   /**
    * Generate tip content based on selected tip

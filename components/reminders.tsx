@@ -25,6 +25,7 @@ import {
 import { Check, Copy, RefreshCw } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { shouldShowRecurringEvent } from "@/lib/recurrence-utils"
+import { useTagData } from "@/hooks/use-tag-data"
 import { Input } from "@/components/ui/input"
 import { scopedLocalStorage } from "@/lib/scoped-storage"
 
@@ -51,10 +52,10 @@ const getEffectiveValue = (event: any, date: Date, dayKey: string, property: str
   return event?.[property]
 }
 
-const shouldIncludeEventOnDate = (event: any, date: Date, dayKey: string): boolean => {
+const shouldIncludeEventOnDate = (event: any, date: Date, dayKey: string, tagConfig: Record<string, unknown> = {}): boolean => {
   if (!event || event.archived) return false
 
-  if (!shouldShowRecurringEvent(event, date, false)) {
+  if (!shouldShowRecurringEvent(event, date, false, tagConfig as any)) {
     return false
   }
 
@@ -116,6 +117,7 @@ const formatReminderLine = (event: any, date: Date, dayKey: string): { line: str
 export function Reminders() {
   // Access events from store
   const { events, hydrated } = useEvents()
+  const { tagConfig } = useTagData()
 
   // State for selected date (defaults to current day in app timezone)
   const [selectedDate, setSelectedDate] = useState<Date>(() => getAppToday())
@@ -138,8 +140,8 @@ export function Reminders() {
     const dayKey = getDayOfWeek(selectedDate)
     const tomorrowKey = getDayOfWeek(tomorrowDate)
 
-    const dayEvents = events.filter((event) => shouldIncludeEventOnDate(event, selectedDate, dayKey))
-    const tomorrowEvents = events.filter((event) => shouldIncludeEventOnDate(event, tomorrowDate, tomorrowKey))
+    const dayEvents = events.filter((event) => shouldIncludeEventOnDate(event, selectedDate, dayKey, tagConfig ?? {}))
+    const tomorrowEvents = events.filter((event) => shouldIncludeEventOnDate(event, tomorrowDate, tomorrowKey, tagConfig ?? {}))
 
     const todayReminders = dayEvents
       .filter((event) => {
@@ -171,7 +173,7 @@ export function Reminders() {
       todayEventCount: dayEvents.length,
       tomorrowEventCount: tomorrowEvents.length,
     }
-  }, [events, selectedDate, tomorrowDate])
+  }, [events, selectedDate, tomorrowDate, tagConfig])
 
   const buildReminderContent = useCallback(() => {
     const resetText = `Reset in ${formatTimeRemaining(minutesUntilNextDay)}!`

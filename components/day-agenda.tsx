@@ -10,6 +10,7 @@ import { useState, useEffect } from "react"
 import { EventCard } from "@/components/event-card"
 import { useEvents } from "@/hooks/use-events"
 import { useOverrideDiff } from "@/hooks/use-override-diff"
+import { useTagData } from "@/hooks/use-tag-data"
 import type { DiffInfo } from "@/lib/config-diff"
 import {
   DndContext,
@@ -54,6 +55,7 @@ export function DayAgenda({ day, date, showLocalTime = false, setShowLocalTime }
   // Access events data from store
   const { events, reorderEvents } = useEvents()
   const { diffIndex } = useOverrideDiff()
+  const { tagConfig } = useTagData()
   const eventOverrideIndex = diffIndex?.events ?? {}
 
   // State to manage all-day and time-specific events
@@ -88,7 +90,7 @@ export function DayAgenda({ day, date, showLocalTime = false, setShowLocalTime }
     // would be excluded by date-specific overrides
     const dayEvents = events.filter((event) => {
       if (event.archived) return false
-      return shouldShowRecurringEvent(event, date, true)
+      return shouldShowRecurringEvent(event, date, true, tagConfig ?? {})
     })
 
     // Split into all-day and time-specific events
@@ -151,7 +153,7 @@ export function DayAgenda({ day, date, showLocalTime = false, setShowLocalTime }
 
     setTimeEvents(timed)
     setAllDayEvents(allDay)
-  }, [events, day, date])
+  }, [events, day, date, tagConfig])
 
   /**
    * Handler for when drag starts
