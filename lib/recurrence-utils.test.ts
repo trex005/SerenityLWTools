@@ -28,3 +28,53 @@ test("resolveRecurrenceDate: throws when tag not in tagConfig", () => {
     /No startDate found for tag/
   )
 })
+
+import { shouldShowRecurringEvent, formatRecurrence } from "./recurrence-utils"
+
+const tagConfig = { tags: { s4: { startDate: "2026-01-01" } } }
+
+test("shouldShowRecurringEvent: shows on offset day with daily recurrence", () => {
+  const event = {
+    recurrence: {
+      type: "days",
+      startTag: "s4",
+      startOffset: 0,
+      onPeriods: 1,
+      offPeriods: 0,
+      daysOfWeek: ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"],
+    },
+  }
+  // 2026-01-01 is a Thursday — should show on that date
+  const date = new Date("2026-01-01T12:00:00Z")
+  assert.equal(shouldShowRecurringEvent(event, date, false, tagConfig), true)
+})
+
+test("shouldShowRecurringEvent: hides before offset start day", () => {
+  const event = {
+    recurrence: {
+      type: "days",
+      startTag: "s4",
+      startOffset: 5,
+      onPeriods: 1,
+      offPeriods: 0,
+      daysOfWeek: ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"],
+    },
+  }
+  // 2026-01-01 is before offset 5 (2026-01-06)
+  const date = new Date("2026-01-01T12:00:00Z")
+  assert.equal(shouldShowRecurringEvent(event, date, false, tagConfig), false)
+})
+
+test("formatRecurrence: returns human label for daily event", () => {
+  const event = {
+    recurrence: {
+      type: "days",
+      startTag: "s4",
+      startOffset: 0,
+      onPeriods: 1,
+      offPeriods: 0,
+      daysOfWeek: ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"],
+    },
+  }
+  assert.equal(formatRecurrence(event, tagConfig), "Daily")
+})

@@ -80,43 +80,50 @@ export function shouldShowOnDate(
  * Get the day of the week as a string (e.g., "sunday")
  * @param date The date to get the day of the week for
  */
-export function shouldShowRecurringEvent(event: any, date: Date, adminModeView = false): boolean {
-  // Format the date as YYYY-MM-DD for use with dateOverrides
+export function shouldShowRecurringEvent(
+  event: any,
+  date: Date,
+  adminModeView = false,
+  tagConfig: TagConfig = {},
+): boolean {
   const dateString = formatInAppTimezone(date, "yyyy-MM-dd")
 
-  // Check for date-specific include/exclude override first, but only if not in admin view
   if (!adminModeView && event.dateIncludeOverrides && event.dateIncludeOverrides[dateString] !== undefined) {
-    // If we have an explicit include/exclude for this date, respect that above all else
     return event.dateIncludeOverrides[dateString]
   }
 
   const normalizedTargetDate = normalizeToAppDay(date)
-  const recurrenceStartDate = event.recurrence?.startDate ? normalizeToAppDay(parseISO(event.recurrence.startDate)) : undefined
-  const recurrenceEndDate = event.recurrence?.endDate ? normalizeToAppDay(parseISO(event.recurrence.endDate)) : undefined
 
-  if (recurrenceStartDate && !Number.isNaN(recurrenceStartDate.getTime())) {
-    const normalizedStart = getStartOfAppDay(recurrenceStartDate)
-    if (normalizedTargetDate.getTime() < normalizedStart.getTime()) {
-      return false
-    }
+  if (event.recurrence?.startTag !== undefined && event.recurrence?.startOffset !== undefined) {
+    const startDate = normalizeToAppDay(
+      resolveRecurrenceDate(event.recurrence.startTag, event.recurrence.startOffset, tagConfig),
+    )
+    if (normalizedTargetDate.getTime() < startDate.getTime()) return false
   }
 
-  if (recurrenceEndDate && !Number.isNaN(recurrenceEndDate.getTime())) {
-    const normalizedEnd = getStartOfAppDay(recurrenceEndDate)
-    if (normalizedTargetDate.getTime() > normalizedEnd.getTime()) {
-      return false
-    }
+  if (event.recurrence?.endOffset !== undefined) {
+    const endDate = normalizeToAppDay(
+      resolveRecurrenceDate(event.recurrence.startTag, event.recurrence.endOffset, tagConfig),
+    )
+    if (normalizedTargetDate.getTime() > endDate.getTime()) return false
   }
 
   if (!event.recurrence || event.recurrence.type === "none") {
     return false
   }
 
-  const params = convertNewRecurrenceFormat(event)
+  const params = convertNewRecurrenceFormat(event, tagConfig)
   if (!params) return false
 
-  // For admin view, show events that match recurrence rules (ignoring include overrides already skipped)
-  return shouldShowOnDate(date, params.startDate, params.periodDays, params.onPeriods, params.offPeriods, params.allowedWeekdays, params.endDate)
+  return shouldShowOnDate(
+    date,
+    params.startDate,
+    params.periodDays,
+    params.onPeriods,
+    params.offPeriods,
+    params.allowedWeekdays,
+    params.endDate,
+  )
 }
 
 /**
@@ -124,43 +131,55 @@ export function shouldShowRecurringEvent(event: any, date: Date, adminModeView =
  * @param event The event with new recurrence format
  * @returns Parameters for the new schedule calculation
  */
-function convertNewRecurrenceFormat(event: any): {
-  startDate: Date,
-  periodDays: number,
-  onPeriods: number,
-  offPeriods: number,
-  allowedWeekdays?: string[],
+function convertNewRecurrenceFormat(
+  event: any,
+  tagConfig: TagConfig,
+): {
+  startDate: Date
+  periodDays: number
+  onPeriods: number
+  offPeriods: number
+  allowedWeekdays?: string[]
   endDate?: Date
 } | null {
   if (!event.recurrence) return null
-  
-  if (!event.recurrence.startDate || event.recurrence.onPeriods === undefined || event.recurrence.offPeriods === undefined) {
+
+  if (
+    event.recurrence.startTag === undefined ||
+    event.recurrence.startOffset === undefined ||
+    event.recurrence.onPeriods === undefined ||
+    event.recurrence.offPeriods === undefined
+  ) {
     return null
   }
-  
+
   let periodDays: number
   if (event.recurrence.type === "days") {
     periodDays = 1
   } else if (event.recurrence.type === "weeks") {
     periodDays = 7
   } else {
-    return null // Unsupported type
+    return null
   }
-  
+
   let endDate: Date | undefined
-  if (event.recurrence.endDate) {
-    const parsedEnd = parseISO(event.recurrence.endDate)
-    if (!Number.isNaN(parsedEnd.getTime())) {
-      endDate = normalizeToAppDay(parsedEnd)
-    }
+  if (event.recurrence.endOffset !== undefined) {
+    endDate = normalizeToAppDay(
+      resolveRecurrenceDate(event.recurrence.startTag, event.recurrence.endOffset, tagConfig),
+    )
   }
-  
+
   return {
-    startDate: normalizeToAppDay(parseISO(event.recurrence.startDate)),
+    startDate: normalizeToAppDay(
+      resolveRecurrenceDate(event.recurrence.startTag, event.recurrence.startOffset, tagConfig),
+    ),
     periodDays,
     onPeriods: event.recurrence.onPeriods,
     offPeriods: event.recurrence.offPeriods,
-    allowedWeekdays: event.recurrence.daysOfWeek && event.recurrence.daysOfWeek.length > 0 ? event.recurrence.daysOfWeek : undefined,
+    allowedWeekdays:
+      event.recurrence.daysOfWeek && event.recurrence.daysOfWeek.length > 0
+        ? event.recurrence.daysOfWeek
+        : undefined,
     endDate,
   }
 }
@@ -234,12 +253,11 @@ function formatWeekdaysCompact(weekdays: string[]): string {
  * Format recurrence information for display with improved labeling
  * @param event The event to format
  */
-export function formatRecurrence(event: any): string | null {
+export function formatRecurrence(event: any, tagConfig: TagConfig = {}): string | null {
   if (!event.recurrence || event.recurrence.type === "none") {
     return null
   }
 
-  // Extract parameters from new format
   let periodDays: number
   let onPeriods: number
   let offPeriods: number
@@ -250,29 +268,24 @@ export function formatRecurrence(event: any): string | null {
   periodDays = event.recurrence.type === "days" ? 1 : 7
   weekdays = event.recurrence.daysOfWeek || []
 
-  // Step 1: Handle special cases first
   if (onPeriods === 1 && offPeriods === 0) {
     const baseLabel = periodDays === 1 ? "Daily" : "Weekly"
     const weekdayFilter = formatWeekdaysCompact(weekdays)
     return weekdayFilter ? `${baseLabel} on ${weekdayFilter}` : baseLabel
   }
 
-  // Step 2: Generate base phrase from periods
   let label: string
-  
+
   if (onPeriods === 1) {
-    // "Every X" format for single on-period
     const total = onPeriods + offPeriods
     if (periodDays === 1) {
       label = `Every ${total} days`
     } else if (periodDays === 7) {
       label = `Every ${total} weeks`
     } else {
-      const unit = `${periodDays}-day period`
-      label = `Every ${total} ${unit}s`
+      label = `Every ${total} ${periodDays}-day periods`
     }
   } else {
-    // "X on, Y off" format
     if (periodDays === 1) {
       label = `${onPeriods} days on, ${offPeriods} off`
     } else if (periodDays === 7) {
@@ -282,16 +295,21 @@ export function formatRecurrence(event: any): string | null {
     }
   }
 
-  // Step 3: Add weekday filter if not all days selected
   const weekdayFilter = formatWeekdaysCompact(weekdays)
   if (weekdayFilter) {
     label += ` on ${weekdayFilter}`
   }
 
-  if (event.recurrence?.endDate) {
-    const parsedEnd = parseISO(event.recurrence.endDate)
-    if (!Number.isNaN(parsedEnd.getTime())) {
-      label += ` (ends ${formatInAppTimezone(parsedEnd, "MMM d, yyyy")})`
+  if (event.recurrence?.endOffset !== undefined && event.recurrence?.startTag) {
+    try {
+      const endDate = resolveRecurrenceDate(
+        event.recurrence.startTag,
+        event.recurrence.endOffset,
+        tagConfig,
+      )
+      label += ` (ends ${formatInAppTimezone(endDate, "MMM d, yyyy")})`
+    } catch {
+      // startTag not in tagConfig — omit end date label
     }
   }
 
