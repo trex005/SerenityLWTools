@@ -1,5 +1,26 @@
 import { parseISO } from "date-fns"
-import { formatInAppTimezone, getDayOfWeek as getAppDayOfWeek, getStartOfAppDay } from "./date-utils"
+import { formatInAppTimezone, getDayOfWeek as getAppDayOfWeek, getStartOfAppDay, addAppDays } from "./date-utils"
+
+export type TagConfig = {
+  tags?: Record<string, { startDate?: string }>
+}
+
+/**
+ * Resolve an absolute Date from a tag-relative offset.
+ * actualDate = tags[startTag].startDate + offsetDays
+ */
+export function resolveRecurrenceDate(
+  startTag: string,
+  offsetDays: number,
+  tagConfig: TagConfig,
+): Date {
+  const startDateStr = tagConfig?.tags?.[startTag]?.startDate
+  if (!startDateStr) {
+    throw new Error(`No startDate found for tag "${startTag}" in tagConfig`)
+  }
+  const base = getStartOfAppDay(parseISO(startDateStr))
+  return addAppDays(base, offsetDays)
+}
 
 export const getDayOfWeek = getAppDayOfWeek
 

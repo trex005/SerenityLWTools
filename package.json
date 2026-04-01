@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test:tz": "tsx --test lib/date-utils.test.ts"
+    "test:tz": "tsx --test lib/date-utils.test.ts",
+    "test:recurrence": "tsx --test lib/recurrence-utils.test.ts"
   },
   "dependencies": {
     "@dnd-kit/core": "latest",
