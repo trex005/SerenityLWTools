@@ -9,69 +9,72 @@
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Label } from "@/components/ui/label"
 import { Checkbox } from "@/components/ui/checkbox"
-import { formatInAppTimezone } from "@/lib/date-utils"
+import { differenceInDays, parseISO } from "date-fns"
+import { formatInAppTimezone, getStartOfAppDay } from "@/lib/date-utils"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { CustomNumberInput } from "./custom-number-input"
+import type { TagConfig } from "@/lib/recurrence-utils"
+import { resolveRecurrenceDate } from "@/lib/recurrence-utils"
 
 // Define the RecurrenceData type for the new structure
 export interface RecurrenceData {
   type: "days" | "weeks" | "none"
+  startTag: string
+  startOffset: number
+  endOffset?: number
   onPeriods: number
   offPeriods: number
   daysOfWeek: string[]
-  startDate: string
-  endDate?: string
 }
 
 interface RecurrenceEditorProps {
   value: RecurrenceData | null | undefined
   onChange: (value: RecurrenceData) => void
-  isNewEvent?: boolean // true for new events, false/undefined for existing events
+  isNewEvent?: boolean
+  tagConfig: TagConfig
+  activeTag: string
 }
 
-// Normalize recurrence into the new format for UI
-const toDateOnly = (value: string | undefined, fallback: string): string => {
-  if (!value) return fallback
-  const match = value.match(/^(\d{4}-\d{2}-\d{2})/)
-  if (match) return match[1]
-  return fallback
-}
-
-function convertLegacyToNew(legacyValue: any, isNewEvent: boolean = false): RecurrenceData {
-  const defaultStartDate = isNewEvent
-    ? formatInAppTimezone(new Date(), "yyyy-MM-dd")
-    : formatInAppTimezone(new Date(2025, 0, 5), "yyyy-MM-dd")
-
-  // If it's already in new format, return as is
-  if (legacyValue && (legacyValue.onPeriods !== undefined || legacyValue.offPeriods !== undefined)) {
-    return {
-      type: legacyValue.type === "weeks" || legacyValue.type === "none" ? legacyValue.type : "days",
-      onPeriods: legacyValue.onPeriods ?? 1,
-      offPeriods: legacyValue.offPeriods ?? 0,
-      daysOfWeek:
-        legacyValue.daysOfWeek && legacyValue.daysOfWeek.length > 0
-          ? legacyValue.daysOfWeek
-          : ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"],
-      startDate: toDateOnly(legacyValue.startDate, defaultStartDate),
-      endDate: legacyValue.endDate ? toDateOnly(legacyValue.endDate, defaultStartDate) : undefined,
-    }
+/** Convert a stored RecurrenceData offset back to a calendar date string for display. */
+const offsetToDateStr = (
+  startTag: string,
+  offset: number,
+  tagConfig: TagConfig,
+): string => {
+  try {
+    const d = resolveRecurrenceDate(startTag, offset, tagConfig)
+    return formatInAppTimezone(d, "yyyy-MM-dd")
+  } catch {
+    return formatInAppTimezone(new Date(), "yyyy-MM-dd")
   }
+}
 
-  // Default new format - use today for new events
-  return {
+/** Compute startOffset from a picked calendar date relative to activeTag's startDate. */
+const dateStrToOffset = (dateStr: string, activeTag: string, tagConfig: TagConfig): number => {
+  const tagStartDateStr = tagConfig?.tags?.[activeTag]?.startDate
+  if (!tagStartDateStr) return 0
+  return differenceInDays(
+    getStartOfAppDay(parseISO(dateStr)),
+    getStartOfAppDay(parseISO(tagStartDateStr)),
+  )
+}
+
+export function RecurrenceEditor({
+  value,
+  onChange,
+  isNewEvent = false,
+  tagConfig,
+  activeTag,
+}: RecurrenceEditorProps) {
+  const recurrence: RecurrenceData = value ?? {
     type: "days",
+    startTag: activeTag,
+    startOffset: 0,
     onPeriods: 1,
     offPeriods: 0,
     daysOfWeek: ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"],
-    startDate: isNewEvent ? formatInAppTimezone(new Date(), "yyyy-MM-dd") : defaultStartDate,
-    endDate: undefined,
   }
-}
-
-export function RecurrenceEditor({ value, onChange, isNewEvent = false }: RecurrenceEditorProps) {
-  // Convert legacy format to new format for display
-  const recurrence: RecurrenceData = convertLegacyToNew(value, isNewEvent)
 
   if (!recurrence.daysOfWeek || recurrence.daysOfWeek.length === 0) {
     recurrence.daysOfWeek = ["monday"] // Ensure daysOfWeek is never empty
@@ -155,79 +158,67 @@ export function RecurrenceEditor({ value, onChange, isNewEvent = false }: Recurr
     })
   }
 
-  // Handle start date change
-  const normalizeDateInput = (value: string | undefined): string | null => {
-    if (!value) return null
-    const match = value.match(/^(\d{4}-\d{2}-\d{2})/)
-    return match ? match[1] : null
-  }
-
-  const handleStartDateChange = (value: string | undefined) => {
-    const startIso = normalizeDateInput(value)
-    if (!startIso) return
-
-    let endIso = recurrence.endDate
-    if (endIso && endIso < startIso) {
-      endIso = startIso
+  const handleStartDateChange = (pickedDateStr: string | undefined) => {
+    if (!pickedDateStr) return
+    const newOffset = dateStrToOffset(pickedDateStr, activeTag, tagConfig)
+    let endOffset = recurrence.endOffset
+    if (endOffset !== undefined && endOffset < newOffset) {
+      endOffset = newOffset
     }
-
     onChange({
       ...recurrence,
-      startDate: startIso,
-      endDate: endIso,
+      startTag: activeTag,
+      startOffset: newOffset,
+      endOffset,
       daysOfWeek: [...recurrence.daysOfWeek],
     })
   }
 
-  const handleEndDateChange = (value: string | undefined) => {
-    const endIso = normalizeDateInput(value)
-    if (!endIso) return
-
-    const startIso = recurrence.startDate
-    const nextEnd = startIso && endIso < startIso ? startIso : endIso
-
+  const handleEndDateChange = (pickedDateStr: string | undefined) => {
+    if (!pickedDateStr) return
+    const newEndOffset = dateStrToOffset(pickedDateStr, activeTag, tagConfig)
+    const effectiveEnd = newEndOffset < recurrence.startOffset ? recurrence.startOffset : newEndOffset
     onChange({
       ...recurrence,
-      endDate: nextEnd,
+      startTag: activeTag,
+      endOffset: effectiveEnd,
       daysOfWeek: [...recurrence.daysOfWeek],
     })
   }
 
   const handleClearEndDate = () => {
-    setEndDatePickerOpen(false)
     onChange({
       ...recurrence,
-      endDate: undefined,
+      endOffset: undefined,
       daysOfWeek: [...recurrence.daysOfWeek],
     })
   }
 
-  // Safely format a date string
-  const formatDateSafe = (dateString: string | undefined) => {
-    if (!dateString) return ""
-    return normalizeDateInput(dateString) || ""
-  }
-
   // Helper function to create a simple date picker
   const renderStartDatePicker = () => {
+    const displayDate = offsetToDateStr(recurrence.startTag, recurrence.startOffset, tagConfig)
     return (
       <div className="space-y-2">
         <Label htmlFor="start-date">Start Date</Label>
         <Input
           id="start-date"
           type="date"
-          value={formatDateSafe(recurrence.startDate)}
+          value={displayDate}
           onChange={(e) => handleStartDateChange(e.target.value)}
           className="w-[240px]"
         />
         <p className="text-xs text-muted-foreground">
-          This date controls when the schedule pattern begins. All schedule calculations are based on day offsets from this date.
+          This date controls when the schedule pattern begins.
         </p>
       </div>
     )
   }
 
   const renderEndDatePicker = () => {
+    const displayEndDate = recurrence.endOffset !== undefined
+      ? offsetToDateStr(recurrence.startTag, recurrence.endOffset, tagConfig)
+      : ""
+    const displayStartDate = offsetToDateStr(recurrence.startTag, recurrence.startOffset, tagConfig)
     return (
       <div className="space-y-2">
         <Label htmlFor="end-date">End Date (optional)</Label>
@@ -235,12 +226,12 @@ export function RecurrenceEditor({ value, onChange, isNewEvent = false }: Recurr
           <Input
             id="end-date"
             type="date"
-            value={formatDateSafe(recurrence.endDate)}
-            min={formatDateSafe(recurrence.startDate) || undefined}
+            value={displayEndDate}
+            min={displayStartDate || undefined}
             onChange={(e) => handleEndDateChange(e.target.value)}
             className="w-[240px]"
           />
-          {recurrence.endDate && (
+          {recurrence.endOffset !== undefined && (
             <Button
               type="button"
               variant="ghost"
@@ -292,20 +283,20 @@ export function RecurrenceEditor({ value, onChange, isNewEvent = false }: Recurr
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="on-periods">{recurrence.type === "days" ? "Days on" : "Weeks on"}</Label>
-              <CustomNumberInput 
-                value={recurrence.onPeriods} 
-                onChange={handleOnPeriodsChange} 
-                min={1} 
-                max={99} 
+              <CustomNumberInput
+                value={recurrence.onPeriods}
+                onChange={handleOnPeriodsChange}
+                min={1}
+                max={99}
               />
             </div>
             <div className="space-y-2">
               <Label htmlFor="off-periods">{recurrence.type === "days" ? "Days off" : "Weeks off"}</Label>
-              <CustomNumberInput 
-                value={recurrence.offPeriods} 
-                onChange={handleOffPeriodsChange} 
-                min={0} 
-                max={99} 
+              <CustomNumberInput
+                value={recurrence.offPeriods}
+                onChange={handleOffPeriodsChange}
+                min={0}
+                max={99}
               />
             </div>
           </div>
