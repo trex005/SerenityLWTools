@@ -38,11 +38,12 @@ interface Event {
   includeOnWebsite?: boolean
   recurrence?: {
     type: "days" | "weeks" | "none"
+    startTag: string
+    startOffset: number
+    endOffset?: number
     onPeriods: number
     offPeriods: number
     daysOfWeek: string[]
-    startDate: string
-    endDate?: string
   }
   variations?: Record<
     string,
