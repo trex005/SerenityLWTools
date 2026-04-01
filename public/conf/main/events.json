@@ -1,5 +1,5 @@
 {
-  "updated": "2025-12-03T23:20:11-02:00",
+  "updated": "2026-02-08T21:12:38-02:00",
   "events": [
     {
       "id": "ev-3",
@@ -13,10 +13,6 @@
         "monday",
         "thursday"
       ],
-      "includeInExport": {
-        "monday": true,
-        "thursday": true
-      },
       "order": {},
       "recurrence": {
         "type": "weeks",
@@ -43,15 +39,6 @@
       "days": [
         "sunday"
       ],
-      "includeInExport": {
-        "sunday": true,
-        "monday": true,
-        "tuesday": true,
-        "wednesday": true,
-        "thursday": true,
-        "friday": true,
-        "saturday": true
-      },
       "variations": {},
       "order": {
         "sunday": 3
@@ -81,11 +68,6 @@
         "monday",
         "tuesday"
       ],
-      "includeInExport": {
-        "monday": true,
-        "tuesday": true,
-        "wednesday": true
-      },
       "variations": {},
       "order": {
         "monday": 0,
@@ -117,14 +99,6 @@
       "days": [
         "friday"
       ],
-      "includeInExport": {
-        "friday": true,
-        "monday": true,
-        "tuesday": true,
-        "wednesday": true,
-        "thursday": true,
-        "saturday": true
-      },
       "variations": {},
       "order": {},
       "recurrence": {
@@ -154,11 +128,6 @@
         "tuesday",
         "thursday"
       ],
-      "includeInExport": {
-        "sunday": true,
-        "tuesday": true,
-        "thursday": true
-      },
       "variations": {},
       "order": {
         "sunday": 0,
@@ -192,10 +161,6 @@
         "monday",
         "sunday"
       ],
-      "includeInExport": {
-        "monday": true,
-        "sunday": true
-      },
       "variations": {},
       "order": {
         "sunday": 0,
@@ -230,11 +195,6 @@
         "wednesday",
         "friday"
       ],
-      "includeInExport": {
-        "monday": true,
-        "wednesday": true,
-        "friday": true
-      },
       "variations": {},
       "order": {
         "monday": 1,
@@ -268,15 +228,6 @@
       "days": [
         "sunday"
       ],
-      "includeInExport": {
-        "sunday": true,
-        "monday": true,
-        "tuesday": true,
-        "wednesday": true,
-        "thursday": true,
-        "friday": true,
-        "saturday": true
-      },
       "variations": {},
       "order": {},
       "recurrence": {
@@ -304,10 +255,6 @@
         "tuesday",
         "saturday"
       ],
-      "includeInExport": {
-        "tuesday": true,
-        "saturday": true
-      },
       "variations": {},
       "order": {
         "saturday": 4,
@@ -330,7 +277,7 @@
     {
       "id": "ev-13",
       "archived": false,
-      "title": "VS: Stamina, Drone data, and drone parts (Double dip with Arms Race 04:00-08:00)",
+      "title": "VS: Stamina, Drone data, and drone parts",
       "description": "",
       "isAllDay": true,
       "startTime": "09:00",
@@ -338,15 +285,6 @@
       "days": [
         "monday"
       ],
-      "includeInExport": {
-        "monday": true,
-        "tuesday": true,
-        "wednesday": true,
-        "thursday": true,
-        "friday": true,
-        "saturday": true,
-        "sunday": true
-      },
       "variations": {},
       "order": {
         "monday": 3
@@ -362,12 +300,13 @@
         "offPeriods": 0
       },
       "includeOnWebsite": true,
-      "remindTomorrow": true
+      "remindTomorrow": true,
+      "includeInBriefing": true
     },
     {
       "id": "ev-14",
       "archived": false,
-      "title": "VS: Unwrap buildings and use construction speedups (Arms Race 08:00-12:00)",
+      "title": "VS: Unwrap buildings and use construction speedups",
       "description": "",
       "isAllDay": true,
       "startTime": "09:00",
@@ -375,15 +314,6 @@
       "days": [
         "tuesday"
       ],
-      "includeInExport": {
-        "tuesday": true,
-        "monday": true,
-        "wednesday": true,
-        "thursday": true,
-        "friday": true,
-        "saturday": true,
-        "sunday": true
-      },
       "variations": {},
       "order": {
         "tuesday": 3
@@ -399,7 +329,8 @@
         "offPeriods": 0
       },
       "includeOnWebsite": true,
-      "remindTomorrow": true
+      "remindTomorrow": true,
+      "includeInBriefing": true
     },
     {
       "id": "ev-15",
@@ -412,9 +343,6 @@
       "days": [
         "wednesday"
       ],
-      "includeInExport": {
-        "wednesday": true
-      },
       "variations": {},
       "order": {
         "wednesday": 4
@@ -436,7 +364,7 @@
     {
       "id": "ev-16",
       "archived": false,
-      "title": "VS: Hero XP, Shards, Skill Medals, exclusive weapon shards (Arms Race 16:00-20:00)",
+      "title": "VS: Hero XP, Shards, Skill Medals, exclusive weapon shards",
       "description": "",
       "isAllDay": true,
       "startTime": "09:00",
@@ -444,15 +372,6 @@
       "days": [
         "thursday"
       ],
-      "includeInExport": {
-        "thursday": true,
-        "monday": true,
-        "tuesday": true,
-        "wednesday": true,
-        "friday": true,
-        "saturday": true,
-        "sunday": true
-      },
       "variations": {},
       "order": {
         "thursday": 2
@@ -474,7 +393,7 @@
     {
       "id": "ev-17",
       "archived": false,
-      "title": "VS: Promote Troops (Arms Race 16:00-20:00), Build/Tech if necessary",
+      "title": "VS: Promote Troops, Build/Tech if necessary",
       "description": "",
       "isAllDay": true,
       "startTime": "09:00",
@@ -482,15 +401,6 @@
       "days": [
         "friday"
       ],
-      "includeInExport": {
-        "friday": true,
-        "monday": true,
-        "tuesday": true,
-        "wednesday": true,
-        "thursday": true,
-        "saturday": true,
-        "sunday": true
-      },
       "variations": {},
       "order": {
         "friday": 2
@@ -506,7 +416,8 @@
         "offPeriods": 0
       },
       "includeOnWebsite": true,
-      "remindTomorrow": true
+      "remindTomorrow": true,
+      "includeInBriefing": true
     },
     {
       "id": "ev-18",
@@ -519,14 +430,6 @@
       "days": [
         "saturday"
       ],
-      "includeInExport": {
-        "saturday": true,
-        "monday": true,
-        "tuesday": true,
-        "wednesday": true,
-        "thursday": true,
-        "friday": true
-      },
       "variations": {},
       "order": {
         "friday": 2,
@@ -556,15 +459,6 @@
       "days": [
         "saturday"
       ],
-      "includeInExport": {
-        "saturday": true,
-        "monday": true,
-        "tuesday": true,
-        "wednesday": true,
-        "thursday": true,
-        "friday": true,
-        "sunday": true
-      },
       "variations": {},
       "order": {},
       "recurrence": {
@@ -596,15 +490,6 @@
         "thursday",
         "sunday"
       ],
-      "includeInExport": {
-        "sunday": true,
-        "tuesday": true,
-        "thursday": true,
-        "monday": true,
-        "wednesday": true,
-        "friday": true,
-        "saturday": true
-      },
       "variations": {},
       "order": {
         "sunday": 4,
@@ -639,15 +524,6 @@
         "wednesday",
         "friday"
       ],
-      "includeInExport": {
-        "monday": true,
-        "wednesday": true,
-        "friday": true,
-        "tuesday": true,
-        "thursday": true,
-        "saturday": true,
-        "sunday": true
-      },
       "variations": {},
       "order": {
         "monday": 4,
@@ -682,11 +558,6 @@
         "thursday",
         "friday"
       ],
-      "includeInExport": {
-        "wednesday": true,
-        "thursday": true,
-        "friday": true
-      },
       "variations": {},
       "order": {
         "wednesday": 6,
@@ -718,15 +589,6 @@
       "days": [
         "sunday"
       ],
-      "includeInExport": {
-        "monday": false,
-        "tuesday": false,
-        "wednesday": false,
-        "thursday": false,
-        "friday": false,
-        "saturday": false,
-        "sunday": true
-      },
       "variations": {},
       "order": {
         "sunday": 2
@@ -758,11 +620,6 @@
         "thursday",
         "friday"
       ],
-      "includeInExport": {
-        "wednesday": true,
-        "thursday": true,
-        "friday": true
-      },
       "variations": {},
       "order": {
         "wednesday": 2,
@@ -794,17 +651,8 @@
       "startTime": "09:00",
       "endTime": "10:00",
       "days": [
-        "saturday"
+        "monday"
       ],
-      "includeInExport": {
-        "saturday": true,
-        "monday": true,
-        "tuesday": true,
-        "wednesday": true,
-        "thursday": true,
-        "friday": true,
-        "sunday": true
-      },
       "variations": {},
       "order": {
         "saturday": 2,
@@ -813,7 +661,7 @@
       "recurrence": {
         "type": "weeks",
         "daysOfWeek": [
-          "saturday"
+          "monday"
         ],
         "interval": 1,
         "startDate": "2024-01-01",
@@ -833,15 +681,6 @@
       "days": [
         "friday"
       ],
-      "includeInExport": {
-        "monday": false,
-        "tuesday": false,
-        "wednesday": false,
-        "thursday": false,
-        "friday": true,
-        "saturday": false,
-        "sunday": false
-      },
       "variations": {},
       "order": {},
       "recurrence": {
@@ -869,15 +708,6 @@
       "days": [
         "sunday"
       ],
-      "includeInExport": {
-        "sunday": true,
-        "monday": true,
-        "tuesday": true,
-        "wednesday": true,
-        "thursday": true,
-        "friday": true,
-        "saturday": true
-      },
       "variations": {},
       "order": {
         "sunday": 5
@@ -912,15 +742,6 @@
         "saturday",
         "wednesday"
       ],
-      "includeInExport": {
-        "monday": true,
-        "sunday": true,
-        "thursday": true,
-        "friday": true,
-        "tuesday": true,
-        "saturday": true,
-        "wednesday": true
-      },
       "order": {},
       "recurrence": {
         "type": "days",
@@ -959,15 +780,6 @@
         "saturday",
         "sunday"
       ],
-      "includeInExport": {
-        "monday": true,
-        "wednesday": true,
-        "thursday": true,
-        "tuesday": true,
-        "friday": true,
-        "saturday": true,
-        "sunday": true
-      },
       "variations": {},
       "order": {
         "wednesday": 5,
@@ -1015,15 +827,6 @@
         "friday",
         "saturday"
       ],
-      "includeInExport": {
-        "friday": true,
-        "sunday": true,
-        "monday": true,
-        "tuesday": true,
-        "wednesday": true,
-        "thursday": true,
-        "saturday": true
-      },
       "variations": {},
       "order": {
         "monday": 5,
@@ -1065,15 +868,6 @@
         "monday",
         "thursday"
       ],
-      "includeInExport": {
-        "wednesday": true,
-        "sunday": true,
-        "monday": true,
-        "tuesday": true,
-        "thursday": true,
-        "friday": true,
-        "saturday": true
-      },
       "variations": {},
       "order": {
         "thursday": 5,
@@ -1104,15 +898,6 @@
         "tuesday",
         "friday"
       ],
-      "includeInExport": {
-        "wednesday": true,
-        "sunday": true,
-        "monday": true,
-        "tuesday": true,
-        "thursday": true,
-        "friday": true,
-        "saturday": true
-      },
       "variations": {},
       "order": {
         "friday": 6,
@@ -1143,15 +928,6 @@
         "wednesday",
         "saturday"
       ],
-      "includeInExport": {
-        "wednesday": true,
-        "sunday": true,
-        "monday": true,
-        "tuesday": true,
-        "thursday": true,
-        "friday": true,
-        "saturday": true
-      },
       "variations": {},
       "order": {
         "saturday": 5,
@@ -1187,15 +963,6 @@
         "friday",
         "saturday"
       ],
-      "includeInExport": {
-        "friday": true,
-        "sunday": true,
-        "monday": true,
-        "tuesday": true,
-        "wednesday": true,
-        "thursday": true,
-        "saturday": true
-      },
       "variations": {},
       "order": {
         "monday": 8,
@@ -1226,7 +993,7 @@
     {
       "id": "7662a10a-144e-4dc5-8ae7-4c8af78b9e12",
       "archived": false,
-      "title": "SHINYs in 950, 974-976, 987-989",
+      "title": "SHINYs in 949-952, 974-976, 987-989",
       "description": "",
       "isAllDay": true,
       "startTime": "09:00",
@@ -1240,15 +1007,6 @@
         "friday",
         "saturday"
       ],
-      "includeInExport": {
-        "friday": true,
-        "sunday": true,
-        "monday": true,
-        "tuesday": true,
-        "wednesday": true,
-        "thursday": true,
-        "saturday": true
-      },
       "variations": {},
       "order": {
         "saturday": 5,
@@ -1293,15 +1051,6 @@
         "friday",
         "saturday"
       ],
-      "includeInExport": {
-        "sunday": true,
-        "monday": true,
-        "tuesday": true,
-        "wednesday": true,
-        "thursday": true,
-        "friday": true,
-        "saturday": true
-      },
       "variations": {},
       "order": {
         "monday": 10,
@@ -1345,15 +1094,6 @@
         "friday",
         "saturday"
       ],
-      "includeInExport": {
-        "monday": true,
-        "sunday": true,
-        "tuesday": true,
-        "wednesday": true,
-        "thursday": true,
-        "friday": true,
-        "saturday": true
-      },
       "variations": {},
       "order": {
         "tuesday": 7,
@@ -1395,15 +1135,6 @@
         "friday",
         "saturday"
       ],
-      "includeInExport": {
-        "monday": true,
-        "sunday": true,
-        "tuesday": true,
-        "wednesday": true,
-        "thursday": true,
-        "friday": true,
-        "saturday": true
-      },
       "variations": {},
       "order": {
         "tuesday": 2
@@ -1438,15 +1169,6 @@
       "days": [
         "tuesday"
       ],
-      "includeInExport": {
-        "sunday": true,
-        "monday": true,
-        "tuesday": true,
-        "wednesday": true,
-        "thursday": true,
-        "friday": true,
-        "saturday": true
-      },
       "variations": {},
       "order": {
         "tuesday": 4
@@ -1466,7 +1188,7 @@
     },
     {
       "id": "fe4d455d-6f36-45b2-92c2-24c32521473f",
-      "archived": false,
+      "archived": true,
       "title": "Hot Deals → Glittering Market",
       "description": "• At minimum, collect 100 diamonds / Buy 60 coins for 500 diamonds",
       "isAllDay": true,
@@ -1480,15 +1202,6 @@
         "saturday",
         "sunday"
       ],
-      "includeInExport": {
-        "monday": true,
-        "sunday": true,
-        "tuesday": true,
-        "wednesday": true,
-        "thursday": true,
-        "friday": true,
-        "saturday": true
-      },
       "variations": {},
       "order": {
         "saturday": 6,
@@ -1526,15 +1239,6 @@
       "days": [
         "thursday"
       ],
-      "includeInExport": {
-        "monday": true,
-        "sunday": true,
-        "tuesday": true,
-        "wednesday": true,
-        "thursday": true,
-        "friday": true,
-        "saturday": true
-      },
       "variations": {},
       "order": {
         "thursday": 9
@@ -1565,15 +1269,6 @@
         "thursday",
         "friday"
       ],
-      "includeInExport": {
-        "friday": true,
-        "sunday": true,
-        "monday": true,
-        "tuesday": true,
-        "wednesday": true,
-        "thursday": true,
-        "saturday": true
-      },
       "variations": {},
       "order": {
         "sunday": 4,
@@ -1612,9 +1307,6 @@
       "days": [
         "friday"
       ],
-      "includeInExport": {
-        "friday": true
-      },
       "variations": {},
       "order": {},
       "recurrence": {
@@ -1641,15 +1333,6 @@
       "days": [
         "thursday"
       ],
-      "includeInExport": {
-        "thursday": true,
-        "sunday": true,
-        "monday": true,
-        "tuesday": true,
-        "wednesday": true,
-        "friday": true,
-        "saturday": true
-      },
       "variations": {},
       "order": {},
       "recurrence": {
@@ -1677,15 +1360,6 @@
       "days": [
         "friday"
       ],
-      "includeInExport": {
-        "friday": true,
-        "sunday": true,
-        "monday": true,
-        "tuesday": true,
-        "wednesday": true,
-        "thursday": true,
-        "saturday": true
-      },
       "variations": {},
       "order": {
         "friday": 3
@@ -1716,15 +1390,6 @@
       "days": [
         "sunday"
       ],
-      "includeInExport": {
-        "tuesday": true,
-        "sunday": true,
-        "monday": true,
-        "wednesday": true,
-        "thursday": true,
-        "friday": true,
-        "saturday": true
-      },
       "variations": {},
       "order": {},
       "recurrence": {
@@ -1753,23 +1418,15 @@
       "days": [
         "wednesday"
       ],
-      "includeInExport": {
-        "wednesday": true,
-        "monday": true,
-        "tuesday": true,
-        "thursday": true,
-        "friday": true,
-        "saturday": true
-      },
       "variations": {},
       "order": {
-      	"monday":1,
-      	"tuesday":1,
-      	"wednesday":1,
-      	"thursday":1,
-      	"friday":1,
-      	"saturday":1,
-      	"sunday":1
+        "monday": 1,
+        "tuesday": 1,
+        "wednesday": 1,
+        "thursday": 1,
+        "friday": 1,
+        "saturday": 1,
+        "sunday": 1
       },
       "recurrence": {
         "type": "days",
@@ -1797,15 +1454,6 @@
       "days": [
         "sunday"
       ],
-      "includeInExport": {
-        "sunday": true,
-        "monday": true,
-        "tuesday": true,
-        "wednesday": true,
-        "thursday": true,
-        "friday": true,
-        "saturday": true
-      },
       "variations": {},
       "order": {},
       "recurrence": {
@@ -1833,14 +1481,6 @@
       "days": [
         "sunday"
       ],
-      "includeInExport": {
-        "sunday": true,
-        "tuesday": true,
-        "wednesday": true,
-        "thursday": true,
-        "friday": true,
-        "saturday": true
-      },
       "variations": {},
       "order": {},
       "recurrence": {
@@ -1879,15 +1519,6 @@
         "friday",
         "saturday"
       ],
-      "includeInExport": {
-        "tuesday": true,
-        "sunday": true,
-        "monday": true,
-        "wednesday": true,
-        "thursday": true,
-        "friday": true,
-        "saturday": true
-      },
       "variations": {},
       "order": {
         "monday": 8
@@ -1924,14 +1555,6 @@
       "days": [
         "monday"
       ],
-      "includeInExport": {
-        "monday": true,
-        "tuesday": true,
-        "wednesday": true,
-        "thursday": true,
-        "friday": true,
-        "saturday": true
-      },
       "variations": {},
       "order": {
         "monday": 9
@@ -1962,15 +1585,6 @@
       "days": [
         "tuesday"
       ],
-      "includeInExport": {
-        "monday": true,
-        "sunday": true,
-        "tuesday": true,
-        "wednesday": true,
-        "thursday": true,
-        "friday": true,
-        "saturday": true
-      },
       "variations": {},
       "order": {},
       "archived": false,
@@ -1999,15 +1613,6 @@
       "days": [
         "thursday"
       ],
-      "includeInExport": {
-        "wednesday": true,
-        "sunday": true,
-        "monday": true,
-        "tuesday": true,
-        "thursday": true,
-        "friday": true,
-        "saturday": true
-      },
       "variations": {},
       "order": {},
       "archived": false,
@@ -2042,15 +1647,6 @@
         "friday",
         "saturday"
       ],
-      "includeInExport": {
-        "monday": true,
-        "sunday": true,
-        "tuesday": true,
-        "wednesday": true,
-        "thursday": true,
-        "friday": true,
-        "saturday": true
-      },
       "variations": {},
       "order": {},
       "archived": false,
@@ -2085,15 +1681,6 @@
       "days": [
         "friday"
       ],
-      "includeInExport": {
-        "monday": true,
-        "sunday": true,
-        "tuesday": true,
-        "wednesday": true,
-        "thursday": true,
-        "friday": true,
-        "saturday": true
-      },
       "variations": {},
       "order": {},
       "archived": true,
@@ -2122,15 +1709,6 @@
       "days": [
         "thursday"
       ],
-      "includeInExport": {
-        "thursday": true,
-        "sunday": true,
-        "monday": true,
-        "tuesday": true,
-        "wednesday": true,
-        "friday": true,
-        "saturday": true
-      },
       "variations": {},
       "order": {},
       "archived": false,
@@ -2160,14 +1738,6 @@
         "friday",
         "saturday"
       ],
-      "includeInExport": {
-        "monday": true,
-        "thursday": true,
-        "tuesday": true,
-        "wednesday": true,
-        "friday": true,
-        "saturday": true
-      },
       "variations": {},
       "order": {
         "monday": 4,
@@ -2202,10 +1772,6 @@
         "tuesday",
         "friday"
       ],
-      "includeInExport": {
-        "tuesday": false,
-        "friday": false
-      },
       "variations": {},
       "order": {},
       "archived": true,
@@ -2233,15 +1799,6 @@
       "days": [
         "saturday"
       ],
-      "includeInExport": {
-        "wednesday": true,
-        "sunday": true,
-        "monday": true,
-        "tuesday": true,
-        "thursday": true,
-        "friday": true,
-        "saturday": true
-      },
       "variations": {},
       "order": {},
       "archived": true,
@@ -2271,15 +1828,6 @@
         "tuesday",
         "monday"
       ],
-      "includeInExport": {
-        "monday": true,
-        "sunday": true,
-        "tuesday": true,
-        "wednesday": true,
-        "thursday": true,
-        "friday": true,
-        "saturday": true
-      },
       "variations": {},
       "order": {
         "monday": 11,
@@ -2313,15 +1861,6 @@
         "wednesday",
         "thursday"
       ],
-      "includeInExport": {
-        "monday": false,
-        "sunday": true,
-        "tuesday": false,
-        "wednesday": false,
-        "thursday": false,
-        "friday": true,
-        "saturday": true
-      },
       "variations": {},
       "order": {
         "monday": 13
@@ -2362,15 +1901,6 @@
         "friday",
         "saturday"
       ],
-      "includeInExport": {
-        "tuesday": true,
-        "sunday": true,
-        "monday": true,
-        "wednesday": true,
-        "thursday": true,
-        "friday": true,
-        "saturday": true
-      },
       "variations": {},
       "order": {
         "monday": 1,
@@ -2429,18 +1959,9 @@
       "days": [
         "saturday"
       ],
-      "includeInExport": {
-        "saturday": true,
-        "sunday": true,
-        "monday": true,
-        "tuesday": true,
-        "wednesday": true,
-        "thursday": true,
-        "friday": true
-      },
       "variations": {},
       "order": {},
-      "archived": true,
+      "archived": false,
       "recurrence": {
         "type": "weeks",
         "daysOfWeek": [
@@ -2469,18 +1990,9 @@
       "days": [
         "saturday"
       ],
-      "includeInExport": {
-        "saturday": true,
-        "sunday": true,
-        "monday": true,
-        "tuesday": true,
-        "wednesday": true,
-        "thursday": true,
-        "friday": true
-      },
       "variations": {},
       "order": {},
-      "archived": true,
+      "archived": false,
       "recurrence": {
         "type": "weeks",
         "daysOfWeek": [
@@ -2510,15 +2022,6 @@
         "tuesday",
         "friday"
       ],
-      "includeInExport": {
-        "thursday": true,
-        "sunday": true,
-        "monday": true,
-        "tuesday": true,
-        "wednesday": true,
-        "friday": true,
-        "saturday": true
-      },
       "variations": {},
       "order": {},
       "archived": true,
@@ -2546,15 +2049,6 @@
         "wednesday",
         "saturday"
       ],
-      "includeInExport": {
-        "thursday": true,
-        "sunday": true,
-        "monday": true,
-        "tuesday": true,
-        "wednesday": true,
-        "friday": true,
-        "saturday": true
-      },
       "variations": {},
       "order": {},
       "archived": true,
@@ -2581,15 +2075,6 @@
       "days": [
         "friday"
       ],
-      "includeInExport": {
-        "wednesday": true,
-        "sunday": true,
-        "monday": true,
-        "tuesday": true,
-        "thursday": true,
-        "friday": true,
-        "saturday": true
-      },
       "variations": {},
       "order": {},
       "archived": false,
@@ -2618,15 +2103,6 @@
         "tuesday",
         "friday"
       ],
-      "includeInExport": {
-        "thursday": true,
-        "sunday": true,
-        "monday": true,
-        "tuesday": true,
-        "wednesday": true,
-        "friday": true,
-        "saturday": true
-      },
       "variations": {},
       "order": {},
       "archived": true,
@@ -2658,15 +2134,6 @@
         "wednesday",
         "saturday"
       ],
-      "includeInExport": {
-        "tuesday": true,
-        "sunday": true,
-        "monday": true,
-        "wednesday": true,
-        "thursday": true,
-        "friday": true,
-        "saturday": true
-      },
       "variations": {},
       "order": {},
       "archived": true,
@@ -2695,15 +2162,6 @@
       "days": [
         "thursday"
       ],
-      "includeInExport": {
-        "monday": true,
-        "sunday": true,
-        "tuesday": true,
-        "wednesday": true,
-        "thursday": true,
-        "friday": true,
-        "saturday": true
-      },
       "variations": {},
       "order": {},
       "archived": true,
@@ -2738,9 +2196,6 @@
         "friday",
         "saturday"
       ],
-      "includeInExport": {
-        "monday": true
-      },
       "variations": {},
       "order": {},
       "archived": true,
@@ -2776,9 +2231,6 @@
       "days": [
         "friday"
       ],
-      "includeInExport": {
-        "friday": true
-      },
       "variations": {},
       "order": {},
       "archived": false,
@@ -2806,13 +2258,9 @@
       "days": [
         "sunday"
       ],
-      "includeInExport": {
-        "monday": true,
-        "sunday": true
-      },
       "variations": {},
       "order": {
-              "sunday": 1
+        "sunday": 1
       },
       "archived": false,
       "recurrence": {
@@ -2840,12 +2288,9 @@
       "days": [
         "monday"
       ],
-      "includeInExport": {
-        "monday": true
-      },
       "variations": {},
       "order": {
-              "monday": 1
+        "monday": 1
       },
       "archived": false,
       "recurrence": {

@@ -1,4 +1,16 @@
 {
-  "updated": "2025-10-28T17:36:51.391Z",
-  "tips": []
+  "updated": "2026-02-14T19:46:30-02:00",
+  "tips": [
+    {
+      "id": "8f2a9d9e-a306-417c-8912-8bd5037d2c83",
+      "title": "Serenity Admin Schedule",
+      "content": "<table border=\"1\" cellpadding=\"5\" cellspacing=\"0\">\n  <tr>\n    <th>Time</th>\n    <th>Days</th>\n    <th>Description</th>\n  </tr>\n\n  <tr><td>00:00</td><td>Day 1</td><td>Set Up Sandworm</td></tr>\n  <tr><td>00:10</td><td>Daily</td><td>Train (Casey)</td></tr>\n  <tr><td>00:10</td><td>Day 1</td><td>Agenda (Moncks)</td></tr>\n  <tr><td>00:10</td><td>Mon</td><td>Set Up Desert Storm</td></tr>\n  <tr><td>00:10</td><td>Sat</td><td>Set Up Canyon Storm</td></tr>\n\n  <tr><td>11:20</td><td>Thur</td><td>Canyon Storm A Reminder</td></tr>\n  <tr><td>11:50</td><td>Thur</td><td>Canyon Storm A</td></tr>\n\n  <tr><td>17:20</td><td>Fri</td><td>Desert Storm A Reminder</td></tr>\n  <tr><td>17:50</td><td>Fri</td><td>Desert Storm A</td></tr>\n\n  <tr><td>21:10</td><td>prn</td><td>Sandworm/Siege/Glacier/Predator Reminder</td></tr>\n\n  <tr><td>21:40</td><td>Day 2</td><td>Sandworm</td></tr>\n  <tr><td>21:40</td><td>Thur Week 1</td><td>Predator</td></tr>\n  <tr><td>21:40</td><td>Fri Week 2</td><td>Glacieradon (Off Season Only)</td></tr>\n\n  <tr><td>21:45</td><td>prn</td><td>Siege Reminder</td></tr>\n\n  <tr><td>22:00</td><td>Mon</td><td>Canyon Storm Last Call</td></tr>\n  <tr><td>22:00</td><td>Wed</td><td>Desert Storm Last Call</td></tr>\n\n  <tr><td>22:15</td><td>Mon/Thur</td><td>Siege</td></tr>\n\n  <tr><td>22:20</td><td>Thur</td><td>Canyon Storm B Reminder</td></tr>\n  <tr><td>22:20</td><td>Fri</td><td>Desert Storm B Reminder</td></tr>\n\n  <tr><td>22:50</td><td>Thur</td><td>Canyon Storm B</td></tr>\n  <tr><td>22:50</td><td>Fri</td><td>Desert Storm B</td></tr>\n\n  <tr><td>23:00</td><td>Mon</td><td>Canyon Storm Lineup</td></tr>\n  <tr><td>23:00</td><td>Wed</td><td>Desert Storm Lineup</td></tr>\n\n  <tr><td>23:25</td><td>Daily</td><td>EOD Reminder</td></tr>\n  <tr><td>23:30</td><td>Daily</td><td>Add Own Reminders for Inconsistent Events</td></tr>\n  <tr><td>23:50</td><td>Fri</td><td>Shield Reminder</td></tr>\n</table>",
+      "customId": "serenity-admin-schedule",
+      "adminOnly": false,
+      "canUseInBriefing": true,
+      "unlisted": false,
+      "isHtml": true,
+      "type": "html"
+    }
+  ]
 }

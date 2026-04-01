@@ -4,5 +4,13 @@
   "brand": {
     "name": "Server 1901",
     "favicon": "/conf/1901/favicon.ico"
+  },
+  "tags": {
+    "1901": {
+      "startDate": "2025-10-19"
+    },
+    "main": {
+      "startDate": "2025-10-13"
+    }
   }
 }

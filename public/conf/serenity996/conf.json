@@ -4,5 +4,10 @@
   "brand": {
     "name": "Serenity",
     "favicon": "/conf/serenity996/favicon.ico"
+  },
+  "tags": {
+    "serenity996": {
+      "startDate": "2024-10-10"
+    }
   }
 }

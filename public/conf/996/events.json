@@ -1,29 +1,74 @@
 ﻿{
-  "updated": "2025-12-12T01:06:08-02:00",
+  "updated": "2026-03-30T23:19:13-02:00",
   "events": [
     {
-      "id": "ev-10",
+      "id": "ev-6",
       "order": {
-        "friday": 0
+        "tuesday": 1
       }
     },
     {
-      "id": "ev-17",
+      "id": "ev-8",
       "order": {
-        "friday": 1
+        "thursday": 2,
+        "tuesday": 2
+      }
+    },
+    {
+      "id": "ev-10",
+      "order": {
+        "wednesday": 2
+      }
+    },
+    {
+      "id": "ev-12",
+      "order": {
+        "saturday": 2,
+        "tuesday": 3
+      }
+    },
+    {
+      "id": "ev-14",
+      "order": {
+        "tuesday": 4
+      }
+    },
+    {
+      "id": "ev-15",
+      "order": {
+        "wednesday": 3
+      }
+    },
+    {
+      "id": "ev-16",
+      "order": {
+        "thursday": 1
+      }
+    },
+    {
+      "id": "ev-18",
+      "order": {
+        "saturday": 1
+      }
+    },
+    {
+      "id": "ev-1739556183702",
+      "order": {
+        "thursday": 5
       }
     },
     {
       "id": "ev-1739556209550",
       "order": {
-        "friday": 3
+        "wednesday": 4
       }
     },
     {
       "id": "ev-1739556688004",
       "order": {
-        "thursday": 5,
-        "friday": 4
+        "wednesday": 5,
+        "thursday": 3,
+        "friday": 5
       }
     },
     {
@@ -34,23 +79,70 @@
       }
     },
     {
+      "id": "5c1804c1-eae9-48f9-a94d-495eea6eb156",
+      "order": {
+        "saturday": 4,
+        "wednesday": 6,
+        "thursday": 6
+      }
+    },
+    {
+      "id": "5aec60d0-4d5f-4299-8f91-cc8590471e7b",
+      "order": {
+        "thursday": 4
+      }
+    },
+    {
+      "id": "5178bd44-1659-40df-9aa7-c76cf22ee563",
+      "order": {
+        "saturday": 3,
+        "wednesday": 7
+      }
+    },
+    {
       "id": "dfb867b9-9ffc-4a60-baf2-bd89a1d18681",
       "order": {
-        "friday": 9
+        "friday": 9,
+        "thursday": 8
+      }
+    },
+    {
+      "id": "7662a10a-144e-4dc5-8ae7-4c8af78b9e12",
+      "order": {
+        "tuesday": 9,
+        "friday": 8
+      }
+    },
+    {
+      "id": "e5263084-2b0f-4289-9ed1-ede774a62176",
+      "order": {
+        "saturday": 5,
+        "wednesday": 8
       }
     },
     {
       "id": "41b7230f-eac7-478d-8f95-2955050d1da0",
-      "archived": false,
       "order": {
         "friday": 7,
         "thursday": 7
       }
     },
     {
-      "id": "9773fd5b-5070-4f05-b232-f527556751ab",
+      "id": "8d795f4d-e2f0-4194-9152-2163891aa0dc",
       "order": {
-        "friday": 2
+        "tuesday": 5
+      }
+    },
+    {
+      "id": "8c78efe1-5b5c-427c-b5e1-7249a7922606",
+      "order": {
+        "thursday": 7
+      }
+    },
+    {
+      "id": "151805d5-5c6a-4cc0-a62b-9ab90c54d5a0",
+      "order": {
+        "tuesday": 10
       }
     },
     {
@@ -64,12 +156,11 @@
       "isAllDay": true,
       "startTime": "09:00",
       "endTime": "",
-      "days": ["friday", "saturday", "sunday"],
-      "includeInExport": {
-        "friday": true,
-        "saturday": true,
-        "sunday": true
-      },
+      "days": [
+        "friday",
+        "saturday",
+        "sunday"
+      ],
       "variations": {},
       "order": {
         "friday": 8
@@ -79,8 +170,55 @@
         "type": "weeks",
         "onPeriods": 1,
         "offPeriods": 4,
-        "daysOfWeek": ["friday", "saturday", "sunday"],
+        "daysOfWeek": [
+          "friday",
+          "saturday",
+          "sunday"
+        ],
         "startDate": "2025-12-12"
+      }
+    },
+    {
+      "id": "469b803b-09d5-4901-a85b-40782d04f182",
+      "title": "Gold Prospecting (Use all your attampts!)",
+      "description": "",
+      "remindTomorrow": true,
+      "remindEndOfDay": true,
+      "includeInBriefing": true,
+      "includeOnWebsite": true,
+      "isAllDay": true,
+      "startTime": "09:00",
+      "endTime": "",
+      "days": [
+        "tuesday",
+        "wednesday",
+        "thursday",
+        "friday",
+        "saturday",
+        "monday"
+      ],
+      "variations": {},
+      "order": {
+        "tuesday": 0,
+        "wednesday": 0,
+        "thursday": 0,
+        "friday": 0,
+        "saturday": 0
+      },
+      "archived": false,
+      "recurrence": {
+        "type": "weeks",
+        "onPeriods": 1,
+        "offPeriods": 0,
+        "daysOfWeek": [
+          "tuesday",
+          "wednesday",
+          "thursday",
+          "friday",
+          "saturday",
+          "monday"
+        ],
+        "startDate": "2026-03-30"
       }
     }
   ]

@@ -4,5 +4,10 @@
   "brand": {
     "name": "ARES, Heroes of 1901",
     "favicon": "/conf/ares1901/favicon.ico"
+  },
+  "tags": {
+    "ares1901": {
+      "startDate": "2025-10-19"
+    }
   }
 }

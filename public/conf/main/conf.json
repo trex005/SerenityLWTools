@@ -3,5 +3,10 @@
   "brand": {
     "name": "Serenity Base",
     "favicon": "/conf/main/favicon.ico"
+  },
+  "tags": {
+    "main": {
+      "startDate": "2024-10-10"
+    }
   }
 }

@@ -137,13 +137,13 @@
     },
     {
       "id": "f32b0c75-bfc8-4b81-9d62-e691011f3506",
-      "title": "Tiered Troops",
-      "content": "The best method for this is to Keep your barracks levels tiered and promote them through the levels instead of training them at the max tier. To do this, upgrade one of your barracks as much as possible and check what level troop it can produce. The next barrack, upgrade until the max troop it can produce is one less than the previous barrack. Follow this pattern for each barrack you have.\n\nExample - you have four barracks and the max troop you can produce is level 7\n• 1st Barrack at level 20-23 - Produces up to level 7 troops\n• 2nd at level 17-16 - Produces up to level 6 troops\n• 3rd Barrack at level 14-15 - Produces up to level 5 troops\n• 4th Barrack at level 10-13 - Produces up to level 4 troops.",
+      "title": "Tiered Troops, AKA Waterfall",
+      "content": "To maximize VS and Arms Race points, keep training low-level troops nonstop and promote them one tier at a time while points are available. To do this efficiently, your barracks need to stay at specific levels, since troops can only be promoted up to the barracks' maximum level.\n\nBased on your level, upgrade your barracks like this:\n\nLevel 20-23\nBarracks: 20, 17, 14, 10\n\nLevel 24-26\nBarracks: 24, 20, 17, 14\n\nLevel 27-30\nBarracks: 27, 24, 20, 17\n\nIf you have T10 troops\nBarracks: 30, 27, 24, 20\n\nOnce your barracks are set to these levels, start with the lowest-level barrack and upgrade it to one level below the next troop tier requirement.\n\nBarracks level requirements for each troop tier:\n\nT1: Levels 1-3\nT2: Levels 4-5\nT3: Levels 6-9\nT4: Levels 10-13\nT5: Levels 14-16\nT6: Levels 17-19\nT7: Levels 20-23\nT8: Levels 24-26\nT9: Levels 27-29\nT10: Level 30",
       "lastUsed": null,
       "customId": "tiered-troops",
       "adminOnly": false,
       "canUseInBriefing": true,
-      "unlisted": true,
+      "unlisted": false,
       "isHtml": false
     },
     {
@@ -561,7 +561,7 @@
       "content": "",
       "lastUsed": null,
       "customId": "decoration-tier-guide",
-      "imageUrl": "https://www.lwserenity.com/tip_images/deco_guide.jpg",
+      "imageUrl": "https://www.lwserenity.com/img/decoration_guide.jpg",
       "adminOnly": false,
       "canUseInBriefing": true,
       "unlisted": false,
@@ -798,6 +798,51 @@
       "isHtml": false,
       "type": "text",
       "customId": "desert-storm-open"
+        },
+    {
+      "id": "d806c2fd-af90-4d84-9e58-5864c7436ed2",
+      "title": "Sandworm Instructions",
+      "content": "Sandworm is starting!\n** No digs or other rallies **\n\n• Start Rallies squad two (gump if you need to conserve troops)\n• ONLY Join Rallies with squad one.\n• DO NOT kill small sandworms unless that person requests help\n• Only request help if your squad 1 is 40m+\n-----\nPlease tag anyone who misses one of the rules",
+      "adminOnly": false,
+      "canUseInBriefing": true,
+      "unlisted": false,
+      "isHtml": false,
+      "type": "text",
+      "customId": "sandworm-instructions"
+	},
+    {
+      "id": "8619bbcf-0ab2-490b-8205-9af43e815b1d",
+      "title": "Canyon Storm Registration",
+      "content": "Canyon Storm is open for registrations\nNo matter what messages you receive, if you do not follow these EXACT steps, you will not be registered:\nEvents →\nCanyon Storm →\nManage →\nRequest To Battle →\nSelect your preferred times →\nConfirm\n\nIt doesn't matter which task force you select as that will be ignored.",
+      "customId": "canyon-registration",
+      "adminOnly": false,
+      "canUseInBriefing": true,
+      "unlisted": false,
+      "isHtml": false,
+      "type": "text",
+      "imageUrl": "/img/canyon_registration.jpg"
+    },
+    {
+      "id": "21e4bf96-94ba-4c1c-8ea5-176fbbb0f8e1",
+      "title": "Extra Account Reasons",
+      "content": "• 30-50m EASY rss daily (Can be mostly gold!)\n• Alliance Center (SUPER Important Seasons 1-4)\n   • Barricade on defense\n   • Hold spaces while doing other things\n   • Steal spots back from invaders\n   • Reserve offensive spots\n   • Move alliance center without everyone online at same time\n• Warzone Duel/Faction War\n   • Super easy AR wins\n   • Pretty easy VS/DS wins\n   • LOTS of truck plunders\n• General Battle\n   • Run rallies risk free from unshielded bases\n• Alliance Padding\n   • HELP SPAM!* \n   • Meet minimums for things like train, DS, Alliance Center\n   • Tech donations\n   • Alliance Gift Collection\n   • Doom Legion Clues\n   • Rally help \"overnight\"\n   • Spawn extra loot bosses (invading zombies)\n• Holidays\n   • Max sleighs easily\n   • Mutual helps (e.g. Chocolate, or Cheers)\n\n * Some of these things require some form of... advanced control",
+      "customId": "extra-account-reasons",
+      "adminOnly": false,
+      "canUseInBriefing": true,
+      "unlisted": false,
+      "isHtml": false,
+      "type": "text"
+    },
+    {
+      "id": "1bfa3033-89fc-46ed-ae48-9f90b2489fe5",
+      "title": "Farm Tracking",
+      "content": "Summary: Every time I scout a base, I rename the player¹ so that I don't waste my time scouting them again in the future and I can find all the best bases in my battle reports with one string.\n\nIf it has at least 1/4 gold:\n\"aaa {Gold} {Food} {Iron}\" (in millions)\ne.g. \"aaa 1200 4000 5000\"\nI'll append more \"a\"s if it is super good\n\nIf it has at least 100m resources:\n\"xxx {Gold} {Food} {Iron}\"\n\nIf it is worthless: \"zzz\"\n\nI usually will scout bases again before farming them, just in case.\n\n¹ To rename a player:\n• Click on their profile picture\n• Three dots in the upper right\n• Fill in \"Note Name\"\n• Click \"Save\"",
+      "customId": "farm-tracking",
+      "adminOnly": false,
+      "canUseInBriefing": true,
+      "unlisted": false,
+      "isHtml": false,
+      "type": "text"
     }
   ]
 }
