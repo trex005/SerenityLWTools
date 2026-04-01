@@ -643,8 +643,15 @@ const fetchBundleForTag = async (tag: string, force = false, options?: FetchOpti
     const tipsSnapshot = includeTips
       ? await getResolvedSnapshot("tips", normalizedTag, resolveOptions)
       : { itemsById: {}, updated: null, tag: normalizedTag }
-    const layer = await getLayer(normalizedTag, force, requestedTypes)
-    const tagConfig = layer?.config || null
+    const ancestry = await buildAncestry(normalizedTag)
+    let mergedConfig: Record<string, unknown> | null = null
+    for (const ancestorTag of ancestry) {
+      const ancestorLayer = await getLayer(ancestorTag, false)
+      if (ancestorLayer?.config && typeof ancestorLayer.config === "object") {
+        mergedConfig = deepMerge(mergedConfig ?? {}, ancestorLayer.config) as Record<string, unknown>
+      }
+    }
+    const tagConfig = mergedConfig
     const data: TagBundle = {
       tag: normalizedTag,
       tagConfig,
