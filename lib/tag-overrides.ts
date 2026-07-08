@@ -35,6 +35,14 @@ const loadBundleForTag = async (tag: string, force = false): Promise<TagBundle> 
   }
 }
 
+const loadBaseBundleForTag = async (tag: string, force = false): Promise<TagBundle> => {
+  const contextTag = getActiveTag()
+  return await fetchComposedForTag(tag, force, {
+    includeAncestorLocalOverrides: false,
+    currentTag: contextTag,
+  })
+}
+
 export const loadEventForTag = async (tag: string, eventId: string) => {
   const bundle = await loadBundleForTag(tag, true)
   const baseEvents = safeArray(bundle.events)
@@ -44,7 +52,7 @@ export const loadEventForTag = async (tag: string, eventId: string) => {
 }
 
 export const saveEventForTag = async (tag: string, eventData: any) => {
-  const bundle = await loadBundleForTag(tag, true)
+  const bundle = await loadBaseBundleForTag(tag, true)
   const baseEvents = safeArray(bundle.events)
   const baseMap = buildIdMap(baseEvents)
   const snapshot = readStoredEventOverrides(tag) || {}
@@ -94,7 +102,7 @@ export const loadTipForTag = async (tag: string, tipId: string) => {
 }
 
 export const saveTipForTag = async (tag: string, tipData: any) => {
-  const bundle = await loadBundleForTag(tag, true)
+  const bundle = await loadBaseBundleForTag(tag, true)
   const baseTips = safeArray(bundle.tips)
   const baseMap = buildIdMap(baseTips)
   const snapshot = readStoredTipOverrides(tag) || {}

@@ -472,7 +472,6 @@ export function EventDialog({ event, open, onOpenChange, initialDay = "monday", 
     const targetTag = selectedTag || activeTag
 
     try {
-      await saveEventForTag(targetTag, cleanedFormData)
       if (targetTag === activeTag) {
         if (isEditing) {
           updateEvent(cleanedFormData)
@@ -480,6 +479,7 @@ export function EventDialog({ event, open, onOpenChange, initialDay = "monday", 
           addEvent(cleanedFormData)
         }
       } else {
+        await saveEventForTag(targetTag, cleanedFormData)
         toast({
           title: "Event updated",
           description: `Saved changes for ${targetTag}.`,

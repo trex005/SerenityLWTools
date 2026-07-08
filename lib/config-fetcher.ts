@@ -520,6 +520,13 @@ const getResolvedSnapshot = async (
 
     for (const id of Object.keys(tagData.itemsById)) {
       const base = merged[id]
+      if (
+        type === "events" &&
+        !base &&
+        typeof tagData.itemsById[id]?.title !== "string"
+      ) {
+        continue
+      }
       merged[id] = deepMerge(base, tagData.itemsById[id])
     }
 

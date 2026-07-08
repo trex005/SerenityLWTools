@@ -35,6 +35,13 @@ import type { DiffInfo } from "@/lib/config-diff"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import { useToast } from "@/hooks/use-toast"
 
+const getEventTitle = (event: any): string => {
+  if (typeof event?.title === "string" && event.title.trim()) {
+    return event.title
+  }
+  return event?.id ? `[Untitled event: ${event.id}]` : "[Untitled event]"
+}
+
 /**
  * EventsView component
  * Displays all events with filtering capabilities and options to archive/restore/delete
@@ -67,6 +74,7 @@ export function EventsView() {
     const searchTokens = tokenizeSearchTerm(filter)
     return (
       allEvents
+        .filter(Boolean)
         .filter((event) => {
           // Filter by archived status if specified
           if (archived !== undefined && event.archived !== archived) {
@@ -74,14 +82,17 @@ export function EventsView() {
           }
 
           // Filter by search term if provided
-          if (searchTokens.length > 0 && !matchesSearchTokens(searchTokens, [event.title, event.description])) {
+          if (
+            searchTokens.length > 0 &&
+            !matchesSearchTokens(searchTokens, [getEventTitle(event), event.description, event.id])
+          ) {
             return false
           }
 
           return true
         })
         // Sort alphabetically by title
-        .sort((a, b) => a.title.localeCompare(b.title))
+        .sort((a, b) => getEventTitle(a).localeCompare(getEventTitle(b)))
     )
   }
 
@@ -131,7 +142,7 @@ export function EventsView() {
       if (success) {
         toast({
           title: "Overrides cleared",
-          description: `Reverted "${eventToReset.title}" to its parent data.`,
+          description: `Reverted "${getEventTitle(eventToReset)}" to its parent data.`,
           variant: "success",
         })
       } else {
@@ -236,6 +247,7 @@ export function EventsView() {
                 onDelete={handleDeleteClick}
                 onReset={handleResetClick}
                 overrideInfo={eventOverrideIndex[event.id]}
+                tagConfig={tagConfig}
               />
             ))}
           </div>
@@ -262,6 +274,7 @@ export function EventsView() {
                 onDelete={handleDeleteClick}
                 onReset={handleResetClick}
                 overrideInfo={eventOverrideIndex[event.id]}
+                tagConfig={tagConfig}
               />
             ))}
           </div>
@@ -283,6 +296,7 @@ export function EventsView() {
                 onDelete={handleDeleteClick}
                 onReset={handleResetClick}
                 overrideInfo={eventOverrideIndex[event.id]}
+                tagConfig={tagConfig}
               />
             ))}
           </div>
@@ -300,7 +314,7 @@ export function EventsView() {
           onOpenChange={(open) => {
             if (!open) setEventToEdit(null)
           }}
-          initialDay={eventToEdit.days[0] || "monday"}
+          initialDay={eventToEdit.days?.[0] || "monday"}
         />
       )}
 
@@ -336,8 +350,8 @@ export function EventsView() {
           <AlertDialogHeader>
             <AlertDialogTitle>Reset Overrides</AlertDialogTitle>
             <AlertDialogDescription>
-              This will discard all changes made to <strong>{eventToReset?.title}</strong> in this tag and revert it to
-              the parent configuration. Continue?
+              This will discard all changes made to <strong>{getEventTitle(eventToReset)}</strong> in this tag and
+              revert it to the parent configuration. Continue?
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
@@ -368,6 +382,7 @@ function EventCard({
   onDelete,
   onReset,
   overrideInfo,
+  tagConfig,
 }: {
   event: any
   onArchive: (id: string) => void
@@ -376,6 +391,7 @@ function EventCard({
   onDelete: (id: string, e: MouseEvent) => void
   onReset?: (event: any) => void
   overrideInfo?: DiffInfo
+  tagConfig?: Record<string, unknown> | null
 }) {
   // Get effective values
   const isAllDay = event.isAllDay
@@ -403,7 +419,7 @@ function EventCard({
             <div className="flex justify-between items-start">
               <div>
                 <div className="flex items-center gap-2">
-                  <h4 className="font-medium">{event.title}</h4>
+                  <h4 className="font-medium">{getEventTitle(event)}</h4>
                   {hasOverrides && (
                     <TooltipProvider>
                       <Tooltip>
