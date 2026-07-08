@@ -28,6 +28,7 @@ import { shouldShowRecurringEvent } from "@/lib/recurrence-utils"
 import { useTagData } from "@/hooks/use-tag-data"
 import { Input } from "@/components/ui/input"
 import { scopedLocalStorage } from "@/lib/scoped-storage"
+import { compareEventsByOrderValue, getEventTitleForSort } from "@/lib/event-order"
 
 const STORAGE_PREFIX = "daily-reminders-content"
 const BULLET_PREFIX = "\u2022 "
@@ -80,7 +81,15 @@ const shouldIncludeEventOnDate = (event: any, date: Date, dayKey: string, tagCon
   return true
 }
 
-const formatReminderLine = (event: any, date: Date, dayKey: string): { line: string; sortKey: string } => {
+type ReminderLine = {
+  event: any
+  line: string
+  title: string
+  startTime: string
+  hasTimedStart: boolean
+}
+
+const formatReminderLine = (event: any, date: Date, dayKey: string): ReminderLine => {
   const titleValue = getEffectiveValue(event, date, dayKey, "title") ?? event.title ?? "Untitled event"
   const title = typeof titleValue === "string" ? titleValue.trim() || "Untitled event" : "Untitled event"
 
@@ -102,12 +111,30 @@ const formatReminderLine = (event: any, date: Date, dayKey: string): { line: str
 
   const hasTimedStart = Boolean(startTime) && !isAllDay
   const prefix = hasTimedStart ? `${startTime} - ` : BULLET_PREFIX
-  const sortKey = hasTimedStart ? `a-${startTime}` : `z-${title.toLowerCase()}`
 
   return {
+    event,
     line: `${prefix}${title}`,
-    sortKey,
+    title,
+    startTime,
+    hasTimedStart,
   }
+}
+
+const compareReminderLines = (a: ReminderLine, b: ReminderLine): number => {
+  if (a.hasTimedStart && !b.hasTimedStart) return -1
+  if (!a.hasTimedStart && b.hasTimedStart) return 1
+
+  if (a.hasTimedStart && b.hasTimedStart) {
+    const timeDiff = a.startTime.localeCompare(b.startTime)
+    if (timeDiff !== 0) return timeDiff
+    return a.title.localeCompare(b.title, undefined, { sensitivity: "base" })
+  }
+
+  return compareEventsByOrderValue(
+    { ...a.event, title: a.title || getEventTitleForSort(a.event) },
+    { ...b.event, title: b.title || getEventTitleForSort(b.event) },
+  )
 }
 
 /**
@@ -152,7 +179,7 @@ export function Reminders() {
         return Boolean(event.remindEndOfDay)
       })
       .map((event) => formatReminderLine(event, selectedDate, dayKey))
-      .sort((a, b) => a.sortKey.localeCompare(b.sortKey))
+      .sort(compareReminderLines)
       .map((item) => item.line)
 
     const tomorrowReminderList = tomorrowEvents
@@ -164,7 +191,7 @@ export function Reminders() {
         return Boolean(event.remindTomorrow)
       })
       .map((event) => formatReminderLine(event, tomorrowDate, tomorrowKey))
-      .sort((a, b) => a.sortKey.localeCompare(b.sortKey))
+      .sort(compareReminderLines)
       .map((item) => item.line)
 
     return {
