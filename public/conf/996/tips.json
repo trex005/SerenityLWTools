@@ -1,6 +1,7 @@
 {
-  "updated": "2025-10-28T17:36:51.391Z",
-  "tips": [    {
+  "updated": "2026-07-07T22:49:31-02:00",
+  "tips": [
+    {
       "id": "2bf53497-c1ff-450a-9156-56c43c737522",
       "title": "Season 4 - Day 1",
       "content": "T minus 12 hours until Season 4 starts!\n\nAs always, please message me or ask in world chat for any clarification\n\n►Prep◄\n• Claim rewards from Season Preview (S4 Icon)\n• Consider last minute items from Season Store\n• SAVE Doom Walker kill and about 20 radar tasks until after the map changes: \n• Immediately before the map changes, you can send trucks to avoid being plundered\n\n► Immediately after map change follow these steps ◄\n1. Donate: Season: IV ► Season IV ► Week 1\n2. Paying players: Buy planned Season/Weekly Passes\n3. Use all Hero's Return Tickets\n4. Rest/Allocate Profession skills with this priority:\n    a. Season Resources\n    b. Building costs\n    c. Professional XP\n    d. Building Time\n    - Even level 100 pros need XP for Tactics Cards\n    - Use Skill Book or Profession Change if needed\n    - Almost everyone should be Engineers\n5. Kill highest Oni Legion (Doom Walker) your alliance is able (collect rewards)\n6. Build/Upgrade Quartz Workshop 1 (and extra if you have weekly pass)\n7. Repair Lighthouse at front of your base (near armored truck) and one generator\n8. Kill zombies up to level 3\n9. Activate Generator\n10. Turn Lighthouse to L1\n\n► Initial Strategy ◄\n• Upgrade Quartz Workshops evenly and as quickly as possible. Workshops 2-4 unlock when the previous hits 15.\n• Capture Strongholds as quickly as possible. Message me for help clearing them.\n• Pack hives tightly around alliance center, position active players so their light covers as much of the hive as possible. Others send electricians to help\n• Buy special items from Magatama Shop ASAP\n\nDaily:\n• Kill highest Oni Legion you can\n• Virus leaders assist advancing Night Wolves (Doom Elite) level for all members.\n   - Those being assisted, use one hero squads\n• Complete Izakaya Bar radar task (even on non-radar VS days)\n\nALSO: I'm still waiting to hear from all R4s and R5s out there so that we can coordinate!",
@@ -8,9 +9,10 @@
       "canUseInBriefing": true,
       "unlisted": false,
       "isHtml": false,
-      "type": "text",      "customId": "s4-day-1"
+      "type": "text",
+      "customId": "s4-day-1"
     },
-        {
+    {
       "id": "a59be4c3-d703-4db2-b431-c5f82610c022",
       "title": "Chekka's Tradepost Proposal",
       "content": "Regardless of the faction assignments, the top 5 servers as listed below would be off limits to trade post battles (unless internal ie 947 battling 947). The bottom 3 servers will have all northern trade posts as battle grounds. ANYONE can attempt to fight for those from any server. ALL southern trade posts are protected and assigned to the home server only.\n\nIf someone chooses to break the agreement, it will be the responsibility of the top alliances to assist in enforcement. (ie if an alliance from my server goes to take a protected one from 996 I will ash them, or Brian, or Zilla, or Destructo, or Jcray, etc - whoever is strong and available to assist) \n\n956\n947\n985\n970\n987\n933\n977\n996\n\nAnything marked in GREEN on the map below cannot be taken by anyone OFF server. It belongs to the home server. Anything in RED is free for all and where the battles will take place – on 933, 977, 996.\n\nFor this to work, we all need to be in agreement. Or come up with another reasonable solution that will protect the lower servers from being bullied out of all of their trade posts.",
@@ -20,9 +22,9 @@
       "unlisted": true,
       "isHtml": false,
       "type": "text",
-	"customId": "chekka-tradepost-proposal"
+      "customId": "chekka-tradepost-proposal"
     },
-        {
+    {
       "id": "e77377d2-4d44-4882-a258-fbac393cfe5a",
       "title": "Season 4 Trade Post Agreement",
       "content": "Regardless of the faction assignments, the top 4 servers as listed below would be off limits to trade post battles (unless internal ie 947 battling 947 for fun). \n\nThe bottom 4 servers will have all northern trade posts as battle grounds. ALL southern trade posts are protected and assigned to the home server only. \nANYONE including the home server can attempt to fight for the northern trade posts from any server.\n\n956 - protected \n947 - protected \n985 - protected \n970 - protected \n933 – battle ground\n987 – battle ground \n 977 – battle ground \n996 – battle ground \n\nFor this to work, we all need to be in agreement. That being said, if there are 1-2 servers that do not agree, the majority will unify and agree to the protections. \n\nThe 1-2 servers in disagreement will have no protections and become a full battlegrounds open to everyone regardless of faction outcomes. If they later decide to participate in unification, protections can and will be restored.",
@@ -32,9 +34,7 @@
       "unlisted": true,
       "isHtml": false,
       "type": "text",
-      	"customId": "s4-tradepost-agreement"
-
+      "customId": "s4-tradepost-agreement"
     }
-
-]
+  ]
 }

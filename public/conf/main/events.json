@@ -1,5 +1,5 @@
 {
-  "updated": "2026-02-08T21:12:38-02:00",
+  "updated": "2026-07-07T22:49:31-02:00",
   "events": [
     {
       "id": "ev-3",
@@ -7,22 +7,34 @@
       "title": "Zombie Siege",
       "description": "",
       "isAllDay": false,
-      "startTime": "22:15",
+      "startTime": "19:45",
       "endTime": "",
       "days": [
+        "sunday",
         "monday",
-        "thursday"
+        "tuesday",
+        "wednesday",
+        "thursday",
+        "friday",
+        "saturday"
       ],
       "order": {},
       "recurrence": {
-        "type": "weeks",
+        "type": "days",
         "onPeriods": 1,
-        "offPeriods": 0,
+        "offPeriods": 2,
         "daysOfWeek": [
+          "sunday",
           "monday",
-          "thursday"
+          "tuesday",
+          "wednesday",
+          "thursday",
+          "friday",
+          "saturday"
         ],
-        "startDate": "2025-09-29"
+        "startTag": "main",
+        "startOffset": 631,
+        "startDate": "2025-01-05"
       },
       "remindTomorrow": true,
       "includeOnWebsite": true,
@@ -41,7 +53,7 @@
       ],
       "variations": {},
       "order": {
-        "sunday": 3
+        "sunday": 4
       },
       "recurrence": {
         "type": "weeks",
@@ -49,9 +61,10 @@
           "sunday"
         ],
         "interval": 1,
-        "startDate": "2024-01-01",
         "onPeriods": 1,
-        "offPeriods": 0
+        "offPeriods": 0,
+        "startTag": "main",
+        "startOffset": -283
       },
       "remindEndOfDay": true,
       "includeOnWebsite": true
@@ -70,9 +83,9 @@
       ],
       "variations": {},
       "order": {
-        "monday": 0,
+        "monday": 3,
         "wednesday": 1,
-        "tuesday": 0
+        "tuesday": 4
       },
       "recurrence": {
         "type": "weeks",
@@ -82,11 +95,15 @@
           "monday",
           "tuesday"
         ],
-        "startDate": "2025-01-05",
-        "interval": 1
+        "interval": 1,
+        "startTag": "main",
+        "startOffset": 87,
+        "startDate": "2025-01-05"
       },
-      "remindEndOfDay": true,
-      "includeOnWebsite": true
+      "remindEndOfDay": false,
+      "includeOnWebsite": true,
+      "includeInBriefing": true,
+      "remindTomorrow": true
     },
     {
       "id": "ev-7",
@@ -108,45 +125,12 @@
         "daysOfWeek": [
           "friday"
         ],
-        "startDate": "2024-01-05",
-        "interval": 1
+        "interval": 1,
+        "startTag": "main",
+        "startOffset": -279
       },
       "remindTomorrow": true,
       "includeInBriefing": true,
-      "includeOnWebsite": true
-    },
-    {
-      "id": "ev-8",
-      "archived": false,
-      "title": "VS: SAVE Radar Tasks",
-      "description": "",
-      "isAllDay": true,
-      "startTime": "09:00",
-      "endTime": "10:00",
-      "days": [
-        "sunday",
-        "tuesday",
-        "thursday"
-      ],
-      "variations": {},
-      "order": {
-        "sunday": 0,
-        "thursday": 4,
-        "tuesday": 1
-      },
-      "recurrence": {
-        "type": "weeks",
-        "daysOfWeek": [
-          "sunday",
-          "tuesday",
-          "thursday"
-        ],
-        "interval": 1,
-        "startDate": "2024-01-01",
-        "onPeriods": 1,
-        "offPeriods": 0
-      },
-      "remindTomorrow": true,
       "includeOnWebsite": true
     },
     {
@@ -176,108 +160,48 @@
           "monday",
           "sunday"
         ],
-        "startDate": "2025-11-30"
+        "startTag": "main",
+        "startOffset": 416
       },
       "remindTomorrow": true,
       "includeOnWebsite": true,
       "includeInBriefing": true
     },
     {
-      "id": "ev-10",
-      "archived": false,
-      "title": "VS: Radar Tasks",
-      "description": "",
-      "isAllDay": true,
-      "startTime": "09:00",
-      "endTime": "10:00",
-      "days": [
-        "monday",
-        "wednesday",
-        "friday"
-      ],
-      "variations": {},
-      "order": {
-        "monday": 1,
-        "wednesday": 3,
-        "friday": 1
-      },
-      "recurrence": {
-        "type": "weeks",
-        "daysOfWeek": [
-          "monday",
-          "wednesday",
-          "friday"
-        ],
-        "interval": 1,
-        "startDate": "2024-01-01",
-        "onPeriods": 1,
-        "offPeriods": 0
-      },
-      "includeInBriefing": true,
-      "includeOnWebsite": true,
-      "remindTomorrow": true
-    },
-    {
       "id": "ev-11",
       "archived": false,
-      "title": "VS: Start gathering with extra squads",
+      "title": "VS: SAVE Radar, gather with extra squads timed for after reset",
       "description": "",
-      "isAllDay": false,
+      "isAllDay": true,
       "startTime": "12:00",
       "endTime": "",
       "days": [
         "sunday"
       ],
       "variations": {},
-      "order": {},
+      "order": {
+        "sunday": 0
+      },
       "recurrence": {
         "type": "weeks",
         "daysOfWeek": [
           "sunday"
         ],
         "interval": 1,
-        "startDate": "2024-01-01",
         "onPeriods": 1,
-        "offPeriods": 0
+        "offPeriods": 0,
+        "startTag": "main",
+        "startOffset": -283,
+        "startDate": "2025-01-05"
       },
       "remindTomorrow": true,
-      "includeOnWebsite": true
-    },
-    {
-      "id": "ev-12",
-      "archived": false,
-      "title": "VS: Deploy Legendary Trucks and Tasks",
-      "description": "",
-      "isAllDay": true,
-      "startTime": "09:00",
-      "endTime": "10:00",
-      "days": [
-        "tuesday",
-        "saturday"
-      ],
-      "variations": {},
-      "order": {
-        "saturday": 4,
-        "tuesday": 2
-      },
-      "recurrence": {
-        "type": "weeks",
-        "daysOfWeek": [
-          "tuesday",
-          "saturday"
-        ],
-        "interval": 1,
-        "startDate": "2024-01-01",
-        "onPeriods": 1,
-        "offPeriods": 0
-      },
       "includeOnWebsite": true,
-      "remindTomorrow": true
+      "includeInBriefing": true
     },
     {
       "id": "ev-13",
       "archived": false,
-      "title": "VS: Stamina, Drone data, and drone parts",
+      "title": "VS: Radar, Stamina, Drone data/parts",
       "description": "",
       "isAllDay": true,
       "startTime": "09:00",
@@ -287,7 +211,7 @@
       ],
       "variations": {},
       "order": {
-        "monday": 3
+        "monday": 0
       },
       "recurrence": {
         "type": "weeks",
@@ -295,71 +219,15 @@
           "monday"
         ],
         "interval": 1,
-        "startDate": "2024-01-01",
         "onPeriods": 1,
-        "offPeriods": 0
+        "offPeriods": 0,
+        "startTag": "main",
+        "startOffset": -283,
+        "startDate": "2025-01-05"
       },
       "includeOnWebsite": true,
       "remindTomorrow": true,
       "includeInBriefing": true
-    },
-    {
-      "id": "ev-14",
-      "archived": false,
-      "title": "VS: Unwrap buildings and use construction speedups",
-      "description": "",
-      "isAllDay": true,
-      "startTime": "09:00",
-      "endTime": "10:00",
-      "days": [
-        "tuesday"
-      ],
-      "variations": {},
-      "order": {
-        "tuesday": 3
-      },
-      "recurrence": {
-        "type": "weeks",
-        "daysOfWeek": [
-          "tuesday"
-        ],
-        "interval": 1,
-        "startDate": "2024-01-01",
-        "onPeriods": 1,
-        "offPeriods": 0
-      },
-      "includeOnWebsite": true,
-      "remindTomorrow": true,
-      "includeInBriefing": true
-    },
-    {
-      "id": "ev-15",
-      "archived": false,
-      "title": "VS: Research ,Research Speedups (Double dip with Tech Research)",
-      "description": "",
-      "isAllDay": true,
-      "startTime": "09:00",
-      "endTime": "10:00",
-      "days": [
-        "wednesday"
-      ],
-      "variations": {},
-      "order": {
-        "wednesday": 4
-      },
-      "recurrence": {
-        "type": "weeks",
-        "daysOfWeek": [
-          "wednesday"
-        ],
-        "interval": 1,
-        "startDate": "2024-01-01",
-        "onPeriods": 1,
-        "offPeriods": 0
-      },
-      "includeInBriefing": true,
-      "includeOnWebsite": true,
-      "remindTomorrow": true
     },
     {
       "id": "ev-16",
@@ -374,7 +242,7 @@
       ],
       "variations": {},
       "order": {
-        "thursday": 2
+        "thursday": 0
       },
       "recurrence": {
         "type": "weeks",
@@ -382,9 +250,10 @@
           "thursday"
         ],
         "interval": 1,
-        "startDate": "2024-01-01",
         "onPeriods": 1,
-        "offPeriods": 0
+        "offPeriods": 0,
+        "startTag": "main",
+        "startOffset": -283
       },
       "includeOnWebsite": true,
       "remindTomorrow": true,
@@ -393,7 +262,7 @@
     {
       "id": "ev-17",
       "archived": false,
-      "title": "VS: Promote Troops, Build/Tech if necessary",
+      "title": "VS: Promote and Train Troops/Overlord, Radar, Build/Tech",
       "description": "",
       "isAllDay": true,
       "startTime": "09:00",
@@ -403,7 +272,7 @@
       ],
       "variations": {},
       "order": {
-        "friday": 2
+        "friday": 0
       },
       "recurrence": {
         "type": "weeks",
@@ -411,9 +280,11 @@
           "friday"
         ],
         "interval": 1,
-        "startDate": "2024-01-01",
         "onPeriods": 1,
-        "offPeriods": 0
+        "offPeriods": 0,
+        "startTag": "main",
+        "startOffset": -283,
+        "startDate": "2025-01-05"
       },
       "includeOnWebsite": true,
       "remindTomorrow": true,
@@ -422,7 +293,7 @@
     {
       "id": "ev-18",
       "archived": false,
-      "title": "VS: Enemy Busters! Kill troops, preferably our opponent",
+      "title": "VS: Enemy Buster, UR Trucks/Tasks, Speed Ups",
       "description": "",
       "isAllDay": true,
       "startTime": "09:00",
@@ -433,7 +304,7 @@
       "variations": {},
       "order": {
         "friday": 2,
-        "saturday": 3
+        "saturday": 0
       },
       "recurrence": {
         "type": "weeks",
@@ -441,12 +312,15 @@
           "saturday"
         ],
         "interval": 1,
-        "startDate": "2024-01-01",
         "onPeriods": 1,
-        "offPeriods": 0
+        "offPeriods": 0,
+        "startTag": "main",
+        "startOffset": -283,
+        "startDate": "2025-01-05"
       },
       "includeOnWebsite": true,
-      "remindTomorrow": true
+      "remindTomorrow": true,
+      "includeInBriefing": true
     },
     {
       "id": "ev-1739555974133",
@@ -467,9 +341,10 @@
           "saturday"
         ],
         "interval": 1,
-        "startDate": "2024-01-01",
         "onPeriods": 1,
-        "offPeriods": 0
+        "offPeriods": 0,
+        "startTag": "main",
+        "startOffset": -283
       },
       "dateIncludeOverrides": {
         "2025-04-12": true
@@ -479,7 +354,7 @@
     },
     {
       "id": "ev-1739556183702",
-      "archived": false,
+      "archived": true,
       "title": "Honorable campaign",
       "description": "",
       "isAllDay": true,
@@ -494,7 +369,7 @@
       "order": {
         "sunday": 4,
         "thursday": 6,
-        "tuesday": 6
+        "tuesday": 2
       },
       "recurrence": {
         "type": "weeks",
@@ -504,16 +379,17 @@
           "sunday"
         ],
         "interval": 1,
-        "startDate": "2025-12-01",
         "onPeriods": 1,
-        "offPeriods": 0
+        "offPeriods": 0,
+        "startTag": "main",
+        "startOffset": 417
       },
       "includeInBriefing": true,
       "includeOnWebsite": true
     },
     {
       "id": "ev-1739556209550",
-      "archived": false,
+      "archived": true,
       "title": "Honorable campaign - FINAL DAY",
       "description": "",
       "isAllDay": true,
@@ -538,9 +414,10 @@
           "friday"
         ],
         "interval": 1,
-        "startDate": "2024-01-01",
         "onPeriods": 1,
-        "offPeriods": 0
+        "offPeriods": 0,
+        "startTag": "main",
+        "startOffset": -283
       },
       "remindEndOfDay": true,
       "includeOnWebsite": true
@@ -560,9 +437,9 @@
       ],
       "variations": {},
       "order": {
-        "wednesday": 6,
-        "thursday": 7,
-        "friday": 6
+        "wednesday": 5,
+        "thursday": 4,
+        "friday": 3
       },
       "recurrence": {
         "type": "weeks",
@@ -572,16 +449,20 @@
           "friday"
         ],
         "interval": 2,
-        "startDate": "2025-03-02",
         "onPeriods": 1,
-        "offPeriods": 1
+        "offPeriods": 1,
+        "startTag": "main",
+        "startOffset": 143,
+        "startDate": "2025-01-05"
       },
-      "includeOnWebsite": true
+      "includeOnWebsite": true,
+      "includeInBriefing": true,
+      "remindTomorrow": true
     },
     {
       "id": "ev-1739556818565",
       "archived": false,
-      "title": "Doomsday event - Don't forget to collect rewards as they are not mailed",
+      "title": "Doomsday",
       "description": "",
       "isAllDay": true,
       "startTime": "09:00",
@@ -600,12 +481,15 @@
         "daysOfWeek": [
           "sunday"
         ],
-        "startDate": "2025-08-31",
-        "interval": 1
+        "interval": 1,
+        "startTag": "main",
+        "startOffset": 325,
+        "startDate": "2025-01-05"
       },
       "remindEndOfDay": true,
       "remindTomorrow": true,
-      "includeOnWebsite": true
+      "includeOnWebsite": true,
+      "includeInBriefing": true
     },
     {
       "id": "ev-1739556987954",
@@ -634,9 +518,10 @@
           "friday"
         ],
         "interval": 2,
-        "startDate": "2025-03-09",
         "onPeriods": 1,
-        "offPeriods": 1
+        "offPeriods": 1,
+        "startTag": "main",
+        "startOffset": 150
       },
       "remindTomorrow": true,
       "includeOnWebsite": true,
@@ -656,7 +541,7 @@
       "variations": {},
       "order": {
         "saturday": 2,
-        "monday": 3
+        "monday": 5
       },
       "recurrence": {
         "type": "weeks",
@@ -664,9 +549,10 @@
           "monday"
         ],
         "interval": 1,
-        "startDate": "2024-01-01",
         "onPeriods": 1,
-        "offPeriods": 0
+        "offPeriods": 0,
+        "startTag": "main",
+        "startOffset": -283
       },
       "includeOnWebsite": true
     },
@@ -690,8 +576,9 @@
         "daysOfWeek": [
           "friday"
         ],
-        "startDate": "2024-01-05",
-        "interval": 1
+        "interval": 1,
+        "startTag": "main",
+        "startOffset": -279
       },
       "remindTomorrow": true,
       "includeInBriefing": true,
@@ -710,7 +597,7 @@
       ],
       "variations": {},
       "order": {
-        "sunday": 5
+        "sunday": 3
       },
       "recurrence": {
         "type": "weeks",
@@ -719,8 +606,9 @@
         "daysOfWeek": [
           "sunday"
         ],
-        "startDate": "2025-09-07",
-        "interval": 1
+        "interval": 1,
+        "startTag": "main",
+        "startOffset": 332
       },
       "remindEndOfDay": true,
       "includeOnWebsite": true
@@ -755,9 +643,10 @@
           "wednesday"
         ],
         "interval": 2,
-        "startDate": "2024-10-13",
         "onPeriods": 1,
-        "offPeriods": 0
+        "offPeriods": 0,
+        "startTag": "main",
+        "startOffset": 3
       },
       "remindTomorrow": true,
       "includeInBriefing": true,
@@ -782,12 +671,13 @@
       ],
       "variations": {},
       "order": {
-        "wednesday": 5,
-        "saturday": 4,
-        "friday": 6,
-        "thursday": 6,
-        "monday": 5,
-        "tuesday": 8
+        "wednesday": 3,
+        "saturday": 3,
+        "friday": 4,
+        "thursday": 3,
+        "monday": 6,
+        "tuesday": 3,
+        "sunday": 7
       },
       "recurrence": {
         "type": "weeks",
@@ -802,8 +692,9 @@
           "friday",
           "saturday"
         ],
-        "startDate": "2025-09-15",
-        "interval": 1
+        "interval": 1,
+        "startTag": "main",
+        "startOffset": 340
       },
       "remindEndOfDay": true,
       "includeInBriefing": true,
@@ -832,7 +723,7 @@
         "monday": 5,
         "saturday": 6,
         "tuesday": 8,
-        "sunday": 7,
+        "sunday": 5,
         "wednesday": 7,
         "thursday": 8,
         "friday": 7
@@ -850,8 +741,9 @@
           "friday",
           "saturday"
         ],
-        "startDate": "2025-09-22",
-        "interval": 1
+        "interval": 1,
+        "startTag": "main",
+        "startOffset": 347
       },
       "remindEndOfDay": true,
       "includeOnWebsite": true
@@ -859,7 +751,7 @@
     {
       "id": "5aec60d0-4d5f-4299-8f91-cc8590471e7b",
       "archived": false,
-      "title": "Wanted Boss: Code 87 - Weak Against Tank Heroes",
+      "title": "Wanted Boss: Code 87 - Weak Against Tank",
       "description": "",
       "isAllDay": true,
       "startTime": "09:00",
@@ -871,7 +763,7 @@
       "variations": {},
       "order": {
         "thursday": 5,
-        "monday": 6
+        "monday": 7
       },
       "recurrence": {
         "type": "weeks",
@@ -880,16 +772,20 @@
           "thursday"
         ],
         "interval": 1,
-        "startDate": "2025-03-12",
         "onPeriods": 1,
-        "offPeriods": 0
+        "offPeriods": 0,
+        "startTag": "main",
+        "startOffset": 153,
+        "startDate": "2025-01-05"
       },
-      "includeOnWebsite": true
+      "includeOnWebsite": true,
+      "includeInBriefing": true,
+      "remindEndOfDay": false
     },
     {
       "id": "6f0f73b6-24e7-491d-b6fa-39d73bb8711e",
       "archived": false,
-      "title": "Wanted Boss:  Code 64 - Weak Against Missile Heroes",
+      "title": "Wanted Boss:  Code 64 - Weak Against Missile",
       "description": "",
       "isAllDay": true,
       "startTime": "09:00",
@@ -900,8 +796,8 @@
       ],
       "variations": {},
       "order": {
-        "friday": 6,
-        "tuesday": 7
+        "friday": 5,
+        "tuesday": 5
       },
       "recurrence": {
         "type": "weeks",
@@ -910,16 +806,19 @@
           "friday"
         ],
         "interval": 1,
-        "startDate": "2025-03-12",
         "onPeriods": 1,
-        "offPeriods": 0
+        "offPeriods": 0,
+        "startTag": "main",
+        "startOffset": 153,
+        "startDate": "2025-01-05"
       },
-      "includeOnWebsite": true
+      "includeOnWebsite": true,
+      "includeInBriefing": true
     },
     {
       "id": "5178bd44-1659-40df-9aa7-c76cf22ee563",
       "archived": false,
-      "title": "Wanted Boss: Code 39 - Weak Against Aircraft Heroes",
+      "title": "Wanted Boss: Code 39 - Weak Against Air",
       "description": "",
       "isAllDay": true,
       "startTime": "09:00",
@@ -930,8 +829,8 @@
       ],
       "variations": {},
       "order": {
-        "saturday": 5,
-        "wednesday": 8
+        "saturday": 4,
+        "wednesday": 6
       },
       "recurrence": {
         "type": "weeks",
@@ -940,11 +839,14 @@
           "saturday"
         ],
         "interval": 1,
-        "startDate": "2025-03-12",
         "onPeriods": 1,
-        "offPeriods": 0
+        "offPeriods": 0,
+        "startTag": "main",
+        "startOffset": 153,
+        "startDate": "2025-01-05"
       },
-      "includeOnWebsite": true
+      "includeOnWebsite": true,
+      "includeInBriefing": true
     },
     {
       "id": "dfb867b9-9ffc-4a60-baf2-bd89a1d18681",
@@ -969,7 +871,8 @@
         "sunday": 8,
         "wednesday": 10,
         "saturday": 7,
-        "tuesday": 9
+        "tuesday": 6,
+        "friday": 6
       },
       "recurrence": {
         "type": "days",
@@ -983,9 +886,10 @@
           "saturday"
         ],
         "interval": 3,
-        "startDate": "2025-03-14",
         "onPeriods": 1,
-        "offPeriods": 2
+        "offPeriods": 2,
+        "startTag": "main",
+        "startOffset": 155
       },
       "dateIncludeOverrides": {},
       "includeOnWebsite": true
@@ -1013,7 +917,8 @@
         "monday": 7,
         "tuesday": 8,
         "thursday": 10,
-        "sunday": 5
+        "sunday": 7,
+        "wednesday": 7
       },
       "recurrence": {
         "type": "days",
@@ -1027,9 +932,10 @@
           "saturday"
         ],
         "interval": 3,
-        "startDate": "2025-03-12",
         "onPeriods": 1,
-        "offPeriods": 2
+        "offPeriods": 2,
+        "startTag": "main",
+        "startOffset": 153
       },
       "dateIncludeOverrides": {},
       "includeOnWebsite": true
@@ -1053,10 +959,12 @@
       ],
       "variations": {},
       "order": {
-        "monday": 10,
+        "monday": 8,
         "saturday": 6,
         "tuesday": 9,
-        "friday": 9
+        "friday": 9,
+        "thursday": 7,
+        "sunday": 9
       },
       "recurrence": {
         "type": "days",
@@ -1070,9 +978,10 @@
           "saturday"
         ],
         "interval": 3,
-        "startDate": "2025-03-13",
         "onPeriods": 1,
-        "offPeriods": 2
+        "offPeriods": 2,
+        "startTag": "main",
+        "startOffset": 154
       },
       "dateIncludeOverrides": {
         "2025-07-05": true
@@ -1110,9 +1019,10 @@
           "saturday"
         ],
         "interval": 4,
-        "startDate": "2025-07-22",
         "onPeriods": 1,
-        "offPeriods": 0
+        "offPeriods": 0,
+        "startTag": "main",
+        "startOffset": 285
       },
       "dateIncludeOverrides": {
         "2025-07-08": false
@@ -1122,7 +1032,7 @@
     },
     {
       "id": "ff6b9bd0-e2e6-49fd-9fa6-7cea574f8d47",
-      "archived": false,
+      "archived": true,
       "title": "Summon Supplies",
       "description": "• Get your free key and do your free summon every day\n• The keys remain between events so save them until you find a box you really want\n• If you have done free summons every day, on the last day:\n  • Spend 500 more diamonds to get 10 UR shards\n  • Spend 4000 more to get a legendary decoration chest",
       "isAllDay": true,
@@ -1150,41 +1060,14 @@
           "friday",
           "saturday"
         ],
-        "startDate": "2025-09-02",
-        "interval": 1
+        "interval": 1,
+        "startTag": "main",
+        "startOffset": 327
       },
       "dateIncludeOverrides": {
         "2025-03-28": false
       },
       "includeOnWebsite": true
-    },
-    {
-      "id": "8d795f4d-e2f0-4194-9152-2163891aa0dc",
-      "archived": false,
-      "title": "VS: Recruit Survivors",
-      "description": "",
-      "isAllDay": true,
-      "startTime": "09:00",
-      "endTime": "",
-      "days": [
-        "tuesday"
-      ],
-      "variations": {},
-      "order": {
-        "tuesday": 4
-      },
-      "recurrence": {
-        "type": "weeks",
-        "daysOfWeek": [
-          "tuesday"
-        ],
-        "interval": 1,
-        "startDate": "2025-03-30",
-        "onPeriods": 1,
-        "offPeriods": 0
-      },
-      "includeOnWebsite": true,
-      "remindTomorrow": true
     },
     {
       "id": "fe4d455d-6f36-45b2-92c2-24c32521473f",
@@ -1221,8 +1104,9 @@
           "saturday",
           "sunday"
         ],
-        "startDate": "2025-12-02",
-        "interval": 1
+        "interval": 1,
+        "startTag": "main",
+        "startOffset": 418
       },
       "remindEndOfDay": true,
       "includeInBriefing": true,
@@ -1241,7 +1125,7 @@
       ],
       "variations": {},
       "order": {
-        "thursday": 9
+        "thursday": 6
       },
       "recurrence": {
         "type": "weeks",
@@ -1249,11 +1133,15 @@
           "thursday"
         ],
         "interval": 1,
-        "startDate": "2024-01-01",
         "onPeriods": 1,
-        "offPeriods": 0
+        "offPeriods": 0,
+        "startTag": "main",
+        "startOffset": -283,
+        "startDate": "2025-01-05"
       },
-      "includeOnWebsite": true
+      "includeOnWebsite": true,
+      "includeInBriefing": true,
+      "remindTomorrow": true
     },
     {
       "id": "5831a6ec-244d-40d2-88dc-81a7173ecffd",
@@ -1285,9 +1173,10 @@
           "friday"
         ],
         "interval": 3,
-        "startDate": "2025-07-06",
         "onPeriods": 1,
-        "offPeriods": 0
+        "offPeriods": 0,
+        "startTag": "main",
+        "startOffset": 269
       },
       "dateIncludeOverrides": {
         "2025-07-10": false,
@@ -1316,7 +1205,8 @@
         "daysOfWeek": [
           "friday"
         ],
-        "startDate": "2025-11-30"
+        "startTag": "main",
+        "startOffset": 416
       },
       "includeOnWebsite": true,
       "remindTomorrow": true,
@@ -1341,46 +1231,19 @@
           "thursday"
         ],
         "interval": 2,
-        "startDate": "2025-07-11",
         "onPeriods": 1,
-        "offPeriods": 1
+        "offPeriods": 1,
+        "startTag": "main",
+        "startOffset": 274
       },
       "remindTomorrow": true,
       "includeInBriefing": true,
       "includeOnWebsite": true
     },
     {
-      "id": "9773fd5b-5070-4f05-b232-f527556751ab",
-      "archived": false,
-      "title": "VS: Promote and Train Overlord",
-      "description": "",
-      "isAllDay": true,
-      "startTime": "09:00",
-      "endTime": "",
-      "days": [
-        "friday"
-      ],
-      "variations": {},
-      "order": {
-        "friday": 3
-      },
-      "recurrence": {
-        "type": "weeks",
-        "daysOfWeek": [
-          "friday"
-        ],
-        "interval": 1,
-        "startDate": "2025-08-22",
-        "onPeriods": 1,
-        "offPeriods": 0
-      },
-      "includeOnWebsite": true,
-      "remindTomorrow": true
-    },
-    {
       "id": "e1a61d22-c57e-45aa-ab6c-d648c529bb89",
       "archived": false,
-      "title": "Buy from Alliance, Campaign and VIP stores.",
+      "title": "Alliance, Campaign, and VIP stores reset",
       "description": "",
       "remindTomorrow": true,
       "remindEndOfDay": true,
@@ -1391,7 +1254,9 @@
         "sunday"
       ],
       "variations": {},
-      "order": {},
+      "order": {
+        "sunday": 6
+      },
       "recurrence": {
         "type": "weeks",
         "onPeriods": 1,
@@ -1399,8 +1264,10 @@
         "daysOfWeek": [
           "sunday"
         ],
-        "startDate": "2024-09-29",
-        "interval": 1
+        "interval": 1,
+        "startTag": "main",
+        "startOffset": -11,
+        "startDate": "2025-01-05"
       },
       "includeInBriefing": true,
       "includeOnWebsite": true
@@ -1422,7 +1289,7 @@
       "order": {
         "monday": 1,
         "tuesday": 1,
-        "wednesday": 1,
+        "wednesday": 4,
         "thursday": 1,
         "friday": 1,
         "saturday": 1,
@@ -1435,8 +1302,10 @@
         "daysOfWeek": [
           "wednesday"
         ],
-        "startDate": "2025-09-17",
-        "interval": 1
+        "interval": 1,
+        "startTag": "main",
+        "startOffset": 342,
+        "startDate": "2025-01-05"
       },
       "includeInBriefing": true,
       "includeOnWebsite": true
@@ -1463,8 +1332,9 @@
         "daysOfWeek": [
           "sunday"
         ],
-        "startDate": "2025-09-21",
-        "interval": 1
+        "interval": 1,
+        "startTag": "main",
+        "startOffset": 346
       },
       "includeOnWebsite": true
     },
@@ -1482,7 +1352,9 @@
         "sunday"
       ],
       "variations": {},
-      "order": {},
+      "order": {
+        "sunday": 8
+      },
       "recurrence": {
         "type": "weeks",
         "onPeriods": 1,
@@ -1490,8 +1362,9 @@
         "daysOfWeek": [
           "sunday"
         ],
-        "startDate": "2023-12-31",
-        "interval": 1
+        "interval": 1,
+        "startTag": "main",
+        "startOffset": -284
       },
       "dateIncludeOverrides": {
         "2025-09-21": false
@@ -1537,8 +1410,9 @@
           "friday",
           "saturday"
         ],
-        "startDate": "2024-01-01",
-        "interval": 1
+        "interval": 1,
+        "startTag": "main",
+        "startOffset": -283
       }
     },
     {
@@ -1567,8 +1441,9 @@
         "daysOfWeek": [
           "monday"
         ],
-        "startDate": "2023-12-31",
-        "interval": 1
+        "interval": 1,
+        "startTag": "main",
+        "startOffset": -284
       }
     },
     {
@@ -1586,7 +1461,9 @@
         "tuesday"
       ],
       "variations": {},
-      "order": {},
+      "order": {
+        "tuesday": 7
+      },
       "archived": false,
       "recurrence": {
         "type": "weeks",
@@ -1595,8 +1472,9 @@
         "daysOfWeek": [
           "tuesday"
         ],
-        "startDate": "2024-01-07",
-        "interval": 1
+        "interval": 1,
+        "startTag": "main",
+        "startOffset": -277
       }
     },
     {
@@ -1623,8 +1501,9 @@
         "daysOfWeek": [
           "thursday"
         ],
-        "startDate": "2023-12-31",
-        "interval": 1
+        "interval": 1,
+        "startTag": "main",
+        "startOffset": -284
       }
     },
     {
@@ -1649,7 +1528,7 @@
       ],
       "variations": {},
       "order": {},
-      "archived": false,
+      "archived": true,
       "recurrence": {
         "type": "days",
         "onPeriods": 1,
@@ -1663,8 +1542,9 @@
           "friday",
           "saturday"
         ],
-        "startDate": "2024-10-13",
-        "interval": 1
+        "interval": 1,
+        "startTag": "main",
+        "startOffset": 3
       }
     },
     {
@@ -1691,8 +1571,9 @@
         "daysOfWeek": [
           "friday"
         ],
-        "startDate": "2025-11-12",
-        "interval": 1
+        "interval": 1,
+        "startTag": "main",
+        "startOffset": 398
       }
     },
     {
@@ -1719,8 +1600,9 @@
         "daysOfWeek": [
           "thursday"
         ],
-        "startDate": "2023-12-31",
-        "interval": 1
+        "interval": 1,
+        "startTag": "main",
+        "startOffset": -284
       }
     },
     {
@@ -1755,9 +1637,10 @@
           "saturday"
         ],
         "interval": 1,
-        "startDate": "2024-01-01",
         "onPeriods": 1,
-        "offPeriods": 0
+        "offPeriods": 0,
+        "startTag": "main",
+        "startOffset": -283
       },
       "includeOnWebsite": true
     },
@@ -1782,9 +1665,10 @@
           "friday"
         ],
         "interval": 1,
-        "startDate": "2025-12-01",
         "onPeriods": 1,
-        "offPeriods": 0
+        "offPeriods": 0,
+        "startTag": "main",
+        "startOffset": 417
       },
       "includeInBriefing": true,
       "includeOnWebsite": true
@@ -1808,9 +1692,10 @@
           "saturday"
         ],
         "interval": 1,
-        "startDate": "2025-03-12",
         "onPeriods": 1,
-        "offPeriods": 0
+        "offPeriods": 0,
+        "startTag": "main",
+        "startOffset": 153
       },
       "dateIncludeOverrides": {
         "2025-05-03": false
@@ -1841,9 +1726,10 @@
           "monday"
         ],
         "interval": 2,
-        "startDate": "2024-01-01",
         "onPeriods": 1,
-        "offPeriods": 0
+        "offPeriods": 0,
+        "startTag": "main",
+        "startOffset": -283
       },
       "dateIncludeOverrides": {},
       "includeOnWebsite": true
@@ -1875,9 +1761,10 @@
           "thursday"
         ],
         "interval": 1,
-        "startDate": "2024-01-01",
         "onPeriods": 1,
-        "offPeriods": 0
+        "offPeriods": 0,
+        "startTag": "main",
+        "startOffset": -283
       },
       "dateIncludeOverrides": {
         "2025-04-08": true,
@@ -1924,9 +1811,10 @@
           "saturday"
         ],
         "interval": 1,
-        "startDate": "2025-04-08",
         "onPeriods": 1,
-        "offPeriods": 0
+        "offPeriods": 0,
+        "startTag": "main",
+        "startOffset": 180
       },
       "dateIncludeOverrides": {
         "2025-04-07": true,
@@ -1968,9 +1856,10 @@
           "saturday"
         ],
         "interval": 1,
-        "startDate": "2024-01-01",
         "onPeriods": 1,
-        "offPeriods": 0
+        "offPeriods": 0,
+        "startTag": "main",
+        "startOffset": -283
       },
       "dateIncludeOverrides": {
         "2025-05-03": true,
@@ -1999,9 +1888,10 @@
           "saturday"
         ],
         "interval": 1,
-        "startDate": "2025-05-03",
         "onPeriods": 1,
-        "offPeriods": 0
+        "offPeriods": 0,
+        "startTag": "main",
+        "startOffset": 205
       },
       "dateIncludeOverrides": {
         "2025-05-03": true,
@@ -2032,9 +1922,10 @@
           "friday"
         ],
         "interval": 1,
-        "startDate": "2025-05-22",
         "onPeriods": 1,
-        "offPeriods": 0
+        "offPeriods": 0,
+        "startTag": "main",
+        "startOffset": 224
       },
       "includeOnWebsite": true
     },
@@ -2059,9 +1950,10 @@
           "saturday"
         ],
         "interval": 1,
-        "startDate": "2025-05-22",
         "onPeriods": 1,
-        "offPeriods": 0
+        "offPeriods": 0,
+        "startTag": "main",
+        "startOffset": 224
       },
       "includeOnWebsite": true
     },
@@ -2085,8 +1977,9 @@
         "daysOfWeek": [
           "friday"
         ],
-        "startDate": "2025-08-06",
-        "interval": 1
+        "interval": 1,
+        "startTag": "main",
+        "startOffset": 300
       },
       "remindTomorrow": true,
       "includeInBriefing": true,
@@ -2113,9 +2006,10 @@
           "friday"
         ],
         "interval": 1,
-        "startDate": "2025-09-04",
         "onPeriods": 1,
-        "offPeriods": 0
+        "offPeriods": 0,
+        "startTag": "main",
+        "startOffset": 329
       },
       "remindTomorrow": true,
       "includeInBriefing": true,
@@ -2145,8 +2039,9 @@
           "wednesday",
           "saturday"
         ],
-        "startDate": "2025-09-16",
-        "interval": 1
+        "interval": 1,
+        "startTag": "main",
+        "startOffset": 341
       },
       "includeOnWebsite": true
     },
@@ -2172,8 +2067,9 @@
         "daysOfWeek": [
           "thursday"
         ],
-        "startDate": "2025-09-11",
-        "interval": 1
+        "interval": 1,
+        "startTag": "main",
+        "startOffset": 336
       },
       "includeInBriefing": true,
       "includeOnWebsite": true
@@ -2189,7 +2085,6 @@
       "endTime": "",
       "days": [
         "sunday",
-        "monday",
         "tuesday",
         "wednesday",
         "thursday",
@@ -2197,13 +2092,19 @@
         "saturday"
       ],
       "variations": {},
-      "order": {},
-      "archived": true,
+      "order": {
+        "tuesday": 2,
+        "wednesday": 2,
+        "thursday": 2,
+        "friday": 2,
+        "saturday": 2,
+        "sunday": 2
+      },
+      "archived": false,
       "recurrence": {
-        "type": "days",
+        "type": "weeks",
         "daysOfWeek": [
           "sunday",
-          "monday",
           "tuesday",
           "wednesday",
           "thursday",
@@ -2211,11 +2112,15 @@
           "saturday"
         ],
         "interval": 1,
-        "startDate": "2024-01-01",
         "onPeriods": 1,
-        "offPeriods": 0
+        "offPeriods": 3,
+        "startTag": "main",
+        "startOffset": 635,
+        "startDate": "2025-01-05",
+        "endOffset": 661
       },
-      "includeOnWebsite": true
+      "includeOnWebsite": true,
+      "includeInBriefing": true
     },
     {
       "id": "516e99c1-b08f-49fb-afa4-825b76080229",
@@ -2241,7 +2146,8 @@
         "daysOfWeek": [
           "friday"
         ],
-        "startDate": "2025-11-30"
+        "startTag": "main",
+        "startOffset": 416
       }
     },
     {
@@ -2256,11 +2162,13 @@
       "startTime": "09:00",
       "endTime": "",
       "days": [
+        "monday",
         "sunday"
       ],
       "variations": {},
       "order": {
-        "sunday": 1
+        "sunday": 5,
+        "monday": 2
       },
       "archived": false,
       "recurrence": {
@@ -2271,7 +2179,9 @@
           "monday",
           "sunday"
         ],
-        "startDate": "2024-01-01"
+        "startTag": "main",
+        "startOffset": -283,
+        "startDate": "2025-01-05"
       }
     },
     {
@@ -2290,7 +2200,7 @@
       ],
       "variations": {},
       "order": {
-        "monday": 1
+        "monday": 4
       },
       "archived": false,
       "recurrence": {
@@ -2300,7 +2210,161 @@
         "daysOfWeek": [
           "monday"
         ],
-        "startDate": "2024-01-01"
+        "startTag": "main",
+        "startOffset": -283
+      }
+    },
+    {
+      "id": "63321d8e-d4e1-48cf-bdf8-69b8ae9c4599",
+      "title": "VS: Construction, UR Trucks/Tasks, Survivors, Armament Material, SAVE Radar",
+      "description": "",
+      "remindTomorrow": true,
+      "remindEndOfDay": false,
+      "includeInBriefing": true,
+      "includeOnWebsite": true,
+      "isAllDay": true,
+      "startTime": "09:00",
+      "endTime": "",
+      "days": [
+        "tuesday"
+      ],
+      "variations": {},
+      "order": {
+        "tuesday": 0
+      },
+      "archived": false,
+      "recurrence": {
+        "type": "weeks",
+        "daysOfWeek": [
+          "tuesday"
+        ],
+        "onPeriods": 1,
+        "offPeriods": 0,
+        "startDate": "2026-07-07",
+        "startTag": "main",
+        "startOffset": -4
+      }
+    },
+    {
+      "id": "ad8755ba-ee0d-4cb3-8c3b-8aa5aa22e3f9",
+      "title": "VS: Research, Radar, Drone Components",
+      "description": "",
+      "remindTomorrow": true,
+      "remindEndOfDay": false,
+      "includeInBriefing": true,
+      "includeOnWebsite": true,
+      "isAllDay": true,
+      "startTime": "09:00",
+      "endTime": "",
+      "days": [
+        "wednesday"
+      ],
+      "variations": {},
+      "order": {
+        "wednesday": 0
+      },
+      "archived": false,
+      "recurrence": {
+        "type": "weeks",
+        "daysOfWeek": [
+          "wednesday"
+        ],
+        "onPeriods": 1,
+        "offPeriods": 0,
+        "startDate": "2026-07-08",
+        "startTag": "main",
+        "startOffset": -4
+      }
+    },
+    {
+      "id": "5d775721-b174-405a-9f95-1045c52954c4",
+      "title": "Alliance Exercise",
+      "description": "",
+      "remindTomorrow": true,
+      "remindEndOfDay": false,
+      "includeInBriefing": true,
+      "includeOnWebsite": true,
+      "isAllDay": false,
+      "startTime": "20:20",
+      "endTime": "",
+      "days": [
+        "sunday",
+        "monday",
+        "tuesday",
+        "wednesday",
+        "thursday",
+        "friday",
+        "saturday"
+      ],
+      "variations": {},
+      "order": {},
+      "archived": false,
+      "recurrence": {
+        "type": "days",
+        "daysOfWeek": [
+          "sunday",
+          "monday",
+          "tuesday",
+          "wednesday",
+          "thursday",
+          "friday",
+          "saturday"
+        ],
+        "onPeriods": 1,
+        "offPeriods": 2,
+        "startDate": "2026-07-07",
+        "startTag": "main",
+        "startOffset": 631
+      }
+    },
+    {
+      "id": "3d376821-2591-42af-a6e5-86c5ac854d25",
+      "title": "Street Rush",
+      "description": "",
+      "remindTomorrow": false,
+      "remindEndOfDay": true,
+      "includeInBriefing": true,
+      "includeOnWebsite": true,
+      "isAllDay": true,
+      "startTime": "09:00",
+      "endTime": "",
+      "days": [
+        "sunday",
+        "monday",
+        "tuesday",
+        "wednesday",
+        "thursday",
+        "friday",
+        "saturday"
+      ],
+      "variations": {},
+      "order": {
+        "tuesday": 1,
+        "wednesday": 1,
+        "thursday": 1,
+        "friday": 1,
+        "saturday": 1,
+        "sunday": 1,
+        "monday": 1
+      },
+      "archived": true,
+      "recurrence": {
+        "type": "days",
+        "daysOfWeek": [
+          "sunday",
+          "monday",
+          "tuesday",
+          "wednesday",
+          "thursday",
+          "friday",
+          "saturday"
+        ],
+        "onPeriods": 1,
+        "offPeriods": 0,
+        "startDate": "2026-07-07",
+        "startTag": "main",
+        "startOffset": 634,
+        "endOffset": 661
       }
     }
   ]

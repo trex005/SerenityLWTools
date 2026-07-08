@@ -1,0 +1,13 @@
+{
+  "updated": "2025-12-14T12:43:37.648Z",
+  "parent": "996",
+  "brand": {
+    "name": "PH3X 996",
+    "favicon": "/conf/ph3x996/favicon.ico"
+  },
+  "tags": {
+    "ph3x996": {
+      "startDate": "2024-10-10"
+    }
+  }
+}

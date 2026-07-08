@@ -1,42 +1,10 @@
-﻿{
-  "updated": "2026-03-30T23:19:13-02:00",
+{
+  "updated": "2026-07-07T22:49:31-02:00",
   "events": [
     {
-      "id": "ev-6",
+      "id": "ev-13",
       "order": {
-        "tuesday": 1
-      }
-    },
-    {
-      "id": "ev-8",
-      "order": {
-        "thursday": 2,
-        "tuesday": 2
-      }
-    },
-    {
-      "id": "ev-10",
-      "order": {
-        "wednesday": 2
-      }
-    },
-    {
-      "id": "ev-12",
-      "order": {
-        "saturday": 2,
-        "tuesday": 3
-      }
-    },
-    {
-      "id": "ev-14",
-      "order": {
-        "tuesday": 4
-      }
-    },
-    {
-      "id": "ev-15",
-      "order": {
-        "wednesday": 3
+        "monday": 3
       }
     },
     {
@@ -52,30 +20,9 @@
       }
     },
     {
-      "id": "ev-1739556183702",
+      "id": "ev-1739558845321",
       "order": {
-        "thursday": 5
-      }
-    },
-    {
-      "id": "ev-1739556209550",
-      "order": {
-        "wednesday": 4
-      }
-    },
-    {
-      "id": "ev-1739556688004",
-      "order": {
-        "wednesday": 5,
-        "thursday": 3,
-        "friday": 5
-      }
-    },
-    {
-      "id": "4329a998-b697-4b0d-ae72-c629390328b4",
-      "order": {
-        "friday": 5,
-        "thursday": 4
+        "monday": 4
       }
     },
     {
@@ -89,28 +36,7 @@
     {
       "id": "5aec60d0-4d5f-4299-8f91-cc8590471e7b",
       "order": {
-        "thursday": 4
-      }
-    },
-    {
-      "id": "5178bd44-1659-40df-9aa7-c76cf22ee563",
-      "order": {
-        "saturday": 3,
-        "wednesday": 7
-      }
-    },
-    {
-      "id": "dfb867b9-9ffc-4a60-baf2-bd89a1d18681",
-      "order": {
-        "friday": 9,
-        "thursday": 8
-      }
-    },
-    {
-      "id": "7662a10a-144e-4dc5-8ae7-4c8af78b9e12",
-      "order": {
-        "tuesday": 9,
-        "friday": 8
+        "monday": 6
       }
     },
     {
@@ -121,61 +47,40 @@
       }
     },
     {
-      "id": "41b7230f-eac7-478d-8f95-2955050d1da0",
-      "order": {
-        "friday": 7,
-        "thursday": 7
-      }
-    },
-    {
-      "id": "8d795f4d-e2f0-4194-9152-2163891aa0dc",
-      "order": {
-        "tuesday": 5
-      }
-    },
-    {
       "id": "8c78efe1-5b5c-427c-b5e1-7249a7922606",
       "order": {
         "thursday": 7
       }
     },
     {
-      "id": "151805d5-5c6a-4cc0-a62b-9ab90c54d5a0",
-      "order": {
-        "tuesday": 10
+      "id": "e05c1e28-c800-48d1-8d3a-53898d5f2923",
+      "startTime": "22:15",
+      "recurrence": {
+        "startDate": "2025-01-05"
       }
     },
     {
-      "id": "2b5913ee-523d-4ad7-bd0a-5ace984c1e01",
-      "title": "Hot deals → Decorate your dreams",
-      "description": "• Save up 20 tokens to get a wish decoration",
-      "remindTomorrow": false,
-      "remindEndOfDay": false,
-      "includeInBriefing": true,
-      "includeOnWebsite": true,
-      "isAllDay": true,
-      "startTime": "09:00",
-      "endTime": "",
-      "days": [
-        "friday",
-        "saturday",
-        "sunday"
-      ],
-      "variations": {},
-      "order": {
-        "friday": 8
-      },
-      "archived": false,
+      "id": "226d3b1b-ce75-444f-ac11-5ee3fe3af4b4",
       "recurrence": {
-        "type": "weeks",
-        "onPeriods": 1,
-        "offPeriods": 4,
-        "daysOfWeek": [
-          "friday",
-          "saturday",
-          "sunday"
-        ],
-        "startDate": "2025-12-12"
+        "startTag": "996"
+      }
+    },
+    {
+      "id": "f948a0fc-4ef5-4ba0-8458-8612c29a4537",
+      "order": {
+        "monday": 7
+      }
+    },
+    {
+      "id": "183e0c1e-249f-47f6-8324-b155e4efb389",
+      "order": {
+        "monday": 2
+      }
+    },
+    {
+      "id": "3d376821-2591-42af-a6e5-86c5ac854d25",
+      "recurrence": {
+        "startTag": "996"
       }
     },
     {
@@ -205,7 +110,7 @@
         "friday": 0,
         "saturday": 0
       },
-      "archived": false,
+      "archived": true,
       "recurrence": {
         "type": "weeks",
         "onPeriods": 1,
@@ -218,7 +123,8 @@
           "saturday",
           "monday"
         ],
-        "startDate": "2026-03-30"
+        "startTag": "996",
+        "startOffset": 536
       }
     }
   ]
