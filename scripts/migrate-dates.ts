@@ -3,7 +3,7 @@
  * One-time migration: convert all events.json files from absolute recurrence.startDate
  * to tag-relative startTag + startOffset, and ensure conf.json has a tags block.
  *
- * Run: npx tsx scripts/migrate-dates.ts
+ * Run: npx tsx scripts/migrate-dates.ts [conf-dir]
  */
 
 import * as fs from "node:fs"
@@ -77,8 +77,31 @@ function isValidDate(str: string): boolean {
   return /^\d{4}-\d{2}-\d{2}$/.test(str) && !isNaN(parseISO(str).getTime())
 }
 
+function readJsonFile(filePath: string): any {
+  const raw = fs.readFileSync(filePath, "utf-8").replace(/^\uFEFF/, "")
+  return JSON.parse(raw)
+}
+
+function readSuppliedStartDates(): Record<string, string> {
+  const raw = process.env.MIGRATE_DATE_START_DATES
+  if (!raw) return {}
+  try {
+    const parsed = JSON.parse(raw)
+    if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) return {}
+    const result: Record<string, string> = {}
+    for (const [tag, value] of Object.entries(parsed)) {
+      if (typeof value === "string" && isValidDate(value)) {
+        result[tag] = value
+      }
+    }
+    return result
+  } catch {
+    return {}
+  }
+}
+
 async function run() {
-  const confDir = path.resolve("public/conf")
+  const confDir = path.resolve(process.argv[2] || "public/conf")
   if (!fs.existsSync(confDir)) {
     console.error(`Directory not found: ${confDir}`)
     process.exit(1)
@@ -90,16 +113,19 @@ async function run() {
     .map((d) => d.name)
 
   const rl = readline.createInterface({ input: process.stdin, output: process.stdout })
+  const suppliedStartDates = readSuppliedStartDates()
 
   // Phase 1: collect missing startDates via prompts before writing anything
   const startDates: Record<string, string> = {}
   for (const tagName of tagDirs) {
     const confPath = path.join(confDir, tagName, "conf.json")
     if (!fs.existsSync(confPath)) continue
-    const conf = JSON.parse(fs.readFileSync(confPath, "utf-8"))
+    const conf = readJsonFile(confPath)
     const existing = conf?.tags?.[tagName]?.startDate
     if (existing) {
       startDates[tagName] = existing
+    } else if (suppliedStartDates[tagName]) {
+      startDates[tagName] = suppliedStartDates[tagName]
     } else {
       let input = ""
       while (!isValidDate(input)) {
@@ -121,7 +147,7 @@ async function run() {
 
     // Update conf.json
     if (fs.existsSync(confPath)) {
-      const conf = JSON.parse(fs.readFileSync(confPath, "utf-8"))
+      const conf = readJsonFile(confPath)
       const updated = addTagsBlock(conf, tagName, startDate)
       if (JSON.stringify(updated) !== JSON.stringify(conf)) {
         fs.writeFileSync(confPath, JSON.stringify(updated, null, 2) + "\n")
@@ -131,7 +157,7 @@ async function run() {
 
     // Update events.json
     if (fs.existsSync(eventsPath)) {
-      const payload = JSON.parse(fs.readFileSync(eventsPath, "utf-8"))
+      const payload = readJsonFile(eventsPath)
       const events: any[] = Array.isArray(payload) ? payload : (payload.events ?? [])
       const converted = events.map((e) => convertEventRecurrence(e, tagName, startDate))
       const changed = JSON.stringify(converted) !== JSON.stringify(events)
