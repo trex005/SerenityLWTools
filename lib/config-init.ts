@@ -16,7 +16,6 @@ export const initialConfig = {
       variations: {},
       dateOverrides: {},
       dateIncludeOverrides: {},
-      order: {},
       archived: false,
       recurrence: {
         type: "weeks",

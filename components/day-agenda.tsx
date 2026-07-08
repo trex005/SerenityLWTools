@@ -2,16 +2,19 @@
  * Day Agenda Component
  *
  * This component displays and manages events for a specific day.
- * It includes drag-and-drop functionality for reordering all-day events.
  */
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, type ReactNode } from "react"
 import { EventCard } from "@/components/event-card"
 import { useEvents } from "@/hooks/use-events"
 import { useOverrideDiff } from "@/hooks/use-override-diff"
 import { useTagData } from "@/hooks/use-tag-data"
-import type { DiffInfo } from "@/lib/config-diff"
+import { shouldShowRecurringEvent } from "@/lib/recurrence-utils"
+import { Switch } from "@/components/ui/switch"
+import { Label } from "@/components/ui/label"
+import { formatInAppTimezone } from "@/lib/date-utils"
+import { compareEventsByOrderValue, getEventOrderValue, getEventTitleForSort } from "@/lib/event-order"
 import {
   DndContext,
   closestCenter,
@@ -20,7 +23,6 @@ import {
   useSensor,
   useSensors,
   type DragEndEvent,
-  type DragStartEvent,
 } from "@dnd-kit/core"
 import {
   SortableContext,
@@ -31,11 +33,6 @@ import {
 import { restrictToVerticalAxis } from "@dnd-kit/modifiers"
 import { CSS } from "@dnd-kit/utilities"
 import { GripVertical } from "lucide-react"
-// Add import for recurrence utilities
-import { shouldShowRecurringEvent } from "@/lib/recurrence-utils"
-import { Switch } from "@/components/ui/switch"
-import { Label } from "@/components/ui/label"
-import { formatInAppTimezone } from "@/lib/date-utils"
 
 // Update the props interface and use the setShowLocalTime function
 interface DayAgendaProps {
@@ -47,28 +44,15 @@ interface DayAgendaProps {
 
 /**
  * DayAgenda component displays events for a specific day of the week
- * It separates all-day events from time-specific events and allows for
- * drag-and-drop reordering of all-day events
+ * It separates all-day events from time-specific events.
  */
-// Update the function signature to include the new prop
 export function DayAgenda({ day, date, showLocalTime = false, setShowLocalTime }: DayAgendaProps) {
-  // Access events data from store
-  const { events, reorderEvents } = useEvents()
+  const { events, updateEventOrderValue } = useEvents()
   const { diffIndex } = useOverrideDiff()
   const { tagConfig } = useTagData()
   const eventOverrideIndex = diffIndex?.events ?? {}
-
-  // State to manage all-day and time-specific events
-  const [allDayEvents, setAllDayEvents] = useState<any[]>([])
-  const [timeEvents, setTimeEvents] = useState<any[]>([])
-
-  // State to track which event is being dragged
-  const [activeId, setActiveId] = useState<string | null>(null)
-
-  // Configure drag-and-drop sensors with permissive settings for better usability
   const sensors = useSensors(
     useSensor(PointerSensor, {
-      // Simple activation constraint for more intuitive dragging
       activationConstraint: {
         distance: 5,
       },
@@ -77,6 +61,10 @@ export function DayAgenda({ day, date, showLocalTime = false, setShowLocalTime }
       coordinateGetter: sortableKeyboardCoordinates,
     }),
   )
+
+  // State to manage all-day and time-specific events
+  const [allDayEvents, setAllDayEvents] = useState<any[]>([])
+  const [timeEvents, setTimeEvents] = useState<any[]>([])
 
   /**
    * Effect to filter and organize events for the current day
@@ -109,12 +97,7 @@ export function DayAgenda({ day, date, showLocalTime = false, setShowLocalTime }
         // Fall back to the main event property
         return event.isAllDay
       })
-      .sort((a, b) => {
-        // Sort by custom order if available
-        const orderA = a.order && a.order[day] !== undefined ? a.order[day] : 999
-        const orderB = b.order && b.order[day] !== undefined ? b.order[day] : 999
-        return orderA - orderB
-      })
+      .sort(compareEventsByOrderValue)
 
     const timed = dayEvents
       .filter((event) => {
@@ -155,61 +138,37 @@ export function DayAgenda({ day, date, showLocalTime = false, setShowLocalTime }
     setAllDayEvents(allDay)
   }, [events, day, date, tagConfig])
 
-  /**
-   * Handler for when drag starts
-   * Records the ID of the event being dragged
-   */
-  const handleDragStart = (event: DragStartEvent) => {
-    const { active } = event
-    setActiveId(active.id as string)
-  }
+  const calculateDroppedOrderValue = (orderedEvents: any[], movedEventId: string): number | null => {
+    const index = orderedEvents.findIndex((event) => event.id === movedEventId)
+    if (index === -1) return null
 
-  /**
-   * Handler for when drag ends
-   * Updates the order of all-day events based on the new positions
-   */
-  const handleDragEnd = (event: DragEndEvent) => {
-    const { active, over } = event
-    setActiveId(null)
-
-    // Safety check to ensure over is defined
-    if (!over) return
-
-    // Check if items are different
-    if (active.id !== over.id) {
-      // Find the indices of the dragged and target items
-      const oldIndex = allDayEvents.findIndex((e) => e.id === active.id)
-      const newIndex = allDayEvents.findIndex((e) => e.id === over.id)
-
-      // Safety check for valid indices
-      if (oldIndex === -1 || newIndex === -1) return
-
-      // Create a new array with the updated order
-      const newOrder = [...allDayEvents]
-      const [movedItem] = newOrder.splice(oldIndex, 1)
-      newOrder.splice(newIndex, 0, movedItem)
-
-      // Update the order property for each event
-      const updatedEvents = newOrder.map((event, index) => ({
-        ...event,
-        order: {
-          ...event.order,
-          [day]: index,
-        },
-      }))
-
-      // Update state and persist changes
-      setAllDayEvents(updatedEvents)
-      reorderEvents(updatedEvents, day)
+    const previous = orderedEvents[index - 1]
+    const next = orderedEvents[index + 1]
+    if (previous && next) {
+      return (getEventOrderValue(previous) + getEventOrderValue(next)) / 2
     }
+    if (previous) return getEventOrderValue(previous) + 1
+    if (next) return getEventOrderValue(next) - 1
+    return getEventOrderValue(orderedEvents[index])
   }
 
-  /**
-   * Handler for when drag is cancelled
-   * Resets the active ID
-   */
-  const handleDragCancel = () => {
-    setActiveId(null)
+  const handleAllDayDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event
+    if (!over || active.id === over.id) return
+
+    const oldIndex = allDayEvents.findIndex((item) => item.id === active.id)
+    const newIndex = allDayEvents.findIndex((item) => item.id === over.id)
+    if (oldIndex === -1 || newIndex === -1) return
+
+    const reordered = [...allDayEvents]
+    const [moved] = reordered.splice(oldIndex, 1)
+    reordered.splice(newIndex, 0, moved)
+
+    const nextOrderValue = calculateDroppedOrderValue(reordered, String(active.id))
+    if (nextOrderValue === null || !Number.isFinite(nextOrderValue)) return
+
+    setAllDayEvents(reordered.map((item) => (item.id === active.id ? { ...item, order_value: nextOrderValue } : item)))
+    updateEventOrderValue(String(active.id), nextOrderValue)
   }
 
   return (
@@ -253,23 +212,21 @@ export function DayAgenda({ day, date, showLocalTime = false, setShowLocalTime }
           <DndContext
             sensors={sensors}
             collisionDetection={closestCenter}
-            onDragStart={handleDragStart}
-            onDragEnd={handleDragEnd}
-            onDragCancel={handleDragCancel}
+            onDragEnd={handleAllDayDragEnd}
             modifiers={[restrictToVerticalAxis]}
           >
-            <SortableContext items={allDayEvents.map((e) => e.id)} strategy={verticalListSortingStrategy}>
+            <SortableContext items={allDayEvents.map((event) => event.id)} strategy={verticalListSortingStrategy}>
               <div className="space-y-2">
                 {allDayEvents.map((event) => (
-                  <SortableEventCard
-                    key={event.id}
-                    event={event}
-                    day={day}
-                    date={date}
-                    isActive={activeId === event.id}
-                    showLocalTime={showLocalTime}
-                    overrideInfo={eventOverrideIndex[event.id]}
-                  />
+                  <SortableAllDayEventCard key={event.id} event={event}>
+                    <EventCard
+                      event={event}
+                      day={day}
+                      date={date}
+                      showLocalTime={showLocalTime}
+                      overrideInfo={eventOverrideIndex[event.id]}
+                    />
+                  </SortableAllDayEventCard>
                 ))}
               </div>
             </SortableContext>
@@ -287,64 +244,31 @@ export function DayAgenda({ day, date, showLocalTime = false, setShowLocalTime }
   )
 }
 
-/**
- * SortableEventCard component for handling drag-and-drop functionality
- * Wraps the regular EventCard with sortable capabilities
- */
-function SortableEventCard({
-  event,
-  day,
-  date,
-  isActive,
-  showLocalTime,
-  overrideInfo,
-}: {
-  event: any
-  day: string
-  date: Date
-  isActive: boolean
-  showLocalTime?: boolean
-  overrideInfo?: DiffInfo
-}) {
-  // Hook to make this component draggable/sortable
-  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({
+function SortableAllDayEventCard({ event, children }: { event: any; children: ReactNode }) {
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: event.id,
-    data: {
-      type: "event",
-      event,
-    },
   })
-
-  // Apply styles for drag handling
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
-    opacity: isActive ? 0.5 : 1,
+    opacity: isDragging ? 0.5 : 1,
     position: "relative" as const,
-    zIndex: isActive ? 1 : "auto",
+    zIndex: isDragging ? 1 : "auto",
   }
 
   return (
-    <div ref={setNodeRef} style={style} className="group">
-      {/* Drag handle */}
-      <div
-        className="absolute left-0 top-0 bottom-0 flex items-center px-2 cursor-move z-10"
+    <div ref={setNodeRef} style={style} className="group relative pl-8">
+      <button
+        type="button"
+        className="absolute left-0 top-0 bottom-0 flex w-8 cursor-move items-center justify-center text-muted-foreground hover:text-foreground"
+        aria-label={`Drag ${getEventTitleForSort(event)}`}
+        title="Drag to reorder"
         {...attributes}
         {...listeners}
       >
-        <GripVertical size={16} className="text-muted-foreground" />
-      </div>
-
-      {/* Event card with padding for the grip icon */}
-      <div className="pl-8">
-        <EventCard
-          event={event}
-          day={day}
-          date={date}
-          showLocalTime={showLocalTime}
-          overrideInfo={overrideInfo}
-        />
-      </div>
+        <GripVertical size={16} />
+      </button>
+      {children}
     </div>
   )
 }

@@ -42,6 +42,7 @@ import {
 import { Checkbox } from "@/components/ui/checkbox"
 import { scopedLocalStorage } from "@/lib/scoped-storage"
 import { matchesSearchTokens, tokenizeSearchTerm } from "@/lib/search-utils"
+import { compareEventsByOrderValue } from "@/lib/event-order"
 
 /**
  * Simple string hashing function to create a unique identifier for description content
@@ -292,11 +293,9 @@ export function EmailGenerator({ initialDateRange }: EmailGeneratorProps) {
             return aStartTime.localeCompare(bStartTime)
           }
 
-          // If both are all-day events, sort by custom order if available
+          // If both are all-day events, sort by global order.
           if (aIsAllDay && bIsAllDay) {
-            const aOrder = a.order && a.order[dayOfWeek] !== undefined ? a.order[dayOfWeek] : 999
-            const bOrder = b.order && b.order[dayOfWeek] !== undefined ? b.order[dayOfWeek] : 999
-            return aOrder - bOrder
+            return compareEventsByOrderValue(a, b)
           }
 
           return 0

@@ -7,9 +7,9 @@ import { useTagData } from "@/hooks/use-tag-data"
 import { shouldShowRecurringEvent } from "@/lib/recurrence-utils"
 import { Switch } from "@/components/ui/switch"
 import { Label } from "@/components/ui/label"
-import { format } from "date-fns"
 import { scopedLocalStorage } from "@/lib/scoped-storage"
 import { formatInAppTimezone } from "@/lib/date-utils"
+import { compareEventsByOrderValue } from "@/lib/event-order"
 
 interface ReadOnlyDayAgendaProps {
   day: string
@@ -107,12 +107,7 @@ export function ReadOnlyDayAgenda({ day, date, showLocalTime = false, setShowLoc
         // Fall back to the main event property
         return event.isAllDay
       })
-      .sort((a, b) => {
-        // Sort by custom order if available
-        const orderA = a.order && a.order[day] !== undefined ? a.order[day] : 999
-        const orderB = b.order && b.order[day] !== undefined ? b.order[day] : 999
-        return orderA - orderB
-      })
+      .sort(compareEventsByOrderValue)
 
     const timed = dayEvents
       .filter((event) => {

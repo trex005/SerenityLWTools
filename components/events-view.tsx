@@ -6,11 +6,11 @@
  */
 "use client"
 
-import { useState, type MouseEvent } from "react"
+import { useEffect, useState, type MouseEvent, type ReactNode } from "react"
 import { useEvents } from "@/hooks/use-events"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { ArchiveRestore, Archive, Trash2, Search, X, Edit, Mail, Globe, Undo2 } from "lucide-react"
+import { ArchiveRestore, Archive, Trash2, Search, X, Edit, Mail, Globe, Undo2, GripVertical } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import {
   AlertDialog,
@@ -34,13 +34,36 @@ import { useTagData } from "@/hooks/use-tag-data"
 import type { DiffInfo } from "@/lib/config-diff"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import { useToast } from "@/hooks/use-toast"
+import {
+  compareEventsByOrderValue,
+  getEventOrderValue,
+  getEventTitleForSort,
+} from "@/lib/event-order"
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  type DragEndEvent,
+} from "@dnd-kit/core"
+import {
+  SortableContext,
+  sortableKeyboardCoordinates,
+  verticalListSortingStrategy,
+  useSortable,
+} from "@dnd-kit/sortable"
+import { restrictToVerticalAxis } from "@dnd-kit/modifiers"
+import { CSS } from "@dnd-kit/utilities"
 
-const getEventTitle = (event: any): string => {
-  if (typeof event?.title === "string" && event.title.trim()) {
-    return event.title
-  }
-  return event?.id ? `[Untitled event: ${event.id}]` : "[Untitled event]"
-}
+type EventTimingFilter = "all" | "scheduled" | "all-day"
+
+const timingFilterChoices: Array<{ value: EventTimingFilter; label: string }> = [
+  { value: "all", label: "All" },
+  { value: "scheduled", label: "Scheduled" },
+  { value: "all-day", label: "All-day" },
+]
 
 /**
  * EventsView component
@@ -48,13 +71,24 @@ const getEventTitle = (event: any): string => {
  */
 export function EventsView() {
   // Access events store
-  const { events, archiveEvent, restoreEvent, deleteEvent, resetEventOverrides } = useEvents()
+  const { events, archiveEvent, restoreEvent, deleteEvent, resetEventOverrides, updateEventOrderValue } = useEvents()
   const { diffIndex } = useOverrideDiff()
   const { tagConfig } = useTagData()
   const { toast } = useToast()
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 5,
+      },
+    }),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    }),
+  )
 
   // State for filter input
   const [filterInput, setFilterInput] = useState("")
+  const [timingFilter, setTimingFilter] = useState<EventTimingFilter>("all")
 
   // Debounced filter value
   const debouncedFilter = useDebounce(filterInput, 500)
@@ -69,8 +103,13 @@ export function EventsView() {
   const [eventToReset, setEventToReset] = useState<any | null>(null)
   const [isResetting, setIsResetting] = useState(false)
 
-  // Filter events based on search term and sort alphabetically
-  const filterAndSortEvents = (allEvents: any[], filter: string, archived?: boolean) => {
+  // Filter events based on search term and sort by global order.
+  const filterAndSortEvents = (
+    allEvents: any[],
+    filter: string,
+    timing: EventTimingFilter,
+    archived?: boolean,
+  ) => {
     const searchTokens = tokenizeSearchTerm(filter)
     return (
       allEvents
@@ -81,26 +120,68 @@ export function EventsView() {
             return false
           }
 
+          if (timing === "scheduled" && event.isAllDay === true) {
+            return false
+          }
+
+          if (timing === "all-day" && event.isAllDay !== true) {
+            return false
+          }
+
           // Filter by search term if provided
           if (
             searchTokens.length > 0 &&
-            !matchesSearchTokens(searchTokens, [getEventTitle(event), event.description, event.id])
+            !matchesSearchTokens(searchTokens, [getEventTitleForSort(event), event.description, event.id])
           ) {
             return false
           }
 
           return true
         })
-        // Sort alphabetically by title
-        .sort((a, b) => getEventTitle(a).localeCompare(getEventTitle(b)))
+        .sort(compareEventsByOrderValue)
     )
   }
 
   // Get filtered and sorted events
-  const allFilteredEvents = filterAndSortEvents(events, debouncedFilter)
-  const activeEvents = filterAndSortEvents(events, debouncedFilter, false)
-  const archivedEvents = filterAndSortEvents(events, debouncedFilter, true)
+  const allFilteredEvents = filterAndSortEvents(events, debouncedFilter, timingFilter)
+  const activeEvents = filterAndSortEvents(events, debouncedFilter, timingFilter, false)
+  const archivedEvents = filterAndSortEvents(events, debouncedFilter, timingFilter, true)
   const eventOverrideIndex = diffIndex?.events ?? {}
+
+  const saveOrderValue = (eventId: string, orderValue: number) => {
+    updateEventOrderValue(eventId, orderValue)
+  }
+
+  const calculateDroppedOrderValue = (orderedEvents: any[], movedEventId: string): number | null => {
+    const index = orderedEvents.findIndex((event) => event.id === movedEventId)
+    if (index === -1) return null
+
+    const previous = orderedEvents[index - 1]
+    const next = orderedEvents[index + 1]
+    if (previous && next) {
+      return (getEventOrderValue(previous) + getEventOrderValue(next)) / 2
+    }
+    if (previous) return getEventOrderValue(previous) + 1
+    if (next) return getEventOrderValue(next) - 1
+    return getEventOrderValue(orderedEvents[index])
+  }
+
+  const handleDragEnd = (visibleEvents: any[], event: DragEndEvent) => {
+    const { active, over } = event
+    if (!over || active.id === over.id) return
+
+    const oldIndex = visibleEvents.findIndex((item) => item.id === active.id)
+    const newIndex = visibleEvents.findIndex((item) => item.id === over.id)
+    if (oldIndex === -1 || newIndex === -1) return
+
+    const reordered = [...visibleEvents]
+    const [moved] = reordered.splice(oldIndex, 1)
+    reordered.splice(newIndex, 0, moved)
+
+    const nextOrderValue = calculateDroppedOrderValue(reordered, String(active.id))
+    if (nextOrderValue === null || !Number.isFinite(nextOrderValue)) return
+    saveOrderValue(String(active.id), nextOrderValue)
+  }
 
   /**
    * Handle archive button click
@@ -142,7 +223,7 @@ export function EventsView() {
       if (success) {
         toast({
           title: "Overrides cleared",
-          description: `Reverted "${getEventTitle(eventToReset)}" to its parent data.`,
+          description: `Reverted "${getEventTitleForSort(eventToReset)}" to its parent data.`,
           variant: "success",
         })
       } else {
@@ -200,7 +281,21 @@ export function EventsView() {
     <div className="space-y-4">
       <div className="flex justify-between items-center">
         <div></div>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center justify-end gap-2">
+          <div className="flex h-9 overflow-hidden rounded-md border border-input">
+            {timingFilterChoices.map((choice) => (
+              <Button
+                key={choice.value}
+                type="button"
+                variant={timingFilter === choice.value ? "default" : "ghost"}
+                size="sm"
+                className="h-9 rounded-none border-0 px-3"
+                onClick={() => setTimingFilter(choice.value)}
+              >
+                {choice.label}
+              </Button>
+            ))}
+          </div>
           <AddEventButton />
           <div className="relative">
             <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
@@ -236,21 +331,19 @@ export function EventsView() {
 
         {/* All events tab */}
         <TabsContent value="all">
-          <div className="space-y-2">
-            {allFilteredEvents.map((event) => (
-              <EventCard
-                key={event.id}
-                event={event}
-                onArchive={handleArchive}
-                onRestore={handleRestore}
-                onEdit={handleEdit}
-                onDelete={handleDeleteClick}
-                onReset={handleResetClick}
-                overrideInfo={eventOverrideIndex[event.id]}
-                tagConfig={tagConfig}
-              />
-            ))}
-          </div>
+          <SortableEventList
+            events={allFilteredEvents}
+            sensors={sensors}
+            onDragEnd={(event) => handleDragEnd(allFilteredEvents, event)}
+            onArchive={handleArchive}
+            onRestore={handleRestore}
+            onEdit={handleEdit}
+            onDelete={handleDeleteClick}
+            onReset={handleResetClick}
+            onOrderValueSave={saveOrderValue}
+            eventOverrideIndex={eventOverrideIndex}
+            tagConfig={tagConfig}
+          />
           {events.length === 0 && (
             <div className="text-center py-8 text-muted-foreground">
               No events found. Add events from the Schedule tab.
@@ -263,21 +356,19 @@ export function EventsView() {
 
         {/* Active events tab */}
         <TabsContent value="active">
-          <div className="space-y-2">
-            {activeEvents.map((event) => (
-              <EventCard
-                key={event.id}
-                event={event}
-                onArchive={handleArchive}
-                onRestore={handleRestore}
-                onEdit={handleEdit}
-                onDelete={handleDeleteClick}
-                onReset={handleResetClick}
-                overrideInfo={eventOverrideIndex[event.id]}
-                tagConfig={tagConfig}
-              />
-            ))}
-          </div>
+          <SortableEventList
+            events={activeEvents}
+            sensors={sensors}
+            onDragEnd={(event) => handleDragEnd(activeEvents, event)}
+            onArchive={handleArchive}
+            onRestore={handleRestore}
+            onEdit={handleEdit}
+            onDelete={handleDeleteClick}
+            onReset={handleResetClick}
+            onOrderValueSave={saveOrderValue}
+            eventOverrideIndex={eventOverrideIndex}
+            tagConfig={tagConfig}
+          />
           {activeEvents.length === 0 && (
             <div className="text-center py-8 text-muted-foreground">No active events found.</div>
           )}
@@ -285,21 +376,19 @@ export function EventsView() {
 
         {/* Archived events tab */}
         <TabsContent value="archived">
-          <div className="space-y-2">
-            {archivedEvents.map((event) => (
-              <EventCard
-                key={event.id}
-                event={event}
-                onArchive={handleArchive}
-                onRestore={handleRestore}
-                onEdit={handleEdit}
-                onDelete={handleDeleteClick}
-                onReset={handleResetClick}
-                overrideInfo={eventOverrideIndex[event.id]}
-                tagConfig={tagConfig}
-              />
-            ))}
-          </div>
+          <SortableEventList
+            events={archivedEvents}
+            sensors={sensors}
+            onDragEnd={(event) => handleDragEnd(archivedEvents, event)}
+            onArchive={handleArchive}
+            onRestore={handleRestore}
+            onEdit={handleEdit}
+            onDelete={handleDeleteClick}
+            onReset={handleResetClick}
+            onOrderValueSave={saveOrderValue}
+            eventOverrideIndex={eventOverrideIndex}
+            tagConfig={tagConfig}
+          />
           {archivedEvents.length === 0 && (
             <div className="text-center py-8 text-muted-foreground">No archived events found.</div>
           )}
@@ -350,8 +439,8 @@ export function EventsView() {
           <AlertDialogHeader>
             <AlertDialogTitle>Reset Overrides</AlertDialogTitle>
             <AlertDialogDescription>
-              This will discard all changes made to <strong>{getEventTitle(eventToReset)}</strong> in this tag and
-              revert it to the parent configuration. Continue?
+              This will discard all changes made to <strong>{getEventTitleForSort(eventToReset)}</strong> in this tag
+              and revert it to the parent configuration. Continue?
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
@@ -370,6 +459,154 @@ export function EventsView() {
   )
 }
 
+function SortableEventList({
+  events,
+  sensors,
+  onDragEnd,
+  onArchive,
+  onRestore,
+  onEdit,
+  onDelete,
+  onReset,
+  onOrderValueSave,
+  eventOverrideIndex,
+  tagConfig,
+}: {
+  events: any[]
+  sensors: any
+  onDragEnd: (event: DragEndEvent) => void
+  onArchive: (id: string) => void
+  onRestore: (id: string) => void
+  onEdit: (event: any) => void
+  onDelete: (id: string, e: MouseEvent) => void
+  onReset: (event: any) => void
+  onOrderValueSave: (id: string, orderValue: number) => void
+  eventOverrideIndex: Record<string, DiffInfo>
+  tagConfig?: Record<string, unknown> | null
+}) {
+  return (
+    <DndContext
+      sensors={sensors}
+      collisionDetection={closestCenter}
+      onDragEnd={onDragEnd}
+      modifiers={[restrictToVerticalAxis]}
+    >
+      <SortableContext items={events.map((event) => event.id)} strategy={verticalListSortingStrategy}>
+        <div className="space-y-2">
+          {events.map((event) => (
+            <SortableEventRow key={event.id} event={event}>
+              <EventCard
+                event={event}
+                onArchive={onArchive}
+                onRestore={onRestore}
+                onEdit={onEdit}
+                onDelete={onDelete}
+                onReset={onReset}
+                onOrderValueSave={onOrderValueSave}
+                overrideInfo={eventOverrideIndex[event.id]}
+                tagConfig={tagConfig}
+              />
+            </SortableEventRow>
+          ))}
+        </div>
+      </SortableContext>
+    </DndContext>
+  )
+}
+
+function SortableEventRow({ event, children }: { event: any; children: ReactNode }) {
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
+    id: event.id,
+  })
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.5 : 1,
+    position: "relative" as const,
+    zIndex: isDragging ? 1 : "auto",
+  }
+
+  return (
+    <div ref={setNodeRef} style={style} className="group relative pl-8">
+      <button
+        type="button"
+        className="absolute left-0 top-0 bottom-0 flex w-8 cursor-move items-center justify-center text-muted-foreground hover:text-foreground"
+        aria-label={`Drag ${getEventTitleForSort(event)}`}
+        title="Drag to reorder"
+        {...attributes}
+        {...listeners}
+      >
+        <GripVertical size={16} />
+      </button>
+      {children}
+    </div>
+  )
+}
+
+function OrderValueInput({
+  event,
+  onSave,
+}: {
+  event: any
+  onSave: (id: string, orderValue: number) => void
+}) {
+  const currentOrderValue = getEventOrderValue(event)
+  const [value, setValue] = useState(String(currentOrderValue))
+  const [isInvalid, setIsInvalid] = useState(false)
+
+  useEffect(() => {
+    setValue(String(currentOrderValue))
+    setIsInvalid(false)
+  }, [currentOrderValue])
+
+  const handleBlur = () => {
+    const trimmed = value.trim()
+    if (!trimmed) {
+      setIsInvalid(true)
+      setValue(String(currentOrderValue))
+      return
+    }
+
+    const parsed = Number(trimmed)
+    if (!Number.isFinite(parsed)) {
+      setIsInvalid(true)
+      setValue(String(currentOrderValue))
+      return
+    }
+
+    setIsInvalid(false)
+    if (parsed !== currentOrderValue) {
+      onSave(event.id, parsed)
+    }
+  }
+
+  return (
+    <Input
+      type="number"
+      step="any"
+      value={value}
+      onChange={(event) => {
+        setValue(event.target.value)
+        setIsInvalid(false)
+      }}
+      onBlur={handleBlur}
+      onKeyDown={(event) => {
+        if (event.key === "Enter") {
+          event.currentTarget.blur()
+        }
+        if (event.key === "Escape") {
+          setValue(String(currentOrderValue))
+          setIsInvalid(false)
+          event.currentTarget.blur()
+        }
+      }}
+      aria-label={`Order value for ${getEventTitleForSort(event)}`}
+      aria-invalid={isInvalid}
+      className={`h-8 w-24 text-right ${isInvalid ? "border-destructive focus-visible:ring-destructive" : ""}`}
+    />
+  )
+}
+
 /**
  * EventCard component
  * Displays a single event with archive/restore and delete options
@@ -381,6 +618,7 @@ function EventCard({
   onEdit,
   onDelete,
   onReset,
+  onOrderValueSave,
   overrideInfo,
   tagConfig,
 }: {
@@ -390,6 +628,7 @@ function EventCard({
   onEdit: (event: any) => void
   onDelete: (id: string, e: MouseEvent) => void
   onReset?: (event: any) => void
+  onOrderValueSave: (id: string, orderValue: number) => void
   overrideInfo?: DiffInfo
   tagConfig?: Record<string, unknown> | null
 }) {
@@ -419,7 +658,7 @@ function EventCard({
             <div className="flex justify-between items-start">
               <div>
                 <div className="flex items-center gap-2">
-                  <h4 className="font-medium">{getEventTitle(event)}</h4>
+                  <h4 className="font-medium">{getEventTitleForSort(event)}</h4>
                   {hasOverrides && (
                     <TooltipProvider>
                       <Tooltip>
@@ -445,12 +684,10 @@ function EventCard({
                     <Globe
                       size={14}
                       className={`text-muted-foreground ${isWebsiteEnabled(event) ? "opacity-100" : "opacity-20"}`}
-                      title={isWebsiteEnabled(event) ? "Included on website" : "Hidden from website"}
                     />
                     <Mail
                       size={14}
                       className={`text-muted-foreground ${isBriefingEnabled(event) ? "opacity-100" : "opacity-20"}`}
-                      title={isBriefingEnabled(event) ? "Included in briefing" : "Excluded from briefing"}
                     />
                   </div>
                 </div>
@@ -463,7 +700,8 @@ function EventCard({
               </div>
 
               {/* Action Buttons */}
-              <div className="flex gap-1 -mb-4">
+              <div className="flex items-center gap-2 -mb-4">
+                <OrderValueInput event={event} onSave={onOrderValueSave} />
                 <Button
                   variant="ghost"
                   size="icon"

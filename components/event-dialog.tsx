@@ -166,7 +166,6 @@ export function EventDialog({ event, open, onOpenChange, initialDay = "monday", 
       endTime: "",
       days: [...recurrenceDays],
       variations: {},
-      order: {},
       archived: false,
       recurrence: {
         type: "weeks",
@@ -196,7 +195,6 @@ export function EventDialog({ event, open, onOpenChange, initialDay = "monday", 
     endTime: "",
     days: [] as string[],
     variations: {} as Record<string, any>,
-    order: {} as Record<string, number>,
     archived: false, // Add the archived property
     recurrence: null,
   })

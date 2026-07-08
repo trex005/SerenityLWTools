@@ -397,6 +397,16 @@ const cloneIdMapFromArray = (items: any[]): Record<string, any> => {
   return map
 }
 
+const stripLegacyEventOrder = (event: any): any => {
+  const copy = cloneJson(event)
+  delete copy.order
+  return copy
+}
+
+const hasExplicitOrderValue = (event: any): boolean => {
+  return Boolean(event && "order_value" in event && Number.isFinite(event.order_value))
+}
+
 const cloneIdMap = (items: Record<string, any>): Record<string, any> => {
   const map: Record<string, any> = {}
   for (const id of Object.keys(items || {})) {
@@ -810,10 +820,10 @@ export const buildChildDeltaFiles = async (
   // Load leaf layer to capture tag-specific config including parent
   const leafLayer = await getLayer(resolvedTag)
 
-  const parentEventsById = arrayToIdMap(parentComposed.events || [])
+  const parentEventsById = arrayToIdMap((parentComposed.events || []).map(stripLegacyEventOrder))
   const parentTipsById = arrayToIdMap(parentComposed.tips || [])
 
-  const childEventsById = arrayToIdMap(effectiveEvents || [])
+  const childEventsById = arrayToIdMap((effectiveEvents || []).map(stripLegacyEventOrder))
   const childTipsById = arrayToIdMap(effectiveTips || [])
 
   const eventDeltas: any[] = []
@@ -826,8 +836,11 @@ export const buildChildDeltaFiles = async (
     const base = parentEventsById[id]
     const edited = childEventsById[id]
     const delta = computeDelta(base, edited)
-    if (delta && typeof delta === "object") {
-      const out = { id, ...(delta as any) }
+    if ((delta && typeof delta === "object") || hasExplicitOrderValue(edited)) {
+      const out = delta && typeof delta === "object" ? { id, ...(delta as any) } : { id }
+      if (hasExplicitOrderValue(edited)) {
+        out.order_value = edited.order_value
+      }
       eventDeltas.push(out)
     }
   }

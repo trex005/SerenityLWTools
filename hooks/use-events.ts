@@ -24,12 +24,18 @@ import {
 } from "@/lib/override-helpers"
 
 // Define the event interface
-interface Event {
+export interface Event {
   id: string
   title: string
   days: string[]
   startTime: string
   endTime: string
+  archived?: boolean
+  isAllDay?: boolean
+  order_value?: number
+  order?: Record<string, number>
+  dateOverrides?: Record<string, Partial<Event> & { hidden?: boolean }>
+  dateIncludeOverrides?: Record<string, boolean>
   description?: string
   color?: string
   remindTomorrow?: boolean
@@ -51,6 +57,8 @@ interface Event {
       startTime?: string
       endTime?: string
       description?: string
+      isAllDay?: boolean
+      hidden?: boolean
     }
   >
 }
@@ -76,7 +84,7 @@ interface EventsState {
   initializeFromConfig: (forceRefresh?: boolean) => Promise<void>
   archiveEvent: (id: string) => void // Archive an event by ID
   restoreEvent: (id: string) => void // Restore an event from archive by ID
-  reorderEvents: (events: Event[], day: string) => void // Reorder events for a specific day
+  updateEventOrderValue: (id: string, orderValue: number) => void // Update global event ordering
   clearEvents: () => void // Clear all events
   deleteAllEvents: () => void // Delete all events without reinitialization
   resetToDefaults: () => void // Reset to default data
@@ -278,31 +286,25 @@ export const useEvents = create<EventsState>()(
       },
 
       /**
-       * Reorder events for a specific day
-       * Updates the order property for each event
+       * Update an event's global order value.
        */
-      reorderEvents: (updatedEvents, day) => {
+      updateEventOrderValue: (id, orderValue) => {
         set((state) => {
-          // Create a map of event IDs to their new order values
-          const orderMap: Record<string, number> = {}
-          updatedEvents.forEach((event, index) => {
-            orderMap[event.id] = index
-          })
-
           const changedEvents: Event[] = []
           const newEvents = state.events.map((event) => {
-            if (orderMap[event.id] === undefined) return event
-            const nextOrder = { ...(event.order || {}) }
-            nextOrder[day] = orderMap[event.id]
-            const updatedEvent = { ...event, order: nextOrder }
+            if (event.id !== id) return event
+            const updatedEvent = { ...event, order_value: orderValue }
             changedEvents.push(updatedEvent)
             return updatedEvent
           })
 
           const filtered = applySearchFilter(newEvents, state.searchTerm)
-          const overridesById = upsertOverrideMap(state.baseEventsMap, state.overridesById, changedEvents)
-          const affectedIds = new Set(changedEvents.map((event) => event.id))
-          const deletedEventIds = state.deletedEventIds.filter((id) => !affectedIds.has(id))
+          const overridesById = changedEvents.length > 0
+            ? upsertOverrideMap(state.baseEventsMap, state.overridesById, changedEvents)
+            : state.overridesById
+          const deletedEventIds = changedEvents.length > 0
+            ? ensureIdRemoved(state.deletedEventIds, changedEvents[0].id)
+            : state.deletedEventIds
 
           return {
             events: newEvents,

@@ -12,15 +12,15 @@ import { useState } from "react"
 import { EventDialog } from "@/components/event-dialog"
 
 interface AddEventButtonProps {
-  day: string // The day for which to create an event
-  date: Date // The specific date for the event
+  day?: string // The day for which to create an event
+  date?: Date // The specific date for the event
 }
 
 /**
  * AddEventButton component
  * Renders a button that, when clicked, opens the event dialog with the specified day pre-selected
  */
-export function AddEventButton({ day, date }: AddEventButtonProps) {
+export function AddEventButton({ day = "monday", date }: AddEventButtonProps) {
   // State to control dialog visibility
   const [showDialog, setShowDialog] = useState(false)
 

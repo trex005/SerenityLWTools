@@ -202,6 +202,8 @@ export function AdminPanel() {
         delete eventCopy.includeInExport
       }
 
+      delete eventCopy.order
+
       // Ensure empty end times are explicitly set to empty strings
       if (!eventCopy.endTime) {
         eventCopy.endTime = ""
