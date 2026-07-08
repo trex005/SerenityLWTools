@@ -1,5 +1,5 @@
 {
-  "updated": "2026-07-07T22:49:31-02:00",
+  "updated": "2026-07-08T01:08:44-02:00",
   "events": [
     {
       "id": "ev-3",
@@ -18,7 +18,6 @@
         "friday",
         "saturday"
       ],
-      "order": {},
       "recurrence": {
         "type": "days",
         "onPeriods": 1,
@@ -52,9 +51,6 @@
         "sunday"
       ],
       "variations": {},
-      "order": {
-        "sunday": 4
-      },
       "recurrence": {
         "type": "weeks",
         "daysOfWeek": [
@@ -67,7 +63,8 @@
         "startOffset": -283
       },
       "remindEndOfDay": true,
-      "includeOnWebsite": true
+      "includeOnWebsite": true,
+      "order_value": 6
     },
     {
       "id": "ev-6",
@@ -82,11 +79,6 @@
         "tuesday"
       ],
       "variations": {},
-      "order": {
-        "monday": 3,
-        "wednesday": 1,
-        "tuesday": 4
-      },
       "recurrence": {
         "type": "weeks",
         "onPeriods": 1,
@@ -103,7 +95,8 @@
       "remindEndOfDay": false,
       "includeOnWebsite": true,
       "includeInBriefing": true,
-      "remindTomorrow": true
+      "remindTomorrow": true,
+      "order_value": 7
     },
     {
       "id": "ev-7",
@@ -117,7 +110,6 @@
         "friday"
       ],
       "variations": {},
-      "order": {},
       "recurrence": {
         "type": "weeks",
         "onPeriods": 1,
@@ -146,12 +138,6 @@
         "sunday"
       ],
       "variations": {},
-      "order": {
-        "sunday": 0,
-        "monday": 1,
-        "friday": 3,
-        "thursday": 2
-      },
       "recurrence": {
         "type": "weeks",
         "onPeriods": 1,
@@ -165,7 +151,8 @@
       },
       "remindTomorrow": true,
       "includeOnWebsite": true,
-      "includeInBriefing": true
+      "includeInBriefing": true,
+      "order_value": -1
     },
     {
       "id": "ev-11",
@@ -179,9 +166,6 @@
         "sunday"
       ],
       "variations": {},
-      "order": {
-        "sunday": 0
-      },
       "recurrence": {
         "type": "weeks",
         "daysOfWeek": [
@@ -196,7 +180,8 @@
       },
       "remindTomorrow": true,
       "includeOnWebsite": true,
-      "includeInBriefing": true
+      "includeInBriefing": true,
+      "order_value": -1
     },
     {
       "id": "ev-13",
@@ -210,9 +195,6 @@
         "monday"
       ],
       "variations": {},
-      "order": {
-        "monday": 0
-      },
       "recurrence": {
         "type": "weeks",
         "daysOfWeek": [
@@ -227,7 +209,8 @@
       },
       "includeOnWebsite": true,
       "remindTomorrow": true,
-      "includeInBriefing": true
+      "includeInBriefing": true,
+      "order_value": -1
     },
     {
       "id": "ev-16",
@@ -241,9 +224,6 @@
         "thursday"
       ],
       "variations": {},
-      "order": {
-        "thursday": 0
-      },
       "recurrence": {
         "type": "weeks",
         "daysOfWeek": [
@@ -257,7 +237,8 @@
       },
       "includeOnWebsite": true,
       "remindTomorrow": true,
-      "includeInBriefing": true
+      "includeInBriefing": true,
+      "order_value": -1
     },
     {
       "id": "ev-17",
@@ -271,9 +252,6 @@
         "friday"
       ],
       "variations": {},
-      "order": {
-        "friday": 0
-      },
       "recurrence": {
         "type": "weeks",
         "daysOfWeek": [
@@ -288,7 +266,8 @@
       },
       "includeOnWebsite": true,
       "remindTomorrow": true,
-      "includeInBriefing": true
+      "includeInBriefing": true,
+      "order_value": -1
     },
     {
       "id": "ev-18",
@@ -302,10 +281,6 @@
         "saturday"
       ],
       "variations": {},
-      "order": {
-        "friday": 2,
-        "saturday": 0
-      },
       "recurrence": {
         "type": "weeks",
         "daysOfWeek": [
@@ -320,7 +295,8 @@
       },
       "includeOnWebsite": true,
       "remindTomorrow": true,
-      "includeInBriefing": true
+      "includeInBriefing": true,
+      "order_value": -1
     },
     {
       "id": "ev-1739555974133",
@@ -334,7 +310,6 @@
         "saturday"
       ],
       "variations": {},
-      "order": {},
       "recurrence": {
         "type": "weeks",
         "daysOfWeek": [
@@ -366,11 +341,6 @@
         "sunday"
       ],
       "variations": {},
-      "order": {
-        "sunday": 4,
-        "thursday": 6,
-        "tuesday": 2
-      },
       "recurrence": {
         "type": "weeks",
         "daysOfWeek": [
@@ -401,11 +371,6 @@
         "friday"
       ],
       "variations": {},
-      "order": {
-        "monday": 4,
-        "wednesday": 5,
-        "friday": 4
-      },
       "recurrence": {
         "type": "weeks",
         "daysOfWeek": [
@@ -436,11 +401,6 @@
         "friday"
       ],
       "variations": {},
-      "order": {
-        "wednesday": 5,
-        "thursday": 4,
-        "friday": 3
-      },
       "recurrence": {
         "type": "weeks",
         "daysOfWeek": [
@@ -457,7 +417,8 @@
       },
       "includeOnWebsite": true,
       "includeInBriefing": true,
-      "remindTomorrow": true
+      "remindTomorrow": true,
+      "order_value": 1
     },
     {
       "id": "ev-1739556818565",
@@ -471,9 +432,6 @@
         "sunday"
       ],
       "variations": {},
-      "order": {
-        "sunday": 2
-      },
       "recurrence": {
         "type": "weeks",
         "onPeriods": 1,
@@ -489,7 +447,8 @@
       "remindEndOfDay": true,
       "remindTomorrow": true,
       "includeOnWebsite": true,
-      "includeInBriefing": true
+      "includeInBriefing": true,
+      "order_value": 1
     },
     {
       "id": "ev-1739556987954",
@@ -505,11 +464,6 @@
         "friday"
       ],
       "variations": {},
-      "order": {
-        "wednesday": 2,
-        "friday": 5,
-        "thursday": 3
-      },
       "recurrence": {
         "type": "weeks",
         "daysOfWeek": [
@@ -525,7 +479,8 @@
       },
       "remindTomorrow": true,
       "includeOnWebsite": true,
-      "includeInBriefing": true
+      "includeInBriefing": true,
+      "order_value": 1
     },
     {
       "id": "ev-1739558845321",
@@ -539,10 +494,6 @@
         "monday"
       ],
       "variations": {},
-      "order": {
-        "saturday": 2,
-        "monday": 5
-      },
       "recurrence": {
         "type": "weeks",
         "daysOfWeek": [
@@ -554,7 +505,8 @@
         "startTag": "main",
         "startOffset": -283
       },
-      "includeOnWebsite": true
+      "includeOnWebsite": true,
+      "order_value": 2
     },
     {
       "id": "ev-1740123329685",
@@ -568,7 +520,6 @@
         "friday"
       ],
       "variations": {},
-      "order": {},
       "recurrence": {
         "type": "weeks",
         "onPeriods": 1,
@@ -596,9 +547,6 @@
         "sunday"
       ],
       "variations": {},
-      "order": {
-        "sunday": 3
-      },
       "recurrence": {
         "type": "weeks",
         "onPeriods": 1,
@@ -611,7 +559,8 @@
         "startOffset": 332
       },
       "remindEndOfDay": true,
-      "includeOnWebsite": true
+      "includeOnWebsite": true,
+      "order_value": 5
     },
     {
       "id": "87a66ed0-70ea-4dfc-8519-ced7ef52be6e",
@@ -630,7 +579,6 @@
         "saturday",
         "wednesday"
       ],
-      "order": {},
       "recurrence": {
         "type": "days",
         "daysOfWeek": [
@@ -670,15 +618,6 @@
         "sunday"
       ],
       "variations": {},
-      "order": {
-        "wednesday": 3,
-        "saturday": 3,
-        "friday": 4,
-        "thursday": 3,
-        "monday": 6,
-        "tuesday": 3,
-        "sunday": 7
-      },
       "recurrence": {
         "type": "weeks",
         "onPeriods": 1,
@@ -699,7 +638,8 @@
       "remindEndOfDay": true,
       "includeInBriefing": true,
       "includeOnWebsite": true,
-      "remindTomorrow": true
+      "remindTomorrow": true,
+      "order_value": 1
     },
     {
       "id": "5c1804c1-eae9-48f9-a94d-495eea6eb156",
@@ -719,15 +659,6 @@
         "saturday"
       ],
       "variations": {},
-      "order": {
-        "monday": 5,
-        "saturday": 6,
-        "tuesday": 8,
-        "sunday": 5,
-        "wednesday": 7,
-        "thursday": 8,
-        "friday": 7
-      },
       "recurrence": {
         "type": "weeks",
         "onPeriods": 2,
@@ -746,7 +677,8 @@
         "startOffset": 347
       },
       "remindEndOfDay": true,
-      "includeOnWebsite": true
+      "includeOnWebsite": true,
+      "order_value": 1
     },
     {
       "id": "5aec60d0-4d5f-4299-8f91-cc8590471e7b",
@@ -761,10 +693,6 @@
         "thursday"
       ],
       "variations": {},
-      "order": {
-        "thursday": 5,
-        "monday": 7
-      },
       "recurrence": {
         "type": "weeks",
         "daysOfWeek": [
@@ -780,7 +708,8 @@
       },
       "includeOnWebsite": true,
       "includeInBriefing": true,
-      "remindEndOfDay": false
+      "remindEndOfDay": false,
+      "order_value": 8
     },
     {
       "id": "6f0f73b6-24e7-491d-b6fa-39d73bb8711e",
@@ -795,10 +724,6 @@
         "friday"
       ],
       "variations": {},
-      "order": {
-        "friday": 5,
-        "tuesday": 5
-      },
       "recurrence": {
         "type": "weeks",
         "daysOfWeek": [
@@ -813,7 +738,8 @@
         "startDate": "2025-01-05"
       },
       "includeOnWebsite": true,
-      "includeInBriefing": true
+      "includeInBriefing": true,
+      "order_value": 8
     },
     {
       "id": "5178bd44-1659-40df-9aa7-c76cf22ee563",
@@ -828,10 +754,6 @@
         "saturday"
       ],
       "variations": {},
-      "order": {
-        "saturday": 4,
-        "wednesday": 6
-      },
       "recurrence": {
         "type": "weeks",
         "daysOfWeek": [
@@ -846,7 +768,8 @@
         "startDate": "2025-01-05"
       },
       "includeOnWebsite": true,
-      "includeInBriefing": true
+      "includeInBriefing": true,
+      "order_value": 8
     },
     {
       "id": "dfb867b9-9ffc-4a60-baf2-bd89a1d18681",
@@ -866,14 +789,6 @@
         "saturday"
       ],
       "variations": {},
-      "order": {
-        "monday": 8,
-        "sunday": 8,
-        "wednesday": 10,
-        "saturday": 7,
-        "tuesday": 6,
-        "friday": 6
-      },
       "recurrence": {
         "type": "days",
         "daysOfWeek": [
@@ -892,7 +807,8 @@
         "startOffset": 155
       },
       "dateIncludeOverrides": {},
-      "includeOnWebsite": true
+      "includeOnWebsite": true,
+      "order_value": 9
     },
     {
       "id": "7662a10a-144e-4dc5-8ae7-4c8af78b9e12",
@@ -912,14 +828,6 @@
         "saturday"
       ],
       "variations": {},
-      "order": {
-        "saturday": 5,
-        "monday": 7,
-        "tuesday": 8,
-        "thursday": 10,
-        "sunday": 7,
-        "wednesday": 7
-      },
       "recurrence": {
         "type": "days",
         "daysOfWeek": [
@@ -938,7 +846,8 @@
         "startOffset": 153
       },
       "dateIncludeOverrides": {},
-      "includeOnWebsite": true
+      "includeOnWebsite": true,
+      "order_value": 9
     },
     {
       "id": "e5263084-2b0f-4289-9ed1-ede774a62176",
@@ -958,14 +867,6 @@
         "saturday"
       ],
       "variations": {},
-      "order": {
-        "monday": 8,
-        "saturday": 6,
-        "tuesday": 9,
-        "friday": 9,
-        "thursday": 7,
-        "sunday": 9
-      },
       "recurrence": {
         "type": "days",
         "daysOfWeek": [
@@ -986,7 +887,8 @@
       "dateIncludeOverrides": {
         "2025-07-05": true
       },
-      "includeOnWebsite": true
+      "includeOnWebsite": true,
+      "order_value": 9
     },
     {
       "id": "41b7230f-eac7-478d-8f95-2955050d1da0",
@@ -1004,11 +906,6 @@
         "saturday"
       ],
       "variations": {},
-      "order": {
-        "tuesday": 7,
-        "wednesday": 9,
-        "friday": 9
-      },
       "recurrence": {
         "type": "weeks",
         "daysOfWeek": [
@@ -1028,7 +925,8 @@
         "2025-07-08": false
       },
       "remindEndOfDay": true,
-      "includeOnWebsite": true
+      "includeOnWebsite": true,
+      "order_value": 5
     },
     {
       "id": "ff6b9bd0-e2e6-49fd-9fa6-7cea574f8d47",
@@ -1046,9 +944,6 @@
         "saturday"
       ],
       "variations": {},
-      "order": {
-        "tuesday": 2
-      },
       "recurrence": {
         "type": "weeks",
         "onPeriods": 1,
@@ -1086,12 +981,6 @@
         "sunday"
       ],
       "variations": {},
-      "order": {
-        "saturday": 6,
-        "friday": 8,
-        "sunday": 6,
-        "tuesday": 5
-      },
       "recurrence": {
         "type": "weeks",
         "onPeriods": 1,
@@ -1124,9 +1013,6 @@
         "thursday"
       ],
       "variations": {},
-      "order": {
-        "thursday": 6
-      },
       "recurrence": {
         "type": "weeks",
         "daysOfWeek": [
@@ -1141,7 +1027,8 @@
       },
       "includeOnWebsite": true,
       "includeInBriefing": true,
-      "remindTomorrow": true
+      "remindTomorrow": true,
+      "order_value": 1
     },
     {
       "id": "5831a6ec-244d-40d2-88dc-81a7173ecffd",
@@ -1158,12 +1045,6 @@
         "friday"
       ],
       "variations": {},
-      "order": {
-        "sunday": 4,
-        "monday": 2,
-        "thursday": 3,
-        "friday": 0
-      },
       "recurrence": {
         "type": "weeks",
         "daysOfWeek": [
@@ -1183,7 +1064,8 @@
         "2025-07-11": false
       },
       "includeOnWebsite": true,
-      "remindTomorrow": true
+      "remindTomorrow": true,
+      "order_value": -1
     },
     {
       "id": "89b95f35-ae1a-485b-8aee-f012c758fa7b",
@@ -1197,7 +1079,6 @@
         "friday"
       ],
       "variations": {},
-      "order": {},
       "recurrence": {
         "type": "weeks",
         "onPeriods": 1,
@@ -1210,7 +1091,8 @@
       },
       "includeOnWebsite": true,
       "remindTomorrow": true,
-      "includeInBriefing": true
+      "includeInBriefing": true,
+      "order_value": -1
     },
     {
       "id": "4af5277e-a46b-4407-94cc-66452e907f1d",
@@ -1224,7 +1106,6 @@
         "thursday"
       ],
       "variations": {},
-      "order": {},
       "recurrence": {
         "type": "weeks",
         "daysOfWeek": [
@@ -1254,9 +1135,6 @@
         "sunday"
       ],
       "variations": {},
-      "order": {
-        "sunday": 6
-      },
       "recurrence": {
         "type": "weeks",
         "onPeriods": 1,
@@ -1270,7 +1148,8 @@
         "startDate": "2025-01-05"
       },
       "includeInBriefing": true,
-      "includeOnWebsite": true
+      "includeOnWebsite": true,
+      "order_value": 8
     },
     {
       "id": "fc3ef9fe-0e81-4a26-b693-448794954e61",
@@ -1286,15 +1165,6 @@
         "wednesday"
       ],
       "variations": {},
-      "order": {
-        "monday": 1,
-        "tuesday": 1,
-        "wednesday": 4,
-        "thursday": 1,
-        "friday": 1,
-        "saturday": 1,
-        "sunday": 1
-      },
       "recurrence": {
         "type": "days",
         "onPeriods": 1,
@@ -1308,7 +1178,8 @@
         "startDate": "2025-01-05"
       },
       "includeInBriefing": true,
-      "includeOnWebsite": true
+      "includeOnWebsite": true,
+      "order_value": 7
     },
     {
       "id": "6ea962c6-2e91-4a52-a670-eb4cd3c7d328",
@@ -1324,7 +1195,6 @@
         "sunday"
       ],
       "variations": {},
-      "order": {},
       "recurrence": {
         "type": "weeks",
         "onPeriods": 1,
@@ -1352,9 +1222,6 @@
         "sunday"
       ],
       "variations": {},
-      "order": {
-        "sunday": 8
-      },
       "recurrence": {
         "type": "weeks",
         "onPeriods": 1,
@@ -1370,7 +1237,8 @@
         "2025-09-21": false
       },
       "includeInBriefing": false,
-      "includeOnWebsite": false
+      "includeOnWebsite": false,
+      "order_value": 10
     },
     {
       "id": "18acf2e1-218e-46c2-a9e4-3b21584523c6",
@@ -1393,9 +1261,6 @@
         "saturday"
       ],
       "variations": {},
-      "order": {
-        "monday": 8
-      },
       "archived": true,
       "recurrence": {
         "type": "weeks",
@@ -1430,9 +1295,6 @@
         "monday"
       ],
       "variations": {},
-      "order": {
-        "monday": 9
-      },
       "archived": false,
       "recurrence": {
         "type": "weeks",
@@ -1444,7 +1306,8 @@
         "interval": 1,
         "startTag": "main",
         "startOffset": -284
-      }
+      },
+      "order_value": 10
     },
     {
       "id": "151805d5-5c6a-4cc0-a62b-9ab90c54d5a0",
@@ -1461,9 +1324,6 @@
         "tuesday"
       ],
       "variations": {},
-      "order": {
-        "tuesday": 7
-      },
       "archived": false,
       "recurrence": {
         "type": "weeks",
@@ -1475,7 +1335,8 @@
         "interval": 1,
         "startTag": "main",
         "startOffset": -277
-      }
+      },
+      "order_value": 10
     },
     {
       "id": "04434cb7-53c9-4aa5-b7a7-0dac1f6239c1",
@@ -1492,7 +1353,6 @@
         "thursday"
       ],
       "variations": {},
-      "order": {},
       "archived": false,
       "recurrence": {
         "type": "weeks",
@@ -1504,7 +1364,8 @@
         "interval": 1,
         "startTag": "main",
         "startOffset": -284
-      }
+      },
+      "order_value": 6
     },
     {
       "id": "1ae7c08b-29e3-4ef3-a00f-ccc19f155ddb",
@@ -1527,7 +1388,6 @@
         "saturday"
       ],
       "variations": {},
-      "order": {},
       "archived": true,
       "recurrence": {
         "type": "days",
@@ -1562,7 +1422,6 @@
         "friday"
       ],
       "variations": {},
-      "order": {},
       "archived": true,
       "recurrence": {
         "type": "weeks",
@@ -1591,7 +1450,6 @@
         "thursday"
       ],
       "variations": {},
-      "order": {},
       "archived": false,
       "recurrence": {
         "type": "weeks",
@@ -1621,10 +1479,6 @@
         "saturday"
       ],
       "variations": {},
-      "order": {
-        "monday": 4,
-        "wednesday": 4
-      },
       "archived": true,
       "recurrence": {
         "type": "weeks",
@@ -1656,7 +1510,6 @@
         "friday"
       ],
       "variations": {},
-      "order": {},
       "archived": true,
       "recurrence": {
         "type": "weeks",
@@ -1684,7 +1537,6 @@
         "saturday"
       ],
       "variations": {},
-      "order": {},
       "archived": true,
       "recurrence": {
         "type": "weeks",
@@ -1714,10 +1566,6 @@
         "monday"
       ],
       "variations": {},
-      "order": {
-        "monday": 11,
-        "tuesday": 9
-      },
       "archived": true,
       "recurrence": {
         "type": "weeks",
@@ -1748,9 +1596,6 @@
         "thursday"
       ],
       "variations": {},
-      "order": {
-        "monday": 13
-      },
       "archived": true,
       "recurrence": {
         "type": "weeks",
@@ -1789,15 +1634,6 @@
         "saturday"
       ],
       "variations": {},
-      "order": {
-        "monday": 1,
-        "saturday": 0,
-        "sunday": 0,
-        "tuesday": 1,
-        "wednesday": 0,
-        "thursday": 0,
-        "friday": 0
-      },
       "archived": true,
       "recurrence": {
         "type": "days",
@@ -1848,7 +1684,6 @@
         "saturday"
       ],
       "variations": {},
-      "order": {},
       "archived": false,
       "recurrence": {
         "type": "weeks",
@@ -1880,7 +1715,6 @@
         "saturday"
       ],
       "variations": {},
-      "order": {},
       "archived": false,
       "recurrence": {
         "type": "weeks",
@@ -1913,7 +1747,6 @@
         "friday"
       ],
       "variations": {},
-      "order": {},
       "archived": true,
       "recurrence": {
         "type": "weeks",
@@ -1927,7 +1760,8 @@
         "startTag": "main",
         "startOffset": 224
       },
-      "includeOnWebsite": true
+      "includeOnWebsite": true,
+      "order_value": 4
     },
     {
       "id": "1f65fd3a-b31b-4d67-9d46-0a53606e79a4",
@@ -1941,7 +1775,6 @@
         "saturday"
       ],
       "variations": {},
-      "order": {},
       "archived": true,
       "recurrence": {
         "type": "weeks",
@@ -1968,7 +1801,6 @@
         "friday"
       ],
       "variations": {},
-      "order": {},
       "archived": false,
       "recurrence": {
         "type": "weeks",
@@ -1997,7 +1829,6 @@
         "friday"
       ],
       "variations": {},
-      "order": {},
       "archived": true,
       "recurrence": {
         "type": "weeks",
@@ -2029,7 +1860,6 @@
         "saturday"
       ],
       "variations": {},
-      "order": {},
       "archived": true,
       "recurrence": {
         "type": "weeks",
@@ -2058,7 +1888,6 @@
         "thursday"
       ],
       "variations": {},
-      "order": {},
       "archived": true,
       "recurrence": {
         "type": "weeks",
@@ -2092,14 +1921,6 @@
         "saturday"
       ],
       "variations": {},
-      "order": {
-        "tuesday": 2,
-        "wednesday": 2,
-        "thursday": 2,
-        "friday": 2,
-        "saturday": 2,
-        "sunday": 2
-      },
       "archived": false,
       "recurrence": {
         "type": "weeks",
@@ -2120,7 +1941,8 @@
         "endOffset": 661
       },
       "includeOnWebsite": true,
-      "includeInBriefing": true
+      "includeInBriefing": true,
+      "order_value": 1
     },
     {
       "id": "516e99c1-b08f-49fb-afa4-825b76080229",
@@ -2137,7 +1959,6 @@
         "friday"
       ],
       "variations": {},
-      "order": {},
       "archived": false,
       "recurrence": {
         "type": "weeks",
@@ -2148,7 +1969,8 @@
         ],
         "startTag": "main",
         "startOffset": 416
-      }
+      },
+      "order_value": -1
     },
     {
       "id": "f948a0fc-4ef5-4ba0-8458-8612c29a4537",
@@ -2166,10 +1988,6 @@
         "sunday"
       ],
       "variations": {},
-      "order": {
-        "sunday": 5,
-        "monday": 2
-      },
       "archived": false,
       "recurrence": {
         "type": "weeks",
@@ -2182,7 +2000,8 @@
         "startTag": "main",
         "startOffset": -283,
         "startDate": "2025-01-05"
-      }
+      },
+      "order_value": 7
     },
     {
       "id": "183e0c1e-249f-47f6-8324-b155e4efb389",
@@ -2199,9 +2018,6 @@
         "monday"
       ],
       "variations": {},
-      "order": {
-        "monday": 4
-      },
       "archived": false,
       "recurrence": {
         "type": "weeks",
@@ -2212,7 +2028,8 @@
         ],
         "startTag": "main",
         "startOffset": -283
-      }
+      },
+      "order_value": 7
     },
     {
       "id": "63321d8e-d4e1-48cf-bdf8-69b8ae9c4599",
@@ -2229,9 +2046,6 @@
         "tuesday"
       ],
       "variations": {},
-      "order": {
-        "tuesday": 0
-      },
       "archived": false,
       "recurrence": {
         "type": "weeks",
@@ -2243,7 +2057,8 @@
         "startDate": "2026-07-07",
         "startTag": "main",
         "startOffset": -4
-      }
+      },
+      "order_value": -1
     },
     {
       "id": "ad8755ba-ee0d-4cb3-8c3b-8aa5aa22e3f9",
@@ -2260,9 +2075,6 @@
         "wednesday"
       ],
       "variations": {},
-      "order": {
-        "wednesday": 0
-      },
       "archived": false,
       "recurrence": {
         "type": "weeks",
@@ -2274,7 +2086,8 @@
         "startDate": "2026-07-08",
         "startTag": "main",
         "startOffset": -4
-      }
+      },
+      "order_value": -1
     },
     {
       "id": "5d775721-b174-405a-9f95-1045c52954c4",
@@ -2297,7 +2110,6 @@
         "saturday"
       ],
       "variations": {},
-      "order": {},
       "archived": false,
       "recurrence": {
         "type": "days",
@@ -2315,7 +2127,8 @@
         "startDate": "2026-07-07",
         "startTag": "main",
         "startOffset": 631
-      }
+      },
+      "order_value": 2
     },
     {
       "id": "3d376821-2591-42af-a6e5-86c5ac854d25",
@@ -2338,15 +2151,6 @@
         "saturday"
       ],
       "variations": {},
-      "order": {
-        "tuesday": 1,
-        "wednesday": 1,
-        "thursday": 1,
-        "friday": 1,
-        "saturday": 1,
-        "sunday": 1,
-        "monday": 1
-      },
       "archived": true,
       "recurrence": {
         "type": "days",
