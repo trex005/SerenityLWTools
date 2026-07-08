@@ -403,10 +403,6 @@ const stripLegacyEventOrder = (event: any): any => {
   return copy
 }
 
-const hasExplicitOrderValue = (event: any): boolean => {
-  return Boolean(event && "order_value" in event && Number.isFinite(event.order_value))
-}
-
 const cloneIdMap = (items: Record<string, any>): Record<string, any> => {
   const map: Record<string, any> = {}
   for (const id of Object.keys(items || {})) {
@@ -836,11 +832,8 @@ export const buildChildDeltaFiles = async (
     const base = parentEventsById[id]
     const edited = childEventsById[id]
     const delta = computeDelta(base, edited)
-    if ((delta && typeof delta === "object") || hasExplicitOrderValue(edited)) {
-      const out = delta && typeof delta === "object" ? { id, ...(delta as any) } : { id }
-      if (hasExplicitOrderValue(edited)) {
-        out.order_value = edited.order_value
-      }
+    if (delta && typeof delta === "object") {
+      const out = { id, ...(delta as any) }
       eventDeltas.push(out)
     }
   }
