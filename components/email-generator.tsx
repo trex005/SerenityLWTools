@@ -22,13 +22,11 @@ import {
   formatInAppTimezone,
   getAppToday,
   getEndOfAppDay,
-  getStartOfAppDay,
 } from "@/lib/date-utils"
 import { Copy, Check, RefreshCw } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
-import { shouldShowRecurringEvent } from "@/lib/recurrence-utils"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -42,20 +40,7 @@ import {
 import { Checkbox } from "@/components/ui/checkbox"
 import { scopedLocalStorage } from "@/lib/scoped-storage"
 import { matchesSearchTokens, tokenizeSearchTerm } from "@/lib/search-utils"
-import { compareEventsByOrderValue } from "@/lib/event-order"
-
-/**
- * Simple string hashing function to create a unique identifier for description content
- */
-const hashString = (str: string): string => {
-  let hash = 0
-  for (let i = 0; i < str.length; i++) {
-    const char = str.charCodeAt(i)
-    hash = (hash << 5) - hash + char
-    hash = hash & hash // Convert to 32bit integer
-  }
-  return hash.toString()
-}
+import { formatIndentedDescription, generateAgenda } from "@/lib/serenity-engine/reports/agenda"
 
 interface EmailGeneratorProps {
   initialDateRange?: [Date | undefined, Date | undefined]
@@ -119,232 +104,22 @@ export function EmailGenerator({ initialDateRange }: EmailGeneratorProps) {
   const rememberedDecision = scopedLocalStorage.getItem("regenerate-agenda-decision")
 
   /**
-   * Get day of week string (monday, tuesday, etc.) from a date
-   */
-  const getDayOfWeek = useCallback((date: Date) => {
-    const days = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"]
-    return days[date.getDay()]
-  }, [])
-
-  /**
    * Format description text with proper indentation for multi-line descriptions
    */
-  const formatDescription = useCallback((description: string): string => {
-    if (!description) return ""
-
-    // Split the description by newlines
-    const lines = description.split("\n")
-
-    // If there's only one line, return it as is
-    if (lines.length < 1) return description
-
-    // For multi-line descriptions, add two spaces to the beginning of each line after the first
-    return lines.map((line) => `  ${line}`).join("\n")
-  }, [])
-
-  // Add this helper function to get effective value for a property
-  const getEffectiveValue = useCallback((event: any, property: string, day: string, dateString: string) => {
-    // First check for date-specific override
-    if (
-      event.dateOverrides &&
-      event.dateOverrides[dateString] &&
-      event.dateOverrides[dateString][property] !== undefined
-    ) {
-      return event.dateOverrides[dateString][property]
-    }
-
-    // Then check for day-specific variation
-    if (event.variations && event.variations[day] && event.variations[day][property] !== undefined) {
-      return event.variations[day][property]
-    }
-
-    // Fall back to the main event property
-    return event[property]
-  }, [])
-
-  /**
-   * Check if an event should be included in the export for a specific date
-   */
-  const shouldIncludeEventForDate = useCallback((event: any, date: Date) => {
-    if (event.includeInBriefing === false) {
-      return false
-    }
-
-    const dateStr = formatInAppTimezone(date, "yyyy-MM-dd")
-    const dayOfWeek = getDayOfWeek(date)
-
-    if (event.dateOverrides?.[dateStr]?.hidden === true) {
-      return false
-    }
-
-    if (event.variations?.[dayOfWeek]?.hidden === true) {
-      return false
-    }
-
-    // Allow explicit per-date include/exclude overrides
-    if (event.dateIncludeOverrides && dateStr in event.dateIncludeOverrides) {
-      return event.dateIncludeOverrides[dateStr]
-    }
-
-    // If not explicitly excluded, include for briefing
-    return true
-  }, [getDayOfWeek])
-
-  /**
-   * Get dates for an event within a specified range
-   */
-  const getEventDatesInRange = useCallback((event: any, startDate: Date, endDate: Date) => {
-    const dates: Date[] = []
-    // Create a new date to avoid modifying the original
-    const currentDate = new Date(startDate.getTime())
-    const lastDate = new Date(endDate.getTime())
-
-    // Check each date in the range
-    while (currentDate <= lastDate) {
-      // Check if this event should be included for this date
-      if (shouldIncludeEventForDate(event, currentDate)) {
-        // Check if this event occurs on this day based on recurrence pattern
-        if (shouldShowRecurringEvent(event, currentDate, false, tagConfig ?? {})) {
-          // Clone the date to avoid reference issues
-          dates.push(new Date(currentDate.getTime()))
-        }
-      }
-
-      currentDate.setDate(currentDate.getDate() + 1)
-    }
-
-    return dates
-  }, [shouldIncludeEventForDate, tagConfig])
+  const formatDescription = useCallback(formatIndentedDescription, [])
 
   /**
    * Generate agenda content based on selected date range
    */
   const generateAgendaContent = useCallback((alsoUpdateEdited = false) => {
     if (!dateRange[0] || !dateRange[1]) return
-
-    const includedDescriptions = new Set<string>() // Track which descriptions have been included by content hash
-
-    // Get events for the selected date range
-    const filteredEvents = events.filter((event) => {
-      // Skip archived events
-      if (event.archived) return false
-
-      // Check if the event occurs on any day within the date range
-      const eventDates = getEventDatesInRange(event, dateRange[0]!, dateRange[1]!)
-      return eventDates.length > 0
-    })
-
-    // Generate email content
-    let content = ""
-
-    // Add date range header
-    content += `Schedule for ${formatInAppTimezone(dateRange[0]!, "MMMM d")} - ${formatInAppTimezone(dateRange[1]!, "MMMM d, yyyy")}\n\n`
-
-    // Create a new date to iterate through the range
-    const currentDate = new Date(dateRange[0]!.getTime())
-    const endDate = new Date(dateRange[1]!.getTime())
-
-    // Get current date in UTC-2 for "Today" and "Tomorrow" labels
-    const utcMinus2Today = getAppToday()
-    const utcMinus2Tomorrow = getStartOfAppDay(addAppDays(utcMinus2Today, 1))
-
-    // Iterate through each day in the range
-    while (currentDate <= endDate) {
-      const dateStr = formatInAppTimezone(currentDate, "yyyy-MM-dd")
-      const dayOfWeek = getDayOfWeek(currentDate)
-
-      // Get events for this specific date
-      const dateEvents = filteredEvents.filter((event) => {
-        return shouldShowRecurringEvent(event, currentDate, false, tagConfig ?? {}) && shouldIncludeEventForDate(event, currentDate)
-      })
-
-      // Only add the date if there are events for it
-      if (dateEvents.length > 0) {
-        // Add the date header with Today/Tomorrow prefix if applicable
-        let dateHeader = formatInAppTimezone(currentDate, "EEEE, MMMM d")
-
-        // Check if this date is today or tomorrow in UTC-2
-        if (
-          formatInAppTimezone(currentDate, "yyyy-MM-dd") === formatInAppTimezone(utcMinus2Today, "yyyy-MM-dd")
-        ) {
-          dateHeader = "Today: " + dateHeader
-        } else if (
-          formatInAppTimezone(currentDate, "yyyy-MM-dd") === formatInAppTimezone(utcMinus2Tomorrow, "yyyy-MM-dd")
-        ) {
-          dateHeader = "Tomorrow: " + dateHeader
-        }
-
-        content += `${dateHeader}\n`
-
-        // Sort events by time
-        const sortedEvents = [...dateEvents].sort((a, b) => {
-          // Get effective values for this specific date
-          const aIsAllDay = getEffectiveValue(a, "isAllDay", dayOfWeek, dateStr)
-          const bIsAllDay = getEffectiveValue(b, "isAllDay", dayOfWeek, dateStr)
-
-          // Timed events come before all-day events
-          if (!aIsAllDay && bIsAllDay) return -1
-          if (aIsAllDay && !bIsAllDay) return 1
-
-          // If both are timed, sort by start time
-          if (!aIsAllDay && !bIsAllDay) {
-            const aStartTime = getEffectiveValue(a, "startTime", dayOfWeek, dateStr) || "00:00"
-            const bStartTime = getEffectiveValue(b, "startTime", dayOfWeek, dateStr) || "00:00"
-            return aStartTime.localeCompare(bStartTime)
-          }
-
-          // If both are all-day events, sort by global order.
-          if (aIsAllDay && bIsAllDay) {
-            return compareEventsByOrderValue(a, b)
-          }
-
-          return 0
-        })
-
-        // Add each event
-        sortedEvents.forEach((event) => {
-          // Get effective values for this specific date
-          const isAllDay = getEffectiveValue(event, "isAllDay", dayOfWeek, dateStr)
-          const startTime = getEffectiveValue(event, "startTime", dayOfWeek, dateStr)
-          const endTime = getEffectiveValue(event, "endTime", dayOfWeek, dateStr)
-          const description = getEffectiveValue(event, "description", dayOfWeek, dateStr)
-
-          // Format time
-          let timeStr = ""
-          if (!isAllDay && startTime) {
-            timeStr += startTime
-            if (endTime) {
-              timeStr += ` - ${endTime}`
-            }
-            timeStr += ": "
-          }
-
-          // Add event title
-          content += `- ${timeStr}${event.title}`
-
-          // Add description with proper formatting on a new line, but only if this specific description hasn't been included
-          if (description) {
-            // Create a unique key for this description (event ID + description content hash)
-            const descriptionKey = `${event.id}-${hashString(description)}`
-
-            if (!includedDescriptions.has(descriptionKey)) {
-              const formattedDescription = formatDescription(description)
-              content += `\n${formattedDescription}`
-
-              // Mark this specific description as included
-              includedDescriptions.add(descriptionKey)
-            }
-          }
-
-          content += "\n"
-        })
-
-        content += "\n"
-      }
-
-      // Move to the next day
-      currentDate.setDate(currentDate.getDate() + 1)
-    }
+    const content = generateAgenda({
+      events,
+      tagConfig: tagConfig ?? {},
+      startDate: formatInAppTimezone(dateRange[0], "yyyy-MM-dd"),
+      endDate: formatInAppTimezone(dateRange[1], "yyyy-MM-dd"),
+      referenceDate: formatInAppTimezone(getAppToday(), "yyyy-MM-dd"),
+    }).content
 
     setAgendaContent(content)
 
@@ -354,7 +129,7 @@ export function EmailGenerator({ initialDateRange }: EmailGeneratorProps) {
     }
 
     return content
-  }, [dateRange, events, formatDescription, getDayOfWeek, getEventDatesInRange, getEffectiveValue, shouldIncludeEventForDate, tagConfig])
+  }, [dateRange, events, tagConfig])
 
   /**
    * Generate tip content based on selected tip

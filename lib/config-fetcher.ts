@@ -1,7 +1,8 @@
 "use client"
 
 import { getActiveTag, getTagOverride, sanitizeTag, setActiveTag } from "./config-tag"
-import { arrayToIdMap, deepMerge, idMapToArray, computeDelta } from "./config-merge"
+import { arrayToIdMap, idMapToArray, computeDelta } from "./config-merge"
+import { deepMergeJson as deepMerge, mergeItemLayer } from "./serenity-engine/composition"
 import {
   readStoredEventOverrides,
   readStoredTipOverrides,
@@ -533,21 +534,7 @@ const getResolvedSnapshot = async (
       ? cloneIdMap((await getResolvedSnapshot(type, tagData.parent, options)).itemsById)
       : {}
 
-    for (const id of Object.keys(tagData.itemsById)) {
-      const base = merged[id]
-      if (
-        type === "events" &&
-        !base &&
-        typeof tagData.itemsById[id]?.title !== "string"
-      ) {
-        continue
-      }
-      merged[id] = deepMerge(base, tagData.itemsById[id])
-    }
-
-    for (const id of tagData.tombstones) {
-      delete merged[id]
-    }
+    merged = mergeItemLayer(merged, tagData.itemsById, tagData.tombstones, type === "events")
 
     return {
       tag: normalizedTag,

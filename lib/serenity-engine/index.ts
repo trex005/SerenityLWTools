@@ -1,23 +1,36 @@
 import { ENGINE_VERSION } from "./core"
 import { generateDailyReminders } from "./reports/reminders"
+import { generateAgenda } from "./reports/agenda"
+import { composeConfiguration } from "./composition"
 
 type EngineRequest = {
   operation: "daily-reminders"
   input: Parameters<typeof generateDailyReminders>[0]
+} | {
+  operation: "agenda"
+  input: Parameters<typeof generateAgenda>[0]
+} | {
+  operation: "compose"
+  input: { layers: Parameters<typeof composeConfiguration>[0] }
 }
 
-export { ENGINE_VERSION, generateDailyReminders }
+export { composeConfiguration, ENGINE_VERSION, generateAgenda, generateDailyReminders }
 
 export const invoke = (requestJson: string): string => {
   try {
     const request = JSON.parse(requestJson) as EngineRequest
-    if (request?.operation !== "daily-reminders" || !request.input) {
+    if (!request?.input || !["daily-reminders", "agenda", "compose"].includes(request.operation)) {
       throw new Error(`Unsupported Serenity engine operation ${JSON.stringify(request?.operation)}`)
     }
+    const result = request.operation === "daily-reminders"
+      ? generateDailyReminders(request.input)
+      : request.operation === "agenda"
+        ? generateAgenda(request.input)
+        : composeConfiguration(request.input.layers)
     return JSON.stringify({
       ok: true,
       engineVersion: ENGINE_VERSION,
-      result: generateDailyReminders(request.input),
+      result,
     })
   } catch (error) {
     return JSON.stringify({

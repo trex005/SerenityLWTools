@@ -6,6 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "build:engine": "esbuild lib/serenity-engine/index.ts --bundle --format=iife --global-name=LWSerenityEngine --platform=neutral --target=es2020 --outfile=artifacts/lw-serenity-engine.js",
     "lint": "next lint",
     "test:tz": "tsx --test lib/date-utils.test.ts",
     "test:recurrence": "tsx --test lib/recurrence-utils.test.ts",
@@ -84,11 +85,12 @@
     "@types/node": "^22",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "esbuild": "0.28.2",
     "eslint": "^9.38.0",
     "eslint-config-next": "15.2.4",
     "postcss": "^8",
     "tailwindcss": "^3.4.17",
-    "typescript": "^5",
-    "tsx": "^4.19.2"
+    "tsx": "^4.19.2",
+    "typescript": "^5"
   }
 }
