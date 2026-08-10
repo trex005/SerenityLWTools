@@ -10,6 +10,9 @@
 - Branding (name/icon/background) comes from the `brand` block in `/public/conf/{tag}/conf.json`; use `useTagData.brand`/`brandLabel`, `BrandLogo`, and `BrandHead` instead of hardcoding strings. `brand.backgroundOpacity` controls the image opacity.
 - Tag configs can set `storage.eventsSuffix` and `storage.tipsSuffix` to invalidate persisted admin overrides for events/tips.
 - `lib/scoped-storage.ts` gates persistence behind Command (admin) modeÃ¢â‚¬â€keep events/tips storage writes aligned with that guard.
+- Zustand stores must use the JSON-wrapped `scopedPersistStorage`; `scopedStateStorage` is the raw string adapter and cannot rehydrate `persist` state directly.
+- Keep JSON-only and local-override config caches separate; ancestor localStorage deltas are deep-merged onto that ancestor's JSON layer before descendant composition.
+- Override markers and reset baselines must include eligible ancestor localStorage; inherited changes must not be attributed to the current tag.
 - Admin edits are stored as per-tag overrides: the `use-events`/`use-tips` stores compose fetched configs with stored overrides and deletion markers so parent updates continue to flow even when local drafts exist.
 - Event and tip editors surface a tag dropdown whenever multiple admin-enabled tags exist; select the target tag to apply overrides without switching the main app context.
 - Tip admin cards mirror the public tip layout; in add/edit flows the customId input sits under the title and auto-fills from a sanitized title (lowercase, hyphenated, alphanumeric only) when left blank.

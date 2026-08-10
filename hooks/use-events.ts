@@ -10,7 +10,7 @@ import { create } from "zustand"
 import { persist } from "zustand/middleware"
 import { fetchComposedForTag, clearConfigCache, primeTagStorageSuffixes } from "@/lib/config-fetcher"
 import { fetchParentEvent } from "@/lib/config-diff"
-import { scopedStateStorage, isAdminModeEnabledForTag } from "@/lib/scoped-storage"
+import { scopedPersistStorage, isAdminModeEnabledForTag } from "@/lib/scoped-storage"
 import { getActiveTag, onTagChange } from "@/lib/config-tag"
 import { matchesSearchTokens, tokenizeSearchTerm } from "@/lib/search-utils"
 import { useAdminStore } from "@/hooks/use-admin-state"
@@ -482,7 +482,7 @@ export const useEvents = create<EventsState>()(
     }),
     {
       name: "events",
-      storage: scopedStateStorage,
+      storage: scopedPersistStorage,
       skipHydration: true,
       partialize: (state) => ({
         overridesById: state.overridesById,

@@ -1,6 +1,6 @@
 "use client"
 
-import type { StateStorage } from "zustand/middleware"
+import { createJSONStorage, type StateStorage } from "zustand/middleware"
 import { getActiveTag, sanitizeTag } from "./config-tag"
 
 const STORAGE_PREFIX = "lw-tools"
@@ -201,6 +201,12 @@ const buildKeyForTag = (tag: string, key: string): string => {
   const keyWithSuffix = applyStorageSuffix(key, suffix)
   return `${STORAGE_PREFIX}:${tag}:${keyWithSuffix}`
 }
+
+// Zustand's persist middleware consumes parsed { state, version } values, while
+// scopedStateStorage deliberately implements the browser-like string API.
+// Keep the raw adapter available to the storage helpers, and use this JSON
+// wrapper anywhere it is passed to persist so reloads actually rehydrate state.
+export const scopedPersistStorage = createJSONStorage(() => scopedStateStorage)
 
 const parseTagFromScopedKey = (rawKey: string): { tag: string; key: string } | null => {
   const prefix = `${STORAGE_PREFIX}:`

@@ -9,6 +9,8 @@
     "lint": "next lint",
     "test:tz": "tsx --test lib/date-utils.test.ts",
     "test:recurrence": "tsx --test lib/recurrence-utils.test.ts",
+    "test:config": "tsx --test lib/config-fetcher.test.ts",
+    "test:storage": "tsx --test lib/scoped-storage.test.ts",
     "test:migrate": "tsx --test scripts/migrate-dates.test.ts"
   },
   "dependencies": {

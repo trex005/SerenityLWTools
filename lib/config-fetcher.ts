@@ -141,8 +141,8 @@ const cloneJson = <T>(value: T): T => JSON.parse(JSON.stringify(value))
 const CONFIG_URL = process.env.CONFIG_URL || ""
 const CACHE_TTL = 5 * 60 * 1000
 
-const cacheByTag = new Map<string, CacheEntry>()
-const inFlightByTag = new Map<string, Promise<TagBundle>>()
+const cacheByTag: CacheStore<CacheEntry> = { remote: new Map(), local: new Map() }
+const inFlightByTag: CacheStore<Promise<TagBundle>> = { remote: new Map(), local: new Map() }
 
 let cachedRootConfig: RootConfig | null = null
 let cachedRootTimestamp = 0
@@ -389,6 +389,15 @@ const shouldUseLocalOverrides = (tag: string, options?: ResolveOptions): boolean
 const getVariantForTag = (tag: string, options?: ResolveOptions): CacheVariant =>
   shouldUseLocalOverrides(tag, options) ? "local" : "remote"
 
+// Resolved and bundle caches represent an entire ancestry chain. They must be
+// local whenever the request is allowed to consult local overrides, even if the
+// leaf itself has no stored access/data and only one of its ancestors does.
+const getResolveVariant = (options?: ResolveOptions): CacheVariant => {
+  if (!options?.includeLocalOverrides) return "remote"
+  const currentTag = options.currentTag || getActiveTag()
+  return isAdminModeEnabledForTag(currentTag) ? "local" : "remote"
+}
+
 const cloneIdMapFromArray = (items: any[]): Record<string, any> => {
   const map = arrayToIdMap(items || [])
   for (const id of Object.keys(map)) {
@@ -500,7 +509,7 @@ const getResolvedSnapshot = async (
     throw new Error("Invalid tag provided")
   }
 
-  const variant = getVariantForTag(normalizedTag, options)
+  const variant = getResolveVariant(options)
   const cache = resolvedCacheByType[type][variant]
   const inFlight = resolvedInFlightByType[type][variant]
 
@@ -570,7 +579,7 @@ const applyOverrideSnapshotToMap = (
 
   if (snapshot.overridesById) {
     for (const id of Object.keys(snapshot.overridesById)) {
-      working[id] = cloneJson(snapshot.overridesById[id])
+      working[id] = deepMerge(working[id], snapshot.overridesById[id])
     }
   }
 
@@ -620,10 +629,19 @@ const fetchBundleForTag = async (tag: string, force = false, options?: FetchOpti
   const includeEvents = requestedTypes.includes("events")
   const includeTips = requestedTypes.includes("tips")
   const cacheable = includeEvents && includeTips
+  const resolveOptions: ResolveOptions = {
+    includeLocalOverrides: options?.includeAncestorLocalOverrides === true,
+    force,
+    currentTag: options?.currentTag || getActiveTag(),
+    types: requestedTypes,
+  }
+  const variant = getResolveVariant(resolveOptions)
+  const bundleCache = cacheByTag[variant]
+  const bundleInFlight = inFlightByTag[variant]
 
   const now = Date.now()
   if (!force) {
-    const cached = cacheByTag.get(normalizedTag)
+    const cached = bundleCache.get(normalizedTag)
     if (cached && now - cached.timestamp < CACHE_TTL) {
         return {
           ...cached.data,
@@ -632,24 +650,19 @@ const fetchBundleForTag = async (tag: string, force = false, options?: FetchOpti
         }
     }
     if (cacheable) {
-      const inFlight = inFlightByTag.get(normalizedTag)
+      const inFlight = bundleInFlight.get(normalizedTag)
       if (inFlight) {
         return inFlight
       }
     }
   } else {
-    inFlightByTag.delete(normalizedTag)
-    cacheByTag.delete(normalizedTag)
+    for (const cacheVariant of ["remote", "local"] as const) {
+      inFlightByTag[cacheVariant].delete(normalizedTag)
+      cacheByTag[cacheVariant].delete(normalizedTag)
+    }
   }
 
   const promise = (async () => {
-    const includeLocalOverrides = options?.includeAncestorLocalOverrides === true
-    const resolveOptions: ResolveOptions = {
-      includeLocalOverrides,
-      force,
-      currentTag: options?.currentTag || getActiveTag(),
-      types: requestedTypes,
-    }
     const eventsSnapshot = includeEvents
       ? await getResolvedSnapshot("events", normalizedTag, resolveOptions)
       : { itemsById: {}, updated: null, tag: normalizedTag }
@@ -681,12 +694,12 @@ const fetchBundleForTag = async (tag: string, force = false, options?: FetchOpti
   })()
 
   if (cacheable) {
-    inFlightByTag.set(normalizedTag, promise)
+    bundleInFlight.set(normalizedTag, promise)
   }
   const data = await promise
   if (cacheable) {
-    cacheByTag.set(normalizedTag, { data, timestamp: Date.now() })
-    inFlightByTag.delete(normalizedTag)
+    bundleCache.set(normalizedTag, { data, timestamp: Date.now() })
+    bundleInFlight.delete(normalizedTag)
   }
 
   return data
@@ -753,8 +766,10 @@ export const fetchComposedForTag = async (
 }
 
 export const clearConfigCache = () => {
-  cacheByTag.clear()
-  inFlightByTag.clear()
+  cacheByTag.remote.clear()
+  cacheByTag.local.clear()
+  inFlightByTag.remote.clear()
+  inFlightByTag.local.clear()
   cachedRootConfig = null
   cachedRootTimestamp = 0
   rootPromise = null
@@ -773,8 +788,10 @@ export const clearConfigCache = () => {
 }
 
 const invalidateCachesForType = (type: DataType) => {
-  cacheByTag.clear()
-  inFlightByTag.clear()
+  cacheByTag.remote.clear()
+  cacheByTag.local.clear()
+  inFlightByTag.remote.clear()
+  inFlightByTag.local.clear()
   const variants: CacheVariant[] = ["remote", "local"]
   for (const variant of variants) {
     tagDataCacheByType[type][variant].clear()

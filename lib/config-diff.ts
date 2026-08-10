@@ -54,7 +54,12 @@ export const computeDiffIndexForTag = async (
   }
 
   // Fetch parent-composed snapshot
-  const parentComposed = await fetchComposedForTag(parentTag)
+  // The parent baseline must include local overrides inherited by the current
+  // tag. Otherwise inherited edits are incorrectly reported as leaf overrides.
+  const parentComposed = await fetchComposedForTag(parentTag, false, {
+    includeAncestorLocalOverrides: true,
+    currentTag: tag,
+  })
 
   const parentEventsById = arrayToIdMap(parentComposed.events || [])
   const parentTipsById = arrayToIdMap(parentComposed.tips || [])
@@ -93,7 +98,10 @@ export const fetchParentComposed = async (
   const leaf = await fetchComposedForTag(tag)
   const parentTag = (leaf?.tagConfig && (leaf.tagConfig as any).parent) || null
   if (!parentTag || typeof parentTag !== "string") return null
-  const parent = await fetchComposedForTag(parentTag)
+  const parent = await fetchComposedForTag(parentTag, false, {
+    includeAncestorLocalOverrides: true,
+    currentTag: tag,
+  })
   return { tag: parentTag, events: parent.events || [], tips: parent.tips || [] }
 }
 

@@ -1,5 +1,5 @@
 {
-  "updated": "2026-07-08T01:08:44-02:00",
+  "updated": "2026-07-17T08:48:45-02:00",
   "events": [
     {
       "id": "ev-3",
@@ -186,7 +186,7 @@
     {
       "id": "ev-13",
       "archived": false,
-      "title": "VS: Radar, Stamina, Drone data/parts",
+      "title": "VS: Radar, Stamina, Drone data/parts, Hero XP/Shards",
       "description": "",
       "isAllDay": true,
       "startTime": "09:00",
@@ -609,13 +609,13 @@
       "startTime": "09:00",
       "endTime": "10:00",
       "days": [
+        "sunday",
         "monday",
+        "tuesday",
         "wednesday",
         "thursday",
-        "tuesday",
         "friday",
-        "saturday",
-        "sunday"
+        "saturday"
       ],
       "variations": {},
       "recurrence": {
@@ -633,12 +633,13 @@
         ],
         "interval": 1,
         "startTag": "main",
-        "startOffset": 340
+        "startOffset": 340,
+        "startDate": "2025-01-05"
       },
       "remindEndOfDay": true,
       "includeInBriefing": true,
       "includeOnWebsite": true,
-      "remindTomorrow": true,
+      "remindTomorrow": false,
       "order_value": 1
     },
     {
@@ -813,7 +814,7 @@
     {
       "id": "7662a10a-144e-4dc5-8ae7-4c8af78b9e12",
       "archived": false,
-      "title": "SHINYs in 949-952, 974-976, 987-989",
+      "title": "SHINYs in 949-951, 974-976, 987-989",
       "description": "",
       "isAllDay": true,
       "startTime": "09:00",
@@ -843,11 +844,13 @@
         "onPeriods": 1,
         "offPeriods": 2,
         "startTag": "main",
-        "startOffset": 153
+        "startOffset": 153,
+        "startDate": "2025-01-05"
       },
       "dateIncludeOverrides": {},
       "includeOnWebsite": true,
-      "order_value": 9
+      "order_value": 9,
+      "includeInBriefing": true
     },
     {
       "id": "e5263084-2b0f-4289-9ed1-ede774a62176",
@@ -892,7 +895,7 @@
     },
     {
       "id": "41b7230f-eac7-478d-8f95-2955050d1da0",
-      "archived": true,
+      "archived": false,
       "title": "Bullseye Loot/Ammo Bonanza",
       "description": "• 3 very simple daily tasks in Ammo Bonanza\n• The ammo stays in inventory between events, so you can save up and spend it all at once to get better prizes (Mythic blueprint!)",
       "isAllDay": true,
@@ -903,7 +906,8 @@
         "wednesday",
         "thursday",
         "friday",
-        "saturday"
+        "saturday",
+        "sunday"
       ],
       "variations": {},
       "recurrence": {
@@ -913,20 +917,23 @@
           "wednesday",
           "thursday",
           "friday",
-          "saturday"
+          "saturday",
+          "sunday"
         ],
         "interval": 4,
         "onPeriods": 1,
-        "offPeriods": 0,
+        "offPeriods": 3,
         "startTag": "main",
-        "startOffset": 285
+        "startOffset": 649,
+        "startDate": "2025-01-05"
       },
       "dateIncludeOverrides": {
         "2025-07-08": false
       },
       "remindEndOfDay": true,
       "includeOnWebsite": true,
-      "order_value": 5
+      "order_value": 5,
+      "includeInBriefing": true
     },
     {
       "id": "ff6b9bd0-e2e6-49fd-9fa6-7cea574f8d47",
@@ -966,7 +973,7 @@
     },
     {
       "id": "fe4d455d-6f36-45b2-92c2-24c32521473f",
-      "archived": true,
+      "archived": false,
       "title": "Hot Deals → Glittering Market",
       "description": "• At minimum, collect 100 diamonds / Buy 60 coins for 500 diamonds",
       "isAllDay": true,
@@ -984,7 +991,7 @@
       "recurrence": {
         "type": "weeks",
         "onPeriods": 1,
-        "offPeriods": 4,
+        "offPeriods": 3,
         "daysOfWeek": [
           "tuesday",
           "wednesday",
@@ -995,7 +1002,8 @@
         ],
         "interval": 1,
         "startTag": "main",
-        "startOffset": 418
+        "startOffset": 277,
+        "startDate": "2025-01-05"
       },
       "remindEndOfDay": true,
       "includeInBriefing": true,
@@ -1100,22 +1108,23 @@
       "title": "Sky Predator",
       "description": "",
       "isAllDay": false,
-      "startTime": "21:40",
+      "startTime": "21:00",
       "endTime": "",
       "days": [
-        "thursday"
+        "wednesday"
       ],
       "variations": {},
       "recurrence": {
         "type": "weeks",
         "daysOfWeek": [
-          "thursday"
+          "wednesday"
         ],
         "interval": 2,
         "onPeriods": 1,
         "offPeriods": 1,
         "startTag": "main",
-        "startOffset": 274
+        "startOffset": 274,
+        "startDate": "2025-01-05"
       },
       "remindTomorrow": true,
       "includeInBriefing": true,
@@ -1154,7 +1163,7 @@
     {
       "id": "fc3ef9fe-0e81-4a26-b693-448794954e61",
       "archived": false,
-      "title": "Register for Desert Storm - FINAL DAY (Due 1 hour before reset)",
+      "title": "Desert Storm registration - FINAL DAY (by 23:00)",
       "description": "",
       "remindTomorrow": true,
       "remindEndOfDay": false,
@@ -1343,7 +1352,7 @@
       "title": "Canyon Storm - Early",
       "description": "",
       "remindTomorrow": true,
-      "remindEndOfDay": true,
+      "remindEndOfDay": false,
       "includeInBriefing": true,
       "includeOnWebsite": true,
       "isAllDay": false,
@@ -1363,7 +1372,8 @@
         ],
         "interval": 1,
         "startTag": "main",
-        "startOffset": -284
+        "startOffset": -284,
+        "startDate": "2025-01-05"
       },
       "order_value": 6
     },
@@ -1440,7 +1450,7 @@
       "title": "Canyon Storm - Late",
       "description": "",
       "remindTomorrow": true,
-      "remindEndOfDay": true,
+      "remindEndOfDay": false,
       "includeInBriefing": true,
       "includeOnWebsite": true,
       "isAllDay": false,
@@ -1460,7 +1470,8 @@
         ],
         "interval": 1,
         "startTag": "main",
-        "startOffset": -284
+        "startOffset": -284,
+        "startDate": "2025-01-05"
       }
     },
     {
@@ -1675,7 +1686,7 @@
     },
     {
       "id": "5870d28b-5d10-4dd9-83fb-612e4c28e0b0",
-      "title": "Meteorite Iron War - Round 1",
+      "title": "Meteorite - Round 1",
       "description": "",
       "isAllDay": false,
       "startTime": "00:10",
@@ -1694,7 +1705,9 @@
         "onPeriods": 1,
         "offPeriods": 0,
         "startTag": "main",
-        "startOffset": -283
+        "startOffset": -283,
+        "startDate": "2025-01-05",
+        "endOffset": 639
       },
       "dateIncludeOverrides": {
         "2025-05-03": true,
@@ -1706,7 +1719,7 @@
     },
     {
       "id": "a061f2df-34c9-4bdd-9fa2-a95e11470268",
-      "title": "Meteorite Iron War - Round 2",
+      "title": "Meteorite - Round 2",
       "description": "",
       "isAllDay": false,
       "startTime": "12:30",
@@ -1725,7 +1738,9 @@
         "onPeriods": 1,
         "offPeriods": 0,
         "startTag": "main",
-        "startOffset": 205
+        "startOffset": 205,
+        "startDate": "2025-01-05",
+        "endOffset": 639
       },
       "dateIncludeOverrides": {
         "2025-05-03": true,
@@ -1795,10 +1810,10 @@
       "title": "Glacieradon",
       "description": "",
       "isAllDay": false,
-      "startTime": "21:40",
+      "startTime": "21:00",
       "endTime": "",
       "days": [
-        "friday"
+        "wednesday"
       ],
       "variations": {},
       "archived": false,
@@ -1807,11 +1822,12 @@
         "onPeriods": 1,
         "offPeriods": 1,
         "daysOfWeek": [
-          "friday"
+          "wednesday"
         ],
         "interval": 1,
         "startTag": "main",
-        "startOffset": 300
+        "startOffset": 297,
+        "startDate": "2025-01-05"
       },
       "remindTomorrow": true,
       "includeInBriefing": true,
@@ -1906,7 +1922,7 @@
     {
       "id": "226d3b1b-ce75-444f-ac11-5ee3fe3af4b4",
       "title": "Hot Deals → Bounty Hunter",
-      "description": "• Get daily free/diamond ammo by clicking on the \"+\" sign\n   ($5 deal also decent for pay players)\n• Use Jammers when only purple zombies are left.\n• Click on Wandering Merchants for free items",
+      "description": "• Click \"+\" for free/diamond ammo\n• Use Jammers when only purple zombies are left.",
       "remindTomorrow": false,
       "remindEndOfDay": true,
       "isAllDay": true,
@@ -2169,6 +2185,35 @@
         "startTag": "main",
         "startOffset": 634,
         "endOffset": 661
+      }
+    },
+    {
+      "id": "b21010b5-ca3e-479c-8df3-02bc4f594a69",
+      "title": "Goldvein War Battle",
+      "description": "",
+      "remindTomorrow": true,
+      "remindEndOfDay": false,
+      "includeInBriefing": true,
+      "includeOnWebsite": true,
+      "isAllDay": false,
+      "startTime": "12:00",
+      "endTime": "",
+      "days": [
+        "saturday"
+      ],
+      "variations": {},
+      "archived": false,
+      "recurrence": {
+        "type": "weeks",
+        "daysOfWeek": [
+          "saturday"
+        ],
+        "onPeriods": 1,
+        "offPeriods": 0,
+        "startDate": "2026-07-25",
+        "startTag": "main",
+        "startOffset": 653,
+        "endOffset": 667
       }
     }
   ]
