@@ -1,9 +1,8 @@
 import { parseISO } from "date-fns"
-import { formatInAppTimezone, getDayOfWeek as getAppDayOfWeek, getStartOfAppDay, addAppDays } from "./date-utils"
+import { formatInAppTimezone, getDayOfWeek as getAppDayOfWeek, getStartOfAppDay } from "./date-utils"
+import { eventOccursOnDate, occursInCycle, resolveRecurrenceDateKey, type TagConfig } from "./serenity-engine/core"
 
-export type TagConfig = {
-  tags?: Record<string, { startDate?: string }>
-}
+export type { TagConfig } from "./serenity-engine/core"
 
 /**
  * Resolve an absolute Date from a tag-relative offset.
@@ -14,17 +13,10 @@ export function resolveRecurrenceDate(
   offsetDays: number,
   tagConfig: TagConfig,
 ): Date {
-  const startDateStr = tagConfig?.tags?.[startTag]?.startDate
-  if (!startDateStr) {
-    throw new Error(`No startDate found for tag "${startTag}" in tagConfig`)
-  }
-  const base = getStartOfAppDay(parseISO(startDateStr))
-  return addAppDays(base, offsetDays)
+  return getStartOfAppDay(parseISO(resolveRecurrenceDateKey(startTag, offsetDays, tagConfig)))
 }
 
 export const getDayOfWeek = getAppDayOfWeek
-
-const DAY_IN_MS = 1000 * 60 * 60 * 24
 
 // Normalize any date to the start of that calendar day in the app timezone
 const normalizeToAppDay = (date: Date): Date => getStartOfAppDay(date)
@@ -50,30 +42,15 @@ export function shouldShowOnDate(
   allowedWeekdays?: string[],
   endDate?: Date
 ): boolean {
-  const normalizedTarget = normalizeToAppDay(targetDate)
-  const normalizedStart = normalizeToAppDay(startDate)
-  const normalizedEnd = endDate ? normalizeToAppDay(endDate) : undefined
-
-  const dayOffset = Math.floor((normalizedTarget.getTime() - normalizedStart.getTime()) / DAY_IN_MS)
-
-  if (dayOffset < 0) return false
-  if (normalizedEnd && normalizedTarget.getTime() > normalizedEnd.getTime()) return false
-
-  const effectiveOnPeriods = Math.max(onPeriods, 0)
-  const effectiveOffPeriods = Math.max(offPeriods, 0)
-  const cyclePeriods = effectiveOnPeriods + effectiveOffPeriods
-  const safePeriodDays = Math.max(periodDays, 1)
-  const cycleDays = safePeriodDays * (cyclePeriods === 0 ? 1 : cyclePeriods)
-  const positionInCycle = ((dayOffset % cycleDays) + cycleDays) % cycleDays
-
-  const inOnBlock = positionInCycle < safePeriodDays * effectiveOnPeriods
-
-  if (allowedWeekdays && allowedWeekdays.length > 0) {
-    const dayOfWeek = getDayOfWeek(normalizedTarget)
-    return inOnBlock && allowedWeekdays.includes(dayOfWeek)
-  }
-
-  return inOnBlock
+  return occursInCycle(
+    formatInAppTimezone(targetDate, "yyyy-MM-dd"),
+    formatInAppTimezone(startDate, "yyyy-MM-dd"),
+    periodDays,
+    onPeriods,
+    offPeriods,
+    allowedWeekdays,
+    endDate ? formatInAppTimezone(endDate, "yyyy-MM-dd") : undefined,
+  )
 }
 
 /**
@@ -86,48 +63,7 @@ export function shouldShowRecurringEvent(
   adminModeView = false,
   tagConfig: TagConfig = {},
 ): boolean {
-  const dateString = formatInAppTimezone(date, "yyyy-MM-dd")
-
-  if (!adminModeView && event.dateIncludeOverrides && event.dateIncludeOverrides[dateString] !== undefined) {
-    return event.dateIncludeOverrides[dateString]
-  }
-
-  const normalizedTargetDate = normalizeToAppDay(date)
-
-  try {
-    if (event.recurrence?.startTag !== undefined && event.recurrence?.startOffset !== undefined) {
-      const startDate = normalizeToAppDay(
-        resolveRecurrenceDate(event.recurrence.startTag, event.recurrence.startOffset, tagConfig),
-      )
-      if (normalizedTargetDate.getTime() < startDate.getTime()) return false
-    }
-
-    if (event.recurrence?.endOffset !== undefined && event.recurrence?.startTag !== undefined) {
-      const endDate = normalizeToAppDay(
-        resolveRecurrenceDate(event.recurrence.startTag, event.recurrence.endOffset, tagConfig),
-      )
-      if (normalizedTargetDate.getTime() > endDate.getTime()) return false
-    }
-  } catch {
-    // startTag not resolvable in tagConfig — treat as no bounds restriction
-  }
-
-  if (!event.recurrence || event.recurrence.type === "none") {
-    return false
-  }
-
-  const params = convertNewRecurrenceFormat(event, tagConfig)
-  if (!params) return false
-
-  return shouldShowOnDate(
-    date,
-    params.startDate,
-    params.periodDays,
-    params.onPeriods,
-    params.offPeriods,
-    params.allowedWeekdays,
-    params.endDate,
-  )
+  return eventOccursOnDate(event, formatInAppTimezone(date, "yyyy-MM-dd"), tagConfig, adminModeView)
 }
 
 /**

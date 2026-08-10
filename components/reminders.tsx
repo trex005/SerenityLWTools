@@ -14,128 +14,22 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { useEvents } from "@/hooks/use-events"
 import {
-  formatTimeRemaining,
   formatInAppTimezone,
   getAppToday,
-  getDayOfWeek,
   addAppDays,
   getStartOfAppDay,
   getMinutesUntilNextDay,
 } from "@/lib/date-utils"
 import { Check, Copy, RefreshCw } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { shouldShowRecurringEvent } from "@/lib/recurrence-utils"
 import { useTagData } from "@/hooks/use-tag-data"
 import { Input } from "@/components/ui/input"
 import { scopedLocalStorage } from "@/lib/scoped-storage"
-import { compareEventsByOrderValue, getEventTitleForSort } from "@/lib/event-order"
+import { generateDailyReminders } from "@/lib/serenity-engine/reports/reminders"
 
 const STORAGE_PREFIX = "daily-reminders-content"
-const BULLET_PREFIX = "\u2022 "
 
 const getDateKey = (date: Date): string => formatInAppTimezone(date, "yyyy-MM-dd")
-
-const getEffectiveValue = (event: any, date: Date, dayKey: string, property: string) => {
-  const dateKey = getDateKey(date)
-
-  if (
-    event?.dateOverrides &&
-    event.dateOverrides[dateKey] &&
-    event.dateOverrides[dateKey][property] !== undefined
-  ) {
-    return event.dateOverrides[dateKey][property]
-  }
-
-  if (event?.variations && event.variations[dayKey] && event.variations[dayKey][property] !== undefined) {
-    return event.variations[dayKey][property]
-  }
-
-  return event?.[property]
-}
-
-const shouldIncludeEventOnDate = (event: any, date: Date, dayKey: string, tagConfig: Record<string, unknown> = {}): boolean => {
-  if (!event || event.archived) return false
-
-  if (!shouldShowRecurringEvent(event, date, false, tagConfig as any)) {
-    return false
-  }
-
-  const dateKey = getDateKey(date)
-
-  if (event.dateOverrides && event.dateOverrides[dateKey]?.hidden === true) {
-    return false
-  }
-
-  if (event.variations && event.variations[dayKey]?.hidden === true) {
-    return false
-  }
-
-  if (
-    event.dateIncludeOverrides &&
-    event.dateIncludeOverrides[dateKey] !== undefined &&
-    event.dateIncludeOverrides[dateKey] === false
-  ) {
-    return false
-  }
-
-  return true
-}
-
-type ReminderLine = {
-  event: any
-  line: string
-  title: string
-  startTime: string
-  hasTimedStart: boolean
-}
-
-const formatReminderLine = (event: any, date: Date, dayKey: string): ReminderLine => {
-  const titleValue = getEffectiveValue(event, date, dayKey, "title") ?? event.title ?? "Untitled event"
-  const title = typeof titleValue === "string" ? titleValue.trim() || "Untitled event" : "Untitled event"
-
-  const startTimeValue = getEffectiveValue(event, date, dayKey, "startTime")
-  const startTime =
-    typeof startTimeValue === "string"
-      ? startTimeValue.trim()
-      : typeof event.startTime === "string"
-        ? event.startTime.trim()
-        : ""
-
-  const isAllDayValue = getEffectiveValue(event, date, dayKey, "isAllDay")
-  const isAllDay =
-    typeof isAllDayValue === "boolean"
-      ? isAllDayValue
-      : typeof event.isAllDay === "boolean"
-        ? event.isAllDay
-        : false
-
-  const hasTimedStart = Boolean(startTime) && !isAllDay
-  const prefix = hasTimedStart ? `${startTime} - ` : BULLET_PREFIX
-
-  return {
-    event,
-    line: `${prefix}${title}`,
-    title,
-    startTime,
-    hasTimedStart,
-  }
-}
-
-const compareReminderLines = (a: ReminderLine, b: ReminderLine): number => {
-  if (a.hasTimedStart && !b.hasTimedStart) return -1
-  if (!a.hasTimedStart && b.hasTimedStart) return 1
-
-  if (a.hasTimedStart && b.hasTimedStart) {
-    const timeDiff = a.startTime.localeCompare(b.startTime)
-    if (timeDiff !== 0) return timeDiff
-    return a.title.localeCompare(b.title, undefined, { sensitivity: "base" })
-  }
-
-  return compareEventsByOrderValue(
-    { ...a.event, title: a.title || getEventTitleForSort(a.event) },
-    { ...b.event, title: b.title || getEventTitleForSort(b.event) },
-  )
-}
 
 /**
  * Reminders component
@@ -162,60 +56,14 @@ export function Reminders() {
   const storageKey = useMemo(() => `${STORAGE_PREFIX}:${getDateKey(selectedDate)}`, [selectedDate])
   const tomorrowDate = useMemo(() => addAppDays(selectedDate, 1), [selectedDate])
 
-  // Get events for the selected day and generate reminders
-  const { dayReminders, tomorrowReminders, todayEventCount, tomorrowEventCount } = useMemo(() => {
-    const dayKey = getDayOfWeek(selectedDate)
-    const tomorrowKey = getDayOfWeek(tomorrowDate)
-
-    const dayEvents = events.filter((event) => shouldIncludeEventOnDate(event, selectedDate, dayKey, tagConfig ?? {}))
-    const tomorrowEvents = events.filter((event) => shouldIncludeEventOnDate(event, tomorrowDate, tomorrowKey, tagConfig ?? {}))
-
-    const todayReminders = dayEvents
-      .filter((event) => {
-        const override = getEffectiveValue(event, selectedDate, dayKey, "remindEndOfDay")
-        if (override !== undefined) {
-          return Boolean(override)
-        }
-        return Boolean(event.remindEndOfDay)
-      })
-      .map((event) => formatReminderLine(event, selectedDate, dayKey))
-      .sort(compareReminderLines)
-      .map((item) => item.line)
-
-    const tomorrowReminderList = tomorrowEvents
-      .filter((event) => {
-        const override = getEffectiveValue(event, tomorrowDate, tomorrowKey, "remindTomorrow")
-        if (override !== undefined) {
-          return Boolean(override)
-        }
-        return Boolean(event.remindTomorrow)
-      })
-      .map((event) => formatReminderLine(event, tomorrowDate, tomorrowKey))
-      .sort(compareReminderLines)
-      .map((item) => item.line)
-
-    return {
-      dayReminders: todayReminders,
-      tomorrowReminders: tomorrowReminderList,
-      todayEventCount: dayEvents.length,
-      tomorrowEventCount: tomorrowEvents.length,
-    }
-  }, [events, selectedDate, tomorrowDate, tagConfig])
-
-  const buildReminderContent = useCallback(() => {
-    const resetText = `Reset in ${formatTimeRemaining(minutesUntilNextDay)}!`
-    const sections: string[] = [resetText]
-
-    if (tomorrowReminders.length > 0) {
-      sections.push(`Tomorrow:\n${tomorrowReminders.join("\n")}`)
-    }
-
-    if (dayReminders.length > 0) {
-      sections.push(`Reminders:\n${dayReminders.join("\n")}`)
-    }
-
-    return sections.join("\n\n")
-  }, [minutesUntilNextDay, dayReminders, tomorrowReminders])
+  const reminderReport = useMemo(() => generateDailyReminders({
+    events,
+    tagConfig: tagConfig ?? {},
+    reportDate: getDateKey(selectedDate),
+    minutesUntilReset: minutesUntilNextDay,
+  }), [events, selectedDate, tagConfig, minutesUntilNextDay])
+  const { dayReminders, tomorrowReminders, todayEventCount, tomorrowEventCount } = reminderReport
+  const buildReminderContent = useCallback(() => reminderReport.content, [reminderReport])
 
   // Initialize or regenerate content when date changes or storage is empty
   useEffect(() => {

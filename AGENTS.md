@@ -21,6 +21,7 @@
 - Event ordering uses the global float `order_value`; missing values behave as `0`, ties sort by title, and legacy per-day `order` data should not be written or exported.
 - All scheduling logic, exports, and timestamps must run in the app timezone (GMT-2). Use the helpers in `lib/date-utils.ts` (`formatInAppTimezone`, `getStartOfAppDay`, `getEndOfAppDay`, `addAppDays`) for any date math or formatting; only the optional local-time display for event times should use the user's timezone.
 - Recurrence uses only the tag-relative `type: "days" | "weeks"` shape with `startTag`/`startOffset`, `onPeriods`/`offPeriods`, and `daysOfWeek`; legacy fields like `startDate`, `interval`, `daily/weekly` types, `pattern`, `phaseStartDate`, or `event.days` fallbacks are no longer read.
+- Portable schedule and report calculations belong in the DOM-free `lib/serenity-engine/` core. UI code must call that core rather than reimplement recurrence so the same compiled artifact can run inside LWMinions.
 - Mail generator defaults to a three-day range (today + next two days) in app time; keep its initial date span aligned with the date range selector quick-pick defaults.
 
 ## Build, Test, and Development Commands
