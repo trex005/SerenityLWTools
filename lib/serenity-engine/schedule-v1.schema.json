@@ -62,7 +62,7 @@
           "required": ["interval", "unit"],
           "properties": {
             "interval": { "type": "integer", "minimum": 1 },
-            "unit": { "enum": ["minutes", "hours", "days", "weeks"] }
+            "unit": { "enum": ["seconds", "minutes", "hours", "days", "weeks"] }
           }
         },
         "duration_seconds": { "$ref": "#/$defs/duration" },

@@ -154,6 +154,7 @@ test("one-time active window may be returned after its start", () => {
 test("all recurring units have deterministic millisecond intervals", () => {
   const start = "2026-08-01T00:00:00Z"
   const expected = {
+    seconds: 2_000,
     minutes: 120_000,
     hours: 7_200_000,
     days: 172_800_000,
@@ -164,7 +165,7 @@ test("all recurring units have deterministic millisecond intervals", () => {
       version: 1,
       type: "recurring",
       start: { kind: "datetime", datetime: start },
-      frequency: { interval: 2, unit: unit as "minutes" | "hours" | "days" | "weeks" },
+      frequency: { interval: 2, unit: unit as "seconds" | "minutes" | "hours" | "days" | "weeks" },
     }, epoch(start) + 1)
     assert.equal(occurrence.runAtMs, epoch(start) + period)
   }

@@ -30,7 +30,7 @@ var LWSerenityEngine = (() => {
   });
 
   // lib/serenity-engine/core.ts
-  var ENGINE_VERSION = "0.3.0";
+  var ENGINE_VERSION = "0.4.0";
   var DATE_KEY = /^(\d{4})-(\d{2})-(\d{2})$/;
   var DAY_MS = 864e5;
   var WEEKDAYS = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
@@ -325,6 +325,7 @@ ${formatIndentedDescription(String(description))}`;
   // lib/serenity-engine/schedule.ts
   var RFC3339 = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2})$/;
   var UNIT_MS = {
+    seconds: 1e3,
     minutes: 6e4,
     hours: 36e5,
     days: 864e5,
@@ -398,7 +399,7 @@ ${formatIndentedDescription(String(description))}`;
       if (interval < 1) throw new Error("frequency.interval must be at least 1");
       const unit = frequency.unit;
       if (typeof unit !== "string" || !(unit in UNIT_MS)) {
-        throw new Error("frequency.unit must be minutes, hours, days, or weeks");
+        throw new Error("frequency.unit must be seconds, minutes, hours, days, or weeks");
       }
       const periodMs = interval * UNIT_MS[unit];
       if (!Number.isSafeInteger(periodMs)) throw new Error("frequency is too large");

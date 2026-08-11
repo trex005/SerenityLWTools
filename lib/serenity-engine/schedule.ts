@@ -1,4 +1,4 @@
-export type ScheduleUnit = "minutes" | "hours" | "days" | "weeks"
+export type ScheduleUnit = "seconds" | "minutes" | "hours" | "days" | "weeks"
 
 export type DateTimeStart = {
   kind: "datetime"
@@ -41,6 +41,7 @@ export type ScheduleOccurrence = {
 
 const RFC3339 = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2})$/
 const UNIT_MS: Record<ScheduleUnit, number> = {
+  seconds: 1_000,
   minutes: 60_000,
   hours: 3_600_000,
   days: 86_400_000,
@@ -136,7 +137,7 @@ export const nextScheduleOccurrence = (
     if (interval < 1) throw new Error("frequency.interval must be at least 1")
     const unit = frequency.unit
     if (typeof unit !== "string" || !(unit in UNIT_MS)) {
-      throw new Error("frequency.unit must be minutes, hours, days, or weeks")
+      throw new Error("frequency.unit must be seconds, minutes, hours, days, or weeks")
     }
     const periodMs = interval * UNIT_MS[unit as ScheduleUnit]
     if (!Number.isSafeInteger(periodMs)) throw new Error("frequency is too large")
