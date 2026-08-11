@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lwserenity.com/schemas/schedule-v1.schema.json",
+  "title": "LW Serenity Schedule v1",
+  "oneOf": [
+    { "$ref": "#/$defs/oneTime" },
+    { "$ref": "#/$defs/recurring" }
+  ],
+  "$defs": {
+    "dateTimeStart": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "datetime"],
+      "properties": {
+        "kind": { "const": "datetime" },
+        "datetime": { "type": "string", "format": "date-time" }
+      }
+    },
+    "delayStart": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "delay_seconds"],
+      "properties": {
+        "kind": { "const": "delay" },
+        "delay_seconds": { "type": "integer", "minimum": 0 },
+        "anchor_at": { "type": "string", "format": "date-time" }
+      }
+    },
+    "duration": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "oneTime": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["version", "type", "start"],
+      "properties": {
+        "version": { "const": 1 },
+        "type": { "const": "one_time" },
+        "start": {
+          "oneOf": [
+            { "$ref": "#/$defs/dateTimeStart" },
+            { "$ref": "#/$defs/delayStart" }
+          ]
+        },
+        "duration_seconds": { "$ref": "#/$defs/duration" }
+      }
+    },
+    "recurring": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["version", "type", "frequency"],
+      "properties": {
+        "version": { "const": 1 },
+        "type": { "const": "recurring" },
+        "start": { "$ref": "#/$defs/dateTimeStart" },
+        "frequency": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["interval", "unit"],
+          "properties": {
+            "interval": { "type": "integer", "minimum": 1 },
+            "unit": { "enum": ["minutes", "hours", "days", "weeks"] }
+          }
+        },
+        "duration_seconds": { "$ref": "#/$defs/duration" }
+      }
+    }
+  }
+}

@@ -25,11 +25,12 @@ var LWSerenityEngine = (() => {
     composeConfiguration: () => composeConfiguration,
     generateAgenda: () => generateAgenda,
     generateDailyReminders: () => generateDailyReminders,
-    invoke: () => invoke
+    invoke: () => invoke,
+    nextScheduleOccurrence: () => nextScheduleOccurrence
   });
 
   // lib/serenity-engine/core.ts
-  var ENGINE_VERSION = "0.1.0";
+  var ENGINE_VERSION = "0.2.0";
   var DATE_KEY = /^(\d{4})-(\d{2})-(\d{2})$/;
   var DAY_MS = 864e5;
   var WEEKDAYS = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
@@ -321,14 +322,104 @@ ${formatIndentedDescription(String(description))}`;
     return { tagConfig: config, events: Object.values(events), tips: Object.values(tips) };
   };
 
+  // lib/serenity-engine/schedule.ts
+  var RFC3339 = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2})$/;
+  var UNIT_MS = {
+    minutes: 6e4,
+    hours: 36e5,
+    days: 864e5,
+    weeks: 6048e5
+  };
+  var requireObject = (value, name) => {
+    if (!value || typeof value !== "object" || Array.isArray(value)) {
+      throw new Error(`${name} must be an object`);
+    }
+    return value;
+  };
+  var requireNonNegativeInteger = (value, name) => {
+    if (!Number.isSafeInteger(value) || Number(value) < 0) {
+      throw new Error(`${name} must be a non-negative safe integer`);
+    }
+    return Number(value);
+  };
+  var parseTimestamp = (value, name) => {
+    if (typeof value !== "string" || !RFC3339.test(value)) {
+      throw new Error(`${name} must be an RFC 3339 datetime with a timezone`);
+    }
+    const timestamp = Date.parse(value);
+    if (!Number.isFinite(timestamp)) throw new Error(`${name} is invalid`);
+    return timestamp;
+  };
+  var durationFor = (schedule) => schedule.duration_seconds === void 0 ? void 0 : requireNonNegativeInteger(schedule.duration_seconds, "duration_seconds") * 1e3;
+  var resultFor = (runAtMs, durationMs, recurring) => ({
+    runAtMs,
+    ...durationMs === void 0 ? {} : { endAtMs: runAtMs + durationMs },
+    recurring
+  });
+  var nextScheduleOccurrence = (scheduleValue, nowMs, includeActiveWindow = false) => {
+    const schedule = requireObject(scheduleValue, "schedule");
+    if (schedule.version !== 1) throw new Error("schedule.version must be 1");
+    if (!Number.isSafeInteger(nowMs)) throw new Error("nowMs must be a safe integer");
+    const durationMs = durationFor(schedule);
+    if (schedule.type === "one_time") {
+      const start = requireObject(schedule.start, "start");
+      let runAtMs;
+      if (start.kind === "datetime") {
+        runAtMs = parseTimestamp(start.datetime, "start.datetime");
+      } else if (start.kind === "delay") {
+        const delayMs = requireNonNegativeInteger(start.delay_seconds, "start.delay_seconds") * 1e3;
+        const anchorMs = start.anchor_at === void 0 ? nowMs : parseTimestamp(start.anchor_at, "start.anchor_at");
+        runAtMs = anchorMs + delayMs;
+      } else {
+        throw new Error("one_time start.kind must be datetime or delay");
+      }
+      const active = durationMs !== void 0 && runAtMs <= nowMs && nowMs < runAtMs + durationMs;
+      if (runAtMs < nowMs && !(includeActiveWindow && active)) {
+        throw new Error("one_time schedule has no future occurrence");
+      }
+      return resultFor(runAtMs, durationMs, false);
+    }
+    if (schedule.type === "recurring") {
+      const frequency = requireObject(schedule.frequency, "frequency");
+      const interval = requireNonNegativeInteger(frequency.interval, "frequency.interval");
+      if (interval < 1) throw new Error("frequency.interval must be at least 1");
+      const unit = frequency.unit;
+      if (typeof unit !== "string" || !(unit in UNIT_MS)) {
+        throw new Error("frequency.unit must be minutes, hours, days, or weeks");
+      }
+      const periodMs = interval * UNIT_MS[unit];
+      if (!Number.isSafeInteger(periodMs)) throw new Error("frequency is too large");
+      const startMs = schedule.start === void 0 ? nowMs : (() => {
+        const start = requireObject(schedule.start, "start");
+        if (start.kind !== "datetime") throw new Error("recurring start.kind must be datetime");
+        return parseTimestamp(start.datetime, "start.datetime");
+      })();
+      const elapsed = nowMs - startMs;
+      if (includeActiveWindow && durationMs !== void 0 && elapsed >= 0) {
+        const previousSteps = Math.floor(elapsed / periodMs);
+        const previousStart = startMs + previousSteps * periodMs;
+        if (previousStart <= nowMs && nowMs < previousStart + durationMs) {
+          return resultFor(previousStart, durationMs, true);
+        }
+      }
+      const steps = elapsed <= 0 ? 0 : Math.ceil(elapsed / periodMs);
+      return resultFor(startMs + steps * periodMs, durationMs, true);
+    }
+    throw new Error("schedule.type must be one_time or recurring");
+  };
+
   // lib/serenity-engine/index.ts
   var invoke = (requestJson) => {
     try {
       const request = JSON.parse(requestJson);
-      if (!request?.input || !["daily-reminders", "agenda", "compose"].includes(request.operation)) {
+      if (!request?.input || !["daily-reminders", "agenda", "compose", "schedule-next"].includes(request.operation)) {
         throw new Error(`Unsupported Serenity engine operation ${JSON.stringify(request?.operation)}`);
       }
-      const result = request.operation === "daily-reminders" ? generateDailyReminders(request.input) : request.operation === "agenda" ? generateAgenda(request.input) : composeConfiguration(request.input.layers);
+      const result = request.operation === "daily-reminders" ? generateDailyReminders(request.input) : request.operation === "agenda" ? generateAgenda(request.input) : request.operation === "compose" ? composeConfiguration(request.input.layers) : nextScheduleOccurrence(
+        request.input.schedule,
+        request.input.nowMs,
+        request.input.includeActiveWindow
+      );
       return JSON.stringify({
         ok: true,
         engineVersion: ENGINE_VERSION,

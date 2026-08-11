@@ -31,3 +31,45 @@ test("JSON ABI contains failures instead of throwing across runtimes", () => {
   assert.equal(response.engineVersion, ENGINE_VERSION)
   assert.match(response.error, /JSON/)
 })
+
+test("JSON ABI resolves canonical schedules", () => {
+  const response = JSON.parse(invoke(JSON.stringify({
+    operation: "schedule-next",
+    input: {
+      schedule: {
+        version: 1,
+        type: "recurring",
+        start: { kind: "datetime", datetime: "2026-08-10T00:00:00Z" },
+        frequency: { interval: 1, unit: "days" },
+      },
+      nowMs: Date.parse("2026-08-10T00:00:01Z"),
+    },
+  })))
+  assert.equal(response.ok, true)
+  assert.deepEqual(response.result, {
+    runAtMs: Date.parse("2026-08-11T00:00:00Z"),
+    recurring: true,
+  })
+})
+
+test("JSON ABI can select an active schedule window", () => {
+  const response = JSON.parse(invoke(JSON.stringify({
+    operation: "schedule-next",
+    input: {
+      schedule: {
+        version: 1,
+        type: "recurring",
+        start: { kind: "datetime", datetime: "2026-08-10T00:00:00Z" },
+        frequency: { interval: 1, unit: "days" },
+        duration_seconds: 7200,
+      },
+      nowMs: Date.parse("2026-08-11T01:00:00Z"),
+      includeActiveWindow: true,
+    },
+  })))
+  assert.deepEqual(response.result, {
+    runAtMs: Date.parse("2026-08-11T00:00:00Z"),
+    endAtMs: Date.parse("2026-08-11T02:00:00Z"),
+    recurring: true,
+  })
+})
