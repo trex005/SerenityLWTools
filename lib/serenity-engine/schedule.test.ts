@@ -4,6 +4,37 @@ import { nextScheduleOccurrence } from "./schedule"
 
 const epoch = (value: string): number => Date.parse(value)
 
+test("one-time datetime supports an explicit end", () => {
+  assert.deepEqual(nextScheduleOccurrence({
+    version: 1,
+    type: "one_time",
+    start: { kind: "datetime", datetime: "2026-08-10T12:00:00-04:00" },
+    end: { kind: "datetime", datetime: "2026-08-10T13:30:00-04:00" },
+  }, epoch("2026-08-10T11:00:00-04:00")), {
+    runAtMs: epoch("2026-08-10T12:00:00-04:00"),
+    endAtMs: epoch("2026-08-10T13:30:00-04:00"),
+    recurring: false,
+  })
+})
+
+test("recurring schedules stop after their inclusive cutoff", () => {
+  const schedule = {
+    version: 1 as const,
+    type: "recurring" as const,
+    start: { kind: "datetime" as const, datetime: "2026-08-10T12:00:00-04:00" },
+    frequency: { interval: 1, unit: "hours" as const },
+    until: "2026-08-10T14:00:00-04:00",
+  }
+  assert.equal(
+    nextScheduleOccurrence(schedule, epoch("2026-08-10T13:30:00-04:00")).runAtMs,
+    epoch("2026-08-10T14:00:00-04:00"),
+  )
+  assert.throws(
+    () => nextScheduleOccurrence(schedule, epoch("2026-08-10T14:00:00.001-04:00")),
+    /no occurrence before until/,
+  )
+})
+
 test("one-time datetime returns its exact instant and duration window", () => {
   assert.deepEqual(nextScheduleOccurrence({
     version: 1,

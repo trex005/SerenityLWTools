@@ -43,8 +43,10 @@
             { "$ref": "#/$defs/delayStart" }
           ]
         },
-        "duration_seconds": { "$ref": "#/$defs/duration" }
-      }
+        "duration_seconds": { "$ref": "#/$defs/duration" },
+        "end": { "$ref": "#/$defs/dateTimeStart" }
+      },
+      "not": { "required": ["duration_seconds", "end"] }
     },
     "recurring": {
       "type": "object",
@@ -63,7 +65,8 @@
             "unit": { "enum": ["minutes", "hours", "days", "weeks"] }
           }
         },
-        "duration_seconds": { "$ref": "#/$defs/duration" }
+        "duration_seconds": { "$ref": "#/$defs/duration" },
+        "until": { "type": "string", "format": "date-time" }
       }
     }
   }

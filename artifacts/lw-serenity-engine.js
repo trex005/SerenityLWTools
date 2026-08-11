@@ -30,7 +30,7 @@ var LWSerenityEngine = (() => {
   });
 
   // lib/serenity-engine/core.ts
-  var ENGINE_VERSION = "0.2.0";
+  var ENGINE_VERSION = "0.3.0";
   var DATE_KEY = /^(\d{4})-(\d{2})-(\d{2})$/;
   var DAY_MS = 864e5;
   var WEEKDAYS = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
@@ -351,9 +351,11 @@ ${formatIndentedDescription(String(description))}`;
     return timestamp;
   };
   var durationFor = (schedule) => schedule.duration_seconds === void 0 ? void 0 : requireNonNegativeInteger(schedule.duration_seconds, "duration_seconds") * 1e3;
-  var resultFor = (runAtMs, durationMs, recurring) => ({
+  var resultFor = (runAtMs, durationMs, recurring, endAtMs) => ({
     runAtMs,
-    ...durationMs === void 0 ? {} : { endAtMs: runAtMs + durationMs },
+    ...endAtMs === void 0 && durationMs === void 0 ? {} : {
+      endAtMs: endAtMs ?? runAtMs + Number(durationMs)
+    },
     recurring
   });
   var nextScheduleOccurrence = (scheduleValue, nowMs, includeActiveWindow = false) => {
@@ -373,13 +375,24 @@ ${formatIndentedDescription(String(description))}`;
       } else {
         throw new Error("one_time start.kind must be datetime or delay");
       }
-      const active = durationMs !== void 0 && runAtMs <= nowMs && nowMs < runAtMs + durationMs;
+      const explicitEnd = schedule.end === void 0 ? void 0 : (() => {
+        if (durationMs !== void 0) throw new Error("one_time schedule cannot use both end and duration_seconds");
+        const end = requireObject(schedule.end, "end");
+        if (end.kind !== "datetime") throw new Error("end.kind must be datetime");
+        return parseTimestamp(end.datetime, "end.datetime");
+      })();
+      if (explicitEnd !== void 0 && explicitEnd <= runAtMs) {
+        throw new Error("end.datetime must be after the scheduled start");
+      }
+      const endAtMs = explicitEnd ?? (durationMs === void 0 ? void 0 : runAtMs + durationMs);
+      const active = endAtMs !== void 0 && runAtMs <= nowMs && nowMs < endAtMs;
       if (runAtMs < nowMs && !(includeActiveWindow && active)) {
         throw new Error("one_time schedule has no future occurrence");
       }
-      return resultFor(runAtMs, durationMs, false);
+      return resultFor(runAtMs, durationMs, false, explicitEnd);
     }
     if (schedule.type === "recurring") {
+      const untilMs = schedule.until === void 0 ? void 0 : parseTimestamp(schedule.until, "until");
       const frequency = requireObject(schedule.frequency, "frequency");
       const interval = requireNonNegativeInteger(frequency.interval, "frequency.interval");
       if (interval < 1) throw new Error("frequency.interval must be at least 1");
@@ -399,11 +412,18 @@ ${formatIndentedDescription(String(description))}`;
         const previousSteps = Math.floor(elapsed / periodMs);
         const previousStart = startMs + previousSteps * periodMs;
         if (previousStart <= nowMs && nowMs < previousStart + durationMs) {
+          if (untilMs !== void 0 && previousStart > untilMs) {
+            throw new Error("recurring schedule has no occurrence before until");
+          }
           return resultFor(previousStart, durationMs, true);
         }
       }
       const steps = elapsed <= 0 ? 0 : Math.ceil(elapsed / periodMs);
-      return resultFor(startMs + steps * periodMs, durationMs, true);
+      const runAtMs = startMs + steps * periodMs;
+      if (untilMs !== void 0 && runAtMs > untilMs) {
+        throw new Error("recurring schedule has no occurrence before until");
+      }
+      return resultFor(runAtMs, durationMs, true);
     }
     throw new Error("schedule.type must be one_time or recurring");
   };

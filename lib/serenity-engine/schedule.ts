@@ -16,6 +16,7 @@ export type OneTimeSchedule = {
   type: "one_time"
   start: DateTimeStart | DelayStart
   duration_seconds?: number
+  end?: DateTimeStart
 }
 
 export type RecurringSchedule = {
@@ -27,6 +28,7 @@ export type RecurringSchedule = {
     unit: ScheduleUnit
   }
   duration_seconds?: number
+  until?: string
 }
 
 export type Schedule = OneTimeSchedule | RecurringSchedule
@@ -73,9 +75,11 @@ const durationFor = (schedule: Record<string, unknown>): number | undefined =>
     ? undefined
     : requireNonNegativeInteger(schedule.duration_seconds, "duration_seconds") * 1000
 
-const resultFor = (runAtMs: number, durationMs: number | undefined, recurring: boolean): ScheduleOccurrence => ({
+const resultFor = (runAtMs: number, durationMs: number | undefined, recurring: boolean, endAtMs?: number): ScheduleOccurrence => ({
   runAtMs,
-  ...(durationMs === undefined ? {} : { endAtMs: runAtMs + durationMs }),
+  ...(endAtMs === undefined && durationMs === undefined ? {} : {
+    endAtMs: endAtMs ?? runAtMs + Number(durationMs),
+  }),
   recurring,
 })
 
@@ -104,14 +108,29 @@ export const nextScheduleOccurrence = (
     } else {
       throw new Error("one_time start.kind must be datetime or delay")
     }
-    const active = durationMs !== undefined && runAtMs <= nowMs && nowMs < runAtMs + durationMs
+    const explicitEnd = schedule.end === undefined
+      ? undefined
+      : (() => {
+          if (durationMs !== undefined) throw new Error("one_time schedule cannot use both end and duration_seconds")
+          const end = requireObject(schedule.end, "end")
+          if (end.kind !== "datetime") throw new Error("end.kind must be datetime")
+          return parseTimestamp(end.datetime, "end.datetime")
+        })()
+    if (explicitEnd !== undefined && explicitEnd <= runAtMs) {
+      throw new Error("end.datetime must be after the scheduled start")
+    }
+    const endAtMs = explicitEnd ?? (durationMs === undefined ? undefined : runAtMs + durationMs)
+    const active = endAtMs !== undefined && runAtMs <= nowMs && nowMs < endAtMs
     if (runAtMs < nowMs && !(includeActiveWindow && active)) {
       throw new Error("one_time schedule has no future occurrence")
     }
-    return resultFor(runAtMs, durationMs, false)
+    return resultFor(runAtMs, durationMs, false, explicitEnd)
   }
 
   if (schedule.type === "recurring") {
+    const untilMs = schedule.until === undefined
+      ? undefined
+      : parseTimestamp(schedule.until, "until")
     const frequency = requireObject(schedule.frequency, "frequency")
     const interval = requireNonNegativeInteger(frequency.interval, "frequency.interval")
     if (interval < 1) throw new Error("frequency.interval must be at least 1")
@@ -133,11 +152,18 @@ export const nextScheduleOccurrence = (
       const previousSteps = Math.floor(elapsed / periodMs)
       const previousStart = startMs + previousSteps * periodMs
       if (previousStart <= nowMs && nowMs < previousStart + durationMs) {
+        if (untilMs !== undefined && previousStart > untilMs) {
+          throw new Error("recurring schedule has no occurrence before until")
+        }
         return resultFor(previousStart, durationMs, true)
       }
     }
     const steps = elapsed <= 0 ? 0 : Math.ceil(elapsed / periodMs)
-    return resultFor(startMs + steps * periodMs, durationMs, true)
+    const runAtMs = startMs + steps * periodMs
+    if (untilMs !== undefined && runAtMs > untilMs) {
+      throw new Error("recurring schedule has no occurrence before until")
+    }
+    return resultFor(runAtMs, durationMs, true)
   }
 
   throw new Error("schedule.type must be one_time or recurring")
