@@ -21,6 +21,31 @@ npm run preview   # serve out/ locally for QA
 A full build takes a few seconds. The output in `out/` is self-contained and can
 be uploaded to any static web server or S3 bucket.
 
+## Deploying source changes without clobbering live content
+
+`out/conf/` contains the repo's local fixtures and may be **stale** compared to
+the live configuration that admins maintain through the Publish flow. Never
+sync the whole `out/` directory blindly.
+
+Use the guarded deploy script, which always excludes `conf/*` and `archive/*`
+from both uploads and deletions:
+
+```
+npm run deploy            # dry run — shows exactly what would change
+npm run deploy:apply      # perform the sync
+npm run deploy:apply -- --delete   # also remove assets deleted from the repo
+```
+
+Environment overrides: `DEPLOY_BUCKET` (default `lwserenity.com`) and
+`AWS_PROFILE`.
+
+Rules of thumb:
+
+- **App/code changes** → build + `npm run deploy:apply`.
+- **Content changes** (events, tips, tag configs) → admin Publish flow only.
+- The copies under `public/conf/` exist so the dev server has data; treat them
+  as samples, not authority.
+
 ## Publishing content changes from the admin panel
 
 Admins do not need to rebuild the app to change events, tips, or tag configs.

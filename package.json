@@ -11,6 +11,8 @@
     "typecheck": "tsc --noEmit",
     "build:engine": "esbuild lib/serenity-engine/index.ts --bundle --format=iife --global-name=LWSerenityEngine --platform=neutral --target=es2020 --outfile=artifacts/lw-serenity-engine.js",
     "check:engine": "node scripts/check-engine-artifact.mjs",
+    "deploy": "node scripts/deploy-site.mjs",
+    "deploy:apply": "node scripts/deploy-site.mjs --execute",
     "test:tz": "tsx --test lib/date-utils.test.ts",
     "test:recurrence": "tsx --test lib/recurrence-utils.test.ts",
     "test:engine": "tsx --test lib/serenity-engine/*.test.ts lib/serenity-engine/reports/*.test.ts",

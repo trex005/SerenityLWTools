@@ -62,6 +62,6 @@
 
 ## Deployment & Configuration Tips
 
-- Read `DEPLOYMENT.md` before releasing; `npm run build` expects bundles in `out/`, and content changes should normally ship through the admin Publish flow rather than full redeployments.
+- Read `DEPLOYMENT.md` before releasing; content changes ship through the admin Publish flow, and source deploys use `npm run deploy` / `npm run deploy:apply`, which always exclude `conf/*` and `archive/*` so live configs are never overwritten by stale repo fixtures.
 - Update S3/CloudFront JSON policies in-repo first, then apply them through the deployment pipeline.
 - Document new env keys beside the code that needs them (`CONFIG_URL` overrides the conf base URL).
