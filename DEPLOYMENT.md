@@ -58,7 +58,7 @@ Attach a policy like this to the publish key (adjust the bucket ARN):
     {
       "Sid": "PublishSerenityConf",
       "Effect": "Allow",
-      "Action": ["s3:GetObject", "s3:PutObject", "s3:CopyObject"],
+      "Action": ["s3:GetObject", "s3:PutObject"],
       "Resource": "arn:aws:s3:::YOUR-BUCKET/*"
     },
     {
