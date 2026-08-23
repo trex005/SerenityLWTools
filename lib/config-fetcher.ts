@@ -5,13 +5,17 @@ import { arrayToIdMap, idMapToArray, computeDelta } from "./config-merge"
 import { deepMergeJson as deepMerge, mergeItemLayer } from "./serenity-engine/composition"
 import {
   readStoredEventOverrides,
+  readStoredEventOperations,
   readStoredTipOverrides,
   type StoredOverrideSnapshot,
   hasAdminAccessForTag,
   isAdminModeEnabledForTag,
   registerTagStorageSuffixes,
 } from "./scoped-storage"
-import { formatInAppTimezone } from "./date-utils"
+import { formatInAppTimezone, getAppTodayKey } from "./date-utils"
+import { loadDateScopedConfiguration, validateExplicitParents } from "./date-scoped-config"
+import type { DateComposition } from "./serenity-engine/composition"
+import type { NormalizedEventOperations } from "./serenity-engine/event-operations"
 
 type DomainMapping = {
   tag?: string
@@ -356,28 +360,18 @@ const getLayer = async (tag: string, force = false, types?: DataType[]): Promise
 
 const getParentTag = (layer: TagLayer | null): string | null => {
   if (!layer || !layer.config) return null
-  const parentVal = layer.config.parent
-  if (typeof parentVal !== "string") return null
-  const p = sanitizeTag(parentVal)
-  return p
+  const parents = validateExplicitParents(layer.config, layer.tag)
+  return parents[0] ?? null
 }
 
 const buildAncestry = async (leafTag: string): Promise<string[]> => {
-  const visited = new Set<string>()
-  const chain: string[] = []
-  let current: string | null = leafTag
-  let depth = 0
-  while (current && depth < 16) {
-    if (visited.has(current)) break
-    visited.add(current)
-    const layer = await getLayer(current)
-    chain.push(current)
-    const parent = getParentTag(layer)
-    if (parent && !visited.has(parent)) current = parent
-    else current = null
-    depth++
+  const leaf = await getLayer(leafTag, false, [])
+  const parents = validateExplicitParents(leaf.config, leafTag)
+  for (const parent of parents) {
+    const parentLayer = await getLayer(parent, false, [])
+    validateExplicitParents(parentLayer.config, parent)
   }
-  return chain.reverse()
+  return [...parents].reverse().concat(leafTag)
 }
 
 const shouldUseLocalOverrides = (tag: string, options?: ResolveOptions): boolean => {
@@ -405,12 +399,6 @@ const cloneIdMapFromArray = (items: any[]): Record<string, any> => {
     map[id] = cloneJson(map[id])
   }
   return map
-}
-
-const stripLegacyEventOrder = (event: any): any => {
-  const copy = cloneJson(event)
-  delete copy.order
-  return copy
 }
 
 const cloneIdMap = (items: Record<string, any>): Record<string, any> => {
@@ -457,7 +445,7 @@ const getTagDataSnapshot = async (
   }
 
   const promise = (async () => {
-    const layer = await getLayer(normalizedTag, options.force, options.types || [type])
+    const layer = await getLayer(normalizedTag, options.force, [type])
     const parent = getParentTag(layer)
     const baseItems = (type === "events" ? layer.events : layer.tips) || []
     const filtered = baseItems.filter((item: any) => item && item.deleted !== true)
@@ -553,6 +541,40 @@ const getResolvedSnapshot = async (
   }
 }
 
+const getResolvedTipsForExplicitLineage = async (
+  tag: string,
+  options: ResolveOptions = {},
+): Promise<ResolvedDataSnapshot> => {
+  const ancestry = await buildAncestry(tag)
+  let merged: Record<string, any> = {}
+  let updated: string | null = null
+  for (const sourceTag of ancestry) {
+    const snapshot = await getTagDataSnapshot("tips", sourceTag, { ...options, types: ["tips"] })
+    merged = mergeItemLayer(merged, snapshot.itemsById, snapshot.tombstones)
+    if (sourceTag === tag) updated = snapshot.updated
+  }
+  return { tag, itemsById: merged, updated }
+}
+
+export const fetchEventsForDate = async (
+  tag: string,
+  date = getAppTodayKey(),
+  options: FetchOptions = {},
+): Promise<DateComposition> => {
+  const normalizedTag = sanitizeTag(tag)
+  if (!normalizedTag || normalizedTag !== tag) throw new Error(`Invalid tag ${JSON.stringify(tag)}`)
+  const currentTag = options.currentTag || getActiveTag()
+  const includeStored = options.includeAncestorLocalOverrides === true && isAdminModeEnabledForTag(currentTag)
+  const loaded = await loadDateScopedConfiguration(normalizedTag, {
+    includeStoredOperations: includeStored,
+    includeAncestorStoredOperations: true,
+    readStoredOperations: (sourceTag) => includeStored && hasAdminAccessForTag(sourceTag)
+      ? readStoredEventOperations(sourceTag)
+      : null,
+  })
+  return loaded.composeForDate(date)
+}
+
 const applyOverrideSnapshotToMap = (
   current: Record<string, any>,
   snapshot?: StoredOverrideSnapshot | null,
@@ -625,10 +647,11 @@ const fetchBundleForTag = async (tag: string, force = false, options?: FetchOpti
   const variant = getResolveVariant(resolveOptions)
   const bundleCache = cacheByTag[variant]
   const bundleInFlight = inFlightByTag[variant]
+  const bundleKey = includeEvents ? `${normalizedTag}|${getAppTodayKey()}` : normalizedTag
 
   const now = Date.now()
   if (!force) {
-    const cached = bundleCache.get(normalizedTag)
+    const cached = bundleCache.get(bundleKey)
     if (cached && now - cached.timestamp < CACHE_TTL) {
         return {
           ...cached.data,
@@ -637,43 +660,52 @@ const fetchBundleForTag = async (tag: string, force = false, options?: FetchOpti
         }
     }
     if (cacheable) {
-      const inFlight = bundleInFlight.get(normalizedTag)
+      const inFlight = bundleInFlight.get(bundleKey)
       if (inFlight) {
         return inFlight
       }
     }
   } else {
     for (const cacheVariant of ["remote", "local"] as const) {
-      inFlightByTag[cacheVariant].delete(normalizedTag)
-      cacheByTag[cacheVariant].delete(normalizedTag)
+      for (const key of Array.from(inFlightByTag[cacheVariant].keys())) {
+        if (key === normalizedTag || key.startsWith(`${normalizedTag}|`)) inFlightByTag[cacheVariant].delete(key)
+      }
+      for (const key of Array.from(cacheByTag[cacheVariant].keys())) {
+        if (key === normalizedTag || key.startsWith(`${normalizedTag}|`)) cacheByTag[cacheVariant].delete(key)
+      }
     }
   }
 
   const promise = (async () => {
-    const eventsSnapshot = includeEvents
-      ? await getResolvedSnapshot("events", normalizedTag, resolveOptions)
-      : { itemsById: {}, updated: null, tag: normalizedTag }
+    const eventComposition = includeEvents
+      ? await fetchEventsForDate(normalizedTag, getAppTodayKey(), {
+          includeAncestorLocalOverrides: options?.includeAncestorLocalOverrides,
+          currentTag: options?.currentTag,
+        })
+      : null
     const tipsSnapshot = includeTips
-      ? await getResolvedSnapshot("tips", normalizedTag, resolveOptions)
+      ? await getResolvedTipsForExplicitLineage(normalizedTag, resolveOptions)
       : { itemsById: {}, updated: null, tag: normalizedTag }
-    const ancestry = await buildAncestry(normalizedTag)
-    let mergedConfig: Record<string, unknown> | null = null
-    for (const ancestorTag of ancestry) {
-      const ancestorLayer = await getLayer(ancestorTag, false)
-      if (ancestorLayer?.config && typeof ancestorLayer.config === "object") {
-        mergedConfig = deepMerge(mergedConfig ?? {}, ancestorLayer.config) as Record<string, unknown>
+    const ancestry = includeTips || !eventComposition ? await buildAncestry(normalizedTag) : []
+    let mergedConfig: Record<string, unknown> | null = eventComposition?.tagConfig ?? null
+    if (!mergedConfig) {
+      for (const ancestorTag of ancestry) {
+        const ancestorLayer = await getLayer(ancestorTag, false, [])
+        if (ancestorLayer?.config && typeof ancestorLayer.config === "object") {
+          mergedConfig = deepMerge(mergedConfig ?? {}, ancestorLayer.config) as Record<string, unknown>
+        }
       }
     }
     const tagConfig = mergedConfig
     const data: TagBundle = {
       tag: normalizedTag,
       tagConfig,
-      events: includeEvents ? idMapToArray(eventsSnapshot.itemsById) : [],
+      events: includeEvents ? eventComposition!.events : [],
       tips: includeTips ? idMapToArray(tipsSnapshot.itemsById) : [],
       updated: {
         root: null,
         tagConfig: typeof tagConfig?.updated === "string" ? tagConfig.updated : null,
-        events: includeEvents ? eventsSnapshot.updated : null,
+        events: null,
         tips: includeTips ? tipsSnapshot.updated : null,
       },
     }
@@ -681,12 +713,12 @@ const fetchBundleForTag = async (tag: string, force = false, options?: FetchOpti
   })()
 
   if (cacheable) {
-    bundleInFlight.set(normalizedTag, promise)
+    bundleInFlight.set(bundleKey, promise)
   }
   const data = await promise
   if (cacheable) {
-    bundleCache.set(normalizedTag, { data, timestamp: Date.now() })
-    bundleInFlight.delete(normalizedTag)
+    bundleCache.set(bundleKey, { data, timestamp: Date.now() })
+    bundleInFlight.delete(bundleKey)
   }
 
   return data
@@ -803,9 +835,9 @@ if (typeof window !== "undefined") {
   }, 100)
 }
 
-// Build child-only deltas and tombstones vs composed parent chain
+// Export leaf-owned/conditional event operations and legacy tip deltas.
 export const buildChildDeltaFiles = async (
-  effectiveEvents: any[],
+  _effectiveEvents: any[],
   effectiveTips: any[],
   tag?: string,
 ) => {
@@ -815,32 +847,19 @@ export const buildChildDeltaFiles = async (
   const parentTags = ancestry.slice(0, -1)
 
   const parentLayers: TagLayer[] = []
-  for (const t of parentTags) parentLayers.push(await getLayer(t))
+  for (const t of parentTags) parentLayers.push(await getLayer(t, false, ["tips"]))
   const parentComposed = composeFromLayers(parentLayers)
   // Load leaf layer to capture tag-specific config including parent
-  const leafLayer = await getLayer(resolvedTag)
+  const leafLayer = await getLayer(resolvedTag, false, [])
+  const eventLoader = await loadDateScopedConfiguration(resolvedTag, {
+    includeStoredOperations: true,
+    includeAncestorStoredOperations: false,
+  })
+  const leafOperations = eventLoader.layers[eventLoader.layers.length - 1].eventOperations as NormalizedEventOperations
 
-  const parentEventsById = arrayToIdMap((parentComposed.events || []).map(stripLegacyEventOrder))
   const parentTipsById = arrayToIdMap(parentComposed.tips || [])
 
-  const childEventsById = arrayToIdMap((effectiveEvents || []).map(stripLegacyEventOrder))
   const childTipsById = arrayToIdMap(effectiveTips || [])
-
-  const eventDeltas: any[] = []
-  const eventsTombstones: Set<string> = new Set()
-
-  for (const id of Object.keys(parentEventsById)) {
-    if (!childEventsById[id]) eventsTombstones.add(id)
-  }
-  for (const id of Object.keys(childEventsById)) {
-    const base = parentEventsById[id]
-    const edited = childEventsById[id]
-    const delta = computeDelta(base, edited)
-    if (delta && typeof delta === "object") {
-      const out = { id, ...(delta as any) }
-      eventDeltas.push(out)
-    }
-  }
 
   const tips: any[] = []
   const tipsTombstones: Set<string> = new Set()
@@ -865,10 +884,17 @@ export const buildChildDeltaFiles = async (
       return cfg
     })(),
     events: {
+      schemaVersion: 2,
       updated: nowIso,
-      events: [
-        ...eventDeltas,
-        ...Array.from(eventsTombstones).map((id) => ({ id, deleted: true })),
+      operations: [
+        ...Object.values(leafOperations.ownedEventsById).map((event) => ({ kind: "owned", event })),
+        ...Object.entries(leafOperations.inheritedOverridesById).map(([id, operation]) => ({
+          kind: "override",
+          id,
+          set: operation.setByPointer,
+          ...(operation.removePointers.length ? { remove: operation.removePointers } : {}),
+        })),
+        ...leafOperations.inheritedDeletedIds.map((id) => ({ kind: "delete", id })),
       ],
     },
     tips: {

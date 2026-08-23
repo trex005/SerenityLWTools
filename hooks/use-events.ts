@@ -1,29 +1,26 @@
-/**
- * Events Store Hook
- *
- * This hook provides a global store for managing events data.
- * It uses Zustand for state management with persistence to local storage.
- */
 "use client"
 
 import { create } from "zustand"
 import { persist } from "zustand/middleware"
-import { fetchComposedForTag, clearConfigCache, primeTagStorageSuffixes } from "@/lib/config-fetcher"
-import { fetchParentEvent } from "@/lib/config-diff"
-import { scopedPersistStorage, isAdminModeEnabledForTag } from "@/lib/scoped-storage"
+import { clearConfigCache, primeTagStorageSuffixes } from "@/lib/config-fetcher"
+import { loadDateScopedConfiguration, mergeStoredEventOperations } from "@/lib/date-scoped-config"
+import { composeEventsForDate, type ConfigurationLayer } from "@/lib/serenity-engine/composition"
+import { getAppTodayKey } from "@/lib/date-utils"
+import {
+  createEmptyStoredEventOperations,
+  discardStoredInheritedOperation,
+  resetInheritedEventOperation,
+  storeEventDeletion,
+  storeInheritedEdit,
+  storeOwnedEvent,
+} from "@/lib/local-event-operations"
+import { scopedPersistStorage } from "@/lib/scoped-storage"
+import type { StoredEventOperations } from "@/lib/scoped-storage"
 import { getActiveTag, onTagChange } from "@/lib/config-tag"
 import { matchesSearchTokens, tokenizeSearchTerm } from "@/lib/search-utils"
 import { useAdminStore } from "@/hooks/use-admin-state"
-import {
-  buildIdMap,
-  composeWithOverrides,
-  deriveOverridesFromFinal,
-  upsertOverrideMap,
-  ensureIdAdded,
-  ensureIdRemoved,
-} from "@/lib/override-helpers"
+import { isAdminModeEnabledForTag } from "@/lib/scoped-storage"
 
-// Define the event interface
 export interface Event {
   id: string
   title: string
@@ -51,27 +48,26 @@ export interface Event {
     offPeriods: number
     daysOfWeek: string[]
   }
-  variations?: Record<
-    string,
-    {
-      startTime?: string
-      endTime?: string
-      description?: string
-      isAllDay?: boolean
-      hidden?: boolean
-    }
-  >
+  variations?: Record<string, {
+    startTime?: string
+    endTime?: string
+    description?: string
+    isAllDay?: boolean
+    hidden?: boolean
+  }>
 }
 
-// Define the events store state
 interface EventsState {
   activeTag: string
   events: Event[]
   baseEvents: Event[]
   baseEventsMap: Record<string, Event>
-  overridesById: Record<string, Event>
-  deletedEventIds: string[]
-  legacyEvents: Event[] | null
+  lowerEventsMap: Record<string, Event>
+  sourceTagById: Record<string, string>
+  publishedLocalOwnedIds: string[]
+  eventOperations: StoredEventOperations
+  localOperationsEnabled: boolean
+  layers: ConfigurationLayer[]
   initialized: boolean
   hydrated: boolean
   searchTerm: string
@@ -79,36 +75,58 @@ interface EventsState {
   setSearchTerm: (term: string) => void
   setEvents: (events: Event[], options?: { fromBase?: boolean }) => void
   addEvent: (event: Event) => void
-  updateEvent: (event: Event) => void
-  deleteEvent: (id: string) => void
+  updateEvent: (event: Event, contextDate?: string) => void
+  deleteEvent: (id: string, contextDate?: string) => void
   initializeFromConfig: (forceRefresh?: boolean) => Promise<void>
-  archiveEvent: (id: string) => void // Archive an event by ID
-  restoreEvent: (id: string) => void // Restore an event from archive by ID
-  updateEventOrderValue: (id: string, orderValue: number) => void // Update global event ordering
-  clearEvents: () => void // Clear all events
-  deleteAllEvents: () => void // Delete all events without reinitialization
-  resetToDefaults: () => void // Reset to default data
-  resetEventOverrides: (eventId: string) => Promise<boolean> // Reset overrides by reverting to parent data
-  updateDateOverride: (eventId: string, date: string, override: Partial<Event> | null) => void // Add or update a date override
-  updateDateIncludeOverride: (eventId: string, date: string, include: boolean | null) => void // Add or update a date include override
+  archiveEvent: (id: string, contextDate?: string) => void
+  restoreEvent: (id: string, contextDate?: string) => void
+  updateEventOrderValue: (id: string, orderValue: number, contextDate?: string) => void
+  clearEvents: () => void
+  deleteAllEvents: () => void
+  resetToDefaults: () => void
+  resetEventOverrides: (eventId: string, contextDate?: string) => Promise<boolean>
+  discardStoredInheritedOperation: (eventId: string) => void
+  updateDateOverride: (eventId: string, date: string, override: Partial<Event> | null) => void
+  updateDateIncludeOverride: (eventId: string, date: string, include: boolean | null) => void
 }
 
-/**
- * Helper function to normalize day names to lowercase
- * This ensures consistency in day references throughout the application
- */
-const normalizeDayName = (day: string): string => {
-  return day.toLowerCase()
-}
-
+const clone = <T>(value: T): T => JSON.parse(JSON.stringify(value))
+const idMap = (events: Event[]): Record<string, Event> => Object.fromEntries(events.map((event) => [event.id, event]))
 const applySearchFilter = (events: Event[], term: string): Event[] => {
   const tokens = tokenizeSearchTerm(term)
-  if (tokens.length === 0) return events
-
-  return events.filter((event) => matchesSearchTokens(tokens, [event.title, event.description]))
+  return tokens.length ? events.filter((event) => matchesSearchTokens(tokens, [event.title, event.description])) : events
 }
 
-// Create the events store with persistence
+const composeWithStored = (state: EventsState, operations: StoredEventOperations, date: string) => {
+  if (!state.layers.length) return null
+  const effectiveOperations = state.localOperationsEnabled ? operations : createEmptyStoredEventOperations()
+  const layers = state.layers.map((layer, index) => index === state.layers.length - 1
+    ? { ...layer, eventOperations: mergeStoredEventOperations(layer.eventOperations!, effectiveOperations) }
+    : layer)
+  const composed = composeEventsForDate({ layers, localTag: state.activeTag, date })
+  const lowerLayers = layers.map((layer, index) => index === layers.length - 1
+    ? { ...layer, eventOperations: { ownedEventsById: {}, inheritedOverridesById: {}, inheritedDeletedIds: [] } }
+    : layer)
+  const lower = composeEventsForDate({ layers: lowerLayers, localTag: state.activeTag, date })
+  return {
+    events: composed.events as unknown as Event[],
+    lowerEventsMap: idMap(lower.events as unknown as Event[]),
+    sourceTagById: composed.sourceTagById,
+  }
+}
+
+const stateForOperations = (state: EventsState, operations: StoredEventOperations, date = getAppTodayKey()) => {
+  const result = composeWithStored(state, operations, date)
+  if (!result) return { eventOperations: operations }
+  return {
+    eventOperations: operations,
+    events: result.events,
+    filteredEvents: applySearchFilter(result.events, state.searchTerm),
+    lowerEventsMap: result.lowerEventsMap,
+    sourceTagById: result.sourceTagById,
+  }
+}
+
 export const useEvents = create<EventsState>()(
   persist(
     (set, get) => ({
@@ -116,469 +134,218 @@ export const useEvents = create<EventsState>()(
       events: [],
       baseEvents: [],
       baseEventsMap: {},
-      overridesById: {},
-      deletedEventIds: [],
-      legacyEvents: null,
+      lowerEventsMap: {},
+      sourceTagById: {},
+      publishedLocalOwnedIds: [],
+      eventOperations: createEmptyStoredEventOperations(),
+      localOperationsEnabled: false,
+      layers: [],
       initialized: false,
       hydrated: false,
       searchTerm: "",
       filteredEvents: [],
 
-      // Set search term and filter events
-      setSearchTerm: (term: string) => {
-        set((state) => ({
-          searchTerm: term,
-          filteredEvents: applySearchFilter(state.events, term),
-        }))
-      },
+      setSearchTerm: (term) => set((state) => ({
+        searchTerm: term,
+        filteredEvents: applySearchFilter(state.events, term),
+      })),
 
-      // Set all events, optionally treating them as the new base data
-      setEvents: (events: Event[], options?: { fromBase?: boolean }) => {
-        set((state) => {
-          if (options?.fromBase) {
-            const baseMap = buildIdMap(events)
-            let overrides = state.overridesById
-            let deletedIds = state.deletedEventIds
-            if (state.legacyEvents && state.legacyEvents.length > 0) {
-              const reconciled = deriveOverridesFromFinal(state.legacyEvents, baseMap)
-              overrides = reconciled.overridesById
-              deletedIds = reconciled.deletedIds
-            }
-            const composed = composeWithOverrides(events, overrides, deletedIds)
-            return {
-              baseEvents: events,
-              baseEventsMap: baseMap,
-              overridesById: overrides,
-              deletedEventIds: deletedIds,
-              legacyEvents: null,
-              events: composed,
-              filteredEvents: applySearchFilter(composed, state.searchTerm),
-            }
-          }
+      setEvents: (events, options) => set((state) => {
+        if (options?.fromBase) {
+          return { baseEvents: events, baseEventsMap: idMap(events) }
+        }
+        let operations = createEmptyStoredEventOperations()
+        for (const event of events) operations = storeOwnedEvent(operations, event)
+        return stateForOperations(state, operations)
+      }),
 
-          const overrideState = deriveOverridesFromFinal(events, state.baseEventsMap)
-          return {
-            events,
-            filteredEvents: applySearchFilter(events, state.searchTerm),
-            overridesById: overrideState.overridesById,
-            deletedEventIds: overrideState.deletedIds,
-            legacyEvents: null,
-          }
+      addEvent: (event) => set((state) => stateForOperations(
+        state,
+        storeOwnedEvent(state.eventOperations, event),
+      )),
+
+      updateEvent: (event, contextDate = getAppTodayKey()) => set((state) => {
+        const contextual = composeWithStored(state, state.eventOperations, contextDate)
+        const locallyOwned = contextual?.sourceTagById[event.id] === state.activeTag
+        const inheritedBaseline = contextual?.lowerEventsMap[event.id]
+        const publishedLeaf = state.layers[state.layers.length - 1]?.eventOperations
+        const publishedInherited = !!publishedLeaf && (
+          Object.prototype.hasOwnProperty.call(publishedLeaf.inheritedOverridesById, event.id)
+          || publishedLeaf.inheritedDeletedIds.includes(event.id)
+        )
+        const operations = locallyOwned
+          ? storeOwnedEvent(state.eventOperations, event)
+          : inheritedBaseline
+            ? storeInheritedEdit(state.eventOperations, inheritedBaseline, event, { publishedInherited })
+            : state.eventOperations
+        return stateForOperations(state, operations)
+      }),
+
+      deleteEvent: (id, contextDate = getAppTodayKey()) => set((state) => {
+        const contextual = composeWithStored(state, state.eventOperations, contextDate)
+        const locallyOwned = contextual?.sourceTagById[id] === state.activeTag
+        const operations = storeEventDeletion(state.eventOperations, id, {
+          locallyOwned,
+          publishedOwned: state.publishedLocalOwnedIds.includes(id),
         })
-      },
+        return stateForOperations(state, operations)
+      }),
 
-      // Add a new event
-      addEvent: (event: Event) => {
-        set((state) => {
-          const newEvents = [...state.events, event]
-          const filtered = applySearchFilter(newEvents, state.searchTerm)
-          const overridesById = upsertOverrideMap(state.baseEventsMap, state.overridesById, [event])
-          const deletedEventIds = ensureIdRemoved(state.deletedEventIds, event.id)
-
-          return {
-            events: newEvents,
-            filteredEvents: filtered,
-            overridesById,
-            deletedEventIds,
-          }
-        })
-      },
-
-      // Update an existing event
-      updateEvent: (updatedEvent: Event) => {
-        set((state) => {
-          const updatedEvents = state.events.map((event) => (event.id === updatedEvent.id ? updatedEvent : event))
-          const filtered = applySearchFilter(updatedEvents, state.searchTerm)
-          const overridesById = upsertOverrideMap(state.baseEventsMap, state.overridesById, [updatedEvent])
-          const deletedEventIds = ensureIdRemoved(state.deletedEventIds, updatedEvent.id)
-
-          return {
-            events: updatedEvents,
-            filteredEvents: filtered,
-            overridesById,
-            deletedEventIds,
-          }
-        })
-      },
-
-      // Delete an event
-      deleteEvent: (id: string) => {
-        set((state) => {
-          const updatedEvents = state.events.filter((event) => event.id !== id)
-          const filtered = applySearchFilter(updatedEvents, state.searchTerm)
-          const overridesById = { ...state.overridesById }
-          delete overridesById[id]
-          const deletedEventIds = state.baseEventsMap[id]
-            ? ensureIdAdded(state.deletedEventIds, id)
-            : ensureIdRemoved(state.deletedEventIds, id)
-
-          return {
-            events: updatedEvents,
-            filteredEvents: filtered,
-            overridesById,
-            deletedEventIds,
-          }
-        })
-      },
-
-      // Initialize events from configuration if not already initialized
       initializeFromConfig: async (forceRefresh = false) => {
-        const { initialized, baseEvents, activeTag, hydrated } = get()
-        if (!hydrated) {
-          // Avoid writing empty state back to storage before hydration completes
-          return
-        }
-        if (!forceRefresh && initialized && baseEvents.length > 0 && !get().legacyEvents?.length) {
-          return
-        }
-
+        const state = get()
+        if (!state.hydrated || (!forceRefresh && state.initialized)) return
         try {
-          const targetTag = getActiveTag()
-          const includeAncestorLocalOverrides =
-            useAdminStore.getState().adminMode || isAdminModeEnabledForTag(targetTag)
-          const config = await fetchComposedForTag(targetTag, forceRefresh, {
-            includeAncestorLocalOverrides,
-            currentTag: targetTag,
-          })
-          const resolvedEvents = Array.isArray(config?.events) ? config.events : []
-          const resolvedTag = config?.tag || targetTag
-          const baseMap = buildIdMap(resolvedEvents)
-
-          set((state) => {
-            let overrides = state.overridesById
-            let deletedIds = state.deletedEventIds
-            if (state.legacyEvents && state.legacyEvents.length > 0) {
-              const reconciled = deriveOverridesFromFinal(state.legacyEvents, baseMap)
-              overrides = reconciled.overridesById
-              deletedIds = reconciled.deletedIds
-            }
-            const composed = composeWithOverrides(resolvedEvents, overrides, deletedIds)
-
-            return {
-              activeTag: resolvedTag,
-              baseEvents: resolvedEvents,
-              baseEventsMap: baseMap,
-              overridesById: overrides,
-              deletedEventIds: deletedIds,
-              legacyEvents: null,
-              events: composed,
-              filteredEvents: applySearchFilter(composed, state.searchTerm),
-              initialized: true,
-            }
+          if (forceRefresh) clearConfigCache()
+          const activeTag = getActiveTag()
+          const localOperationsEnabled = useAdminStore.getState().adminMode || isAdminModeEnabledForTag(activeTag)
+          const loaded = await loadDateScopedConfiguration(activeTag)
+          const date = getAppTodayKey()
+          const remote = loaded.composeForDate(date)
+          const lower = loaded.composeLowerStackForDate(date)
+          const publishedLeaf = loaded.layers[loaded.layers.length - 1].eventOperations!
+          const initializedState: EventsState = {
+            ...get(),
+            activeTag,
+            localOperationsEnabled,
+            layers: loaded.layers,
+            baseEvents: remote.events as unknown as Event[],
+            baseEventsMap: idMap(remote.events as unknown as Event[]),
+            lowerEventsMap: idMap(lower.events as unknown as Event[]),
+            sourceTagById: remote.sourceTagById,
+            publishedLocalOwnedIds: Object.keys(publishedLeaf.ownedEventsById),
+            initialized: true,
+          }
+          const composed = composeWithStored(initializedState, get().eventOperations, date)!
+          set({
+            activeTag,
+            localOperationsEnabled,
+            layers: loaded.layers,
+            baseEvents: initializedState.baseEvents,
+            baseEventsMap: initializedState.baseEventsMap,
+            lowerEventsMap: composed.lowerEventsMap,
+            sourceTagById: composed.sourceTagById,
+            publishedLocalOwnedIds: initializedState.publishedLocalOwnedIds,
+            events: composed.events,
+            filteredEvents: applySearchFilter(composed.events, get().searchTerm),
+            initialized: true,
           })
         } catch (error) {
-          console.error("Error initializing events:", error)
-          set({ initialized: true, activeTag })
+          console.error("Error initializing date-scoped events:", error)
+          set({ initialized: true })
         }
       },
 
-      // Add the archive and restore functions to the store
-      archiveEvent: (id) => {
-        const target = get().events.find((event) => event.id === id)
-        if (!target) return
-        get().updateEvent({ ...target, archived: true })
+      archiveEvent: (id, contextDate) => {
+        const date = contextDate || getAppTodayKey()
+        const contextual = composeWithStored(get(), get().eventOperations, date)
+        const event = contextual?.events.find((candidate) => candidate.id === id)
+        if (event) get().updateEvent({ ...event, archived: true }, contextDate)
       },
-
-      restoreEvent: (id) => {
-        const target = get().events.find((event) => event.id === id)
-        if (!target) return
-        get().updateEvent({ ...target, archived: false })
+      restoreEvent: (id, contextDate) => {
+        const date = contextDate || getAppTodayKey()
+        const contextual = composeWithStored(get(), get().eventOperations, date)
+        const event = contextual?.events.find((candidate) => candidate.id === id)
+        if (event) get().updateEvent({ ...event, archived: false }, contextDate)
       },
-
-      /**
-       * Update an event's global order value.
-       */
-      updateEventOrderValue: (id, orderValue) => {
-        set((state) => {
-          const changedEvents: Event[] = []
-          const newEvents = state.events.map((event) => {
-            if (event.id !== id) return event
-            const updatedEvent = { ...event, order_value: orderValue }
-            changedEvents.push(updatedEvent)
-            return updatedEvent
-          })
-
-          const filtered = applySearchFilter(newEvents, state.searchTerm)
-          const overridesById = changedEvents.length > 0
-            ? upsertOverrideMap(state.baseEventsMap, state.overridesById, changedEvents)
-            : state.overridesById
-          const deletedEventIds = changedEvents.length > 0
-            ? ensureIdRemoved(state.deletedEventIds, changedEvents[0].id)
-            : state.deletedEventIds
-
-          return {
-            events: newEvents,
-            filteredEvents: filtered,
-            overridesById,
-            deletedEventIds,
-          }
-        })
+      updateEventOrderValue: (id, orderValue, contextDate) => {
+        const event = get().events.find((candidate) => candidate.id === id)
+        if (event) get().updateEvent({ ...event, order_value: orderValue }, contextDate)
       },
-
-      /**
-       * Add or update a date-specific override for an event
-       * If override is null, remove the override for that date
-       */
-      updateDateOverride: (eventId, date, override) => {
-        set((state) => {
-          let changedEvent: Event | null = null
-          const updatedEvents = state.events.map((event) => {
-            if (event.id !== eventId) return event
-            const dateOverrides = { ...(event.dateOverrides || {}) }
-
-            if (override === null) {
-              delete dateOverrides[date]
-            } else {
-              dateOverrides[date] = {
-                ...dateOverrides[date],
-                ...override,
-              }
-            }
-
-            changedEvent = {
-              ...event,
-              dateOverrides,
-            }
-            return changedEvent
-          })
-
-          const filtered = applySearchFilter(updatedEvents, state.searchTerm)
-          const overridesById = changedEvent
-            ? upsertOverrideMap(state.baseEventsMap, state.overridesById, [changedEvent])
-            : state.overridesById
-          const deletedEventIds = changedEvent
-            ? ensureIdRemoved(state.deletedEventIds, changedEvent.id)
-            : state.deletedEventIds
-
-          return {
-            events: updatedEvents,
-            filteredEvents: filtered,
-            overridesById,
-            deletedEventIds,
-          }
-        })
+      updateDateOverride: (id, date, override) => {
+        const event = get().events.find((candidate) => candidate.id === id)
+        if (!event) return
+        const dateOverrides = { ...(event.dateOverrides || {}) }
+        if (override === null) delete dateOverrides[date]
+        else dateOverrides[date] = { ...(dateOverrides[date] || {}), ...override }
+        get().updateEvent({ ...event, dateOverrides }, date)
       },
-
-      /**
-       * Add or update a date-specific override for event scheduling
-       * If include is null, remove the override for that date
-       */
-      updateDateIncludeOverride: (eventId, date: string, include: boolean | null) => {
-        set((state) => {
-          let changedEvent: Event | null = null
-          const updatedEvents = state.events.map((event) => {
-            if (event.id !== eventId) return event
-            const dateIncludeOverrides = { ...(event.dateIncludeOverrides || {}) }
-
-            if (include === null) {
-              delete dateIncludeOverrides[date]
-            } else {
-              dateIncludeOverrides[date] = include
-            }
-
-            changedEvent = {
-              ...event,
-              dateIncludeOverrides,
-            }
-            return changedEvent
-          })
-
-          const filtered = applySearchFilter(updatedEvents, state.searchTerm)
-          const overridesById = changedEvent
-            ? upsertOverrideMap(state.baseEventsMap, state.overridesById, [changedEvent])
-            : state.overridesById
-          const deletedEventIds = changedEvent
-            ? ensureIdRemoved(state.deletedEventIds, changedEvent.id)
-            : state.deletedEventIds
-
-          return {
-            events: updatedEvents,
-            filteredEvents: filtered,
-            overridesById,
-            deletedEventIds,
-          }
-        })
+      updateDateIncludeOverride: (id, date, include) => {
+        const event = get().events.find((candidate) => candidate.id === id)
+        if (!event) return
+        const dateIncludeOverrides = { ...(event.dateIncludeOverrides || {}) }
+        if (include === null) delete dateIncludeOverrides[date]
+        else dateIncludeOverrides[date] = include
+        get().updateEvent({ ...event, dateIncludeOverrides }, date)
       },
-
-      /**
-       * Reset an event back to its parent data, removing local overrides for the current tag.
-       * Returns true if a parent version was applied.
-       */
-      resetEventOverrides: async (eventId: string) => {
-        try {
-          const parent = await fetchParentEvent(get().activeTag, eventId)
-          if (!parent) {
-            return false
-          }
-
-          set((state) => {
-            const parentEvent = parent as Event
-            const updatedEvents = state.events.map((event) => (event.id === eventId ? parentEvent : event))
-            const filtered = applySearchFilter(updatedEvents, state.searchTerm)
-            const overridesById = upsertOverrideMap(state.baseEventsMap, state.overridesById, [parentEvent])
-            const deletedEventIds = ensureIdRemoved(state.deletedEventIds, eventId)
-
-            return {
-              events: updatedEvents,
-              filteredEvents: filtered,
-              overridesById,
-              deletedEventIds,
-            }
-          })
-
-          return true
-        } catch (error) {
-          console.error("Failed to reset event overrides", error)
-          return false
-        }
+      resetEventOverrides: async (id, contextDate = getAppTodayKey()) => {
+        const before = get().eventOperations
+        const publishedLeaf = get().layers[get().layers.length - 1]?.eventOperations
+        const publishedInherited = !!publishedLeaf && (
+          Object.prototype.hasOwnProperty.call(publishedLeaf.inheritedOverridesById, id)
+          || publishedLeaf.inheritedDeletedIds.includes(id)
+        )
+        const operations = resetInheritedEventOperation(before, id, { publishedInherited })
+        const changed = JSON.stringify(before) !== JSON.stringify(operations)
+        if (changed) set((state) => stateForOperations(state, operations))
+        return changed
       },
-
-      /**
-       * Clear all events from the store
-       * This may trigger reinitialization from config if onRehydrateStorage runs
-       */
-      clearEvents: () => {
-        set({
-          events: [],
-          filteredEvents: [],
-        })
-      },
-
-      /**
-       * Delete all events without triggering reinitialization
-       * This explicitly keeps the initialized flag as true
-       */
-      deleteAllEvents: () => {
-        set({
-          events: [],
-          filteredEvents: [],
-          overridesById: {},
-          deletedEventIds: [],
-          baseEvents: [],
-          baseEventsMap: {},
-          legacyEvents: null,
-          initialized: true,
-        })
-      },
-
-      /**
-       * Reset to default data from config
-       */
+      discardStoredInheritedOperation: (id) => set((state) => stateForOperations(
+        state,
+        discardStoredInheritedOperation(state.eventOperations, id),
+      )),
+      clearEvents: () => set({ events: [], filteredEvents: [] }),
+      deleteAllEvents: () => set((state) => stateForOperations(state, createEmptyStoredEventOperations())),
       resetToDefaults: () => {
         set({
+          eventOperations: createEmptyStoredEventOperations(),
           events: [],
           filteredEvents: [],
-          overridesById: {},
-          deletedEventIds: [],
-          baseEvents: [],
-          baseEventsMap: {},
-          legacyEvents: null,
           initialized: false,
         })
-        setTimeout(() => {
-          get().initializeFromConfig(true)
-        }, 0)
+        setTimeout(() => get().initializeFromConfig(true), 0)
       },
     }),
     {
       name: "events",
       storage: scopedPersistStorage,
       skipHydration: true,
-      partialize: (state) => ({
-        overridesById: state.overridesById,
-        deletedEventIds: state.deletedEventIds,
-        legacyEvents: state.legacyEvents,
-      }),
-      version: 1,
-      migrate: (persisted: any, version) => {
-        if (!persisted) return { overridesById: {}, deletedEventIds: [], legacyEvents: null }
-        if (version === 0) {
-          const legacyEvents = Array.isArray(persisted?.events) ? persisted.events : null
-          return {
-            overridesById: persisted?.overridesById || {},
-            deletedEventIds: persisted?.deletedEventIds || [],
-            legacyEvents,
-          }
-        }
-        return persisted
-      },
-      // Disable automatic rehydration initialization
+      partialize: (state) => ({ eventOperations: state.eventOperations }),
+      version: 2,
+      migrate: (persisted: any, version) => version === 2 && persisted?.eventOperations
+        ? persisted
+        : { eventOperations: createEmptyStoredEventOperations() },
       onRehydrateStorage: () => () => {
-        // Mark store as hydrated after rehydration completes
         useEvents.setState({ hydrated: true })
-        useEvents
-          .getState()
-          .initializeFromConfig(false)
-          .catch((error) => {
-            console.error("Failed to initialize events after hydration", error)
-          })
+        useEvents.getState().initializeFromConfig(false).catch(console.error)
       },
     },
   ),
 )
 
 const triggerEventsRehydrate = () => {
-  const hydrator = useEvents.persist?.rehydrate?.()
-  if (hydrator && typeof (hydrator as Promise<void>).then === "function") {
-    ;(hydrator as Promise<void>).catch(() => undefined)
+  const hydration = useEvents.persist?.rehydrate?.()
+  if (hydration && typeof (hydration as Promise<void>).then === "function") {
+    ;(hydration as Promise<void>).catch(() => undefined)
   }
 }
 
-onTagChange((nextTag) => {
+onTagChange((activeTag) => {
   useEvents.setState({
-    activeTag: nextTag,
+    activeTag,
     events: [],
-    filteredEvents: [],
     baseEvents: [],
     baseEventsMap: {},
-    overridesById: {},
-    deletedEventIds: [],
-    legacyEvents: null,
+    lowerEventsMap: {},
+    sourceTagById: {},
+    publishedLocalOwnedIds: [],
+    eventOperations: createEmptyStoredEventOperations(),
+    localOperationsEnabled: false,
+    layers: [],
     initialized: false,
     hydrated: false,
   })
-
-  primeTagStorageSuffixes(nextTag)
-    .catch(() => undefined)
-    .finally(() => {
-      triggerEventsRehydrate()
-    })
+  primeTagStorageSuffixes(activeTag).catch(() => undefined).finally(triggerEventsRehydrate)
 })
 
-export const refreshEventsStore = async (forceRefresh = true) => {
-  await useEvents.getState().initializeFromConfig(forceRefresh)
-}
-
+export const refreshEventsStore = async (forceRefresh = true) => useEvents.getState().initializeFromConfig(forceRefresh)
 export const invalidateAndRefreshEvents = async () => {
   clearConfigCache()
   await refreshEventsStore(true)
 }
 
-const bootstrapEventsStore = () => {
-  if (useEvents.getState().hydrated) {
-    useEvents
-      .getState()
-      .initializeFromConfig(false)
-      .catch((error) => {
-        console.error("Failed to bootstrap events store", error)
-      })
-    return
-  }
-
-  primeTagStorageSuffixes()
-    .catch(() => undefined)
-    .finally(() => {
-      triggerEventsRehydrate()
-    })
-}
-
 if (typeof window !== "undefined") {
-  bootstrapEventsStore()
-  useAdminStore.subscribe((state, prevState) => {
-    if (state.adminMode !== prevState.adminMode) {
-      refreshEventsStore(true).catch((error) => {
-        console.error("Failed to refresh events after admin change", error)
-      })
-    }
+  primeTagStorageSuffixes().catch(() => undefined).finally(triggerEventsRehydrate)
+  useAdminStore.subscribe((state, previous) => {
+    if (state.adminMode !== previous.adminMode) refreshEventsStore(true).catch(console.error)
   })
 }

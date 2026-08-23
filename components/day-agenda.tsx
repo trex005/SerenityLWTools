@@ -8,6 +8,7 @@
 import { useState, useEffect, type ReactNode } from "react"
 import { EventCard } from "@/components/event-card"
 import { useEvents } from "@/hooks/use-events"
+import { useDateEvents } from "@/hooks/use-date-events"
 import { useOverrideDiff } from "@/hooks/use-override-diff"
 import { useTagData } from "@/hooks/use-tag-data"
 import { shouldShowRecurringEvent } from "@/lib/recurrence-utils"
@@ -47,7 +48,9 @@ interface DayAgendaProps {
  * It separates all-day events from time-specific events.
  */
 export function DayAgenda({ day, date, showLocalTime = false, setShowLocalTime }: DayAgendaProps) {
-  const { events, updateEventOrderValue } = useEvents()
+  const { updateEventOrderValue } = useEvents()
+  const dateKey = formatInAppTimezone(date, "yyyy-MM-dd")
+  const events = useDateEvents(dateKey)
   const { diffIndex } = useOverrideDiff()
   const { tagConfig } = useTagData()
   const eventOverrideIndex = diffIndex?.events ?? {}
@@ -71,8 +74,6 @@ export function DayAgenda({ day, date, showLocalTime = false, setShowLocalTime }
    * It separates all-day events from time-specific events and sorts them appropriately
    */
   useEffect(() => {
-    const dateKey = formatInAppTimezone(date, "yyyy-MM-dd")
-
     // Filter events for the current day that are not archived and match recurrence pattern
     // We need to respect the recurrence pattern even in admin view, but still show events that
     // would be excluded by date-specific overrides
@@ -168,7 +169,7 @@ export function DayAgenda({ day, date, showLocalTime = false, setShowLocalTime }
     if (nextOrderValue === null || !Number.isFinite(nextOrderValue)) return
 
     setAllDayEvents(reordered.map((item) => (item.id === active.id ? { ...item, order_value: nextOrderValue } : item)))
-    updateEventOrderValue(String(active.id), nextOrderValue)
+    updateEventOrderValue(String(active.id), nextOrderValue, dateKey)
   }
 
   return (

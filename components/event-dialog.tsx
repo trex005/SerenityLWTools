@@ -30,7 +30,10 @@ import { v4 as uuidv4 } from "uuid"
 // Add import for RecurrenceEditor at the top of the file
 import { RecurrenceEditor } from "@/components/recurrence-editor"
 import { formatInAppTimezone } from "@/lib/date-utils"
-import { useOverrideDiff } from "@/hooks/use-override-diff"
+import { useEffectiveEventLayers } from "@/hooks/use-date-events"
+import { composeEventsForDate } from "@/lib/serenity-engine/composition"
+import { computeDelta } from "@/lib/config-merge"
+import { getAppTodayKey } from "@/lib/date-utils"
 import { useToast } from "@/hooks/use-toast"
 import { useTagData } from "@/hooks/use-tag-data"
 import { listAdminEnabledTags } from "@/lib/scoped-storage"
@@ -55,7 +58,7 @@ interface EventDialogProps {
 export function EventDialog({ event, open, onOpenChange, initialDay = "monday", initialDate }: EventDialogProps) {
   // Access event store functions
   const { addEvent, updateEvent, resetEventOverrides, activeTag } = useEvents()
-  const { diffIndex } = useOverrideDiff()
+  const effectiveEventLayers = useEffectiveEventLayers()
   const { toast } = useToast()
   const { tagConfig } = useTagData()
 
@@ -67,11 +70,30 @@ export function EventDialog({ event, open, onOpenChange, initialDay = "monday", 
     () => ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"],
     [],
   )
-  const overrideInfo = event?.id ? diffIndex?.events[event.id] : null
-  const overrideKeys = useMemo(() => overrideInfo?.overrideKeys ?? [], [overrideInfo])
+  const eventContext = useMemo(() => {
+    if (!event?.id || !effectiveEventLayers.layers.length) return null
+    const dateKey = initialDate ? formatInAppTimezone(initialDate, "yyyy-MM-dd") : getAppTodayKey()
+    const effective = composeEventsForDate({
+      layers: effectiveEventLayers.layers,
+      localTag: effectiveEventLayers.localTag,
+      date: dateKey,
+    })
+    const lowerLayers = effectiveEventLayers.layers.map((layer, index) => index === effectiveEventLayers.layers.length - 1
+      ? { ...layer, eventOperations: { ownedEventsById: {}, inheritedOverridesById: {}, inheritedDeletedIds: [] } }
+      : layer)
+    const lower = composeEventsForDate({ layers: lowerLayers, localTag: effectiveEventLayers.localTag, date: dateKey })
+    const parent = lower.events.find((candidate) => candidate.id === event.id)
+    const locallyOwned = effective.sourceTagById[event.id] === effectiveEventLayers.localTag
+    const delta = !locallyOwned && parent ? computeDelta(parent as any, event) : undefined
+    return {
+      parentExists: !!parent,
+      overrideKeys: delta && typeof delta === "object" ? Object.keys(delta as any) : [],
+    }
+  }, [effectiveEventLayers, event, initialDate])
+  const overrideKeys = useMemo(() => eventContext?.overrideKeys ?? [], [eventContext])
   const overrideKeySet = useMemo(() => new Set(overrideKeys), [overrideKeys])
   const hasOverrides = overrideKeys.length > 0
-  const parentHasData = overrideInfo?.parentExists ?? false
+  const parentHasData = eventContext?.parentExists ?? false
 
   const formatOverrideKey = (key: string) =>
     key
@@ -472,7 +494,7 @@ export function EventDialog({ event, open, onOpenChange, initialDay = "monday", 
     try {
       if (targetTag === activeTag) {
         if (isEditing) {
-          updateEvent(cleanedFormData)
+          updateEvent(cleanedFormData, initialDate ? formatInAppTimezone(initialDate, "yyyy-MM-dd") : undefined)
         } else {
           addEvent(cleanedFormData)
         }
@@ -557,7 +579,10 @@ export function EventDialog({ event, open, onOpenChange, initialDay = "monday", 
 
     setIsResetting(true)
     try {
-      const success = await resetEventOverrides(event.id)
+      const success = await resetEventOverrides(
+        event.id,
+        initialDate ? formatInAppTimezone(initialDate, "yyyy-MM-dd") : undefined,
+      )
       if (success) {
         toast({
           title: "Overrides removed",

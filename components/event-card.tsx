@@ -189,7 +189,7 @@ export function EventCard({ event, day, date, showLocalTime = false, overrideInf
 
     // If shift key is pressed, delete without confirmation
     if (e.shiftKey) {
-      deleteEvent(event.id)
+      deleteEvent(event.id, date ? formatInAppTimezone(date, "yyyy-MM-dd") : undefined)
     } else {
       setDeleteDialogOpen(true)
     }
@@ -201,7 +201,7 @@ export function EventCard({ event, day, date, showLocalTime = false, overrideInf
    */
   const confirmDelete = () => {
     console.log("Deleting event:", event.id)
-    deleteEvent(event.id)
+    deleteEvent(event.id, date ? formatInAppTimezone(date, "yyyy-MM-dd") : undefined)
     setDeleteDialogOpen(false)
   }
 
@@ -213,7 +213,7 @@ export function EventCard({ event, day, date, showLocalTime = false, overrideInf
     e.preventDefault()
     e.stopPropagation()
     console.log("Archive button clicked for event:", event.id)
-    archiveEvent(event.id)
+    archiveEvent(event.id, date ? formatInAppTimezone(date, "yyyy-MM-dd") : undefined)
   }
 
   /**

@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import { Card, CardContent } from "@/components/ui/card"
 import { useConfigData } from "@/hooks/use-config-data"
+import { useDateEvents } from "@/hooks/use-date-events"
 import { useTagData } from "@/hooks/use-tag-data"
 import { shouldShowRecurringEvent } from "@/lib/recurrence-utils"
 import { Switch } from "@/components/ui/switch"
@@ -20,7 +21,9 @@ interface ReadOnlyDayAgendaProps {
 
 export function ReadOnlyDayAgenda({ day, date, showLocalTime = false, setShowLocalTime }: ReadOnlyDayAgendaProps) {
   // Access events data from config
-  const { events, isLoaded } = useConfigData()
+  const { isLoaded } = useConfigData()
+  const dateKey = formatInAppTimezone(date, "yyyy-MM-dd")
+  const events = useDateEvents(dateKey)
   const { tagConfig } = useTagData()
 
   // State to manage all-day and time-specific events

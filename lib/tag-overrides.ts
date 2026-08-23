@@ -7,11 +7,20 @@ import {
   type TagBundle,
 } from "@/lib/config-fetcher"
 import { getActiveTag } from "@/lib/config-tag"
+import { getAppTodayKey } from "@/lib/date-utils"
+import { loadDateScopedConfiguration } from "@/lib/date-scoped-config"
+import {
+  createEmptyStoredEventOperations,
+  resetInheritedEventOperation,
+  storeEventDeletion,
+  storeInheritedEdit,
+  storeOwnedEvent,
+} from "@/lib/local-event-operations"
 import { buildIdMap, composeWithOverrides, ensureIdAdded, ensureIdRemoved, upsertOverrideMap } from "@/lib/override-helpers"
 import {
-  readStoredEventOverrides,
+  readStoredEventOperations,
   readStoredTipOverrides,
-  writeStoredEventOverrides,
+  writeStoredEventOperations,
   writeStoredTipOverrides,
 } from "@/lib/scoped-storage"
 
@@ -44,52 +53,54 @@ const loadBaseBundleForTag = async (tag: string, force = false): Promise<TagBund
 }
 
 export const loadEventForTag = async (tag: string, eventId: string) => {
-  const bundle = await loadBundleForTag(tag, true)
-  const baseEvents = safeArray(bundle.events)
-  const overrides = readStoredEventOverrides(tag)
-  const merged = composeWithOverrides(baseEvents, overrides?.overridesById || {}, overrides?.deletedIds || [])
-  return merged.find((evt) => evt && evt.id === eventId) || null
+  const loaded = await loadDateScopedConfiguration(tag, { includeStoredOperations: true })
+  return loaded.composeForDate(getAppTodayKey()).events.find((event) => event.id === eventId) || null
 }
 
 export const saveEventForTag = async (tag: string, eventData: any) => {
-  const bundle = await loadBaseBundleForTag(tag, true)
-  const baseEvents = safeArray(bundle.events)
-  const baseMap = buildIdMap(baseEvents)
-  const snapshot = readStoredEventOverrides(tag) || {}
-  const overrides = snapshot.overridesById || {}
-  const updatedOverrides = upsertOverrideMap(baseMap, overrides, [eventData])
-  const updatedDeletedIds = ensureIdRemoved(snapshot.deletedIds || [], eventData.id)
-  writeStoredEventOverrides(tag, {
-    overridesById: updatedOverrides,
-    deletedIds: updatedDeletedIds,
-    legacyItems: snapshot.legacyItems,
-  })
+  const loaded = await loadDateScopedConfiguration(tag)
+  const date = getAppTodayKey()
+  const effective = loaded.composeForDate(date)
+  const lower = loaded.composeLowerStackForDate(date)
+  const current = readStoredEventOperations(tag) || createEmptyStoredEventOperations()
+  const localOwned = effective.sourceTagById[eventData.id] === tag
+  const baseline = lower.events.find((event) => event.id === eventData.id)
+  const publishedLeaf = loaded.layers[loaded.layers.length - 1].eventOperations!
+  const publishedInherited = Object.prototype.hasOwnProperty.call(
+    publishedLeaf.inheritedOverridesById,
+    eventData.id,
+  ) || publishedLeaf.inheritedDeletedIds.includes(eventData.id)
+  const next = localOwned || !baseline
+    ? storeOwnedEvent(current, eventData)
+    : storeInheritedEdit(current, baseline as any, eventData, { publishedInherited })
+  writeStoredEventOperations(tag, next)
   invalidateEventCacheForTag(tag)
 }
 
 export const deleteEventForTag = async (tag: string, eventId: string) => {
-  const snapshot = readStoredEventOverrides(tag) || {}
-  const overrides = { ...(snapshot.overridesById || {}) }
-  delete overrides[eventId]
-  const deletedIds = ensureIdAdded(snapshot.deletedIds || [], eventId)
-  writeStoredEventOverrides(tag, {
-    overridesById: overrides,
-    deletedIds,
-    legacyItems: snapshot.legacyItems,
-  })
+  const loaded = await loadDateScopedConfiguration(tag, { includeStoredOperations: true })
+  const effective = loaded.composeForDate(getAppTodayKey())
+  const publishedOwned = Object.prototype.hasOwnProperty.call(
+    loaded.layers[loaded.layers.length - 1].eventOperations!.ownedEventsById,
+    eventId,
+  )
+  const current = readStoredEventOperations(tag) || createEmptyStoredEventOperations()
+  writeStoredEventOperations(tag, storeEventDeletion(current, eventId, {
+    locallyOwned: effective.sourceTagById[eventId] === tag,
+    publishedOwned,
+  }))
   invalidateEventCacheForTag(tag)
 }
 
 export const clearEventOverrideForTag = async (tag: string, eventId: string) => {
-  const snapshot = readStoredEventOverrides(tag) || {}
-  const overrides = { ...(snapshot.overridesById || {}) }
-  delete overrides[eventId]
-  const deletedIds = ensureIdRemoved(snapshot.deletedIds || [], eventId)
-  writeStoredEventOverrides(tag, {
-    overridesById: overrides,
-    deletedIds,
-    legacyItems: snapshot.legacyItems,
-  })
+  const loaded = await loadDateScopedConfiguration(tag)
+  const publishedLeaf = loaded.layers[loaded.layers.length - 1].eventOperations!
+  const publishedInherited = Object.prototype.hasOwnProperty.call(
+    publishedLeaf.inheritedOverridesById,
+    eventId,
+  ) || publishedLeaf.inheritedDeletedIds.includes(eventId)
+  const current = readStoredEventOperations(tag) || createEmptyStoredEventOperations()
+  writeStoredEventOperations(tag, resetInheritedEventOperation(current, eventId, { publishedInherited }))
   invalidateEventCacheForTag(tag)
 }
 

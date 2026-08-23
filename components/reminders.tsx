@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { useEvents } from "@/hooks/use-events"
+import { useEffectiveEventLayers } from "@/hooks/use-date-events"
 import {
   formatInAppTimezone,
   getAppToday,
@@ -22,10 +23,9 @@ import {
 } from "@/lib/date-utils"
 import { Check, Copy, RefreshCw } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { useTagData } from "@/hooks/use-tag-data"
 import { Input } from "@/components/ui/input"
 import { scopedLocalStorage } from "@/lib/scoped-storage"
-import { generateDailyReminders } from "@/lib/serenity-engine/reports/reminders"
+import { generateDailyReminders, generateDailyRemindersFromLayers } from "@/lib/serenity-engine/reports/reminders"
 
 const STORAGE_PREFIX = "daily-reminders-content"
 
@@ -38,7 +38,7 @@ const getDateKey = (date: Date): string => formatInAppTimezone(date, "yyyy-MM-dd
 export function Reminders() {
   // Access events from store
   const { events, hydrated } = useEvents()
-  const { tagConfig } = useTagData()
+  const effectiveEventLayers = useEffectiveEventLayers()
 
   // State for selected date (defaults to current day in app timezone)
   const [selectedDate, setSelectedDate] = useState<Date>(() => getAppToday())
@@ -56,12 +56,19 @@ export function Reminders() {
   const storageKey = useMemo(() => `${STORAGE_PREFIX}:${getDateKey(selectedDate)}`, [selectedDate])
   const tomorrowDate = useMemo(() => addAppDays(selectedDate, 1), [selectedDate])
 
-  const reminderReport = useMemo(() => generateDailyReminders({
-    events,
-    tagConfig: tagConfig ?? {},
-    reportDate: getDateKey(selectedDate),
-    minutesUntilReset: minutesUntilNextDay,
-  }), [events, selectedDate, tagConfig, minutesUntilNextDay])
+  const reminderReport = useMemo(() => effectiveEventLayers.layers.length
+    ? generateDailyRemindersFromLayers({
+        layers: effectiveEventLayers.layers,
+        localTag: effectiveEventLayers.localTag,
+        reportDate: getDateKey(selectedDate),
+        minutesUntilReset: minutesUntilNextDay,
+      })
+    : generateDailyReminders({
+        events: [],
+        tagConfig: {},
+        reportDate: getDateKey(selectedDate),
+        minutesUntilReset: minutesUntilNextDay,
+      }), [effectiveEventLayers, selectedDate, minutesUntilNextDay])
   const { dayReminders, tomorrowReminders, todayEventCount, tomorrowEventCount } = reminderReport
   const buildReminderContent = useCallback(() => reminderReport.content, [reminderReport])
 

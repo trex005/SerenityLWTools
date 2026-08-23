@@ -70,7 +70,15 @@ const adminModeModeActive = (storage: Storage): boolean => {
   }
 }
 
-type PersistedPayload = { state?: { overridesById?: Record<string, any>; deletedEventIds?: any; deletedTipIds?: any; legacyEvents?: any; legacyTips?: any } }
+export type StoredEventOperations = {
+  ownedEventsById: Record<string, any>
+  inheritedOverridesById: Record<string, { set: Record<string, unknown>; remove?: string[] }>
+  inheritedDeletedIds: string[]
+  suppressedPublishedOwnedIds: string[]
+  suppressedPublishedInheritedIds?: string[]
+}
+
+type PersistedPayload = { state?: { eventOperations?: Partial<StoredEventOperations>; overridesById?: Record<string, any>; deletedEventIds?: any; deletedTipIds?: any; legacyEvents?: any; legacyTips?: any } }
 
 const parsePersistedPayload = (raw: string | null): PersistedPayload | null => {
   if (!raw) return null
@@ -83,7 +91,14 @@ const parsePersistedPayload = (raw: string | null): PersistedPayload | null => {
 
 const isOverrideSnapshotEmpty = (payload: PersistedPayload | null, key: string): boolean => {
   if (!payload || !payload.state) return true
-  const { overridesById, deletedEventIds, deletedTipIds, legacyEvents, legacyTips } = payload.state
+  const { eventOperations, overridesById, deletedEventIds, deletedTipIds, legacyEvents, legacyTips } = payload.state
+  if (key === "events" && eventOperations) {
+    return Object.keys(eventOperations.ownedEventsById || {}).length === 0
+      && Object.keys(eventOperations.inheritedOverridesById || {}).length === 0
+      && (!Array.isArray(eventOperations.inheritedDeletedIds) || eventOperations.inheritedDeletedIds.length === 0)
+      && (!Array.isArray(eventOperations.suppressedPublishedOwnedIds) || eventOperations.suppressedPublishedOwnedIds.length === 0)
+      && (!Array.isArray(eventOperations.suppressedPublishedInheritedIds) || eventOperations.suppressedPublishedInheritedIds.length === 0)
+  }
   const overridesEmpty = !overridesById || Object.keys(overridesById).length === 0
   const deletedEmpty =
     key === "events"
@@ -355,6 +370,42 @@ export const readStoredEventOverrides = (tag: string): StoredOverrideSnapshot | 
   if (!state) return null
   return normalizeOverrideSnapshot(state, "deletedEventIds", "legacyEvents")
 }
+
+const emptyStoredEventOperations = (): StoredEventOperations => ({
+  ownedEventsById: {},
+  inheritedOverridesById: {},
+  inheritedDeletedIds: [],
+  suppressedPublishedOwnedIds: [],
+  suppressedPublishedInheritedIds: [],
+})
+
+export const readStoredEventOperations = (tag: string): StoredEventOperations | null => {
+  const state = readPersistedStateForTag(tag, "events")
+  if (!state || typeof state !== "object" || !state.eventOperations || typeof state.eventOperations !== "object") {
+    return null
+  }
+  const value = state.eventOperations
+  return {
+    ownedEventsById: value.ownedEventsById && typeof value.ownedEventsById === "object" ? value.ownedEventsById : {},
+    inheritedOverridesById:
+      value.inheritedOverridesById && typeof value.inheritedOverridesById === "object"
+        ? value.inheritedOverridesById
+        : {},
+    inheritedDeletedIds: Array.isArray(value.inheritedDeletedIds) ? value.inheritedDeletedIds.slice() : [],
+    suppressedPublishedOwnedIds: Array.isArray(value.suppressedPublishedOwnedIds)
+      ? value.suppressedPublishedOwnedIds.slice()
+      : [],
+    suppressedPublishedInheritedIds: Array.isArray(value.suppressedPublishedInheritedIds)
+      ? value.suppressedPublishedInheritedIds.slice()
+      : [],
+  }
+}
+
+export const writeStoredEventOperations = (tag: string, operations: StoredEventOperations) => {
+  writePersistedStateForTag(tag, "events", { eventOperations: operations }, 2)
+}
+
+export { emptyStoredEventOperations }
 
 export const readStoredTipOverrides = (tag: string): StoredOverrideSnapshot | null => {
   const state = readPersistedStateForTag(tag, "tips")

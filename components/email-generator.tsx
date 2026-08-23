@@ -15,8 +15,8 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { DateRangeSelector } from "@/components/date-range-selector"
 import { useEvents } from "@/hooks/use-events"
+import { useEffectiveEventLayers } from "@/hooks/use-date-events"
 import { useTips } from "@/hooks/use-tips"
-import { useTagData } from "@/hooks/use-tag-data"
 import {
   addAppDays,
   formatInAppTimezone,
@@ -40,7 +40,7 @@ import {
 import { Checkbox } from "@/components/ui/checkbox"
 import { scopedLocalStorage } from "@/lib/scoped-storage"
 import { matchesSearchTokens, tokenizeSearchTerm } from "@/lib/search-utils"
-import { formatIndentedDescription, generateAgenda } from "@/lib/serenity-engine/reports/agenda"
+import { formatIndentedDescription, generateAgendaFromLayers } from "@/lib/serenity-engine/reports/agenda"
 
 interface EmailGeneratorProps {
   initialDateRange?: [Date | undefined, Date | undefined]
@@ -49,8 +49,8 @@ interface EmailGeneratorProps {
 export function EmailGenerator({ initialDateRange }: EmailGeneratorProps) {
   // Access events and tips from stores
   const { events } = useEvents()
+  const effectiveEventLayers = useEffectiveEventLayers()
   const { tips, updateTip } = useTips()
-  const { tagConfig } = useTagData()
 
   // State for date range - default to today + next two days in UTC-2
   const [dateRange, setDateRange] = useState<[Date | undefined, Date | undefined]>(() => {
@@ -113,9 +113,10 @@ export function EmailGenerator({ initialDateRange }: EmailGeneratorProps) {
    */
   const generateAgendaContent = useCallback((alsoUpdateEdited = false) => {
     if (!dateRange[0] || !dateRange[1]) return
-    const content = generateAgenda({
-      events,
-      tagConfig: tagConfig ?? {},
+    if (!effectiveEventLayers.layers.length) return
+    const content = generateAgendaFromLayers({
+      layers: effectiveEventLayers.layers,
+      localTag: effectiveEventLayers.localTag,
       startDate: formatInAppTimezone(dateRange[0], "yyyy-MM-dd"),
       endDate: formatInAppTimezone(dateRange[1], "yyyy-MM-dd"),
       referenceDate: formatInAppTimezone(getAppToday(), "yyyy-MM-dd"),
@@ -129,7 +130,7 @@ export function EmailGenerator({ initialDateRange }: EmailGeneratorProps) {
     }
 
     return content
-  }, [dateRange, events, tagConfig])
+  }, [dateRange, effectiveEventLayers])
 
   /**
    * Generate tip content based on selected tip

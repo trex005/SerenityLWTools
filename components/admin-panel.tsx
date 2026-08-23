@@ -51,20 +51,21 @@ import {
   readScopedStateForTag,
   clearScopedDataForTags,
   TAG_DATA_STORAGE_KEYS,
+  type StoredEventOperations,
 } from "@/lib/scoped-storage"
 import { getActiveTag } from "@/lib/config-tag"
 import JSZip from "jszip"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { buildIdMap, composeWithOverrides, deriveOverridesFromFinal } from "@/lib/override-helpers"
 import { formatInAppTimezone } from "@/lib/date-utils"
+import { createEmptyStoredEventOperations } from "@/lib/local-event-operations"
+import { normalizeEventOperations } from "@/lib/serenity-engine/event-operations"
 
 const EVENTS_STORAGE_KEY = "events"
 const TIPS_STORAGE_KEY = "tips"
 
 type StoredEventsState = {
-  overridesById?: Record<string, any>
-  deletedEventIds?: string[]
-  legacyEvents?: any[]
+  eventOperations?: StoredEventOperations
 }
 
 type StoredTipsState = {
@@ -76,18 +77,9 @@ type StoredTipsState = {
 const loadStoredEventsForTag = async (tag: string): Promise<any[]> => {
   const persisted = readScopedStateForTag<{ state?: StoredEventsState }>(tag, EVENTS_STORAGE_KEY)
   const stored = persisted?.state
-  if (!stored) return []
+  if (!stored?.eventOperations) return []
   const bundle = await fetchComposedForTag(tag, false, { includeAncestorLocalOverrides: true })
-  const baseEvents = Array.isArray(bundle?.events) ? bundle.events : []
-  const baseMap = buildIdMap(baseEvents)
-  let overrides = stored.overridesById || {}
-  let deletedIds = Array.isArray(stored.deletedEventIds) ? stored.deletedEventIds : []
-  if (Array.isArray(stored.legacyEvents) && stored.legacyEvents.length > 0) {
-    const derived = deriveOverridesFromFinal(stored.legacyEvents, baseMap)
-    overrides = derived.overridesById
-    deletedIds = derived.deletedIds
-  }
-  return composeWithOverrides(baseEvents, overrides, deletedIds)
+  return Array.isArray(bundle?.events) ? bundle.events : []
 }
 
 const loadStoredTipsForTag = async (tag: string): Promise<any[]> => {
@@ -113,9 +105,14 @@ const loadStoredTipsForTag = async (tag: string): Promise<any[]> => {
  */
 export function AdminPanel() {
   // Access data stores
-  const { events, setEvents } = useEvents()
+  const { events, setEvents, eventOperations, discardStoredInheritedOperation } = useEvents()
   const { tips, setTips: setTipsStore } = useTips()
   const { toast } = useToast()
+  const storedConditionalEventIds = Array.from(new Set([
+    ...Object.keys(eventOperations.inheritedOverridesById),
+    ...eventOperations.inheritedDeletedIds,
+    ...(eventOperations.suppressedPublishedInheritedIds ?? []),
+  ])).sort()
 
   // Function to reset regenerate agenda decision
   const resetRegenerateDecision = () => {
@@ -456,7 +453,26 @@ export function AdminPanel() {
         const data = JSON.parse(event.target?.result as string)
         const importSummary = []
 
-        if (data.events) {
+        if (data.schemaVersion === 2 && Array.isArray(data.operations)) {
+          const normalized = normalizeEventOperations(data)
+          useEvents.setState({
+            eventOperations: {
+              ownedEventsById: normalized.ownedEventsById,
+              inheritedOverridesById: Object.fromEntries(
+                Object.entries(normalized.inheritedOverridesById).map(([id, operation]) => [id, {
+                  set: operation.setByPointer,
+                  remove: operation.removePointers,
+                }]),
+              ),
+              inheritedDeletedIds: normalized.inheritedDeletedIds,
+              suppressedPublishedOwnedIds: [],
+              suppressedPublishedInheritedIds: [],
+            },
+            initialized: false,
+          })
+          useEvents.getState().initializeFromConfig(true).catch(console.error)
+          importSummary.push(`${data.operations.length} event operations`)
+        } else if (data.events) {
           setEvents(data.events, { fromBase: false })
           importSummary.push(`${data.events.length} events`)
         }
@@ -506,9 +522,11 @@ export function AdminPanel() {
         filteredEvents: [],
         baseEvents: [],
         baseEventsMap: {},
-        overridesById: {},
-        deletedEventIds: [],
-        legacyEvents: null,
+        lowerEventsMap: {},
+        sourceTagById: {},
+        publishedLocalOwnedIds: [],
+        eventOperations: createEmptyStoredEventOperations(),
+        layers: [],
         initialized: false,
       })
       useTips.setState({
@@ -533,10 +551,10 @@ export function AdminPanel() {
       const resolvedTag = fetchedConfig?.tag || getActiveTag()
       const resolvedEvents: Event[] = Array.isArray(fetchedConfig?.events)
         ? (fetchedConfig.events as Event[])
-        : (initialConfig.events as Event[])
+        : (initialConfig.events as unknown as Event[])
       const resolvedTips: Tip[] = Array.isArray(fetchedConfig?.tips)
         ? (fetchedConfig.tips as Tip[])
-        : (initialConfig.tips as Tip[])
+        : (initialConfig.tips as unknown as Tip[])
 
       // Set the data directly
       useEvents.getState().setEvents(resolvedEvents, { fromBase: true })
@@ -753,6 +771,25 @@ export function AdminPanel() {
                   <Trash2 className="mr-2 h-4 w-4" />
                   {isClearingAllTagData ? "Clearing..." : "Clear Stored Data"}
                 </Button>
+              </div>
+            </div>
+          )}
+
+          {storedConditionalEventIds.length > 0 && (
+            <div className="grid gap-2">
+              <h3 className="text-lg font-medium">Stored Inherited Event Operations</h3>
+              <p className="text-sm text-muted-foreground">
+                These conditional operations remain stored even while their parent event is inactive.
+              </p>
+              <div className="space-y-2">
+                {storedConditionalEventIds.map((id) => (
+                  <div key={id} className="flex items-center justify-between gap-2 rounded border p-2">
+                    <code className="truncate text-xs">{id}</code>
+                    <Button variant="outline" size="sm" onClick={() => discardStoredInheritedOperation(id)}>
+                      Discard local operation
+                    </Button>
+                  </div>
+                ))}
               </div>
             </div>
           )}

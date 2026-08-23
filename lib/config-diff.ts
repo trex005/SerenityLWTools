@@ -2,6 +2,8 @@
 
 import { arrayToIdMap, computeDelta } from "@/lib/config-merge"
 import { fetchComposedForTag } from "@/lib/config-fetcher"
+import { loadDateScopedConfiguration } from "@/lib/date-scoped-config"
+import { getAppTodayKey } from "@/lib/date-utils"
 
 export type DiffInfo = {
   parentExists: boolean
@@ -24,19 +26,11 @@ export const computeDiffIndexForTag = async (
   effectiveTips: any[],
   tag: string,
 ): Promise<DiffIndex> => {
-  // Compose parent chain by fetching composed for tag, then removing leaf-only layer by recomposing parent
-  // We don't have a direct parent compose function exported, so approximate by fetching composed for tag's parent chain
-  // through fetchComposedForTag for each parent tag is not available; instead we infer parent by rebuilding
-  // via config-fetcher functionality inside buildChildDeltaFiles. To keep the API surface small here, we reuse
-  // fetchComposedForTag(tag) to read the leaf's composed snapshot and infer parent existence for each id by
-  // removing leaf deltas via comparison with parent maps also built in buildChildDeltaFiles. Since we cannot
-  // access parent maps directly, call fetchComposedForTag for tag and also for parent by reading tag's config
-  // isn't available here. As a practical approach, we compute base-vs-leaf deltas using composed parent by
-  // leveraging fetchComposedForTag on the parent tag derived from tagConfig.parent if present.
-
-  // Load composed for current tag to discover parent tag
-  const leafComposed = await fetchComposedForTag(tag)
-  const parentTag = (leafComposed?.tagConfig && (leafComposed.tagConfig as any).parent) || null
+  const eventLoader = await loadDateScopedConfiguration(tag, { includeStoredOperations: true })
+  const date = getAppTodayKey()
+  const eventComposition = eventLoader.composeForDate(date)
+  const parentEventComposition = eventLoader.composeLowerStackForDate(date)
+  const parentTag = eventLoader.parents[0] || null
 
   if (!parentTag || typeof parentTag !== "string") {
     // No parent chain: mark everything as newInTag=false (no parent), parentExists=false
@@ -53,15 +47,12 @@ export const computeDiffIndexForTag = async (
     return { hasParentChain: false, events, tips }
   }
 
-  // Fetch parent-composed snapshot
-  // The parent baseline must include local overrides inherited by the current
-  // tag. Otherwise inherited edits are incorrectly reported as leaf overrides.
   const parentComposed = await fetchComposedForTag(parentTag, false, {
     includeAncestorLocalOverrides: true,
     currentTag: tag,
   })
 
-  const parentEventsById = arrayToIdMap(parentComposed.events || [])
+  const parentEventsById = arrayToIdMap(parentEventComposition.events || [])
   const parentTipsById = arrayToIdMap(parentComposed.tips || [])
   const childEventsById = arrayToIdMap(effectiveEvents || [])
   const childTipsById = arrayToIdMap(effectiveTips || [])
@@ -74,8 +65,8 @@ export const computeDiffIndexForTag = async (
     const edited = childEventsById[id]
     const delta = computeDelta(base, edited)
     const parentExists = !!base
-    const newInTag = !base
-    const overrideKeys = parentExists && delta && typeof delta === "object" ? Object.keys(delta as any) : []
+    const newInTag = eventComposition.sourceTagById[id] === tag
+    const overrideKeys = !newInTag && parentExists && delta && typeof delta === "object" ? Object.keys(delta as any) : []
     events[id] = { parentExists, newInTag, overrideKeys }
   }
   for (const id of Object.keys(childTipsById)) {
@@ -95,14 +86,15 @@ export const computeDiffIndexForTag = async (
 export const fetchParentComposed = async (
   tag: string,
 ): Promise<{ tag: string; events: any[]; tips: any[] } | null> => {
-  const leaf = await fetchComposedForTag(tag)
-  const parentTag = (leaf?.tagConfig && (leaf.tagConfig as any).parent) || null
-  if (!parentTag || typeof parentTag !== "string") return null
+  const loader = await loadDateScopedConfiguration(tag, { includeStoredOperations: true })
+  const parentTag = loader.parents[0] || null
+  if (!parentTag) return null
+  const lower = loader.composeLowerStackForDate(getAppTodayKey())
   const parent = await fetchComposedForTag(parentTag, false, {
     includeAncestorLocalOverrides: true,
     currentTag: tag,
   })
-  return { tag: parentTag, events: parent.events || [], tips: parent.tips || [] }
+  return { tag: parentTag, events: lower.events || [], tips: parent.tips || [] }
 }
 
 export const fetchParentEvent = async (tag: string, id: string): Promise<any | null> => {
