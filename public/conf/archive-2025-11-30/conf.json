@@ -8,5 +8,9 @@
     "archive-2025-11-30": {
       "startDate": "2025-11-30"
     }
+  },
+  "parents": [],
+  "storage": {
+    "eventsSuffix": "schema-v2-20260816"
   }
 }

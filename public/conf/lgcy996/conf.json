@@ -1,6 +1,5 @@
 {
   "updated": "2025-12-14T12:43:37.648Z",
-  "parent": "996",
   "brand": {
     "name": "LGCY",
     "favicon": "/conf/lgcy996/favicon.ico"
@@ -9,5 +8,12 @@
     "lgcy996": {
       "startDate": "2024-10-10"
     }
+  },
+  "parents": [
+    "996",
+    "main"
+  ],
+  "storage": {
+    "eventsSuffix": "schema-v2-20260816"
   }
 }

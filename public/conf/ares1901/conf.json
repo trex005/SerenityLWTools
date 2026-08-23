@@ -1,6 +1,5 @@
 {
   "updated": "2025-12-14T12:43:37.648Z",
-  "parent": "1901",
   "brand": {
     "name": "ARES, Heroes of 1901",
     "favicon": "/conf/ares1901/favicon.ico"
@@ -9,5 +8,12 @@
     "ares1901": {
       "startDate": "2025-10-19"
     }
+  },
+  "parents": [
+    "1901",
+    "main"
+  ],
+  "storage": {
+    "eventsSuffix": "schema-v2-20260816"
   }
 }

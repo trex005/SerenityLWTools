@@ -1,5 +1,27 @@
 {
-  "updated": "2026-07-07T22:49:31-02:00",
-  "events": [
+  "schemaVersion": 2,
+  "updated": "2026-08-12T22:48:27-02:00",
+  "operations": [
+    {
+      "kind": "override",
+      "id": "ev-9",
+      "set": {
+        "/archived": true
+      }
+    },
+    {
+      "kind": "override",
+      "id": "5831a6ec-244d-40d2-88dc-81a7173ecffd",
+      "set": {
+        "/archived": true
+      }
+    },
+    {
+      "kind": "override",
+      "id": "516e99c1-b08f-49fb-afa4-825b76080229",
+      "set": {
+        "/archived": true
+      }
+    }
   ]
 }

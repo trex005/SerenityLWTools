@@ -8,5 +8,9 @@
     "main": {
       "startDate": "2024-10-10"
     }
+  },
+  "parents": [],
+  "storage": {
+    "eventsSuffix": "schema-v2-20260816"
   }
 }

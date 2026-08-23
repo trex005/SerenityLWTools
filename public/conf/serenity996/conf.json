@@ -1,6 +1,5 @@
 {
   "updated": "2026-07-07T22:49:31-02:00",
-  "parent": "996",
   "brand": {
     "name": "Serenity",
     "favicon": "/conf/serenity996/favicon.ico"
@@ -9,5 +8,12 @@
     "serenity996": {
       "startDate": "2024-10-10"
     }
+  },
+  "parents": [
+    "996",
+    "main"
+  ],
+  "storage": {
+    "eventsSuffix": "schema-v2-20260816"
   }
 }

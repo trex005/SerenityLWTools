@@ -1,6 +1,5 @@
 {
   "updated": "2025-12-14T12:43:37.648Z",
-  "parent": "996",
   "brand": {
     "name": "Serenity Sandwich Club",
     "favicon": "/conf/sswc996/favicon.ico",
@@ -8,12 +7,16 @@
     "backgroundOpacity": 0.25
   },
   "storage": {
-    "eventsSuffix": "v2",
+    "eventsSuffix": "schema-v2-20260816",
     "tipsSuffix": "v2"
   },
   "tags": {
     "sswc996": {
       "startDate": "2024-10-10"
     }
-  }
+  },
+  "parents": [
+    "996",
+    "main"
+  ]
 }

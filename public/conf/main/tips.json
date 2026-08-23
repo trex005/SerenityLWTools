@@ -1,5 +1,5 @@
 {
-  "updated": "2026-07-07T22:49:31-02:00",
+  "updated": "2026-08-12T18:25:27-02:00",
   "tips": [
     {
       "id": "7ffc3fb1-56eb-4155-8be1-de25da815e1e",
@@ -843,6 +843,30 @@
       "unlisted": false,
       "isHtml": false,
       "type": "text"
+    },
+    {
+      "id": "86dae861-70a9-44d3-88f5-18171d517cfb",
+      "title": "Ammo Bonanza",
+      "content": "",
+      "customId": "ammo-bonanza",
+      "imageUrl": "/img/ammo_bonanza.jpg",
+      "adminOnly": false,
+      "canUseInBriefing": true,
+      "unlisted": false,
+      "isHtml": false,
+      "type": "text"
+    },
+    {
+      "id": "510e995b-0a50-4dd1-b1a0-c9b9308f6755",
+      "title": "Waterfall Troop Training Strategy - Dinotorial",
+      "content": "",
+      "customId": "waterfall-training-dinotorial",
+      "imageUrl": "/img/dinotorial/Waterfall.jpg",
+      "adminOnly": false,
+      "canUseInBriefing": true,
+      "unlisted": false,
+      "isHtml": false,
+      "type": "image"
     }
   ]
 }

@@ -1,0 +1,366 @@
+{
+  "_meta": {
+    "source_file_type": "Next.js / webpack JavaScript bundle",
+    "notes": [
+      "Static data is normalized without executing arbitrary JavaScript.",
+      "Calculation functions are preserved as minified source so no behavior is lost.",
+      "7200000 ms = 2 hours, used by the bundle for the UTC-2 game-day boundary.",
+      "86400000 ms = 1 day.",
+      "604800000 ms = 1 week."
+    ]
+  },
+  "season_transition_special_weeks": [
+    {
+      "season": 2,
+      "weeks": [
+        {
+          "isPostSeason": false,
+          "week": 8
+        },
+        {
+          "isPostSeason": true,
+          "week": 1
+        }
+      ]
+    },
+    {
+      "season": 3,
+      "weeks": [
+        {
+          "isPostSeason": false,
+          "week": 8
+        },
+        {
+          "isPostSeason": true,
+          "week": 1
+        }
+      ]
+    },
+    {
+      "season": 4,
+      "weeks": [
+        {
+          "isPostSeason": false,
+          "week": 8
+        },
+        {
+          "isPostSeason": true,
+          "week": 1
+        }
+      ]
+    },
+    {
+      "season": 5,
+      "weeks": [
+        {
+          "isPostSeason": false,
+          "week": 8
+        },
+        {
+          "isPostSeason": true,
+          "week": 1
+        }
+      ]
+    },
+    {
+      "season": 6,
+      "weeks": [
+        {
+          "isPostSeason": false,
+          "week": 8
+        },
+        {
+          "isPostSeason": true,
+          "week": 1
+        }
+      ]
+    }
+  ],
+  "hero_translation_keys": {
+    "Kim": "kim",
+    "DVA": "dva",
+    "Tesla": "tesla",
+    "Murphy": "murphy",
+    "Carlie": "carlie",
+    "Swift": "swift",
+    "Marshall": "marshall",
+    "Schuyler": "schuyler",
+    "McGregor": "mcgregor",
+    "Lucius": "lucius",
+    "Adam": "adam",
+    "Williams": "williams",
+    "Fiona": "fiona",
+    "Stetmann": "stetmann",
+    "Morrison": "morrison"
+  },
+  "hot_deal_event_metadata": {
+    "heroWeaponBP": {
+      "name": "Hero Exclusive Weapon Battle Pass",
+      "shortName": "Weapon BP",
+      "bg": "bg-yellow-100 dark:bg-yellow-900/40",
+      "text": "text-yellow-700 dark:text-yellow-300",
+      "guideSlug": "exclusive-weapons"
+    },
+    "heroSpin": {
+      "name": "Hero Shard Spin",
+      "shortName": "Hero Spin",
+      "bg": "bg-purple-100 dark:bg-purple-900/40",
+      "text": "text-purple-700 dark:text-purple-300"
+    },
+    "heroRoulette": {
+      "name": "Hero Shard Roulette",
+      "shortName": "Roulette",
+      "bg": "bg-purple-100 dark:bg-purple-900/40",
+      "text": "text-purple-700 dark:text-purple-300"
+    },
+    "energyLootQuest": {
+      "name": "Energy Loot Quest",
+      "shortName": "Energy Quest",
+      "bg": "bg-green-100 dark:bg-green-900/40",
+      "text": "text-green-700 dark:text-green-300"
+    },
+    "moonstone": {
+      "name": "Moonstone Blessing",
+      "shortName": "Moonstone",
+      "bg": "bg-sky-100 dark:bg-sky-900/40",
+      "text": "text-sky-700 dark:text-sky-300"
+    },
+    "bountyHunter": {
+      "name": "Bounty Hunter",
+      "shortName": "Bounty Hunter",
+      "bg": "bg-orange-100 dark:bg-orange-900/40",
+      "text": "text-orange-700 dark:text-orange-300"
+    },
+    "heroGrowthBP": {
+      "name": "Hero Growth Battle Pass",
+      "shortName": "Hero Growth BP",
+      "bg": "bg-teal-100 dark:bg-teal-900/40",
+      "text": "text-teal-700 dark:text-teal-300"
+    },
+    "glitteringMarket": {
+      "name": "Glittering Market",
+      "shortName": "Glittering Mkt",
+      "bg": "bg-pink-100 dark:bg-pink-900/40",
+      "text": "text-pink-700 dark:text-pink-300"
+    },
+    "overlordBP": {
+      "name": "Overlord Training Battle Pass",
+      "shortName": "Overlord BP",
+      "bg": "bg-indigo-100 dark:bg-indigo-900/40",
+      "text": "text-indigo-700 dark:text-indigo-300"
+    },
+    "totalMobilisation": {
+      "name": "Total Mobilization",
+      "shortName": "Total Mob.",
+      "bg": "bg-red-100 dark:bg-red-900/40",
+      "text": "text-red-700 dark:text-red-300"
+    },
+    "droneBP": {
+      "name": "Drone Training Pass",
+      "shortName": "Drone BP",
+      "bg": "bg-lime-100 dark:bg-lime-900/40",
+      "text": "text-lime-700 dark:text-lime-300"
+    },
+    "bullseye": {
+      "name": "Bullseye Loot / Ammo Bonanza",
+      "shortName": "Bullseye",
+      "bg": "bg-amber-100 dark:bg-amber-900/40",
+      "text": "text-amber-700 dark:text-amber-300",
+      "guideSlug": "ammo-bonanza"
+    }
+  },
+  "in_season_weekly_rotation": {
+    "1": [
+      "heroWeaponBP",
+      "energyLootQuest"
+    ],
+    "2": [
+      "bountyHunter",
+      "heroGrowthBP",
+      "moonstone"
+    ],
+    "3": [
+      "heroWeaponBP",
+      "glitteringMarket",
+      "overlordBP",
+      "energyLootQuest"
+    ],
+    "4": [
+      "bullseye",
+      "droneBP",
+      "moonstone"
+    ],
+    "5": [
+      "totalMobilisation",
+      "energyLootQuest"
+    ],
+    "6": [
+      "heroWeaponBP",
+      "bountyHunter",
+      "heroGrowthBP",
+      "moonstone"
+    ],
+    "7": [
+      "glitteringMarket",
+      "overlordBP",
+      "energyLootQuest"
+    ],
+    "8": [
+      "bullseye",
+      "droneBP",
+      "moonstone"
+    ]
+  },
+  "off_season_four_week_rotation": {
+    "1": [
+      "totalMobilisation",
+      "energyLootQuest"
+    ],
+    "2": [
+      "bountyHunter",
+      "heroGrowthBP",
+      "moonstone"
+    ],
+    "3": [
+      "glitteringMarket",
+      "overlordBP",
+      "energyLootQuest"
+    ],
+    "4": [
+      "bullseye",
+      "droneBP",
+      "moonstone"
+    ]
+  },
+  "exclusive_weapon_schedule": {
+    "1": {
+      "1": {
+        "name": "Kim",
+        "guideSlug": "season-1-kim-exclusive-weapon"
+      },
+      "3": {
+        "name": "DVA",
+        "guideSlug": "season-1-dva-exclusive-weapon"
+      },
+      "6": {
+        "name": "Tesla",
+        "guideSlug": "season-1-tesla-exclusive-weapon"
+      }
+    },
+    "2": {
+      "1": {
+        "name": "Murphy",
+        "guideSlug": "season-2-murphy-exclusive-weapon"
+      },
+      "3": {
+        "name": "Carlie",
+        "guideSlug": "season-2-carlie-exclusive-weapon"
+      },
+      "6": {
+        "name": "Swift",
+        "guideSlug": "season-2-swift-exclusive-weapon"
+      }
+    },
+    "3": {
+      "1": {
+        "name": "Marshall",
+        "guideSlug": "season-3-marshall-exclusive-weapon"
+      },
+      "3": {
+        "name": "Schuyler",
+        "guideSlug": "season-3-schuyler-exclusive-weapon"
+      },
+      "6": {
+        "name": "McGregor",
+        "guideSlug": "season-3-mcgregor-exclusive-weapon"
+      }
+    },
+    "4": {
+      "1": {
+        "name": "Lucius",
+        "guideSlug": "season-4-lucius-exclusive-weapon"
+      },
+      "3": {
+        "name": "Adam",
+        "guideSlug": "season-4-adam-exclusive-weapon"
+      },
+      "6": {
+        "name": "Williams",
+        "guideSlug": "season-4-williams-exclusive-weapon"
+      }
+    },
+    "5": {
+      "1": {
+        "name": "Fiona",
+        "guideSlug": "season-5-fiona-exclusive-weapon"
+      },
+      "3": {
+        "name": "Stetmann",
+        "guideSlug": "season-5-stetmann-exclusive-weapon"
+      },
+      "6": {
+        "name": "Morrison",
+        "guideSlug": "season-5-morrison-exclusive-weapon"
+      }
+    }
+  },
+  "derived_rules": {
+    "game_day_timezone_offset_hours": -2,
+    "shiny_cycle_days": 3,
+    "shiny_phase_mapping": {
+      "0": "Today",
+      "1": "In 2 days",
+      "2": "Tomorrow"
+    },
+    "in_season_length_weeks": 8,
+    "server_age_season_threshold_days": {
+      "season_0_through": 120,
+      "season_1_through": 176,
+      "season_2_through": 260,
+      "season_3_through": 351,
+      "season_4_after": 351
+    },
+    "alternating_weekly_events": {
+      "even_week": [
+        "Zombie Invasion (Wed-Fri)",
+        "Rampage Bosses (Sun)"
+      ],
+      "odd_week": [
+        "General's Trial (Wed-Fri)",
+        "Doomsday (Sun)"
+      ]
+    }
+  },
+  "server_and_season_logic_source": {
+    "server_age_days_utc_minus_2": "e=>{let s=new Date(parseInt(e)),t=new Date,a=new Date(s.getTime()-72e5),r=new Date(t.getTime()-72e5),n=new Date(Date.UTC(a.getUTCFullYear(),a.getUTCMonth(),a.getUTCDate()));return Math.floor((new Date(Date.UTC(r.getUTCFullYear(),r.getUTCMonth(),r.getUTCDate())).getTime()-n.getTime())/864e5)+1}",
+    "game_day_of_week_utc_minus_2": "()=>{let e=new Date;e.setUTCHours(e.getUTCHours()-2);let s=e.getUTCDay();return 0===s?7:s}",
+    "active_event_theme": "()=>{let e=i();if(e<=0)return\"No active event\";let s=a.Y[e-1],t=new Date,r=60*t.getUTCHours()+t.getUTCMinutes(),n=s.events;for(let e=0;e<n.length;e++){let[s,t]=n[e].time.split(\":\").map(Number),a=60*s+t,i=n[e+1],o=i?i.time.split(\":\").map(Number).reduce((e,s)=>60*e+s):1440;if(r>=a&&r<o)return n[e].theme}return\"No active event\"}",
+    "is_shiny_today": "e=>(n(e.timestamp)-1)",
+    "is_special_season_week": "e=>{var s;let t=e.currentSeason;if(!t||t<2)return!1;let a=e.currentWeek;if(null==a)return!1;let r=null!==(s=e.isPostSeason)&&void 0!==s&&s,n=u.find(e=>e.season===t);return!!n&&n.weeks.some(e=>e.isPostSeason===r&&e.week===a)}",
+    "has_season_preview": "e=>!!e.seasonPreviewAt",
+    "season_preview_week": "e=>{if(!p(e)||!e.seasonPreviewAt)return null;let s=(0,r.A4)(new Date(e.seasonPreviewAt));return Math.max(1,Math.round(((0,r.A4)(new Date).getTime()-s.getTime())/6048e5)+1)}",
+    "season_age_days_utc_minus_2": "e=>{var s;if(!e.currentSeason||0===e.currentSeason)return null;let t=\"s\".concat(e.currentSeason),a=null===(s=e.seasonStartTimestamps)||void 0===s?void 0:s[t];if(!a)return null;let r=new Date(parseInt(a)),n=new Date,i=new Date(r.getTime()-72e5),o=new Date(n.getTime()-72e5),m=new Date(Date.UTC(i.getUTCFullYear(),i.getUTCMonth(),i.getUTCDate()));return Math.floor((new Date(Date.UTC(o.getUTCFullYear(),o.getUTCMonth(),o.getUTCDate())).getTime()-m.getTime())/864e5)+1}",
+    "shiny_label": "e=>{let s=(n(e.timestamp)-1)%3;return 0===s?\"Today\":1===s?\"In 2 days\":\"Tomorrow\"}",
+    "infer_season_from_server_age": "(e,s)=>{if((null==s?void 0:s.currentSeason)!==void 0&&(null==s?void 0:s.isPostSeason)!==void 0)return{season:s.currentSeason,isPostSeason:s.isPostSeason};let t=n(e);return t<=120?{season:0,isPostSeason:!1}:t<=176?{season:1,isPostSeason:!1}:t<=260?{season:2,isPostSeason:!1}:t<=351?{season:3,isPostSeason:!1}:{season:4,isPostSeason:!1}}",
+    "alternating_events_current_week": "e=>{var s,t;let a=[],r=1;if(null===(s=e.seasonStartTimestamps)||void 0===s?void 0:s.s6)r=W(e.seasonStartTimestamps.s6)||1;else if(null===(t=e.seasonStartTimestamps)||void 0===t?void 0:t.s5)r=W(e.seasonStartTimestamps.s5)||1;else{let s=n(e.timestamp),t=new Date;t.setUTCHours(t.getUTCHours()+2);let a=t.getUTCDay();r=Math.floor((Math.max(1,s-(0===a?6:a-1))-1)/7)}return r%2==0?(a.push(\"Zombie Invasion (Wed-Fri)\"),a.push(\"Rampage Bosses (Sun)\")):(a.push(\"General's Trial (Wed-Fri)\"),a.push(\"Doomsday (Sun)\")),a}",
+    "alternating_events_next_week": "e=>{var s,t;let a=[],r=1;if(null===(s=e.seasonStartTimestamps)||void 0===s?void 0:s.s6)r=W(e.seasonStartTimestamps.s6)||1;else if(null===(t=e.seasonStartTimestamps)||void 0===t?void 0:t.s5)r=W(e.seasonStartTimestamps.s5)||1;else{let s=n(e.timestamp),t=new Date;t.setUTCHours(t.getUTCHours()+2);let a=t.getUTCDay();r=Math.floor((Math.max(1,s-(0===a?6:a-1))-1)/7)}return(r+1)%2==0?(a.push(\"Zombie Invasion (Wed-Fri)\"),a.push(\"Rampage Bosses (Sun)\")):(a.push(\"General's Trial (Wed-Fri)\"),a.push(\"Doomsday (Sun)\")),a}",
+    "format_server_start_date_utc_minus_2": "function(e){let s=arguments.length>1&&void 0!==arguments[1]?arguments[1]:\"en\";return new Date(new Date(parseInt(e)).getTime()-72e5).toLocaleDateString(s,{weekday:\"long\",year:\"numeric\",month:\"short\",day:\"numeric\",timeZone:\"UTC\"})},W=e=>{let s=new Date(parseInt(e)),t=new Date;return s.setUTCHours(2,0,0,0),t.setUTCHours(2,0,0,0),Math.floor(Math.floor((t.getTime()-s.getTime())/864e5)/7)+1}",
+    "season_week_number": "e=>{let s=new Date(parseInt(e)),t=new Date;return s.setUTCHours(2,0,0,0),t.setUTCHours(2,0,0,0),Math.floor(Math.floor((t.getTime()-s.getTime())/864e5)/7)+1}",
+    "server_status_text": "e=>e.currentSeason&&0!==e.currentSeason?e.isPostSeason?e.currentWeek?\"Post-season (week \".concat(e.currentWeek,\")\"):\"Post-season\":e.currentWeek?\"Week \".concat(e.currentWeek):\"Unknown\":\"\"",
+    "season_bucket": "e=>{let s=e.currentSeason||0;if(0===s)return{season:0,week:0,displayName:\"Season 0 (No weeks)\",count:0};if(e.isPostSeason){let t=e.currentWeek||1;return{season:s,week:\"post-season\",displayName:\"Season \".concat(s,\" - Post-season (Week \").concat(t,\")\"),count:0,actualWeek:t}}let t=e.currentWeek||1;return{season:s,week:t,displayName:\"Season \".concat(s,\" - Week \").concat(t),count:0}}",
+    "group_servers_by_season_week": "e=>{let s=new Map;return e.forEach(e=>{if(!e.currentSeason||0===e.currentSeason)return;let t=h(e),a=\"post-season\"===t.week?\"\".concat(t.season,\"-post-season-\").concat(t.actualWeek):\"\".concat(t.season,\"-\").concat(t.week);s.has(a)?s.get(a).count++:s.set(a,{...t,count:1})}),Array.from(s.values()).sort((e,s)=>e.season!==s.season?e.season-s.season:\"post-season\"===e.week&&\"post-season\"===s.week?(e.actualWeek||0)-(s.actualWeek||0):\"post-season\"===e.week&&\"post-season\"!==s.week?1:\"post-season\"===s.week&&\"post-season\"!==e.week?-1:e.week-s.week)}"
+  },
+  "hot_deals_logic_source": {
+    "hot_deal_display_name": "function r(e,s){var t,a;let r=null!==(a=null===(t=n[e])||void 0===t?void 0:t.name)&&void 0!==a?a:e;if(!s)return r;let i=s(\"dashboard.hot_deals.events.\".concat(e));return i===\"dashboard.hot_deals.events.\".concat(e)?r:i}",
+    "exclusive_weapon_for_season_week": "function u(e,s){var t,a;return null!==(a=null===(t=m[e])||void 0===t?void 0:t[s])&&void 0!==a?a:null}",
+    "start_of_monday_utc": "function S(e){let s=new Date(e);s.setUTCHours(0,0,0,0);let t=s.getUTCDay();return s.setUTCDate(s.getUTCDate()-(0===t?6:t-1)),s}",
+    "season_week_info": "function p(e,s,t){if(t)return{isInSeason:!1,weekNum:Math.max(1,s+e)};let a=s+e;return a>=1&&a<=8?{isInSeason:!0,weekNum:a}:a>8?{isInSeason:!1,weekNum:a-8}:{isInSeason:!1,weekNum:0}}",
+    "season_week_relative_to_date": "function d(e,s,t){let a=S(new Date);return p(Math.round((e.getTime()-a.getTime())/6048e5),s,t)}",
+    "events_for_week": "function c(e,s){var t,a,r,n,m,u;let S=0===s?(r=e.weekNum)<4?[]:null!==(n=o[(0+(r-4))%4+1])&&void 0!==n?n:[]:e.isInSeason?null!==(t=i[e.weekNum])&&void 0!==t?t:[]:e.weekNum<=0?[]:null!==(a=o[(e.weekNum-1)%4+1])&&void 0!==a?a:[];return S.includes(\"overlordBP\")&&(m=s,u=e,!(m>2)&&(m<2||u.weekNum<=0||!((u.isInSeason?(u.weekNum-1)*7+1:56+(u.weekNum-1)*7+1)>=89)))?S.filter(e=>\"overlordBP\"!==e):S}",
+    "effective_season_context": "function k(e,s,t,a,r,n,i){if(i){let s=S(new Date(i));if(e.getTime()>=s.getTime())return{effectiveSeason:a+1,weekInfo:p(Math.round((e.getTime()-s.getTime())/6048e5),1,!1),isPreseason:!1,isNextSeason:!0}}if(0===a){let s=r?function(e,s){let t=new Date(Number(e)),a=S(t),r=0===function(e){let s=e.getUTCDay();return 0===s?6:s-1}(t)?a:new Date(a.getTime()+6048e5);return s.getTime()<r.getTime()?0:Math.round((s.getTime()-r.getTime())/6048e5)+1}(r,e):0;if(n){let t=S(new Date(n));if(e.getTime()>=t.getTime())return{effectiveSeason:0,weekInfo:{isInSeason:!1,weekNum:s},isPreseason:!0,previewWeekNum:Math.round((e.getTime()-t.getTime())/6048e5)+1,isNextSeason:!1}}return{effectiveSeason:0,weekInfo:{isInSeason:!1,weekNum:s},isPreseason:!1,isNextSeason:!1}}if(n){let r=S(new Date(n));if(e.getTime()>=r.getTime()){let n=Math.round((e.getTime()-r.getTime())/6048e5)+1;return{effectiveSeason:a,weekInfo:d(e,s,t),isPreseason:!0,previewWeekNum:n,isNextSeason:!1}}}return{effectiveSeason:a,weekInfo:d(e,s,t),isPreseason:!1,isNextSeason:!1}}",
+    "events_for_date": "function g(e,s,t,a,r,n,i){let o=k(S(e),s,t,a,r,n,i);return c(o.weekInfo,o.effectiveSeason)}",
+    "hot_deal_calendar_entries": "function A(e,s,t,n,i,o,m,S){let p=e=>\"\".concat(function(e,s){if(!s)return e;let t=a[e];return t?s(\"dashboard.hot_deals.hero_names.\".concat(t)):e}(e,o),\" \").concat(r(\"heroWeaponBP\",o)),d=k(e,s,t,n,i,m,S),g=d.weekInfo,A=d.effectiveSeason,v=c(g,A),P=k(new Date(e.getTime()-6048e5),s,t,n,i,m,S),W=P.weekInfo,T=P.effectiveSeason,h=c(W,T),l=[];for(let e of(v.includes(\"energyLootQuest\")&&l.push({key:\"energyLootQuest\",eventId:\"energyLootQuest\",startCol:1,colSpan:7}),v.includes(\"moonstone\")&&l.push({key:\"moonstone\",eventId:\"moonstone\",startCol:1,colSpan:7}),[\"heroGrowthBP\",\"overlordBP\",\"droneBP\"]))v.includes(e)&&l.push({key:e,eventId:e,startCol:1,colSpan:7});if(T<=5&&h.includes(\"heroWeaponBP\")&&W.isInSeason){let e=u(T,W.weekNum);l.push({key:\"heroWeaponBP_carry\",eventId:\"heroWeaponBP\",startCol:1,colSpan:3,label:e?p(e.name):void 0,guideSlug:null==e?void 0:e.guideSlug})}if(A<=5&&v.includes(\"heroWeaponBP\")&&g.isInSeason){let e=u(A,g.weekNum);l.push({key:\"heroWeaponBP_new\",eventId:\"heroWeaponBP\",startCol:4,colSpan:4,label:e?p(e.name):void 0,guideSlug:null==e?void 0:e.guideSlug})}if(g.isInSeason&&(6===A?[1,3,5]:[1,3,6]).includes(g.weekNum)){let e=A%2==0?\"heroSpin\":\"heroRoulette\";l.push({key:e,eventId:e,startCol:4,colSpan:3})}for(let e of(v.includes(\"bullseye\")&&l.push({key:\"bullseye\",eventId:\"bullseye\",startCol:2,colSpan:5}),[\"bountyHunter\",\"glitteringMarket\",\"totalMobilisation\"]))v.includes(e)&&l.push({key:e,eventId:e,startCol:2,colSpan:6});return l}",
+    "season_display_state": "function v(e,s,t,a,r,n,i){let o=k(e,s,t,null!=a?a:0,r,n,i);if(o.isPreseason){var m;return{isInSeason:!1,weekNum:null!==(m=o.previewWeekNum)&&void 0!==m?m:1,isPreseason:!0}}return o.isNextSeason&&o.weekInfo.isInSeason?{isInSeason:!0,weekNum:o.weekInfo.weekNum,isPreseason:!1,nextSeason:o.effectiveSeason}:{isInSeason:o.weekInfo.isInSeason,weekNum:o.weekInfo.weekNum,isPreseason:!1}}"
+  },
+  "unclassified_embedded_json": []
+}
