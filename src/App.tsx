@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import { useAdminState } from "@/hooks/use-admin-state"
 import { useTagData } from "@/hooks/use-tag-data"
 import { AdminAccessTrigger } from "@/components/admin-access-trigger"
@@ -253,30 +253,7 @@ function AgendaView({ adminMode }: { adminMode: boolean }) {
             </button>
           </div>
 
-          <div className="inline-flex items-center gap-1.5 rounded-lg border bg-card/40 px-2.5 py-1.5">
-            <CalendarRange className="h-4 w-4 text-muted-foreground" />
-            <input
-              type="date"
-              aria-label="Range start date"
-              value={toDateInputValue(range[0])}
-              onChange={(event) => {
-                const start = fromDateInputValue(event.target.value, false)
-                if (start) setRange(([end]) => (start <= end ? [start, end] : [start, addAppDays(start, 6)]))
-              }}
-              className="w-[7.5rem] bg-transparent text-sm outline-none [color-scheme:dark]"
-            />
-            <span className="text-muted-foreground">–</span>
-            <input
-              type="date"
-              aria-label="Range end date"
-              value={toDateInputValue(range[1])}
-              onChange={(event) => {
-                const end = fromDateInputValue(event.target.value, true)
-                if (end) setRange(([start]) => (end >= start ? [start, end] : [addAppDays(end, -6), end]))
-              }}
-              className="w-[7.5rem] bg-transparent text-sm outline-none [color-scheme:dark]"
-            />
-          </div>
+          <CustomRangePicker range={range} onChange={setRange} />
         </div>
         {adminMode && activeEntry && <AddEventButton day={activeEntry.day} date={activeEntry.date} />}
       </div>
@@ -324,6 +301,86 @@ function AgendaView({ adminMode }: { adminMode: boolean }) {
             />
           )}
         </section>
+      )}
+    </div>
+  )
+}
+
+function CustomRangePicker({
+  range,
+  onChange,
+}: {
+  range: [Date, Date]
+  onChange: (range: [Date, Date]) => void
+}) {
+  const [open, setOpen] = useState(false)
+  const containerRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (!open) return
+    const handlePointerDown = (event: MouseEvent | TouchEvent) => {
+      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+        setOpen(false)
+      }
+    }
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setOpen(false)
+    }
+    document.addEventListener("mousedown", handlePointerDown)
+    document.addEventListener("touchstart", handlePointerDown)
+    document.addEventListener("keydown", handleKeyDown)
+    return () => {
+      document.removeEventListener("mousedown", handlePointerDown)
+      document.removeEventListener("touchstart", handlePointerDown)
+      document.removeEventListener("keydown", handleKeyDown)
+    }
+  }, [open])
+
+  return (
+    <div className="relative" ref={containerRef}>
+      <button
+        onClick={() => setOpen((current) => !current)}
+        aria-expanded={open}
+        aria-haspopup="dialog"
+        title={`Custom range: ${toDateInputValue(range[0])} to ${toDateInputValue(range[1])}`}
+        data-active={open}
+        className="inline-flex h-8 w-9 items-center justify-center rounded-lg border bg-card/40 text-muted-foreground transition-colors hover:bg-white/5 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring data-[active=true]:border-primary/50 data-[active=true]:text-foreground"
+      >
+        <CalendarRange className="h-4 w-4" />
+      </button>
+
+      {open && (
+        <div
+          role="dialog"
+          aria-label="Custom date range"
+          className="absolute left-0 top-full z-30 mt-2 w-64 rounded-xl border bg-popover/95 p-3 shadow-xl backdrop-blur-xl"
+        >
+          <p className="section-label mb-2">Custom range</p>
+          <label className="block">
+            <span className="mb-1 block text-xs text-muted-foreground">Start</span>
+            <input
+              type="date"
+              value={toDateInputValue(range[0])}
+              onChange={(event) => {
+                const start = fromDateInputValue(event.target.value, false)
+                if (start) onChange(start <= range[1] ? [start, range[1]] : [start, addAppDays(start, 6)])
+              }}
+              className="w-full rounded-lg border bg-transparent px-2 py-1.5 text-sm outline-none transition-colors focus:border-primary/60 [color-scheme:dark]"
+            />
+          </label>
+          <label className="mt-2 block">
+            <span className="mb-1 block text-xs text-muted-foreground">End</span>
+            <input
+              type="date"
+              value={toDateInputValue(range[1])}
+              onChange={(event) => {
+                const end = fromDateInputValue(event.target.value, true)
+                if (end) onChange(end >= range[0] ? [range[0], end] : [addAppDays(end, -6), end])
+              }}
+              className="w-full rounded-lg border bg-transparent px-2 py-1.5 text-sm outline-none transition-colors focus:border-primary/60 [color-scheme:dark]"
+            />
+          </label>
+        </div>
       )}
     </div>
   )
