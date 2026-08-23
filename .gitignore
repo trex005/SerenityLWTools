@@ -7,9 +7,13 @@
 /coverage
 /tmp/
 
-# next.js
+# vite
+node_modules/.vite/
+
+# build output
 /.next/
 /out/
+*.tsbuildinfo
 /.claude/
 
 # production

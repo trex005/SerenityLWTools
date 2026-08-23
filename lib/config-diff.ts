@@ -52,7 +52,7 @@ export const computeDiffIndexForTag = async (
     currentTag: tag,
   })
 
-  const parentEventsById = arrayToIdMap(parentEventComposition.events || [])
+  const parentEventsById = arrayToIdMap((parentEventComposition.events || []) as unknown as { id: string }[])
   const parentTipsById = arrayToIdMap(parentComposed.tips || [])
   const childEventsById = arrayToIdMap(effectiveEvents || [])
   const childTipsById = arrayToIdMap(effectiveTips || [])

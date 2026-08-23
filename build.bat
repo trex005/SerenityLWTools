@@ -1,1 +1,1 @@
-node build-static
+npm run build

@@ -28,7 +28,7 @@ import { useState, useEffect, useMemo, useRef, useCallback } from "react"
 import { useEvents } from "@/hooks/use-events"
 import { v4 as uuidv4 } from "uuid"
 // Add import for RecurrenceEditor at the top of the file
-import { RecurrenceEditor } from "@/components/recurrence-editor"
+import { RecurrenceEditor, type RecurrenceData } from "@/components/recurrence-editor"
 import { formatInAppTimezone } from "@/lib/date-utils"
 import { useEffectiveEventLayers } from "@/hooks/use-date-events"
 import { composeEventsForDate } from "@/lib/serenity-engine/composition"
@@ -172,7 +172,6 @@ export function EventDialog({ event, open, onOpenChange, initialDay = "monday", 
   )
 
   const initializeFormForNewEvent = useCallback(() => {
-    const startDate = initialDate ? formatInAppTimezone(initialDate, "yyyy-MM-dd") : undefined
     const recurrenceDays = [initialDay]
 
     setFormData({
@@ -194,14 +193,14 @@ export function EventDialog({ event, open, onOpenChange, initialDay = "monday", 
         daysOfWeek: recurrenceDays,
         onPeriods: 1,
         offPeriods: 0,
-        startDate: startDate ?? formatInAppTimezone(new Date(), "yyyy-MM-dd"),
-        endDate: undefined,
+        startTag: activeTag,
+        startOffset: 0,
       },
     })
     setIncludeEndTime(false)
     setIncludeEndTimeVariation({})
     setHasVariation({})
-  }, [initialDay, initialDate])
+  }, [activeTag, initialDay, initialDate])
 
   // State for form data
   const [formData, setFormData] = useState({
@@ -218,7 +217,7 @@ export function EventDialog({ event, open, onOpenChange, initialDay = "monday", 
     days: [] as string[],
     variations: {} as Record<string, any>,
     archived: false, // Add the archived property
-    recurrence: null,
+    recurrence: null as RecurrenceData | null,
   })
 
   // State for UI elements
@@ -451,7 +450,7 @@ export function EventDialog({ event, open, onOpenChange, initialDay = "monday", 
           startOffset: 0,
         }
     setFormData((prev) => {
-      const allowedDays = new Set(newRecurrence.daysOfWeek)
+      const allowedDays = new Set<string>(newRecurrence.daysOfWeek)
       return {
         ...prev,
         days: [...allowedDays],

@@ -467,7 +467,9 @@ export function ReadOnlyTips({ forceRefresh }: { forceRefresh?: string }) {
             {sortedTips.map((tip) => (
               <Card
                 key={tip.id}
-                ref={(el) => (tipRefs.current[tip.id] = el)}
+                ref={(el) => {
+                  tipRefs.current[tip.id] = el
+                }}
                 className={`transition-colors duration-300 ${highlightedTipId === tip.id ? "border-primary bg-primary/5" : ""}`}
                 id={`tip-${tip.id}`}
               >

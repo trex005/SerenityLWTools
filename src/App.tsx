@@ -1,0 +1,260 @@
+import { useEffect, useMemo, useState } from "react"
+import { useAdminState } from "@/hooks/use-admin-state"
+import { useTagData } from "@/hooks/use-tag-data"
+import { AdminAccessTrigger } from "@/components/admin-access-trigger"
+import { BrandLogo } from "@/components/brand-logo"
+import { DayAgenda } from "@/components/day-agenda"
+import { AddEventButton } from "@/components/add-event-button"
+import { ReadOnlyDayAgenda } from "@/components/read-only-day-agenda"
+import { ReadOnlyTips } from "@/components/read-only-tips"
+import { TipsManagement } from "@/components/tips-management"
+import { EventsView } from "@/components/events-view"
+import { EmailGenerator } from "@/components/email-generator"
+import { Reminders } from "@/components/reminders"
+import { AdminPanel } from "@/components/admin-panel"
+import { PublishDialog } from "@/src/publish-dialog"
+import { getTipIdFromLocation } from "@/lib/hash-navigation"
+import { OverrideDiffProvider } from "@/hooks/use-override-diff"
+import { addAppDays, formatInAppTimezone, getAppToday, getAppTodayKey } from "@/lib/date-utils"
+import { CloudUpload, Eye, EyeOff, LogOut } from "lucide-react"
+import { useShowLocalTime } from "@/src/local-time"
+
+type MainTab = "agenda" | "tips" | "events" | "mail" | "reminders" | "command"
+
+const PUBLIC_TABS: MainTab[] = ["agenda", "tips"]
+const ADMIN_TABS: MainTab[] = ["agenda", "events", "tips", "mail", "reminders", "command"]
+
+const TAB_LABELS: Record<MainTab, string> = {
+  agenda: "Agenda",
+  events: "Events",
+  tips: "Tips",
+  mail: "Mail",
+  reminders: "Reminders",
+  command: "Command",
+}
+
+export function App() {
+  const { adminMode } = useAdminState()
+  const { brandLabel } = useTagData()
+  const [activeTab, setActiveTab] = useState<MainTab>(() =>
+    typeof window !== "undefined" && getTipIdFromLocation() ? "tips" : "agenda",
+  )
+  const [publishOpen, setPublishOpen] = useState(false)
+
+  useEffect(() => {
+    if (!adminMode && !PUBLIC_TABS.includes(activeTab)) {
+      setActiveTab("agenda")
+    }
+  }, [adminMode, activeTab])
+
+  const tabs = adminMode ? ADMIN_TABS : PUBLIC_TABS
+
+  return (
+    <div className="flex min-h-screen flex-col">
+      <TopBar
+        adminMode={adminMode}
+        tabs={tabs}
+        activeTab={activeTab}
+        onTabChange={setActiveTab}
+        onPublish={() => setPublishOpen(true)}
+      />
+
+      <main className="mx-auto w-full max-w-4xl flex-1 px-3 py-5 sm:px-4">
+        {activeTab === "agenda" && <AgendaView adminMode={adminMode} />}
+        {activeTab === "tips" &&
+          (adminMode ? <TipsManagement forceRefresh="0" /> : <ReadOnlyTips forceRefresh="0" />)}
+        {adminMode && activeTab === "events" && <EventsView />}
+        {adminMode && activeTab === "mail" && <EmailGenerator />}
+        {adminMode && activeTab === "reminders" && <Reminders />}
+        {adminMode && activeTab === "command" && (
+          <OverrideDiffProvider>
+            <AdminPanel />
+          </OverrideDiffProvider>
+        )}
+      </main>
+
+      <footer className="py-6 text-center text-xs text-muted-foreground/70">{brandLabel}</footer>
+
+      <AdminAccessTrigger />
+      <PublishDialog open={publishOpen} onOpenChange={setPublishOpen} />
+    </div>
+  )
+}
+
+function TopBar({
+  adminMode,
+  tabs,
+  activeTab,
+  onTabChange,
+  onPublish,
+}: {
+  adminMode: boolean
+  tabs: MainTab[]
+  activeTab: MainTab
+  onTabChange: (tab: MainTab) => void
+  onPublish: () => void
+}) {
+  const { exitAdminMode } = useAdminState()
+
+  return (
+    <header className="app-topbar">
+      <div className="mx-auto flex w-full max-w-4xl flex-col gap-2 px-3 pb-2 pt-3 sm:px-4">
+        <div className="flex items-center justify-between gap-3">
+          <div className="flex min-w-0 items-center gap-2.5">
+            <BrandLogo size={28} />
+            {adminMode && (
+              <span className="rounded-full bg-primary/10 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-primary">
+                Command mode
+              </span>
+            )}
+          </div>
+          <div className="flex items-center gap-1.5">
+            {adminMode ? (
+              <>
+                <button
+                  onClick={onPublish}
+                  className="inline-flex items-center gap-1.5 rounded-full bg-primary px-3.5 py-1.5 text-sm font-medium text-primary-foreground shadow-sm transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                >
+                  <CloudUpload className="h-4 w-4" />
+                  Publish
+                </button>
+                <button
+                  onClick={exitAdminMode}
+                  title="Exit command mode"
+                  aria-label="Exit command mode"
+                  className="inline-flex h-8 w-8 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                >
+                  <LogOut className="h-4 w-4" />
+                </button>
+              </>
+            ) : (
+              <LocalTimeToggle />
+            )}
+          </div>
+        </div>
+
+        <nav className="scroll-strip -mx-1 px-1" aria-label="Sections">
+          {tabs.map((tab) => (
+            <button
+              key={tab}
+              className="nav-pill"
+              data-active={activeTab === tab}
+              onClick={() => onTabChange(tab)}
+            >
+              {TAB_LABELS[tab]}
+            </button>
+          ))}
+        </nav>
+      </div>
+    </header>
+  )
+}
+
+function LocalTimeToggle() {
+  const [showLocalTime, setShowLocalTime] = useShowLocalTime()
+  return (
+    <button
+      onClick={() => setShowLocalTime(!showLocalTime)}
+      title={showLocalTime ? "Local time shown alongside server time" : "Server time only"}
+      aria-pressed={showLocalTime}
+      className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+    >
+      {showLocalTime ? <Eye className="h-3.5 w-3.5" /> : <EyeOff className="h-3.5 w-3.5" />}
+      Local time
+    </button>
+  )
+}
+
+const RANGE_OPTIONS = [3, 7, 14]
+
+function AgendaView({ adminMode }: { adminMode: boolean }) {
+  const [rangeDays, setRangeDays] = useState(7)
+  const [activeDay, setActiveDay] = useState<string>(() => getAppTodayKey())
+  const [showLocalTime, setShowLocalTime] = useShowLocalTime()
+
+  const days = useMemo(() => {
+    const today = getAppToday()
+    const result: { key: string; day: string; date: Date }[] = []
+    for (let i = 0; i < rangeDays; i++) {
+      const date = addAppDays(today, i)
+      result.push({
+        key: formatInAppTimezone(date, "yyyy-MM-dd"),
+        day: formatInAppTimezone(date, "EEEE").toLowerCase(),
+        date: new Date(date),
+      })
+    }
+    return result
+  }, [rangeDays])
+
+  useEffect(() => {
+    if (!days.some((entry) => entry.key === activeDay)) {
+      setActiveDay(getAppTodayKey())
+    }
+  }, [days, activeDay])
+
+  const todayKey = getAppTodayKey()
+  const activeEntry = days.find((entry) => entry.key === activeDay)
+
+  return (
+    <div className="space-y-4">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div className="scroll-strip -mx-1 px-1" role="tablist" aria-label="Quick range">
+          {RANGE_OPTIONS.map((option) => (
+            <button
+              key={option}
+              className="nav-pill"
+              data-active={rangeDays === option}
+              onClick={() => setRangeDays(option)}
+            >
+              {option} days
+            </button>
+          ))}
+        </div>
+        {adminMode && activeEntry && <AddEventButton day={activeEntry.day} date={activeEntry.date} />}
+      </div>
+
+      <div className="scroll-strip -mx-1 px-1" role="tablist" aria-label="Agenda days">
+        {days.map(({ key, date }) => (
+          <button
+            key={key}
+            role="tab"
+            aria-selected={activeDay === key}
+            className="day-chip"
+            data-active={activeDay === key}
+            data-today={key === todayKey}
+            onClick={() => setActiveDay(key)}
+          >
+            <span className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
+              {formatInAppTimezone(date, "EEE")}
+            </span>
+            <span className="text-base font-semibold leading-tight">{formatInAppTimezone(date, "d")}</span>
+            <span className="text-[11px] text-muted-foreground">{formatInAppTimezone(date, "MMM")}</span>
+          </button>
+        ))}
+      </div>
+
+      {activeEntry && (
+        <section aria-label={`Agenda for ${activeEntry.key}`}>
+          <h2 className="mb-3 text-lg font-semibold capitalize">
+            {formatInAppTimezone(activeEntry.date, "EEEE, MMMM d, yyyy")}
+          </h2>
+          {adminMode ? (
+            <DayAgenda
+              day={activeEntry.day}
+              date={activeEntry.date}
+              showLocalTime={showLocalTime}
+              setShowLocalTime={setShowLocalTime}
+            />
+          ) : (
+            <ReadOnlyDayAgenda
+              day={activeEntry.day}
+              date={activeEntry.date}
+              showLocalTime={showLocalTime}
+              setShowLocalTime={setShowLocalTime}
+            />
+          )}
+        </section>
+      )}
+    </div>
+  )
+}

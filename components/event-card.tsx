@@ -331,16 +331,24 @@ export function EventCard({ event, day, date, showLocalTime = false, overrideInf
                         </Tooltip>
                       </TooltipProvider>
                     )}
-                    <Globe
-                      size={14}
-                      className={`text-muted-foreground ${isIncludedOnWebsite() ? "opacity-100" : "opacity-20"}`}
+                    <span
                       title={isIncludedOnWebsite() ? "Included on website" : "Hidden from website"}
-                    />
-                    <Mail
-                      size={14}
-                      className={`text-muted-foreground ${isIncludedInBriefing() ? "opacity-100" : "opacity-20"}`}
+                      className="inline-flex"
+                    >
+                      <Globe
+                        size={14}
+                        className={`text-muted-foreground ${isIncludedOnWebsite() ? "opacity-100" : "opacity-20"}`}
+                      />
+                    </span>
+                    <span
                       title={isIncludedInBriefing() ? "Included in briefing" : "Excluded from briefing"}
-                    />
+                      className="inline-flex"
+                    >
+                      <Mail
+                        size={14}
+                        className={`text-muted-foreground ${isIncludedInBriefing() ? "opacity-100" : "opacity-20"}`}
+                      />
+                    </span>
                     {hasDateOverride && (
                       <TooltipProvider>
                         <Tooltip>

@@ -2,11 +2,11 @@
 
 ## Project Structure & Module Organization
 
-- `app/` holds Next.js routes, layouts, and entry points; keep route handlers slim and push logic into shared modules.
+- `index.html` + `src/` are the Vite SPA entry points (`src/App.tsx` is the shell; `src/publish-dialog.tsx` hosts the S3 publish flow).
 - `components/` stores feature components, with primitives in `components/ui/` built on Radix + Tailwind.
 - `lib/` collects TypeScript helpers (`date-utils.ts`, `config-fetcher.ts`) and should remain framework-agnostic.
-- Styling lives in `styles/` and `app/globals.css`; static assets go in `public/`.
-- Configs live in `next.config.mjs`, `tailwind.config.ts`, `postcss.config.mjs`, and `tsconfig.json`.
+- Styling lives in `src/globals.css`; static assets go in `public/`.
+- Configs live in `vite.config.ts`, `tailwind.config.ts`, `postcss.config.mjs`, and `tsconfig.json`.
 - Branding (name/icon/background) comes from the `brand` block in `/public/conf/{tag}/conf.json`; use `useTagData.brand`/`brandLabel`, `BrandLogo`, and `BrandHead` instead of hardcoding strings. `brand.backgroundOpacity` controls the image opacity.
 - Tag configs can set `storage.eventsSuffix` and `storage.tipsSuffix` to invalidate persisted admin overrides for events/tips.
 - `lib/scoped-storage.ts` gates persistence behind Command (admin) modeÃ¢â‚¬â€keep events/tips storage writes aligned with that guard.
@@ -25,30 +25,31 @@
 - Cross-application one-time and interval schedules use the canonical `lib/serenity-engine/schedule-v1.schema.json` shape and the engine's `schedule-next` operation. Keep schema, TypeScript resolver, JSON ABI, and cross-runtime fixtures aligned when schedule behavior changes.
 - Canonical one-time schedules may specify either `duration_seconds` or an explicit `end` datetime; recurring schedules may specify `duration_seconds` per occurrence and an optional inclusive `until` cutoff.
 - Canonical recurring frequency units include seconds for high-frequency local automation as well as minutes, hours, days, and weeks.
-- `pnpm build:engine` produces the trusted `artifacts/lw-serenity-engine.js` IIFE. Commit that artifact whenever engine source changes; LWMinions embeds the identical bytes and never executes JavaScript downloaded from the static host.
+- `npm run build:engine` produces the trusted `artifacts/lw-serenity-engine.js` IIFE. Commit that artifact whenever engine source changes; LWMinions embeds the identical bytes and never executes JavaScript downloaded from the static host.
+- After rebuilding the engine artifact, run `npm run check:engine -- --fix` to sync it into the sibling `LWMinions` checkout and commit both copies together; plain `npm run check:engine` fails when the copies drift.
 - Mail generator defaults to a three-day range (today + next two days) in app time; keep its initial date span aligned with the date range selector quick-pick defaults.
+- Admin publishing uploads only changed `conf/{tag}/*.json` deltas to S3 (`lib/publish/`); each replaced file is first archived to `archive/<path>/<name>.<ISO-datetime>.json`. Canonical comparisons ignore root `updated` timestamps so untouched files are never republished. See `DEPLOYMENT.md` for the required IAM policy and bucket CORS.
 
 ## Build, Test, and Development Commands
 
-- `pnpm install` (preferred) or `npm install` installs dependencies; use one tool per change to keep lockfiles in sync.
-- `pnpm dev` launches the local server at `http://localhost:3000`.
-- `pnpm build` compiles production assets consumed by `deploy-static.js`.
-- `pnpm start` serves the compiled build for QA.
-- `pnpm lint` runs `next lint` and Tailwind rulesâ€”run it before opening a PR.
+- `npm install` installs dependencies (npm is the package manager of record; `package-lock.json` is committed).
+- `npm run dev` launches the Vite dev server at `http://localhost:3000`.
+- `npm run build` compiles production assets to `out/` in seconds.
+- `npm run start` (or `preview`) serves the compiled build for QA.
+- `npm run typecheck` runs `tsc --noEmit`—keep it clean before opening a PR.
 
 ## Coding Style & Naming Conventions
 
 - Default to TypeScript functions with React 19 hooks; avoid classes.
 - Use 2-space indentation, kebab-case filenames (`day-agenda.tsx`), and PascalCase exports (`DayAgenda`).
 - Compose UI with Tailwind + `clsx`/`cva`; keep variant logic within each component.
-- Let ESLint or `pnpm lint --fix` handle formatting; skip manual tweaks.
+- Keep new dependencies minimal; prefer hand-rolled Tailwind utilities over adding UI libraries.
 
 ## Testing Guidelines
 
-- No automated tests yet; colocate new ones as `*.test.ts(x)` or mirrored `__tests__/` folders.
-- Prefer React Testing Library for behavior and integration coverage in `app/`.
+- Colocate tests as `*.test.ts(x)` and run them via the `test:*` scripts (`test:engine`, `test:date-scoped`, `test:config`, `test:storage`, `test:tz`, `test:recurrence`, `test:converter`, `test:migrate`) with `tsx --test`.
 - When schedules use date spans, confirm the end day renders and the next day is empty.
-- Every PR should describe manual verification steps and confirm `pnpm lint` passes.
+- Every PR should describe manual verification steps and confirm `npm run typecheck` plus relevant `test:*` suites pass.
 - Document new test scripts inside `package.json` for discoverability.
 
 ## Commit & Pull Request Guidelines
@@ -56,11 +57,11 @@
 - Mirror the existing concise subject lines (`Fix date bugs in UI and loading data from server`) and keep each commit focused.
 - Add body context when touching deploy scripts or AWS policies.
 - For every new feature or bug fix, update `AGENTS.md` within PR (or note why no change was needed) to keep this guide current.
-- PRs must cover problem, solution, test evidence (`pnpm lint`, screenshots), and link issues or deploy notes.
+- PRs must cover problem, solution, test evidence (typecheck/tests/screenshots), and link issues or deploy notes.
 - Request review before running deployment scripts and keep environment secrets in untracked `.env.local`.
 
 ## Deployment & Configuration Tips
 
-- Read `DEPLOYMENT.md` and helper scripts (`deploy-static.js`, `build-static.js`) before releasing; they expect bundles in `out/`.
+- Read `DEPLOYMENT.md` before releasing; `npm run build` expects bundles in `out/`, and content changes should normally ship through the admin Publish flow rather than full redeployments.
 - Update S3/CloudFront JSON policies in-repo first, then apply them through the deployment pipeline.
-- Document new env keys beside the code that needs them.
+- Document new env keys beside the code that needs them (`CONFIG_URL` overrides the conf base URL).

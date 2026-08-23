@@ -79,7 +79,7 @@ function processEmbeddedHtmlWithScripts(html: string, scopeId: string): { proces
       
       // Split multiple selectors and scope each one
       const selectors = cleanSelector.split(",")
-      const scopedSelectors = selectors.map(sel => {
+      const scopedSelectors = selectors.map((sel: string) => {
         const trimmedSel = sel.trim()
         // Don't scope html, body, or universal selectors - replace with our scope
         if (trimmedSel === "html" || trimmedSel === "body" || trimmedSel === "*") {

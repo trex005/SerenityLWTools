@@ -17,19 +17,19 @@ export function StorageInitializer() {
   const eventsHydrated = useEvents((state) => state.hydrated)
   const initializeTips = useTips((state) => state.initializeFromConfig)
   const tipsHydrated = useTips((state) => state.hydrated)
-  const { isAdmin } = useAdminState()
+  const { adminMode } = useAdminState()
 
   useEffect(() => {
     // In admin mode, ensure local storage has data for the current tag
-    if (!isAdmin || !eventsHydrated) return
+    if (!adminMode || !eventsHydrated) return
 
     initializeEvents().catch(() => undefined)
-  }, [isAdmin, eventsHydrated, initializeEvents])
+  }, [adminMode, eventsHydrated, initializeEvents])
 
   useEffect(() => {
-    if (!isAdmin || !tipsHydrated) return
+    if (!adminMode || !tipsHydrated) return
     initializeTips().catch(() => undefined)
-  }, [isAdmin, tipsHydrated, initializeTips])
+  }, [adminMode, tipsHydrated, initializeTips])
 
   return null
 }

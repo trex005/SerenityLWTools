@@ -34,7 +34,7 @@ import {
   fetchComposedForTag,
   type TagBundle,
 } from "@/lib/config-fetcher"
-import AWS from "aws-sdk"
+import { CloudFrontClient, CreateInvalidationCommand } from "@aws-sdk/client-cloudfront"
 import { Label } from "@/components/ui/label"
 import {
   Dialog,
@@ -600,15 +600,14 @@ export function AdminPanel() {
     setInvalidationId(null)
 
     try {
-      // Configure AWS with stored credentials
-      AWS.config.update({
-        accessKeyId: credentials.accessKeyId,
-        secretAccessKey: credentials.secretAccessKey,
-        region: "us-east-1", // CloudFront is global but API calls go through us-east-1
+      // CloudFront is global but API calls go through us-east-1
+      const cloudfront = new CloudFrontClient({
+        region: "us-east-1",
+        credentials: {
+          accessKeyId: credentials.accessKeyId,
+          secretAccessKey: credentials.secretAccessKey,
+        },
       })
-
-      // Create CloudFront service object
-      const cloudfront = new AWS.CloudFront()
 
       // Distribution ID for the CloudFront distribution
       const distributionId = "E2YA1IN0GY7BLP"
@@ -626,7 +625,7 @@ export function AdminPanel() {
       }
 
       // Create the invalidation
-      const result = await cloudfront.createInvalidation(params).promise()
+      const result = await cloudfront.send(new CreateInvalidationCommand(params))
 
       // Store the invalidation ID for reference
       if (result.Invalidation?.Id) {
@@ -662,7 +661,9 @@ export function AdminPanel() {
 
       // If the error is related to credentials, prompt for new ones
       if (
+        error.name === "InvalidClientTokenId" ||
         error.code === "InvalidClientTokenId" ||
+        error.name === "SignatureDoesNotMatch" ||
         error.code === "SignatureDoesNotMatch" ||
         error.message?.includes("credentials") ||
         error.message?.includes("token")

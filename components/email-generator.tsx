@@ -373,7 +373,7 @@ export function EmailGenerator({ initialDateRange }: EmailGeneratorProps) {
   /**
    * Format the relative time for last used date
    */
-  const formatLastUsed = (lastUsed: string | null) => {
+  const formatLastUsed = (lastUsed: string | null | undefined) => {
     if (!lastUsed) return "Never used"
 
     const lastUsedDate = new Date(lastUsed)
