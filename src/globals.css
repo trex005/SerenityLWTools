@@ -4,48 +4,49 @@
 
 @layer base {
   :root {
-    --background: 220 25% 97%;
-    --foreground: 228 30% 12%;
-    --card: 0 0% 100%;
-    --card-foreground: 228 30% 12%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 228 30% 12%;
-    --primary: 238 70% 56%;
+    --background: 228 30% 6%;
+    --foreground: 220 25% 93%;
+    --card: 229 26% 10%;
+    --card-foreground: 220 25% 93%;
+    --popover: 229 28% 9%;
+    --popover-foreground: 220 25% 93%;
+    --primary: 245 85% 66%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 226 22% 92%;
-    --secondary-foreground: 228 25% 22%;
-    --muted: 226 20% 93%;
-    --muted-foreground: 227 12% 44%;
-    --accent: 238 70% 96%;
-    --accent-foreground: 238 60% 38%;
-    --destructive: 0 78% 56%;
+    --secondary: 227 20% 16%;
+    --secondary-foreground: 220 20% 88%;
+    --muted: 227 20% 14%;
+    --muted-foreground: 226 13% 62%;
+    --accent: 240 35% 20%;
+    --accent-foreground: 235 80% 84%;
+    --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
-    --border: 226 18% 88%;
-    --input: 226 18% 85%;
-    --ring: 238 70% 56%;
-    --radius: 0.65rem;
+    --border: 228 18% 17%;
+    --input: 228 18% 22%;
+    --ring: 245 85% 66%;
+    --radius: 0.75rem;
   }
 
+  /* The app is always dark; keep the .dark hook identical for safety. */
   .dark {
-    --background: 228 28% 8%;
+    --background: 228 30% 6%;
     --foreground: 220 25% 93%;
-    --card: 228 24% 11%;
+    --card: 229 26% 10%;
     --card-foreground: 220 25% 93%;
-    --popover: 228 24% 11%;
+    --popover: 229 28% 9%;
     --popover-foreground: 220 25% 93%;
-    --primary: 238 85% 67%;
-    --primary-foreground: 228 40% 10%;
-    --secondary: 227 20% 17%;
-    --secondary-foreground: 220 20% 85%;
-    --muted: 227 20% 16%;
-    --muted-foreground: 226 12% 62%;
-    --accent: 238 40% 22%;
-    --accent-foreground: 238 80% 84%;
-    --destructive: 0 72% 48%;
+    --primary: 245 85% 66%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 227 20% 16%;
+    --secondary-foreground: 220 20% 88%;
+    --muted: 227 20% 14%;
+    --muted-foreground: 226 13% 62%;
+    --accent: 240 35% 20%;
+    --accent-foreground: 235 80% 84%;
+    --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
-    --border: 227 18% 20%;
-    --input: 227 18% 24%;
-    --ring: 238 85% 67%;
+    --border: 228 18% 17%;
+    --input: 228 18% 22%;
+    --ring: 245 85% 66%;
   }
 }
 
@@ -55,11 +56,18 @@
   }
   html {
     -webkit-tap-highlight-color: transparent;
+    color-scheme: dark;
   }
   body {
-    @apply bg-background text-foreground antialiased;
+    @apply text-foreground antialiased;
     position: relative;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    background-color: hsl(var(--background));
+    background-image:
+      radial-gradient(1100px 520px at 12% -12%, hsl(247 80% 30% / 0.32), transparent 60%),
+      radial-gradient(900px 480px at 108% 8%, hsl(202 85% 34% / 0.18), transparent 55%),
+      radial-gradient(900px 640px at 50% 125%, hsl(280 75% 28% / 0.2), transparent 62%);
+    background-attachment: fixed;
   }
   body::before {
     content: "";
@@ -77,20 +85,85 @@
     position: relative;
     z-index: 1;
   }
+
+  ::selection {
+    background-color: hsl(245 85% 66% / 0.35);
+  }
+
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(228 18% 26%) transparent;
+  }
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-thumb {
+    border-radius: 9999px;
+    background-color: hsl(228 18% 24%);
+    border: 2px solid transparent;
+    background-clip: padding-box;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  h1,
+  h2,
+  h3 {
+    letter-spacing: -0.02em;
+  }
 }
 
 @layer components {
-  /* Frosted sticky top bar for the app shell */
+  /* Frosted sticky top bar with a gradient hairline */
   .app-topbar {
-    @apply sticky top-0 z-40 border-b border-border/60 bg-background/80 backdrop-blur-xl;
+    @apply sticky top-0 z-40 border-b border-white/5 bg-background/70 backdrop-blur-xl;
+  }
+  .app-topbar::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -1px;
+    height: 1px;
+    background: linear-gradient(
+      to right,
+      transparent,
+      hsl(245 85% 66% / 0.45),
+      hsl(275 80% 65% / 0.35),
+      transparent
+    );
+    pointer-events: none;
   }
 
   /* Pill-style navigation tabs */
   .nav-pill {
-    @apply inline-flex items-center gap-1.5 whitespace-nowrap rounded-full px-3.5 py-1.5 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring;
+    @apply inline-flex items-center gap-1.5 whitespace-nowrap rounded-full px-3.5 py-1.5 text-sm font-medium text-muted-foreground transition-all hover:bg-white/5 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring;
   }
   .nav-pill[data-active="true"] {
-    @apply bg-primary text-primary-foreground shadow-sm hover:text-primary-foreground;
+    @apply bg-primary text-primary-foreground shadow-[0_4px_16px_-6px_hsl(245_85%_66%/0.6)] hover:text-primary-foreground;
+  }
+
+  /* Gradient sheen applied wherever the primary surface is used (buttons, active pills) */
+  .bg-primary {
+    background-color: hsl(var(--primary));
+    background-image: linear-gradient(135deg, hsl(243 85% 60%), hsl(270 80% 63%));
+  }
+
+  /* Glassy cards everywhere */
+  .bg-card {
+    background-color: hsl(var(--card) / 0.82);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow:
+      inset 0 1px 0 0 rgb(255 255 255 / 0.04),
+      0 10px 30px -18px rgb(0 0 0 / 0.55);
+  }
+  .bg-popover\/95,
+  .bg-background\/80 {
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
   }
 
   /* Scrollable horizontal strip that hides scrollbars */
@@ -103,13 +176,34 @@
   }
 
   .day-chip {
-    @apply flex min-w-[4.25rem] flex-col items-center rounded-xl border px-2.5 py-2 text-center transition-colors hover:bg-accent/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring;
+    @apply flex min-w-[4.25rem] flex-col items-center rounded-xl border bg-card/40 px-2.5 py-2 text-center transition-all hover:-translate-y-0.5 hover:border-white/15 hover:bg-white/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring;
   }
   .day-chip[data-active="true"] {
-    @apply border-primary/70 bg-primary/10;
+    @apply border-transparent bg-primary/15 shadow-[inset_0_0_0_1px_hsl(245_85%_66%/0.55),0_8px_20px_-10px_hsl(245_85%_66%/0.5)] hover:bg-primary/20;
   }
-  .day-chip[data-today="true"]:not([data-active="true"]) {
-    @apply border-primary/40;
+  .day-chip[data-active="true"] .text-muted-foreground {
+    @apply text-primary-foreground/70;
+  }
+  .day-chip[data-today="true"]:not([data-active="true"])::before {
+    content: "";
+    position: absolute;
+  }
+  .day-chip[data-today="true"] {
+    position: relative;
+  }
+  .day-chip[data-today="true"]:not([data-active="true"])::after {
+    content: "";
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 5px;
+    height: 5px;
+    border-radius: 9999px;
+    background: linear-gradient(135deg, hsl(243 85% 60%), hsl(270 80% 63%));
+  }
+
+  .section-title {
+    @apply text-lg font-semibold capitalize tracking-tight;
   }
 }
 
@@ -206,12 +300,18 @@
 }
 
 .html-content a {
-  color: hsl(var(--primary));
+  color: hsl(245 85% 74%);
   text-decoration: underline;
+  text-decoration-color: hsl(245 85% 74% / 0.4);
+  text-underline-offset: 2px;
+}
+
+.html-content a:hover {
+  text-decoration-color: hsl(245 85% 74%);
 }
 
 .html-content blockquote {
-  border-left: 4px solid hsl(var(--muted));
+  border-left: 4px solid hsl(var(--accent));
   padding-left: 1rem;
   margin-left: 0;
   margin-right: 0;

@@ -59,7 +59,7 @@ export function App() {
         onPublish={() => setPublishOpen(true)}
       />
 
-      <main className="mx-auto w-full max-w-4xl flex-1 px-3 py-5 sm:px-4">
+      <main className="mx-auto w-full max-w-5xl flex-1 px-3 py-5 sm:px-4">
         {activeTab === "agenda" && <AgendaView adminMode={adminMode} />}
         {activeTab === "tips" &&
           (adminMode ? <TipsManagement forceRefresh="0" /> : <ReadOnlyTips forceRefresh="0" />)}
@@ -73,7 +73,9 @@ export function App() {
         )}
       </main>
 
-      <footer className="py-6 text-center text-xs text-muted-foreground/70">{brandLabel}</footer>
+      <footer className="mt-4 border-t border-white/5 py-6 text-center text-xs text-muted-foreground/60">
+        {brandLabel}
+      </footer>
 
       <AdminAccessTrigger />
       <PublishDialog open={publishOpen} onOpenChange={setPublishOpen} />
@@ -98,7 +100,7 @@ function TopBar({
 
   return (
     <header className="app-topbar">
-      <div className="mx-auto flex w-full max-w-4xl flex-col gap-2 px-3 pb-2 pt-3 sm:px-4">
+      <div className="mx-auto flex w-full max-w-5xl flex-col gap-2 px-3 pb-2 pt-3 sm:px-4">
         <div className="flex items-center justify-between gap-3">
           <div className="flex min-w-0 items-center gap-2.5">
             <BrandLogo size={28} />
@@ -235,7 +237,7 @@ function AgendaView({ adminMode }: { adminMode: boolean }) {
 
       {activeEntry && (
         <section aria-label={`Agenda for ${activeEntry.key}`}>
-          <h2 className="mb-3 text-lg font-semibold capitalize">
+          <h2 className="section-title mb-3">
             {formatInAppTimezone(activeEntry.date, "EEEE, MMMM d, yyyy")}
           </h2>
           {adminMode ? (
