@@ -18,7 +18,8 @@
     "test:storage": "tsx --test lib/scoped-storage.test.ts",
     "test:migrate": "tsx --test scripts/migrate-dates.test.ts",
     "test:converter": "tsx --test scripts/convert-tag-schema.test.ts",
-    "test:date-scoped": "tsx --test lib/date-scoped-config.test.ts lib/local-event-operations.test.ts lib/event-operation-diff.test.ts"
+    "test:date-scoped": "tsx --test lib/date-scoped-config.test.ts lib/local-event-operations.test.ts lib/event-operation-diff.test.ts",
+    "test:publish": "tsx --test lib/publish/canonical.test.ts"
   },
   "dependencies": {
     "@aws-sdk/client-cloudfront": "^3.712.0",
