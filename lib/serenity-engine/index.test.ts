@@ -29,6 +29,7 @@ test("JSON ABI contains failures instead of throwing across runtimes", () => {
   const response = JSON.parse(invoke("not-json"))
   assert.equal(response.ok, false)
   assert.equal(response.engineVersion, ENGINE_VERSION)
+  assert.equal(response.errorCode, "INVALID_REQUEST")
   assert.match(response.error, /JSON/)
 })
 
@@ -72,4 +73,22 @@ test("JSON ABI can select an active schedule window", () => {
     endAtMs: Date.parse("2026-08-11T02:00:00Z"),
     recurring: true,
   })
+})
+
+test("JSON ABI exposes strict event normalization", () => {
+  const response = JSON.parse(invoke(JSON.stringify({
+    operation: "normalize-event-operations",
+    input: { document: { schemaVersion: 2, operations: [{ kind: "owned", event: { id: "x", title: "X" } }] } },
+  })))
+  assert.equal(response.ok, true)
+  assert.deepEqual(response.result.ownedEventsById, { x: { id: "x", title: "X" } })
+})
+
+test("JSON ABI returns stable validation error codes", () => {
+  const response = JSON.parse(invoke(JSON.stringify({
+    operation: "normalize-event-operations",
+    input: { document: { schemaVersion: 1, operations: [] } },
+  })))
+  assert.equal(response.ok, false)
+  assert.equal(response.errorCode, "INVALID_EVENT_OPERATIONS")
 })

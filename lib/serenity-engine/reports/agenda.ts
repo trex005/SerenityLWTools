@@ -1,4 +1,5 @@
-import { addDateKeyDays, eventOccursOnDate, weekdayForDateKey, type TagConfig } from "../core"
+import { addDateKeyDays, eventOccursOnDate, validateReportDateRange, weekdayForDateKey, type TagConfig } from "../core"
+import { composeEventsForDate, type ConfigurationLayer } from "../composition"
 
 const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
 const WEEKDAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
@@ -66,25 +67,25 @@ const compareForDate = (a: any, b: any, weekday: string, dateKey: string): numbe
   return 0
 }
 
-export const generateAgenda = ({
-  events,
-  tagConfig,
+const generateAgendaWithResolver = ({
+  resolve,
   startDate,
   endDate,
   referenceDate,
 }: {
-  events: any[]
-  tagConfig: TagConfig
+  resolve: (dateKey: string) => { events: any[]; tagConfig: TagConfig }
   startDate: string
   endDate: string
   referenceDate?: string
 }): { content: string; eventCount: number } => {
+  validateReportDateRange(startDate, endDate)
   let content = `Schedule for ${shortDate(startDate)} - ${shortDate(endDate, true)}\n\n`
   const includedDescriptions = new Set<string>()
   const tomorrow = referenceDate ? addDateKeyDays(referenceDate, 1) : undefined
   let eventCount = 0
 
   for (let dateKey = startDate; dateKey <= endDate; dateKey = addDateKeyDays(dateKey, 1)) {
+    const { events, tagConfig } = resolve(dateKey)
     const weekday = weekdayForDateKey(dateKey)
     const dateEvents = events.filter((event) => includedOnDate(event, dateKey, tagConfig))
       .sort((a, b) => compareForDate(a, b, weekday, dateKey))
@@ -117,3 +118,41 @@ export const generateAgenda = ({
   }
   return { content, eventCount }
 }
+
+export const generateAgenda = ({
+  events,
+  tagConfig,
+  startDate,
+  endDate,
+  referenceDate,
+}: {
+  events: any[]
+  tagConfig: TagConfig
+  startDate: string
+  endDate: string
+  referenceDate?: string
+}): { content: string; eventCount: number } => generateAgendaWithResolver({
+  resolve: () => ({ events, tagConfig }),
+  startDate,
+  endDate,
+  referenceDate,
+})
+
+export const generateAgendaFromLayers = ({
+  layers,
+  localTag,
+  startDate,
+  endDate,
+  referenceDate,
+}: {
+  layers: ConfigurationLayer[]
+  localTag?: string
+  startDate: string
+  endDate: string
+  referenceDate?: string
+}): { content: string; eventCount: number } => generateAgendaWithResolver({
+  resolve: (date) => composeEventsForDate({ layers, localTag, date }),
+  startDate,
+  endDate,
+  referenceDate,
+})

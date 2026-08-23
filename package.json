@@ -13,7 +13,8 @@
     "test:engine": "tsx --test lib/serenity-engine/*.test.ts lib/serenity-engine/reports/*.test.ts",
     "test:config": "tsx --test lib/config-fetcher.test.ts",
     "test:storage": "tsx --test lib/scoped-storage.test.ts",
-    "test:migrate": "tsx --test scripts/migrate-dates.test.ts"
+    "test:migrate": "tsx --test scripts/migrate-dates.test.ts",
+    "test:converter": "tsx --test scripts/convert-tag-schema.test.ts"
   },
   "dependencies": {
     "@dnd-kit/core": "latest",

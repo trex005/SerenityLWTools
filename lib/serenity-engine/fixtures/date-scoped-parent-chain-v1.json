@@ -1,0 +1,76 @@
+{
+  "fixtureVersion": 1,
+  "localTag": "996",
+  "layers": [
+    {
+      "tag": "main",
+      "config": { "tags": { "main": { "startDate": "2024-01-01" } }, "brand": { "root": true } },
+      "eventDocument": {
+        "schemaVersion": 2,
+        "operations": [
+          { "kind": "owned", "event": { "id": "shared", "title": "Main", "description": "Main description" } },
+          { "kind": "owned", "event": { "id": "returning", "title": "Returning" } }
+        ]
+      }
+    },
+    {
+      "tag": "s4",
+      "config": { "tags": { "s4": { "startDate": "2025-12-15" } }, "brand": { "season": 4 } },
+      "eventDocument": {
+        "schemaVersion": 2,
+        "operations": [
+          { "kind": "override", "id": "shared", "set": { "/title": "Season 4", "/seasonOnly": true }, "remove": ["/description"] },
+          { "kind": "owned", "event": { "id": "s4-only", "title": "S4 only" } },
+          { "kind": "delete", "id": "returning" }
+        ]
+      }
+    },
+    {
+      "tag": "s5_preview",
+      "config": { "tags": { "s5_preview": { "startDate": "2026-01-02" } }, "brand": { "season": 5 } },
+      "eventDocument": {
+        "schemaVersion": 2,
+        "operations": [
+          { "kind": "override", "id": "shared", "set": { "/title": "Preview" } },
+          { "kind": "owned", "event": { "id": "preview-only", "title": "Preview only" } }
+        ]
+      }
+    },
+    {
+      "tag": "996",
+      "config": {
+        "tags": {
+          "996": { "startDate": "2024-10-10" },
+          "s4": { "startDate": "2025-12-22", "endDate": "2026-01-01" }
+        },
+        "brand": { "local": true }
+      },
+      "eventDocument": {
+        "schemaVersion": 2,
+        "operations": [
+          { "kind": "override", "id": "shared", "set": { "/local": true } },
+          { "kind": "override", "id": "s4-only", "set": { "/title": "Locally edited S4" } },
+          { "kind": "delete", "id": "preview-only" },
+          { "kind": "owned", "event": { "id": "local-only", "title": "Local only" } }
+        ]
+      }
+    }
+  ],
+  "cases": [
+    {
+      "date": "2025-12-21",
+      "activeSourceTags": ["main", "996"],
+      "eventIds": ["local-only", "returning", "shared"]
+    },
+    {
+      "date": "2026-01-01",
+      "activeSourceTags": ["main", "s4", "996"],
+      "eventIds": ["local-only", "s4-only", "shared"]
+    },
+    {
+      "date": "2026-01-02",
+      "activeSourceTags": ["main", "s5_preview", "996"],
+      "eventIds": ["local-only", "returning", "shared"]
+    }
+  ]
+}

@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lastwar.tools/schemas/serenity-event-operations-v2.json",
+  "title": "Serenity event operations version 2",
+  "type": "object",
+  "required": ["schemaVersion", "operations"],
+  "properties": {
+    "schemaVersion": { "const": 2 },
+    "updated": { "type": "string" },
+    "operations": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          {
+            "type": "object",
+            "required": ["kind", "event"],
+            "properties": {
+              "kind": { "const": "owned" },
+              "event": {
+                "type": "object",
+                "required": ["id", "title"],
+                "properties": {
+                  "id": { "type": "string", "minLength": 1 },
+                  "title": { "type": "string", "minLength": 1 }
+                }
+              }
+            },
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "required": ["kind", "id", "set"],
+            "properties": {
+              "kind": { "const": "override" },
+              "id": { "type": "string", "minLength": 1 },
+              "set": { "type": "object" },
+              "remove": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }
+            },
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "required": ["kind", "id"],
+            "properties": {
+              "kind": { "const": "delete" },
+              "id": { "type": "string", "minLength": 1 }
+            },
+            "additionalProperties": false
+          }
+        ]
+      }
+    }
+  },
+  "additionalProperties": false
+}

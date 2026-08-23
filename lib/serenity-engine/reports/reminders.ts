@@ -1,4 +1,5 @@
 import { addDateKeyDays, eventOccursOnDate, weekdayForDateKey, type TagConfig } from "../core"
+import { composeEventsForDate, type ConfigurationLayer } from "../composition"
 
 const BULLET_PREFIX = "\u2022 "
 
@@ -107,5 +108,40 @@ export const generateDailyReminders = ({
     tomorrowReminders,
     todayEventCount: todayEvents.length,
     tomorrowEventCount: tomorrowEvents.length,
+  }
+}
+
+export const generateDailyRemindersFromLayers = ({
+  layers,
+  localTag,
+  reportDate,
+  minutesUntilReset,
+}: {
+  layers: ConfigurationLayer[]
+  localTag?: string
+  reportDate: string
+  minutesUntilReset: number
+}): DailyReminderReport => {
+  const tomorrow = addDateKeyDays(reportDate, 1)
+  const todayComposition = composeEventsForDate({ layers, localTag, date: reportDate })
+  const tomorrowComposition = composeEventsForDate({ layers, localTag, date: tomorrow })
+  const today = visibleEvents(todayComposition.events, reportDate, todayComposition.tagConfig)
+  const next = visibleEvents(tomorrowComposition.events, tomorrow, tomorrowComposition.tagConfig)
+  const select = (items: any[], dateKey: string, property: string) => items
+    .filter((event) => Boolean(effectiveValue(event, dateKey, weekdayForDateKey(dateKey), property)))
+    .map((event) => reminderLine(event, dateKey))
+    .sort(compareLines)
+    .map(({ line }) => line)
+  const dayReminders = select(today, reportDate, "remindEndOfDay")
+  const tomorrowReminders = select(next, tomorrow, "remindTomorrow")
+  const sections = [`Reset in ${duration(minutesUntilReset)}!`]
+  if (tomorrowReminders.length) sections.push(`Tomorrow:\n${tomorrowReminders.join("\n")}`)
+  if (dayReminders.length) sections.push(`Reminders:\n${dayReminders.join("\n")}`)
+  return {
+    content: sections.join("\n\n"),
+    dayReminders,
+    tomorrowReminders,
+    todayEventCount: today.length,
+    tomorrowEventCount: next.length,
   }
 }

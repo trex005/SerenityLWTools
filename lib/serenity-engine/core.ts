@@ -1,6 +1,9 @@
-export const ENGINE_VERSION = "0.4.0"
+import { engineError } from "./errors"
 
-export type TagConfig = { tags?: Record<string, { startDate?: string }> }
+export const ENGINE_VERSION = "0.5.0"
+
+export type TagMetadata = { startDate?: string; endDate?: string | null; [key: string]: unknown }
+export type TagConfig = { tags?: Record<string, TagMetadata | null>; [key: string]: unknown }
 export type Recurrence = {
   type: "days" | "weeks" | "none"
   startTag: string
@@ -19,16 +22,30 @@ const DATE_KEY = /^(\d{4})-(\d{2})-(\d{2})$/
 const DAY_MS = 86_400_000
 const WEEKDAYS = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"]
 
-const dateKeyToDay = (dateKey: string): number => {
+export const dateKeyToDay = (dateKey: string): number => {
   const match = DATE_KEY.exec(dateKey)
-  if (!match) throw new Error(`Invalid date key ${JSON.stringify(dateKey)}`)
+  if (!match) return engineError("INVALID_DATE", `Invalid date key ${JSON.stringify(dateKey)}`)
   const [year, month, day] = match.slice(1).map(Number)
   const timestamp = Date.UTC(year, month - 1, day)
   const parsed = new Date(timestamp)
   if (parsed.getUTCFullYear() !== year || parsed.getUTCMonth() !== month - 1 || parsed.getUTCDate() !== day) {
-    throw new Error(`Invalid date key ${JSON.stringify(dateKey)}`)
+    engineError("INVALID_DATE", `Invalid date key ${JSON.stringify(dateKey)}`)
   }
   return Math.floor(timestamp / DAY_MS)
+}
+
+export const validateDateKey = (dateKey: string): string => {
+  dateKeyToDay(dateKey)
+  return dateKey
+}
+
+export const validateReportDateRange = (startDate: string, endDate: string): number => {
+  const start = dateKeyToDay(startDate)
+  const end = dateKeyToDay(endDate)
+  if (end < start) engineError("INVALID_DATE_RANGE", "Report startDate must not be after endDate")
+  const inclusiveDays = end - start + 1
+  if (inclusiveDays > 366) engineError("LIMIT_EXCEEDED", "Reports are limited to 366 inclusive days")
+  return inclusiveDays
 }
 
 const dayToDateKey = (day: number): string => new Date(day * DAY_MS).toISOString().slice(0, 10)
