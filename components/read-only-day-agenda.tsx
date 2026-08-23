@@ -181,14 +181,12 @@ export function ReadOnlyDayAgenda({ day, date, showLocalTime = false }: ReadOnly
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5">
       {/* Time-specific Events Section - Now displayed first */}
       {timeEvents.length > 0 && (
         <div>
-          <div className="flex justify-between items-center mb-2">
-            <h4 className="text-md font-medium">Scheduled Events</h4>
-          </div>
-          <div className="space-y-2">
+          <h4 className="section-label mb-1.5">Scheduled</h4>
+          <div className="space-y-1.5">
             {timeEvents.map((event) => (
               <ReadOnlyEventCard
                 key={event.id}
@@ -207,8 +205,8 @@ export function ReadOnlyDayAgenda({ day, date, showLocalTime = false }: ReadOnly
       {/* All-day Events Section - Now displayed second */}
       {allDayEvents.length > 0 && (
         <div>
-          <h4 className="text-md font-medium mb-2">All-day Events</h4>
-          <div className="space-y-2">
+          <h4 className="section-label mb-1.5">All-day</h4>
+          <div className="space-y-1.5">
             {allDayEvents.map((event) => (
               <ReadOnlyEventCard
                 key={event.id}
@@ -226,7 +224,7 @@ export function ReadOnlyDayAgenda({ day, date, showLocalTime = false }: ReadOnly
 
       {/* Empty state message */}
       {allDayEvents.length === 0 && timeEvents.length === 0 && (
-        <div className="text-center py-8 text-muted-foreground">No events scheduled for this day.</div>
+        <div className="text-center py-6 text-muted-foreground">No events scheduled for this day.</div>
       )}
     </div>
   )
@@ -256,27 +254,30 @@ function ReadOnlyEventCard({
   const description = getEffectiveValue(event, "description")
 
   return (
-    <Card>
-      <CardContent className="p-4">
-        <div>
-          <h4 className="font-medium">{event.title}</h4>
-
-          {!isAllDay && startTime && (
-            <div className="text-sm text-muted-foreground">
+    <Card className="overflow-hidden">
+      <CardContent className="flex items-start gap-x-3 p-2.5">
+        {!isAllDay && startTime ? (
+          <div className="w-[4.6rem] shrink-0 sm:w-24">
+            <div className="text-[13px] font-semibold leading-tight tabular-nums">
               {startTime}
-              {endTime ? ` - ${endTime}` : ""}
-
-              {showLocalTime && (
-                <span className="text-xs text-muted-foreground/60 ml-2">
-                  ({formatLocalTime(startTime)}
-                  {endTime ? ` - ${formatLocalTime(endTime)}` : ""})
-                </span>
-              )}
+              {endTime ? `\u2013${endTime}` : ""}
             </div>
-          )}
+            {showLocalTime && (
+              <div className="text-[10px] leading-tight text-muted-foreground">
+                {formatLocalTime(startTime)}
+                {endTime ? `\u2013${formatLocalTime(endTime)}` : ""}
+              </div>
+            )}
+          </div>
+        ) : null}
 
-          {/* Event Description */}
-          {description && <p className="text-sm mt-2 text-muted-foreground whitespace-pre-line">{description}</p>}
+        <div className="min-w-0 flex-1">
+          <h4 className="text-sm font-semibold leading-snug">{event.title}</h4>
+          {description && (
+            <p className="mt-0.5 whitespace-pre-line text-xs leading-relaxed text-muted-foreground">
+              {description}
+            </p>
+          )}
         </div>
       </CardContent>
     </Card>

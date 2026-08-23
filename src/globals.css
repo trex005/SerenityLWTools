@@ -139,10 +139,15 @@
 
   /* Pill-style navigation tabs */
   .nav-pill {
-    @apply inline-flex items-center gap-1.5 whitespace-nowrap rounded-full px-3.5 py-1.5 text-sm font-medium text-muted-foreground transition-all hover:bg-white/5 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring;
+    @apply inline-flex items-center gap-1 whitespace-nowrap rounded-full px-3 py-1 text-[13px] font-medium text-muted-foreground transition-all hover:bg-white/5 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring;
   }
   .nav-pill[data-active="true"] {
     @apply bg-primary text-primary-foreground shadow-[0_4px_16px_-6px_hsl(245_85%_66%/0.6)] hover:text-primary-foreground;
+  }
+
+  /* Small uppercase section labels */
+  .section-label {
+    @apply text-[11px] font-semibold uppercase tracking-wider text-muted-foreground;
   }
 
   /* Gradient sheen applied wherever the primary surface is used (buttons, active pills) */
@@ -176,7 +181,7 @@
   }
 
   .day-chip {
-    @apply flex min-w-[4.25rem] flex-col items-center rounded-xl border bg-card/40 px-2.5 py-2 text-center transition-all hover:-translate-y-0.5 hover:border-white/15 hover:bg-white/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring;
+    @apply flex min-w-[3.6rem] flex-col items-center rounded-lg border bg-card/40 px-2 py-1.5 text-center transition-all hover:-translate-y-0.5 hover:border-white/15 hover:bg-white/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring;
   }
   .day-chip[data-active="true"] {
     @apply border-transparent bg-primary/15 shadow-[inset_0_0_0_1px_hsl(245_85%_66%/0.55),0_8px_20px_-10px_hsl(245_85%_66%/0.5)] hover:bg-primary/20;

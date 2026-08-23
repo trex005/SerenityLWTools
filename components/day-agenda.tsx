@@ -173,10 +173,8 @@ export function DayAgenda({ day, date, showLocalTime = false }: DayAgendaProps) 
       {/* Time-specific Events Section - Now displayed first */}
       {timeEvents.length > 0 && (
         <div>
-          <div className="flex justify-between items-center mb-2">
-            <h4 className="text-md font-medium">Scheduled Events</h4>
-          </div>
-          <div className="space-y-2">
+          <h4 className="section-label mb-1.5">Scheduled</h4>
+          <div className="space-y-1.5">
             {timeEvents.map((event) => (
               <EventCard
                 key={event.id}
@@ -194,7 +192,7 @@ export function DayAgenda({ day, date, showLocalTime = false }: DayAgendaProps) 
       {/* All-day Events Section - Now displayed second */}
       {allDayEvents.length > 0 && (
         <div>
-          <h4 className="text-md font-medium mb-2">All-day Events</h4>
+          <h4 className="section-label mb-1.5">All-day</h4>
           <DndContext
             sensors={sensors}
             collisionDetection={closestCenter}
@@ -202,7 +200,7 @@ export function DayAgenda({ day, date, showLocalTime = false }: DayAgendaProps) 
             modifiers={[restrictToVerticalAxis]}
           >
             <SortableContext items={allDayEvents.map((event) => event.id)} strategy={verticalListSortingStrategy}>
-              <div className="space-y-2">
+              <div className="space-y-1.5">
                 {allDayEvents.map((event) => (
                   <SortableAllDayEventCard key={event.id} event={event}>
                     <EventCard
@@ -222,7 +220,7 @@ export function DayAgenda({ day, date, showLocalTime = false }: DayAgendaProps) 
 
       {/* Empty state message */}
       {allDayEvents.length === 0 && timeEvents.length === 0 && (
-        <div className="text-center py-8 text-muted-foreground">
+        <div className="text-center py-6 text-muted-foreground">
           No events scheduled for this day. Click &quot;Add Event&quot; to create one.
         </div>
       )}

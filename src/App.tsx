@@ -59,7 +59,7 @@ export function App() {
         onPublish={() => setPublishOpen(true)}
       />
 
-      <main className="mx-auto w-full max-w-5xl flex-1 px-3 py-5 sm:px-4">
+      <main className="mx-auto w-full max-w-5xl flex-1 px-3 pb-10 pt-4 sm:px-4">
         {activeTab === "agenda" && <AgendaView adminMode={adminMode} />}
         {activeTab === "tips" &&
           (adminMode ? <TipsManagement forceRefresh="0" /> : <ReadOnlyTips forceRefresh="0" />)}
@@ -100,42 +100,19 @@ function TopBar({
 
   return (
     <header className="app-topbar">
-      <div className="mx-auto flex w-full max-w-5xl flex-col gap-2 px-3 pb-2 pt-3 sm:px-4">
-        <div className="flex items-center justify-between gap-3">
-          <div className="flex min-w-0 items-center gap-2.5">
-            <BrandLogo size={28} />
-            {adminMode && (
-              <span className="rounded-full bg-primary/10 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-primary">
-                Command mode
-              </span>
-            )}
-          </div>
-          <div className="flex items-center gap-1.5">
-            {adminMode ? (
-              <>
-                <button
-                  onClick={onPublish}
-                  className="inline-flex items-center gap-1.5 rounded-full bg-primary px-3.5 py-1.5 text-sm font-medium text-primary-foreground shadow-sm transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                >
-                  <CloudUpload className="h-4 w-4" />
-                  Publish
-                </button>
-                <button
-                  onClick={exitAdminMode}
-                  title="Exit command mode"
-                  aria-label="Exit command mode"
-                  className="inline-flex h-8 w-8 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                >
-                  <LogOut className="h-4 w-4" />
-                </button>
-              </>
-            ) : (
-              <LocalTimeToggle />
-            )}
-          </div>
+      <div className="mx-auto flex h-12 w-full max-w-5xl items-center gap-2 px-3 sm:px-4">
+        <div className="flex shrink-0 items-center gap-2">
+          <BrandLogo size={22} />
+          {adminMode && (
+            <span
+              title="Command mode"
+              aria-label="Command mode"
+              className="h-2 w-2 rounded-full bg-primary shadow-[0_0_8px_2px_hsl(245_85%_66%/0.7)]"
+            />
+          )}
         </div>
 
-        <nav className="scroll-strip -mx-1 px-1" aria-label="Sections">
+        <nav className="scroll-strip min-w-0 flex-1 px-0.5" aria-label="Sections">
           {tabs.map((tab) => (
             <button
               key={tab}
@@ -147,6 +124,31 @@ function TopBar({
             </button>
           ))}
         </nav>
+
+        <div className="flex shrink-0 items-center gap-1">
+          {adminMode ? (
+            <>
+              <button
+                onClick={onPublish}
+                title="Publish changes to S3"
+                className="inline-flex h-8 items-center gap-1.5 rounded-full bg-primary px-3 text-[13px] font-medium text-primary-foreground shadow-sm transition-all hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              >
+                <CloudUpload className="h-4 w-4" />
+                <span className="hidden sm:inline">Publish</span>
+              </button>
+              <button
+                onClick={exitAdminMode}
+                title="Exit command mode"
+                aria-label="Exit command mode"
+                className="inline-flex h-8 w-8 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-white/5 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              >
+                <LogOut className="h-4 w-4" />
+              </button>
+            </>
+          ) : (
+            <LocalTimeToggle />
+          )}
+        </div>
       </div>
     </header>
   )
@@ -158,11 +160,11 @@ function LocalTimeToggle() {
     <button
       onClick={() => setShowLocalTime(!showLocalTime)}
       title={showLocalTime ? "Local time shown alongside server time" : "Server time only"}
+      aria-label={showLocalTime ? "Hide local time" : "Show local time"}
       aria-pressed={showLocalTime}
-      className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+      className="inline-flex h-8 w-8 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-white/5 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
     >
-      {showLocalTime ? <Eye className="h-3.5 w-3.5" /> : <EyeOff className="h-3.5 w-3.5" />}
-      Local time
+      {showLocalTime ? <Eye className="h-4 w-4" /> : <EyeOff className="h-4 w-4" />}
     </button>
   )
 }
@@ -290,11 +292,11 @@ function AgendaView({ adminMode }: { adminMode: boolean }) {
             data-today={key === todayKey}
             onClick={() => setActiveDay(key)}
           >
-            <span className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
+            <span className="text-[10px] font-medium uppercase tracking-wide text-muted-foreground">
               {formatInAppTimezone(date, "EEE")}
             </span>
-            <span className="text-base font-semibold leading-tight">{formatInAppTimezone(date, "d")}</span>
-            <span className="text-[11px] text-muted-foreground">{formatInAppTimezone(date, "MMM")}</span>
+            <span className="text-sm font-semibold leading-tight">{formatInAppTimezone(date, "d")}</span>
+            <span className="text-[10px] text-muted-foreground">{formatInAppTimezone(date, "MMM")}</span>
           </button>
         ))}
       </div>

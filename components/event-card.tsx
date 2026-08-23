@@ -307,7 +307,7 @@ export function EventCard({ event, day, date, showLocalTime = false, overrideInf
     <>
       {/* Event Card */}
       <Card className={`relative ${hasDateOverride ? "border-primary" : ""}`}>
-        <CardContent className="p-4">
+        <CardContent className="p-3">
           <div className="flex items-start">
             <div className="flex-1">
               <div className="flex justify-between items-start">
