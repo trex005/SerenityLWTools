@@ -1,16 +1,7 @@
 {
   "updated": "2026-07-07T22:49:31-02:00",
-  "brand": {
-    "name": "Serenity Base",
-    "favicon": "/conf/main/favicon.ico"
-  },
-  "tags": {
-    "main": {
-      "startDate": "2024-10-10"
-    }
-  },
+  "brand"  : {"name": "Serenity Base", "favicon": "/conf/main/favicon.ico"},
+  "tags"   : { "main": {"startDate": "2024-10-10"} },
   "parents": [],
-  "storage": {
-    "eventsSuffix": "schema-v2-20260816"
-  }
+  "storage": {"eventsSuffix": "schema-v2-20260816"}
 }

@@ -1,0 +1,7 @@
+{
+  "updated": "2026-07-07T22:49:31-02:00",
+  "brand"  : {"name": "Serenity", "favicon": "/conf/996serenity/favicon.ico"},
+  "tags"   : { "996serenity": {"startDate": "2024-10-10"} },
+  "parents": ["server996", "season6", "main"],
+  "storage": {"eventsSuffix": "schema-v2-20260816"}
+}
