@@ -295,8 +295,12 @@ function AgendaView({ adminMode }: { adminMode: boolean }) {
             <span className="text-[10px] font-medium uppercase tracking-wide text-muted-foreground">
               {formatInAppTimezone(date, "EEE")}
             </span>
-            <span className="text-sm font-semibold leading-tight">{formatInAppTimezone(date, "d")}</span>
-            <span className="text-[10px] text-muted-foreground">{formatInAppTimezone(date, "MMM")}</span>
+            <span className="text-sm font-semibold leading-tight tabular-nums">
+              {formatInAppTimezone(date, "d")}
+              <span className="ml-0.5 text-[10px] font-medium text-muted-foreground">
+                {formatInAppTimezone(date, "MMM")}
+              </span>
+            </span>
           </button>
         ))}
       </div>
