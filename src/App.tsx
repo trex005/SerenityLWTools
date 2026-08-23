@@ -184,7 +184,7 @@ function AgendaView({ adminMode }: { adminMode: boolean }) {
     return [today, addAppDays(today, 6)]
   })
   const [activeDay, setActiveDay] = useState<string>(() => getAppTodayKey())
-  const [showLocalTime, setShowLocalTime] = useShowLocalTime()
+  const [showLocalTime] = useShowLocalTime()
 
   const days = useMemo(() => {
     const result: { key: string; day: string; date: Date }[] = []
@@ -309,14 +309,12 @@ function AgendaView({ adminMode }: { adminMode: boolean }) {
               day={activeEntry.day}
               date={activeEntry.date}
               showLocalTime={showLocalTime}
-              setShowLocalTime={setShowLocalTime}
             />
           ) : (
             <ReadOnlyDayAgenda
               day={activeEntry.day}
               date={activeEntry.date}
               showLocalTime={showLocalTime}
-              setShowLocalTime={setShowLocalTime}
             />
           )}
         </section>

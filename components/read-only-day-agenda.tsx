@@ -6,9 +6,6 @@ import { useConfigData } from "@/hooks/use-config-data"
 import { useDateEvents } from "@/hooks/use-date-events"
 import { useTagData } from "@/hooks/use-tag-data"
 import { shouldShowRecurringEvent } from "@/lib/recurrence-utils"
-import { Switch } from "@/components/ui/switch"
-import { Label } from "@/components/ui/label"
-import { scopedLocalStorage } from "@/lib/scoped-storage"
 import { formatInAppTimezone } from "@/lib/date-utils"
 import { compareEventsByOrderValue } from "@/lib/event-order"
 
@@ -16,10 +13,9 @@ interface ReadOnlyDayAgendaProps {
   day: string
   date: Date
   showLocalTime?: boolean
-  setShowLocalTime?: (value: boolean) => void
 }
 
-export function ReadOnlyDayAgenda({ day, date, showLocalTime = false, setShowLocalTime }: ReadOnlyDayAgendaProps) {
+export function ReadOnlyDayAgenda({ day, date, showLocalTime = false }: ReadOnlyDayAgendaProps) {
   // Access events data from config
   const { isLoaded } = useConfigData()
   const dateKey = formatInAppTimezone(date, "yyyy-MM-dd")
@@ -30,27 +26,8 @@ export function ReadOnlyDayAgenda({ day, date, showLocalTime = false, setShowLoc
   const [allDayEvents, setAllDayEvents] = useState<any[]>([])
   const [timeEvents, setTimeEvents] = useState<any[]>([])
 
-  // If parent provides showLocalTime and setShowLocalTime, use those
-  // Otherwise, manage state internally
-  const [internalShowLocalTime, setInternalShowLocalTime] = useState(() => {
-    const saved = scopedLocalStorage.getItem("show-local-time")
-    return saved ? JSON.parse(saved) : true
-  })
-
-  // Use parent state if provided, otherwise use internal state
-  const effectiveShowLocalTime = showLocalTime !== undefined ? showLocalTime : internalShowLocalTime
-
-  // Function to update showLocalTime and save to localStorage
-  const handleShowLocalTimeChange = (value: boolean) => {
-    if (setShowLocalTime) {
-      // If parent provided a setter, use it
-      setShowLocalTime(value)
-    } else {
-      // Otherwise use internal state
-      setInternalShowLocalTime(value)
-      scopedLocalStorage.setItem("show-local-time", JSON.stringify(value))
-    }
-  }
+  // Local-time display is toggled globally from the top bar
+  const effectiveShowLocalTime = showLocalTime
 
   /**
    * Effect to filter and organize events for the current day
@@ -210,17 +187,6 @@ export function ReadOnlyDayAgenda({ day, date, showLocalTime = false, setShowLoc
         <div>
           <div className="flex justify-between items-center mb-2">
             <h4 className="text-md font-medium">Scheduled Events</h4>
-            <div className="flex items-center gap-2">
-              <Switch
-                id={`show-local-time-${day}`}
-                checked={effectiveShowLocalTime}
-                onCheckedChange={handleShowLocalTimeChange}
-                className="data-[state=checked]:bg-primary/40"
-              />
-              <Label htmlFor={`show-local-time-${day}`} className="text-xs text-muted-foreground">
-                also display local time
-              </Label>
-            </div>
           </div>
           <div className="space-y-2">
             {timeEvents.map((event) => (

@@ -12,8 +12,6 @@ import { useDateEvents } from "@/hooks/use-date-events"
 import { useOverrideDiff } from "@/hooks/use-override-diff"
 import { useTagData } from "@/hooks/use-tag-data"
 import { shouldShowRecurringEvent } from "@/lib/recurrence-utils"
-import { Switch } from "@/components/ui/switch"
-import { Label } from "@/components/ui/label"
 import { formatInAppTimezone } from "@/lib/date-utils"
 import { compareEventsByOrderValue, getEventOrderValue, getEventTitleForSort } from "@/lib/event-order"
 import {
@@ -35,19 +33,17 @@ import { restrictToVerticalAxis } from "@dnd-kit/modifiers"
 import { CSS } from "@dnd-kit/utilities"
 import { GripVertical } from "lucide-react"
 
-// Update the props interface and use the setShowLocalTime function
 interface DayAgendaProps {
   day: string
   date: Date
   showLocalTime?: boolean
-  setShowLocalTime?: (value: boolean) => void
 }
 
 /**
  * DayAgenda component displays events for a specific day of the week
  * It separates all-day events from time-specific events.
  */
-export function DayAgenda({ day, date, showLocalTime = false, setShowLocalTime }: DayAgendaProps) {
+export function DayAgenda({ day, date, showLocalTime = false }: DayAgendaProps) {
   const { updateEventOrderValue } = useEvents()
   const dateKey = formatInAppTimezone(date, "yyyy-MM-dd")
   const events = useDateEvents(dateKey)
@@ -179,17 +175,6 @@ export function DayAgenda({ day, date, showLocalTime = false, setShowLocalTime }
         <div>
           <div className="flex justify-between items-center mb-2">
             <h4 className="text-md font-medium">Scheduled Events</h4>
-            <div className="flex items-center gap-2">
-              <Switch
-                id={`show-local-time-${day}`}
-                checked={showLocalTime}
-                onCheckedChange={setShowLocalTime}
-                className="data-[state=checked]:bg-primary/40"
-              />
-              <Label htmlFor={`show-local-time-${day}`} className="text-xs text-muted-foreground">
-                also display local time
-              </Label>
-            </div>
           </div>
           <div className="space-y-2">
             {timeEvents.map((event) => (
