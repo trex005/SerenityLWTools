@@ -15,8 +15,8 @@ import { AdminPanel } from "@/components/admin-panel"
 import { PublishDialog } from "@/src/publish-dialog"
 import { getTipIdFromLocation } from "@/lib/hash-navigation"
 import { OverrideDiffProvider } from "@/hooks/use-override-diff"
-import { addAppDays, formatInAppTimezone, getAppToday, getAppTodayKey } from "@/lib/date-utils"
-import { CloudUpload, Eye, EyeOff, LogOut } from "lucide-react"
+import { addAppDays, formatInAppTimezone, getAppToday, getAppTodayKey, getStartOfAppDay, getEndOfAppDay } from "@/lib/date-utils"
+import { CalendarRange, ChevronLeft, ChevronRight, CloudUpload, Eye, EyeOff, LogOut } from "lucide-react"
 import { useShowLocalTime } from "@/src/local-time"
 
 type MainTab = "agenda" | "tips" | "events" | "mail" | "reminders" | "command"
@@ -167,32 +167,57 @@ function LocalTimeToggle() {
   )
 }
 
-const RANGE_OPTIONS = [3, 7, 14]
+const MAX_RANGE_DAYS = 31
+
+const toDateInputValue = (date: Date): string => formatInAppTimezone(date, "yyyy-MM-dd")
+
+const fromDateInputValue = (value: string, endOfDay: boolean): Date | undefined => {
+  const [year, month, day] = value.split("-").map(Number)
+  if (!year || !month || !day) return undefined
+  const parsed = getEndOfAppDay(new Date(Date.UTC(year, month - 1, day, 12)))
+  return endOfDay ? parsed : getStartOfAppDay(parsed)
+}
 
 function AgendaView({ adminMode }: { adminMode: boolean }) {
-  const [rangeDays, setRangeDays] = useState(7)
+  const [range, setRange] = useState<[Date, Date]>(() => {
+    const today = getAppToday()
+    return [today, addAppDays(today, 6)]
+  })
   const [activeDay, setActiveDay] = useState<string>(() => getAppTodayKey())
   const [showLocalTime, setShowLocalTime] = useShowLocalTime()
 
   const days = useMemo(() => {
-    const today = getAppToday()
     const result: { key: string; day: string; date: Date }[] = []
-    for (let i = 0; i < rangeDays; i++) {
-      const date = addAppDays(today, i)
+    let cursor = range[0]
+    let guard = 0
+    while (cursor <= range[1] && guard < MAX_RANGE_DAYS) {
       result.push({
-        key: formatInAppTimezone(date, "yyyy-MM-dd"),
-        day: formatInAppTimezone(date, "EEEE").toLowerCase(),
-        date: new Date(date),
+        key: formatInAppTimezone(cursor, "yyyy-MM-dd"),
+        day: formatInAppTimezone(cursor, "EEEE").toLowerCase(),
+        date: new Date(cursor),
       })
+      cursor = addAppDays(cursor, 1)
+      guard += 1
     }
     return result
-  }, [rangeDays])
+  }, [range])
 
   useEffect(() => {
     if (!days.some((entry) => entry.key === activeDay)) {
-      setActiveDay(getAppTodayKey())
+      setActiveDay(days[0]?.key ?? getAppTodayKey())
     }
   }, [days, activeDay])
+
+  const pageRange = (delta: number) => {
+    const span = days.length || 7
+    setRange(([start, end]) => [addAppDays(start, delta * span), addAppDays(end, delta * span)])
+  }
+
+  const resetToToday = () => {
+    const today = getAppToday()
+    setRange([today, addAppDays(today, 6)])
+    setActiveDay(getAppTodayKey())
+  }
 
   const todayKey = getAppTodayKey()
   const activeEntry = days.find((entry) => entry.key === activeDay)
@@ -200,17 +225,56 @@ function AgendaView({ adminMode }: { adminMode: boolean }) {
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <div className="scroll-strip -mx-1 px-1" role="tablist" aria-label="Quick range">
-          {RANGE_OPTIONS.map((option) => (
+        <div className="flex flex-wrap items-center gap-2">
+          <div className="inline-flex items-center rounded-lg border bg-card/40">
             <button
-              key={option}
-              className="nav-pill"
-              data-active={rangeDays === option}
-              onClick={() => setRangeDays(option)}
+              onClick={() => pageRange(-1)}
+              aria-label="Previous period"
+              title="Previous period"
+              className="inline-flex h-8 w-8 items-center justify-center rounded-l-lg text-muted-foreground transition-colors hover:bg-white/5 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >
-              {option} days
+              <ChevronLeft className="h-4 w-4" />
             </button>
-          ))}
+            <button
+              onClick={resetToToday}
+              className="border-x border-white/5 px-3 py-1.5 text-sm font-medium text-muted-foreground transition-colors hover:bg-white/5 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            >
+              Today
+            </button>
+            <button
+              onClick={() => pageRange(1)}
+              aria-label="Next period"
+              title="Next period"
+              className="inline-flex h-8 w-8 items-center justify-center rounded-r-lg text-muted-foreground transition-colors hover:bg-white/5 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            >
+              <ChevronRight className="h-4 w-4" />
+            </button>
+          </div>
+
+          <div className="inline-flex items-center gap-1.5 rounded-lg border bg-card/40 px-2.5 py-1.5">
+            <CalendarRange className="h-4 w-4 text-muted-foreground" />
+            <input
+              type="date"
+              aria-label="Range start date"
+              value={toDateInputValue(range[0])}
+              onChange={(event) => {
+                const start = fromDateInputValue(event.target.value, false)
+                if (start) setRange(([end]) => (start <= end ? [start, end] : [start, addAppDays(start, 6)]))
+              }}
+              className="w-[7.5rem] bg-transparent text-sm outline-none [color-scheme:dark]"
+            />
+            <span className="text-muted-foreground">–</span>
+            <input
+              type="date"
+              aria-label="Range end date"
+              value={toDateInputValue(range[1])}
+              onChange={(event) => {
+                const end = fromDateInputValue(event.target.value, true)
+                if (end) setRange(([start]) => (end >= start ? [start, end] : [addAppDays(end, -6), end]))
+              }}
+              className="w-[7.5rem] bg-transparent text-sm outline-none [color-scheme:dark]"
+            />
+          </div>
         </div>
         {adminMode && activeEntry && <AddEventButton day={activeEntry.day} date={activeEntry.date} />}
       </div>
