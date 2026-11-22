@@ -1,0 +1,193 @@
+{
+  "schemaVersion": 2,
+  "updated": "2026-08-23T21:27:01-02:00",
+  "operations": [
+    {
+      "kind": "owned",
+      "event": {
+        "id": "863ecb60-9cb5-4e76-92fb-9b16057189d3",
+        "title": "Capture Cities (Level 1 opens)",
+        "description": "",
+        "remindTomorrow": true,
+        "remindEndOfDay": false,
+        "includeInBriefing": true,
+        "includeOnWebsite": true,
+        "isAllDay": false,
+        "startTime": "12:00",
+        "endTime": "",
+        "days": [
+          "wednesday"
+        ],
+        "variations": {},
+        "archived": false,
+        "recurrence": {
+          "type": "weeks",
+          "daysOfWeek": [
+            "wednesday"
+          ],
+          "onPeriods": 1,
+          "offPeriods": 0,
+          "startTag": "season6",
+          "startOffset": 2,
+          "endOffset": 2,
+          "startDate": "2025-01-05"
+        }
+      }
+    },
+    {
+      "kind": "owned",
+      "event": {
+        "id": "403b8446-59ef-4771-a697-fd4315b56b32",
+        "title": "Capture Cities (Level 2 opens)",
+        "description": "",
+        "remindTomorrow": true,
+        "remindEndOfDay": false,
+        "includeInBriefing": true,
+        "includeOnWebsite": true,
+        "isAllDay": false,
+        "startTime": "12:00",
+        "endTime": "",
+        "days": [
+          "saturday"
+        ],
+        "variations": {},
+        "archived": false,
+        "recurrence": {
+          "type": "weeks",
+          "daysOfWeek": [
+            "saturday"
+          ],
+          "onPeriods": 1,
+          "offPeriods": 0,
+          "startTag": "season6",
+          "startOffset": 5,
+          "endOffset": 5
+        }
+      }
+    },
+    {
+      "kind": "owned",
+      "event": {
+        "id": "c948ba6b-3499-4b8f-a341-2a4ac693bb6b",
+        "title": "Capture Cities (Level 3 openes)",
+        "description": "",
+        "remindTomorrow": true,
+        "remindEndOfDay": false,
+        "includeInBriefing": true,
+        "includeOnWebsite": true,
+        "isAllDay": false,
+        "startTime": "12:00",
+        "endTime": "",
+        "days": [
+          "wednesday"
+        ],
+        "variations": {},
+        "archived": false,
+        "recurrence": {
+          "type": "weeks",
+          "daysOfWeek": [
+            "wednesday"
+          ],
+          "onPeriods": 1,
+          "offPeriods": 0,
+          "startTag": "season6",
+          "startOffset": 9,
+          "endOffset": 9
+        }
+      }
+    },
+    {
+      "kind": "owned",
+      "event": {
+        "id": "a9c4d315-08f2-42af-951a-834f13b81a68",
+        "title": "Capture Properties POSSIBLE",
+        "description": "",
+        "remindTomorrow": true,
+        "remindEndOfDay": false,
+        "includeInBriefing": true,
+        "includeOnWebsite": true,
+        "isAllDay": false,
+        "startTime": "20:00",
+        "endTime": "",
+        "days": [
+          "sunday",
+          "monday",
+          "tuesday",
+          "wednesday",
+          "thursday",
+          "friday",
+          "saturday"
+        ],
+        "variations": {},
+        "archived": false,
+        "recurrence": {
+          "type": "days",
+          "daysOfWeek": [
+            "sunday",
+            "monday",
+            "tuesday",
+            "wednesday",
+            "thursday",
+            "friday",
+            "saturday"
+          ],
+          "onPeriods": 1,
+          "offPeriods": 0,
+          "startTag": "season6",
+          "startOffset": 0,
+          "endOffset": 13,
+          "startDate": "2025-01-05"
+        }
+      }
+    },
+    {
+      "kind": "override",
+      "id": "ev-3",
+      "set": {
+        "/archived": true
+      }
+    },
+    {
+      "kind": "override",
+      "id": "5d775721-b174-405a-9f95-1045c52954c4",
+      "set": {
+        "/archived": true
+      }
+    },
+    {
+      "kind": "override",
+      "id": "04434cb7-53c9-4aa5-b7a7-0dac1f6239c1",
+      "set": {
+        "/archived": true
+      }
+    },
+    {
+      "kind": "override",
+      "id": "d60cae98-2318-4856-a8e0-b68c567f8306",
+      "set": {
+        "/archived": true
+      }
+    },
+    {
+      "kind": "override",
+      "id": "e05c1e28-c800-48d1-8d3a-53898d5f2923",
+      "set": {
+        "/archived": true
+      }
+    },
+    {
+      "kind": "override",
+      "id": "f948a0fc-4ef5-4ba0-8458-8612c29a4537",
+      "set": {
+        "/archived": true
+      }
+    },
+    {
+      "kind": "override",
+      "id": "183e0c1e-249f-47f6-8324-b155e4efb389",
+      "set": {
+        "/archived": true
+      }
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "parents": [
+    "server996",
+    "main"
+  ],
+  "updated": "2026-11-11T06:08:39.697288Z",
+  "tags": {
+    "996goon": {
+      "startDate": "2024-10-10"
+    }
+  },
+  "brand": {
+      "name"             : "Goonies",
+
+    "backgroundImage": "/conf/996goon/goonies-background-20261111.png",
+    "backgroundOpacity": 0.65,
+    "backgroundSize": "cover",
+    "backgroundPosition": "top center",
+    "backgroundRepeat": "no-repeat"
+  }
+}

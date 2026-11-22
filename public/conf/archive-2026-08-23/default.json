@@ -1,0 +1,45 @@
+{
+  "updated": "2025-10-28T07:28:53.729441Z",
+  "domains": {
+    "localhost": {
+      "tag": "main"
+    },
+    "lwserenity.com": {
+      "tag": "serenity996"
+    },
+    "sswclub.com": {
+      "tag": "sswc996"
+    },
+    "lw996.com": {
+      "tag": "996"
+    },
+    "lgcy.lw996.com": {
+      "tag": "lgcy996"
+    },
+    "bltc.lw996.com": {
+      "tag": "bltc996"
+    },
+    "ph3x.lw996.com": {
+      "tag": "ph3x996"
+    },
+    "lwserenity.com": {
+      "tag": "serenity996"
+    },
+    "lw1901.com": {
+      "tag": "1901"
+    },
+    "ares.lw1901.com": {
+      "tag": "ares1901"
+    },
+    "lgcy.lwserenity.com": {
+      "tag": "lgcy996"
+    },
+    "ph3x.lwserenity.com": {
+      "tag": "ph3x996"
+    },
+    "bltc.lwserenity.com": {
+      "tag": "bltc996"
+    }
+  },
+  "defaultTag": "main"
+}

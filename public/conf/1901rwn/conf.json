@@ -1,0 +1,22 @@
+{
+  "tags": {
+    "1901rwn": {
+      "startDate": "2025-10-19"
+    }
+  },
+  "parents": [
+    "server1901",
+    "main"
+  ],
+  "updated": "2026-11-11T06:33:04.064143Z",
+  "brand": {
+    "backgroundImage": "/conf/1901rwn/ninja-isle-raqual-20261121-7732b50d.png",
+    "backgroundOpacity": 0.25,
+    "backgroundSize": "cover",
+    "backgroundPosition": "top center",
+    "backgroundRepeat": "no-repeat"
+  },
+  "storage": {
+    "eventsSuffix": "schema-v2-20261108"
+  }
+}

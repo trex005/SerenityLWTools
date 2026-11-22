@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 2,
+  "updated": "2026-07-08T01:48:04-02:00",
+  "operations": [
+    {
+      "kind": "override",
+      "id": "5831a6ec-244d-40d2-88dc-81a7173ecffd",
+      "set": {
+        "/archived": false
+      }
+    },
+    {
+      "kind": "override",
+      "id": "226d3b1b-ce75-444f-ac11-5ee3fe3af4b4",
+      "set": {
+        "/recurrence/startTag": "996"
+      }
+    },
+    {
+      "kind": "override",
+      "id": "3d376821-2591-42af-a6e5-86c5ac854d25",
+      "set": {
+        "/archived": false,
+        "/recurrence/startTag": "996"
+      }
+    },
+    {
+      "kind": "owned",
+      "event": {
+        "id": "469b803b-09d5-4901-a85b-40782d04f182",
+        "title": "Gold Prospecting (Use all your attampts!)",
+        "description": "",
+        "remindTomorrow": true,
+        "remindEndOfDay": true,
+        "includeInBriefing": true,
+        "includeOnWebsite": true,
+        "isAllDay": true,
+        "startTime": "09:00",
+        "endTime": "",
+        "days": [
+          "tuesday",
+          "wednesday",
+          "thursday",
+          "friday",
+          "saturday",
+          "monday"
+        ],
+        "variations": {},
+        "archived": true,
+        "recurrence": {
+          "type": "weeks",
+          "onPeriods": 1,
+          "offPeriods": 0,
+          "daysOfWeek": [
+            "tuesday",
+            "wednesday",
+            "thursday",
+            "friday",
+            "saturday",
+            "monday"
+          ],
+          "startTag": "996",
+          "startOffset": 536
+        }
+      }
+    }
+  ]
+}

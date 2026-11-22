@@ -1,0 +1,205 @@
+[
+  {
+    "day": 1,
+    "events": [
+      {
+        "time": "02:00",
+        "theme": "Base Building"
+      },
+      {
+        "time": "06:00",
+        "theme": "Unit Progression"
+      },
+      {
+        "time": "10:00",
+        "theme": "Hero Advancement"
+      },
+      {
+        "time": "14:00",
+        "theme": "Tech Research"
+      },
+      {
+        "time": "18:00",
+        "theme": "Drone Boost"
+      },
+      {
+        "time": "22:00",
+        "theme": "Hero Advancement"
+      }
+    ]
+  },
+  {
+    "day": 2,
+    "events": [
+      {
+        "time": "02:00",
+        "theme": "Unit Progression"
+      },
+      {
+        "time": "06:00",
+        "theme": "Tech Research"
+      },
+      {
+        "time": "10:00",
+        "theme": "Base Building"
+      },
+      {
+        "time": "14:00",
+        "theme": "Drone Boost"
+      },
+      {
+        "time": "18:00",
+        "theme": "Hero Advancement"
+      },
+      {
+        "time": "22:00",
+        "theme": "Base Building"
+      }
+    ]
+  },
+  {
+    "day": 3,
+    "events": [
+      {
+        "time": "02:00",
+        "theme": "Drone Boost"
+      },
+      {
+        "time": "06:00",
+        "theme": "Hero Advancement"
+      },
+      {
+        "time": "10:00",
+        "theme": "Tech Research"
+      },
+      {
+        "time": "14:00",
+        "theme": "Base Building"
+      },
+      {
+        "time": "18:00",
+        "theme": "Unit Progression"
+      },
+      {
+        "time": "22:00",
+        "theme": "Tech Research"
+      }
+    ]
+  },
+  {
+    "day": 4,
+    "events": [
+      {
+        "time": "02:00",
+        "theme": "Base Building"
+      },
+      {
+        "time": "06:00",
+        "theme": "Unit Progression"
+      },
+      {
+        "time": "10:00",
+        "theme": "Hero Advancement"
+      },
+      {
+        "time": "14:00",
+        "theme": "Tech Research"
+      },
+      {
+        "time": "18:00",
+        "theme": "Drone Boost"
+      },
+      {
+        "time": "22:00",
+        "theme": "Hero Advancement"
+      }
+    ]
+  },
+  {
+    "day": 5,
+    "events": [
+      {
+        "time": "02:00",
+        "theme": "Tech Research"
+      },
+      {
+        "time": "06:00",
+        "theme": "Drone Boost"
+      },
+      {
+        "time": "10:00",
+        "theme": "Unit Progression"
+      },
+      {
+        "time": "14:00",
+        "theme": "Hero Advancement"
+      },
+      {
+        "time": "18:00",
+        "theme": "Base Building"
+      },
+      {
+        "time": "22:00",
+        "theme": "Unit Progression"
+      }
+    ]
+  },
+  {
+    "day": 6,
+    "events": [
+      {
+        "time": "02:00",
+        "theme": "Unit Progression"
+      },
+      {
+        "time": "06:00",
+        "theme": "Tech Research"
+      },
+      {
+        "time": "10:00",
+        "theme": "Base Building"
+      },
+      {
+        "time": "14:00",
+        "theme": "Drone Boost"
+      },
+      {
+        "time": "18:00",
+        "theme": "Hero Advancement"
+      },
+      {
+        "time": "22:00",
+        "theme": "Base Building"
+      }
+    ]
+  },
+  {
+    "day": 7,
+    "events": [
+      {
+        "time": "02:00",
+        "theme": "Drone Boost"
+      },
+      {
+        "time": "06:00",
+        "theme": "Hero Advancement"
+      },
+      {
+        "time": "10:00",
+        "theme": "Tech Research"
+      },
+      {
+        "time": "14:00",
+        "theme": "Base Building"
+      },
+      {
+        "time": "18:00",
+        "theme": "Unit Progression"
+      },
+      {
+        "time": "22:00",
+        "theme": "Tech Research"
+      }
+    ]
+  }
+]

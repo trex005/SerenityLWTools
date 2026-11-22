@@ -19,7 +19,7 @@ import { resolveRecurrenceDate } from "@/lib/recurrence-utils"
 
 // Define the RecurrenceData type for the new structure
 export interface RecurrenceData {
-  type: "days" | "weeks" | "none"
+  type: "days" | "weeks" | "month_end" | "none"
   startTag: string
   startOffset: number
   endOffset?: number
@@ -84,7 +84,7 @@ export function RecurrenceEditor({
   const days = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"]
 
   // Handle recurrence type change
-  const handleTypeChange = (type: "days" | "weeks" | "none") => {
+  const handleTypeChange = (type: RecurrenceData["type"]) => {
     // Create a new recurrence object with the updated type
     const newRecurrence: RecurrenceData = {
       ...recurrence,
@@ -100,7 +100,7 @@ export function RecurrenceEditor({
       if (newRecurrence.daysOfWeek.length === 0) {
         newRecurrence.daysOfWeek = ["monday"]
       }
-    } else if (type === "days") {
+    } else if (type === "days" || type === "month_end") {
       newRecurrence.onPeriods = newRecurrence.onPeriods || 1
       newRecurrence.offPeriods = newRecurrence.offPeriods || 0
       // For daily recurrence, automatically select all days
@@ -260,7 +260,7 @@ export function RecurrenceEditor({
         <Label className="font-medium">Type</Label>
         <RadioGroup
           value={recurrence.type}
-          onValueChange={(value) => handleTypeChange(value as "days" | "weeks" | "none")}
+          onValueChange={(value) => handleTypeChange(value as RecurrenceData["type"])}
         >
           <div className="flex items-center space-x-2">
             <RadioGroupItem value="none" id="r-none" />
@@ -274,12 +274,17 @@ export function RecurrenceEditor({
             <RadioGroupItem value="weeks" id="r-weeks" />
             <Label htmlFor="r-weeks">Weeks</Label>
           </div>
+          <div className="flex items-center space-x-2">
+            <RadioGroupItem value="month_end" id="r-month-end" />
+            <Label htmlFor="r-month-end">Last day of every month</Label>
+          </div>
         </RadioGroup>
       </div>
 
       {/* Period Configuration */}
       {recurrence.type !== "none" && (
         <div className="space-y-4">
+          {recurrence.type !== "month_end" && <>
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="on-periods">{recurrence.type === "days" ? "Days on" : "Weeks on"}</Label>
@@ -323,6 +328,7 @@ export function RecurrenceEditor({
             </div>
           </div>
 
+          </>}
           {/* Schedule Bounds */}
           {renderStartDatePicker()}
           {renderEndDatePicker()}

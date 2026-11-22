@@ -118,7 +118,7 @@ export function EventDialog({ event, open, onOpenChange, initialDay = "monday", 
       const recurrence = sourceEvent.recurrence
         ? {
             ...sourceEvent.recurrence,
-            type: sourceEvent.recurrence.type === "weeks" || sourceEvent.recurrence.type === "none" ? sourceEvent.recurrence.type : "days",
+            type: sourceEvent.recurrence.type === "weeks" || sourceEvent.recurrence.type === "none" || sourceEvent.recurrence.type === "month_end" ? sourceEvent.recurrence.type : "days",
             onPeriods: sourceEvent.recurrence.onPeriods ?? 1,
             offPeriods: sourceEvent.recurrence.offPeriods ?? 0,
             daysOfWeek:

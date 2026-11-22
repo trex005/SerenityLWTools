@@ -1,6 +1,6 @@
 {
-  "updated": "2026-08-12T18:25:27-02:00",
-  "tips"   : [
+  "updated": "2026-11-20T23:49:26-02:00",
+  "tips": [
     {
       "id": "7ffc3fb1-56eb-4155-8be1-de25da815e1e",
       "title": "Shields",
@@ -179,26 +179,26 @@
       "isHtml": true
     },
     {
-      "id"              : "f546ccc6-5c5f-40f1-9026-86de59eda1a7",
-      "title"           : "VS Cheatsheet",
-      "content"         : "",
-      "lastUsed"        : null,
-      "customId"        : "vs-cheatsheet",
-      "imageUrl"        : "https://www.lwserenity.com/tip_images/vs_schedule.jpg",
-      "adminOnly"       : false,
+      "id": "f546ccc6-5c5f-40f1-9026-86de59eda1a7",
+      "title": "VS Cheatsheet",
+      "content": "",
+      "lastUsed": null,
+      "customId": "vs-cheatsheet",
+      "imageUrl": "https://www.lwserenity.com/tip_images/vs_schedule.jpg",
+      "adminOnly": false,
       "canUseInBriefing": false
     },
     {
-      "id"              : "5529a305-5aa1-4f8c-9c36-4c0a55483e4a",
-      "title"           : "What is a SHINY?",
-      "content"         : "",
-      "lastUsed"        : null,
-      "customId"        : "what-is-a-shiny",
-      "imageUrl"        : "https://www.lwserenity.com/tip_images/Shiny.jpg",
-      "adminOnly"       : false,
+      "id": "5529a305-5aa1-4f8c-9c36-4c0a55483e4a",
+      "title": "What is a SHINY?",
+      "content": "",
+      "lastUsed": null,
+      "customId": "what-is-a-shiny",
+      "imageUrl": "https://www.lwserenity.com/tip_images/Shiny.jpg",
+      "adminOnly": false,
       "canUseInBriefing": false,
-      "unlisted"        : true,
-      "isHtml"          : false
+      "unlisted": true,
+      "isHtml": false
     },
     {
       "id": "df5bea0a-4cea-4aec-9cfe-19990d8d4b4e",
@@ -249,13 +249,13 @@
       "canUseInBriefing": false
     },
     {
-      "id"              : "2e296b35-9d8d-4d8c-b71b-e44425943e79",
-      "title"           : "Headquarter Requirement Costs",
-      "content"         : "",
-      "lastUsed"        : null,
-      "customId"        : "headquarter-requirement-costs",
-      "imageUrl"        : "https://www.lwserenity.com/tip_images/hq-req-costs.png",
-      "adminOnly"       : false,
+      "id": "2e296b35-9d8d-4d8c-b71b-e44425943e79",
+      "title": "Headquarter Requirement Costs",
+      "content": "",
+      "lastUsed": null,
+      "customId": "headquarter-requirement-costs",
+      "imageUrl": "https://www.lwserenity.com/tip_images/hq-req-costs.png",
+      "adminOnly": false,
       "canUseInBriefing": false
     },
     {
@@ -300,23 +300,23 @@
       "canUseInBriefing": false
     },
     {
-      "id"              : "4374d8c5-f315-45c1-be84-29c956da9b19",
-      "title"           : "How to time SHINYs",
-      "content"         : "",
-      "lastUsed"        : null,
-      "customId"        : "how-to-time-shinys",
-      "imageUrl"        : "https://www.lwserenity.com/tip_images/time-shinys.jpg",
-      "adminOnly"       : false,
+      "id": "4374d8c5-f315-45c1-be84-29c956da9b19",
+      "title": "How to time SHINYs",
+      "content": "",
+      "lastUsed": null,
+      "customId": "how-to-time-shinys",
+      "imageUrl": "https://www.lwserenity.com/tip_images/time-shinys.jpg",
+      "adminOnly": false,
       "canUseInBriefing": false
     },
     {
-      "id"              : "9ec6ea79-bad9-4db2-88e4-5bef0caf7097",
-      "title"           : "Using Gold Bricks",
-      "content"         : "",
-      "lastUsed"        : null,
-      "customId"        : "using-gold-bricks",
-      "imageUrl"        : "https://lwserenity.com/tip_images/using-gold-bricks.png",
-      "adminOnly"       : false,
+      "id": "9ec6ea79-bad9-4db2-88e4-5bef0caf7097",
+      "title": "Using Gold Bricks",
+      "content": "",
+      "lastUsed": null,
+      "customId": "using-gold-bricks",
+      "imageUrl": "https://lwserenity.com/tip_images/using-gold-bricks.png",
+      "adminOnly": false,
       "canUseInBriefing": true
     },
     {
@@ -556,28 +556,28 @@
       "isHtml": false
     },
     {
-      "id"              : "c0995503-6a85-4e3d-b43f-fa01a1d966f0",
-      "title"           : "Decoration Tier Guide",
-      "content"         : "",
-      "lastUsed"        : null,
-      "customId"        : "decoration-tier-guide",
-      "imageUrl"        : "https://www.lwserenity.com/img/decoration_guide.jpg",
-      "adminOnly"       : false,
+      "id": "c0995503-6a85-4e3d-b43f-fa01a1d966f0",
+      "title": "Decoration Tier Guide",
+      "content": "",
+      "lastUsed": null,
+      "customId": "decoration-tier-guide",
+      "imageUrl": "https://www.lwserenity.com/img/decoration_guide.jpg",
+      "adminOnly": false,
       "canUseInBriefing": true,
-      "unlisted"        : false,
-      "isHtml"          : false
+      "unlisted": false,
+      "isHtml": false
     },
     {
-      "id"              : "f03de286-361e-47a8-8d07-3ccc16c55bd5",
-      "title"           : "Base upgrade level prerequisites",
-      "content"         : "",
-      "lastUsed"        : null,
-      "customId"        : "base-upgrade-level-prerequisites",
-      "imageUrl"        : "https://www.lwserenity.com/tip_images/base_prereqs.png",
-      "adminOnly"       : false,
+      "id": "f03de286-361e-47a8-8d07-3ccc16c55bd5",
+      "title": "Base upgrade level prerequisites",
+      "content": "",
+      "lastUsed": null,
+      "customId": "base-upgrade-level-prerequisites",
+      "imageUrl": "https://www.lwserenity.com/tip_images/base_prereqs.png",
+      "adminOnly": false,
       "canUseInBriefing": false,
-      "unlisted"        : false,
-      "isHtml"          : false
+      "unlisted": false,
+      "isHtml": false
     },
     {
       "id": "5f54e568-2b91-421a-988c-b29a4c764a16",
@@ -604,16 +604,16 @@
       "isHtml": true
     },
     {
-      "id"              : "5281758d-efed-45f0-91aa-dc447e4a7d8a",
-      "title"           : "Drone Parts Costs",
-      "content"         : "",
-      "lastUsed"        : null,
-      "customId"        : "drone-costs",
-      "imageUrl"        : "https://LWSerenity.com/img/drone-costs.png",
-      "adminOnly"       : false,
+      "id": "5281758d-efed-45f0-91aa-dc447e4a7d8a",
+      "title": "Drone Parts Costs",
+      "content": "",
+      "lastUsed": null,
+      "customId": "drone-costs",
+      "imageUrl": "https://LWSerenity.com/img/drone-costs.png",
+      "adminOnly": false,
       "canUseInBriefing": false,
-      "unlisted"        : false,
-      "isHtml"          : false
+      "unlisted": false,
+      "isHtml": false
     },
     {
       "id": "9373aec3-fde7-4fd0-9f42-c6462d0a55cc",
@@ -845,28 +845,39 @@
       "type": "text"
     },
     {
-      "id"              : "86dae861-70a9-44d3-88f5-18171d517cfb",
-      "title"           : "Ammo Bonanza",
-      "content"         : "",
-      "customId"        : "ammo-bonanza",
-      "imageUrl"        : "/img/ammo_bonanza.jpg",
-      "adminOnly"       : false,
+      "id": "86dae861-70a9-44d3-88f5-18171d517cfb",
+      "title": "Ammo Bonanza",
+      "content": "",
+      "customId": "ammo-bonanza",
+      "imageUrl": "/img/ammo_bonanza.jpg",
+      "adminOnly": false,
       "canUseInBriefing": true,
-      "unlisted"        : false,
-      "isHtml"          : false,
-      "type"            : "text"
+      "unlisted": false,
+      "isHtml": false,
+      "type": "text"
     },
     {
-      "id"              : "510e995b-0a50-4dd1-b1a0-c9b9308f6755",
-      "title"           : "Waterfall Troop Training Strategy - Dinotorial",
-      "content"         : "",
-      "customId"        : "waterfall-training-dinotorial",
-      "imageUrl"        : "/img/dinotorial/Waterfall.jpg",
-      "adminOnly"       : false,
+      "id": "510e995b-0a50-4dd1-b1a0-c9b9308f6755",
+      "title": "Waterfall Troop Training Strategy - Dinotorial",
+      "content": "",
+      "customId": "waterfall-training-dinotorial",
+      "imageUrl": "/img/dinotorial/Waterfall.jpg",
+      "adminOnly": false,
       "canUseInBriefing": true,
-      "unlisted"        : false,
-      "isHtml"          : false,
-      "type"            : "image"
+      "unlisted": false,
+      "isHtml": false,
+      "type": "image"
+    },
+    {
+      "id": "c25e9f89-fe5d-40c2-82a9-c0635cb1d1de",
+      "title": "Quick War Fever",
+      "content": "<video controls=\"\" preload=\"none\" data-alt-text=\"How to trade tile hits\" poster=\"/vid/quick-war-fever.png\">\n          <source src=\"/vid/quick-war-fever.mp4\" type=\"video/mp4\">\n          Your browser does not support the video tag.\n        </video>",
+      "customId": "quick-war-fever",
+      "adminOnly": false,
+      "canUseInBriefing": true,
+      "unlisted": false,
+      "isHtml": true,
+      "type": "html"
     }
   ]
 }

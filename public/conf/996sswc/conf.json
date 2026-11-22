@@ -7,6 +7,6 @@
     "backgroundOpacity": 0.25
   },
   "storage": {"eventsSuffix": "schema-v2-20260816", "tipsSuffix": "v2"},
-  "tags"   : { "server996": {"startDate": "2024-10-10"} },
-  "parents": ["server996", "season6", "main"]
+  "tags"   : { "996sswc": {"startDate": "2024-10-10"},"server996": {"startDate": "2024-10-10"} },
+  "parents": ["server996", "main"]
 }

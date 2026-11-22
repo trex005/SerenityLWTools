@@ -1,7 +1,24 @@
 {
-  "updated": "2026-07-07T22:49:31-02:00",
-  "brand"  : {"name": "Serenity", "favicon": "/conf/996serenity/favicon.ico"},
-  "tags"   : { "996serenity": {"startDate": "2024-10-10"} },
-  "parents": ["server996", "season6", "main"],
-  "storage": {"eventsSuffix": "schema-v2-20260816"}
+  "updated": "2026-11-11T06:45:50.397840Z",
+  "brand": {
+    "name": "Serenity",
+    "favicon": "/conf/996serenity/favicon.ico",
+    "backgroundImage": "/conf/996serenity/ffly-leaders-moncks-centered-20261111.png",
+    "backgroundOpacity": 0.25,
+    "backgroundSize": "cover",
+    "backgroundPosition": "top center",
+    "backgroundRepeat": "no-repeat"
+  },
+  "tags": {
+    "996serenity": {
+      "startDate": "2024-10-10"
+    }
+  },
+  "parents": [
+    "server996",
+    "main"
+  ],
+  "storage": {
+    "eventsSuffix": "schema-v2-20260816"
+  }
 }

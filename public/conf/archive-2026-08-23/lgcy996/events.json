@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 2,
+  "updated": "2026-03-30T21:23:11-02:00",
+  "operations": [
+    {
+      "kind": "override",
+      "id": "ev-3",
+      "set": {
+        "/startTime": "20:15"
+      }
+    },
+    {
+      "kind": "override",
+      "id": "1ae7c08b-29e3-4ef3-a00f-ccc19f155ddb",
+      "set": {
+        "/startTime": "19:40"
+      }
+    }
+  ]
+}

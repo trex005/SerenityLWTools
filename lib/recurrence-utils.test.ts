@@ -31,6 +31,10 @@ test("resolveRecurrenceDate: throws when tag not in tagConfig", () => {
 
 import { shouldShowRecurringEvent, formatRecurrence } from "./recurrence-utils"
 
+test("formatRecurrence labels month-end events", () => {
+  assert.equal(formatRecurrence({ recurrence: { type: "month_end" } }), "Last day of every month")
+})
+
 const tagConfig = { tags: { s4: { startDate: "2026-01-01" } } }
 
 test("shouldShowRecurringEvent: shows on offset day with daily recurrence", () => {

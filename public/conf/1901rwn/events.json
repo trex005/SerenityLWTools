@@ -1,0 +1,728 @@
+{
+  "schemaVersion": 2,
+  "updated": "2026-11-20T21:19:24-02:00",
+  "operations": [
+    {
+      "kind": "owned",
+      "event": {
+        "id": "92893585-69e4-4b01-bb25-2f4ede6ae5b5",
+        "title": "Bounty Hunter - FINAL DAY",
+        "description": "",
+        "remindTomorrow": false,
+        "remindEndOfDay": true,
+        "includeInBriefing": false,
+        "includeOnWebsite": false,
+        "isAllDay": true,
+        "startTime": "09:00",
+        "endTime": "",
+        "days": [
+          "sunday",
+          "monday",
+          "tuesday",
+          "wednesday",
+          "thursday",
+          "friday",
+          "saturday"
+        ],
+        "variations": {},
+        "archived": false,
+        "recurrence": {
+          "type": "days",
+          "daysOfWeek": [
+            "sunday",
+            "monday",
+            "tuesday",
+            "wednesday",
+            "thursday",
+            "friday",
+            "saturday"
+          ],
+          "onPeriods": 1,
+          "offPeriods": 0,
+          "startTag": "1901rwn",
+          "startOffset": 371,
+          "endOffset": 371,
+          "startDate": "2025-01-05"
+        },
+        "order_value": 1
+      }
+    },
+    {
+      "kind": "owned",
+      "event": {
+        "id": "9356e46d-8293-46c9-a38d-811d71c44a62",
+        "title": "2 cities/1 stronghold capture",
+        "description": "",
+        "remindTomorrow": true,
+        "remindEndOfDay": false,
+        "includeInBriefing": true,
+        "includeOnWebsite": true,
+        "isAllDay": false,
+        "startTime": "12:00",
+        "endTime": "",
+        "days": [
+          "monday"
+        ],
+        "variations": {},
+        "archived": false,
+        "recurrence": {
+          "type": "days",
+          "daysOfWeek": [
+            "monday"
+          ],
+          "onPeriods": 1,
+          "offPeriods": 0,
+          "startTag": "1901rwn",
+          "startOffset": 372,
+          "endOffset": 378,
+          "startDate": "2025-01-05"
+        },
+        "order_value": -50
+      }
+    },
+    {
+      "kind": "owned",
+      "event": {
+        "id": "2840c82a-0246-43ed-8090-8bc2c3e81ab7",
+        "title": "Zombie Siege! Troops on the wall!",
+        "description": "",
+        "remindTomorrow": false,
+        "remindEndOfDay": true,
+        "includeInBriefing": true,
+        "includeOnWebsite": true,
+        "isAllDay": false,
+        "startTime": "22:00",
+        "endTime": "",
+        "days": [
+          "tuesday"
+        ],
+        "variations": {},
+        "archived": false,
+        "recurrence": {
+          "type": "none",
+          "daysOfWeek": [
+            "tuesday"
+          ],
+          "onPeriods": 1,
+          "offPeriods": 0,
+          "startTag": "1901rwn",
+          "startOffset": 0
+        }
+      }
+    },
+    {
+      "kind": "owned",
+      "event": {
+        "id": "75e1f2fb-99c9-4603-a193-acddc33a2272",
+        "title": "ZOMBIE SIEGE! Troops on the wall!",
+        "description": "",
+        "remindTomorrow": true,
+        "remindEndOfDay": false,
+        "includeInBriefing": true,
+        "includeOnWebsite": true,
+        "isAllDay": false,
+        "startTime": "23:00",
+        "endTime": "",
+        "days": [
+          "tuesday"
+        ],
+        "variations": {},
+        "archived": false,
+        "recurrence": {
+          "type": "days",
+          "daysOfWeek": [
+            "tuesday"
+          ],
+          "onPeriods": 1,
+          "offPeriods": 0,
+          "startTag": "1901rwn",
+          "startOffset": 366,
+          "startDate": "2025-01-05"
+        }
+      }
+    },
+    {
+      "kind": "owned",
+      "event": {
+        "id": "9911d7d9-0915-4e6c-99d7-b8f753e25e72",
+        "title": "CITY & STRONGHOLD CAPTURE",
+        "description": "",
+        "remindTomorrow": true,
+        "remindEndOfDay": false,
+        "includeInBriefing": true,
+        "includeOnWebsite": true,
+        "isAllDay": false,
+        "startTime": "12:00",
+        "endTime": "",
+        "days": [
+          "thursday"
+        ],
+        "variations": {},
+        "archived": true,
+        "recurrence": {
+          "type": "weeks",
+          "daysOfWeek": [
+            "thursday"
+          ],
+          "onPeriods": 1,
+          "offPeriods": 0,
+          "startTag": "1901rwn",
+          "startOffset": 375,
+          "startDate": "2025-01-05"
+        }
+      }
+    },
+    {
+      "kind": "owned",
+      "event": {
+        "id": "519ad82a-1235-42bb-aa56-74dd9930d828",
+        "title": "CITY CAPTURE",
+        "description": "",
+        "remindTomorrow": true,
+        "remindEndOfDay": false,
+        "includeInBriefing": true,
+        "includeOnWebsite": true,
+        "isAllDay": false,
+        "startTime": "12:00",
+        "endTime": "",
+        "days": [
+          "friday"
+        ],
+        "variations": {},
+        "archived": true,
+        "recurrence": {
+          "type": "weeks",
+          "daysOfWeek": [
+            "friday"
+          ],
+          "onPeriods": 1,
+          "offPeriods": 0,
+          "startTag": "1901rwn",
+          "startOffset": 376
+        }
+      }
+    },
+    {
+      "kind": "owned",
+      "event": {
+        "id": "eec2ff6d-802c-40cd-a9cf-67a6e0382450",
+        "title": "Please use free teleports to move to our new hive formation!",
+        "description": "",
+        "remindTomorrow": true,
+        "remindEndOfDay": false,
+        "includeInBriefing": true,
+        "includeOnWebsite": true,
+        "isAllDay": true,
+        "startTime": "09:00",
+        "endTime": "",
+        "days": [
+          "friday"
+        ],
+        "variations": {},
+        "archived": true,
+        "recurrence": {
+          "type": "weeks",
+          "daysOfWeek": [
+            "friday"
+          ],
+          "onPeriods": 1,
+          "offPeriods": 0,
+          "startTag": "1901rwn",
+          "startOffset": 0
+        }
+      }
+    },
+    {
+      "kind": "owned",
+      "event": {
+        "id": "312e899d-93a4-48d7-a2d9-1ec510c43a54",
+        "title": "BOSS ATTACK ON ALLIANCE CENTER! SEND SQUAD",
+        "description": "",
+        "remindTomorrow": true,
+        "remindEndOfDay": false,
+        "includeInBriefing": true,
+        "includeOnWebsite": true,
+        "isAllDay": false,
+        "startTime": "11:00",
+        "endTime": "",
+        "days": [
+          "tuesday"
+        ],
+        "variations": {},
+        "archived": true,
+        "recurrence": {
+          "type": "weeks",
+          "daysOfWeek": [
+            "tuesday"
+          ],
+          "onPeriods": 1,
+          "offPeriods": 0,
+          "startTag": "1901rwn",
+          "startOffset": 366
+        }
+      }
+    },
+    {
+      "kind": "owned",
+      "event": {
+        "id": "1dd253f7-ab45-438f-afa3-c9eb6fcea0c6",
+        "title": "REBELS! On Buster Day we need to reorganize our hive. We will be doing clean rows with no spaces between you and the next base. Please be on the lookout for directions Saturday.",
+        "description": "",
+        "remindTomorrow": true,
+        "remindEndOfDay": false,
+        "includeInBriefing": true,
+        "includeOnWebsite": true,
+        "isAllDay": true,
+        "startTime": "09:00",
+        "endTime": "",
+        "days": [
+          "thursday",
+          "friday"
+        ],
+        "variations": {},
+        "archived": false,
+        "recurrence": {
+          "type": "weeks",
+          "daysOfWeek": [
+            "thursday",
+            "friday"
+          ],
+          "onPeriods": 1,
+          "offPeriods": 0,
+          "startTag": "1901rwn",
+          "startOffset": 382,
+          "startDate": "2025-01-05"
+        },
+        "order_value": -1.5
+      }
+    },
+    {
+      "kind": "owned",
+      "event": {
+        "id": "f905f959-249d-4d78-96f4-324f146403a3",
+        "title": "REBELS! Please be on the lookout for direction from leadership about our organizing our hive formation",
+        "description": "",
+        "remindTomorrow": true,
+        "remindEndOfDay": false,
+        "includeInBriefing": true,
+        "includeOnWebsite": true,
+        "isAllDay": true,
+        "startTime": "09:00",
+        "endTime": "",
+        "days": [
+          "thursday"
+        ],
+        "variations": {},
+        "archived": false,
+        "recurrence": {
+          "type": "none",
+          "daysOfWeek": [
+            "thursday"
+          ],
+          "onPeriods": 1,
+          "offPeriods": 0,
+          "startTag": "1901rwn",
+          "startOffset": 0
+        }
+      }
+    },
+    {
+      "kind": "owned",
+      "event": {
+        "id": "0070c5f9-f462-48d8-a3f6-a36682717be3",
+        "title": "BOSS ATTACK ON ALLIANCE CENTER! SEND 1st SQUAD TO GARRISON",
+        "description": "",
+        "remindTomorrow": true,
+        "remindEndOfDay": false,
+        "includeInBriefing": true,
+        "includeOnWebsite": true,
+        "isAllDay": false,
+        "startTime": "11:00",
+        "endTime": "",
+        "days": [
+          "friday"
+        ],
+        "variations": {},
+        "archived": true,
+        "recurrence": {
+          "type": "weeks",
+          "daysOfWeek": [
+            "friday"
+          ],
+          "onPeriods": 1,
+          "offPeriods": 0,
+          "startTag": "1901rwn",
+          "startOffset": 382
+        }
+      }
+    },
+    {
+      "kind": "owned",
+      "event": {
+        "id": "5480f07e-6e8c-448c-944a-a99a9a777cde",
+        "title": "PLEASE MOVE TO BLOCK SPACE AROUND OUR ALLIANCE CENTER! We will need to defend on Wednesday Hdub, Sylvyr, & Isle will be in touch with those that are too far away.",
+        "description": "",
+        "remindTomorrow": true,
+        "remindEndOfDay": false,
+        "includeInBriefing": true,
+        "includeOnWebsite": true,
+        "isAllDay": true,
+        "startTime": "09:00",
+        "endTime": "",
+        "days": [
+          "tuesday"
+        ],
+        "variations": {},
+        "archived": false,
+        "recurrence": {
+          "type": "weeks",
+          "daysOfWeek": [
+            "tuesday"
+          ],
+          "onPeriods": 1,
+          "offPeriods": 0,
+          "startTag": "1901rwn",
+          "startOffset": 366
+        },
+        "order_value": -2
+      }
+    },
+    {
+      "kind": "owned",
+      "event": {
+        "id": "a9198ec6-11f0-493c-8caf-178dc8366894",
+        "title": "GOLD DUST CONQUEST BATTLE! BE READY! Battle plans to come from Tank in R5 Message",
+        "description": "",
+        "remindTomorrow": true,
+        "remindEndOfDay": false,
+        "includeInBriefing": true,
+        "includeOnWebsite": true,
+        "isAllDay": false,
+        "startTime": "12:30",
+        "endTime": "",
+        "days": [
+          "wednesday"
+        ],
+        "variations": {},
+        "archived": false,
+        "recurrence": {
+          "type": "weeks",
+          "daysOfWeek": [
+            "wednesday"
+          ],
+          "onPeriods": 1,
+          "offPeriods": 0,
+          "startTag": "1901rwn",
+          "startOffset": 387,
+          "startDate": "2025-01-05"
+        }
+      }
+    },
+    {
+      "kind": "owned",
+      "event": {
+        "id": "15b92948-fbd1-4afe-9092-5b3feaa4cc9f",
+        "title": "Check out our alliance website! https://rwninjas.com/",
+        "description": "",
+        "remindTomorrow": true,
+        "remindEndOfDay": false,
+        "includeInBriefing": true,
+        "includeOnWebsite": true,
+        "isAllDay": true,
+        "startTime": "09:00",
+        "endTime": "",
+        "days": [
+          "sunday",
+          "monday",
+          "tuesday",
+          "wednesday",
+          "thursday",
+          "friday",
+          "saturday"
+        ],
+        "variations": {},
+        "archived": false,
+        "recurrence": {
+          "type": "days",
+          "daysOfWeek": [
+            "sunday",
+            "monday",
+            "tuesday",
+            "wednesday",
+            "thursday",
+            "friday",
+            "saturday"
+          ],
+          "onPeriods": 1,
+          "offPeriods": 0,
+          "startTag": "1901rwn",
+          "startOffset": 395
+        }
+      }
+    },
+    {
+      "kind": "owned",
+      "event": {
+        "id": "37aeb76d-c7a6-4a55-85e4-1a8351c6db64",
+        "title": "SKY PREDATOR!!! LETS DO THIS",
+        "description": "",
+        "remindTomorrow": true,
+        "remindEndOfDay": false,
+        "includeInBriefing": true,
+        "includeOnWebsite": true,
+        "isAllDay": false,
+        "startTime": "22:00",
+        "endTime": "",
+        "days": [
+          "thursday"
+        ],
+        "variations": {},
+        "archived": true,
+        "recurrence": {
+          "type": "weeks",
+          "daysOfWeek": [
+            "thursday"
+          ],
+          "onPeriods": 1,
+          "offPeriods": 0,
+          "startTag": "1901rwn",
+          "startOffset": 388
+        }
+      }
+    },
+    {
+      "kind": "owned",
+      "event": {
+        "id": "87746464-5ec4-4659-b975-9ba622e2521d",
+        "title": "GOLD DUST CONQUEST WAR!!! Please read Tanks message for battle plans!",
+        "description": "",
+        "remindTomorrow": true,
+        "remindEndOfDay": false,
+        "includeInBriefing": true,
+        "includeOnWebsite": true,
+        "isAllDay": false,
+        "startTime": "12:30",
+        "endTime": "",
+        "days": [
+          "saturday"
+        ],
+        "variations": {},
+        "archived": false,
+        "recurrence": {
+          "type": "weeks",
+          "daysOfWeek": [
+            "saturday"
+          ],
+          "onPeriods": 1,
+          "offPeriods": 0,
+          "startTag": "1901rwn",
+          "startOffset": 391
+        }
+      }
+    },
+    {
+      "kind": "owned",
+      "event": {
+        "id": "b6069108-4272-4fc3-b761-e08cd80104e0",
+        "title": "ZOMBIES! PUT YOUR TROOPS ON THE WALL!!!",
+        "description": "",
+        "remindTomorrow": true,
+        "remindEndOfDay": false,
+        "includeInBriefing": true,
+        "includeOnWebsite": true,
+        "isAllDay": false,
+        "startTime": "23:00",
+        "endTime": "",
+        "days": [
+          "monday"
+        ],
+        "variations": {},
+        "archived": false,
+        "recurrence": {
+          "type": "weeks",
+          "daysOfWeek": [
+            "monday"
+          ],
+          "onPeriods": 1,
+          "offPeriods": 0,
+          "startTag": "1901rwn",
+          "startOffset": 393
+        }
+      }
+    },
+    {
+      "kind": "owned",
+      "event": {
+        "id": "d8ec0020-185e-4c76-97be-1d750c97a3a5",
+        "title": "GOLD DUST BATTLE!! We are attacking BVC1 but ONLY trading tile hits and NOT ATTACKING THEIR ALLIANCE BUILDINGS. Please read Tank's message from earlier today.",
+        "description": "",
+        "remindTomorrow": true,
+        "remindEndOfDay": false,
+        "includeInBriefing": true,
+        "includeOnWebsite": true,
+        "isAllDay": false,
+        "startTime": "12:30",
+        "endTime": "",
+        "days": [
+          "saturday"
+        ],
+        "variations": {},
+        "archived": false,
+        "recurrence": {
+          "type": "weeks",
+          "daysOfWeek": [
+            "saturday"
+          ],
+          "onPeriods": 1,
+          "offPeriods": 0,
+          "startTag": "1901rwn",
+          "startOffset": 398
+        }
+      }
+    },
+    {
+      "kind": "override",
+      "id": "87a66ed0-70ea-4dfc-8519-ced7ef52be6e",
+      "set": {
+        "/recurrence/startOffset": -4,
+        "/recurrence/startTag": "1901rwn",
+        "/startTime": "21:30"
+      }
+    },
+    {
+      "kind": "override",
+      "id": "ev-1739556688004",
+      "set": {
+        "/description": "test"
+      }
+    },
+    {
+      "kind": "override",
+      "id": "be913f10-2c14-4b73-a272-4c77ab0d617c",
+      "set": {
+        "/recurrence/endOffset": 378,
+        "/recurrence/startOffset": 372,
+        "/recurrence/startTag": "1901rwn"
+      }
+    },
+    {
+      "kind": "override",
+      "id": "878e222f-ae36-4616-9f73-2bb31948fad2",
+      "set": {
+        "/recurrence/endOffset": 372,
+        "/recurrence/startOffset": 372,
+        "/recurrence/startTag": "1901rwn"
+      }
+    },
+    {
+      "kind": "override",
+      "id": "ev-13",
+      "set": {
+        "/title": "VS: Radar Training - See Image"
+      }
+    },
+    {
+      "kind": "override",
+      "id": "ev-1740278810425",
+      "set": {
+        "/description": "• Bosses spawn at 0:00, 6:00, and 12:00 server time! Hit 3 times"
+      }
+    },
+    {
+      "kind": "override",
+      "id": "ev-1739556183702",
+      "set": {
+        "/recurrence/startDate": "2025-01-05",
+        "/recurrence/startOffset": -291,
+        "/recurrence/startTag": "1901rwn"
+      }
+    },
+    {
+      "kind": "override",
+      "id": "ev-1739556209550",
+      "set": {
+        "/includeInBriefing": true,
+        "/recurrence/startDate": "2025-01-05"
+      }
+    },
+    {
+      "kind": "override",
+      "id": "ev-16",
+      "set": {
+        "/recurrence/startDate": "2025-01-05",
+        "/recurrence/startOffset": 382,
+        "/recurrence/startTag": "1901rwn"
+      }
+    },
+    {
+      "kind": "override",
+      "id": "4329a998-b697-4b0d-ae72-c629390328b4",
+      "set": {
+        "/archived": true
+      }
+    },
+    {
+      "kind": "override",
+      "id": "f948a0fc-4ef5-4ba0-8458-8612c29a4537",
+      "set": {
+        "/archived": true
+      }
+    },
+    {
+      "kind": "override",
+      "id": "183e0c1e-249f-47f6-8324-b155e4efb389",
+      "set": {
+        "/archived": true
+      }
+    },
+    {
+      "kind": "override",
+      "id": "ev-17",
+      "set": {
+        "/recurrence/startOffset": 389,
+        "/recurrence/startTag": "1901rwn"
+      }
+    },
+    {
+      "kind": "override",
+      "id": "ev-1740123329685",
+      "set": {
+        "/recurrence/startDate": "2025-01-05",
+        "/startTime": "23:00"
+      }
+    },
+    {
+      "kind": "override",
+      "id": "5870d28b-5d10-4dd9-83fb-612e4c28e0b0",
+      "set": {
+        "/archived": true
+      }
+    },
+    {
+      "kind": "override",
+      "id": "a061f2df-34c9-4bdd-9fa2-a95e11470268",
+      "set": {
+        "/archived": true
+      }
+    },
+    {
+      "kind": "override",
+      "id": "ev-18",
+      "set": {
+        "/recurrence/startOffset": 390,
+        "/recurrence/startTag": "1901rwn"
+      },
+      "remove": [
+        "/recurrence/endOffset"
+      ]
+    },
+    {
+      "kind": "delete",
+      "id": "4af5277e-a46b-4407-94cc-66452e907f1d"
+    },
+    {
+      "kind": "delete",
+      "id": "e05c1e28-c800-48d1-8d3a-53898d5f2923"
+    }
+  ]
+}

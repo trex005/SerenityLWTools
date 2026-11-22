@@ -2,6 +2,18 @@ import assert from "node:assert/strict"
 import test from "node:test"
 import { addDateKeyDays, eventOccursOnDate, occursInCycle, resolveRecurrenceDateKey, weekdayForDateKey } from "./core"
 
+test("month-end recurrence follows calendar month lengths and inclusive bounds", () => {
+  const recurrence = { type: "month_end" as const, startTag: "main", startOffset: 30, endOffset: 455, onPeriods: 1, offPeriods: 0, daysOfWeek: ["monday"] }
+  const tags = { tags: { main: { startDate: "2023-01-01" } } }
+  const event = { recurrence }
+  for (const date of ["2023-01-31", "2023-02-28", "2023-04-30", "2023-12-31", "2024-02-29", "2024-03-31"]) {
+    assert.equal(eventOccursOnDate(event, date, tags), true, date)
+  }
+  for (const date of ["2023-01-30", "2023-02-27", "2024-02-28", "2024-04-30"]) {
+    assert.equal(eventOccursOnDate(event, date, tags), false, date)
+  }
+})
+
 test("portable date-key arithmetic", () => {
   assert.equal(addDateKeyDays("2026-01-31", 1), "2026-02-01")
   assert.equal(weekdayForDateKey("2026-08-10"), "monday")

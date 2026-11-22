@@ -1,29 +1,7 @@
 {
   "schemaVersion": 2,
-  "updated": "2026-07-08T01:48:04-02:00",
+  "updated": "2026-11-22T05:26:36-02:00",
   "operations": [
-    {
-      "kind": "override",
-      "id": "5831a6ec-244d-40d2-88dc-81a7173ecffd",
-      "set": {
-        "/archived": false
-      }
-    },
-    {
-      "kind": "override",
-      "id": "226d3b1b-ce75-444f-ac11-5ee3fe3af4b4",
-      "set": {
-        "/recurrence/startTag": "996"
-      }
-    },
-    {
-      "kind": "override",
-      "id": "3d376821-2591-42af-a6e5-86c5ac854d25",
-      "set": {
-        "/archived": false,
-        "/recurrence/startTag": "996"
-      }
-    },
     {
       "kind": "owned",
       "event": {
@@ -62,6 +40,347 @@
           "startTag": "996",
           "startOffset": 536
         }
+      }
+    },
+    {
+      "kind": "owned",
+      "event": {
+        "id": "01c5ba32-d04c-4402-a034-3a1266899736",
+        "title": "Alter Conquest",
+        "description": "",
+        "remindTomorrow": true,
+        "remindEndOfDay": false,
+        "includeInBriefing": true,
+        "includeOnWebsite": true,
+        "isAllDay": false,
+        "startTime": "12:00",
+        "endTime": "",
+        "days": [
+          "tuesday"
+        ],
+        "variations": {},
+        "archived": false,
+        "recurrence": {
+          "type": "weeks",
+          "daysOfWeek": [
+            "tuesday"
+          ],
+          "onPeriods": 1,
+          "offPeriods": 0,
+          "startTag": "server996",
+          "startOffset": 698,
+          "endOffset": 726,
+          "startDate": "2025-01-05"
+        }
+      }
+    },
+    {
+      "kind": "owned",
+      "event": {
+        "id": "1f71d9b8-c2cc-4dc0-b30e-1b7052208ec8",
+        "title": "FACTION DUEL!",
+        "description": "",
+        "remindTomorrow": true,
+        "remindEndOfDay": false,
+        "includeInBriefing": true,
+        "includeOnWebsite": true,
+        "isAllDay": false,
+        "startTime": "12:00",
+        "endTime": "",
+        "days": [
+          "sunday"
+        ],
+        "variations": {},
+        "archived": false,
+        "recurrence": {
+          "type": "weeks",
+          "daysOfWeek": [
+            "sunday"
+          ],
+          "onPeriods": 1,
+          "offPeriods": 0,
+          "startTag": "server996",
+          "startOffset": 731,
+          "endOffset": 731,
+          "startDate": "2025-01-05"
+        }
+      }
+    },
+    {
+      "kind": "owned",
+      "event": {
+        "id": "43e0a548-7276-47a5-b2ec-85d3161a8dd1",
+        "title": "2 Pond Captures",
+        "description": "",
+        "remindTomorrow": true,
+        "remindEndOfDay": false,
+        "includeInBriefing": true,
+        "includeOnWebsite": true,
+        "isAllDay": false,
+        "startTime": "00:30",
+        "endTime": "",
+        "days": [
+          "sunday"
+        ],
+        "variations": {},
+        "archived": false,
+        "recurrence": {
+          "type": "weeks",
+          "daysOfWeek": [
+            "sunday"
+          ],
+          "onPeriods": 1,
+          "offPeriods": 0,
+          "startTag": "server996",
+          "startOffset": 731,
+          "endOffset": 731
+        }
+      }
+    },
+    {
+      "kind": "owned",
+      "event": {
+        "id": "3fc4cf6a-035b-4732-9266-7d00b7e6a45d",
+        "title": "Season 6 Celebration begins!!",
+        "description": "",
+        "remindTomorrow": true,
+        "remindEndOfDay": false,
+        "includeInBriefing": true,
+        "includeOnWebsite": true,
+        "isAllDay": true,
+        "startTime": "09:00",
+        "endTime": "",
+        "days": [
+          "sunday",
+          "monday",
+          "tuesday",
+          "wednesday",
+          "thursday",
+          "friday",
+          "saturday"
+        ],
+        "variations": {},
+        "archived": false,
+        "recurrence": {
+          "type": "days",
+          "daysOfWeek": [
+            "sunday",
+            "monday",
+            "tuesday",
+            "wednesday",
+            "thursday",
+            "friday",
+            "saturday"
+          ],
+          "onPeriods": 1,
+          "offPeriods": 0,
+          "startTag": "server996",
+          "startOffset": 746,
+          "endOffset": 746
+        },
+        "order_value": -50
+      }
+    },
+    {
+      "kind": "owned",
+      "event": {
+        "id": "1c596def-e9d6-41b8-8c12-111ecb3640d0",
+        "title": "Thanksgiving event",
+        "description": "",
+        "remindTomorrow": true,
+        "remindEndOfDay": true,
+        "includeInBriefing": true,
+        "includeOnWebsite": true,
+        "isAllDay": true,
+        "startTime": "09:00",
+        "endTime": "",
+        "days": [
+          "sunday",
+          "monday",
+          "tuesday",
+          "wednesday",
+          "thursday",
+          "friday",
+          "saturday"
+        ],
+        "variations": {},
+        "archived": false,
+        "recurrence": {
+          "type": "days",
+          "daysOfWeek": [
+            "sunday",
+            "monday",
+            "tuesday",
+            "wednesday",
+            "thursday",
+            "friday",
+            "saturday"
+          ],
+          "onPeriods": 1,
+          "offPeriods": 0,
+          "startTag": "server996",
+          "startOffset": 773,
+          "endOffset": 779
+        },
+        "order_value": -50
+      }
+    },
+    {
+      "kind": "owned",
+      "event": {
+        "id": "e439c9d9-dbcc-4600-8f1f-130e8bc5ee62",
+        "title": "Black Market = FINAL DAY!",
+        "description": "",
+        "remindTomorrow": true,
+        "remindEndOfDay": true,
+        "includeInBriefing": true,
+        "includeOnWebsite": true,
+        "isAllDay": true,
+        "startTime": "09:00",
+        "endTime": "",
+        "days": [
+          "sunday",
+          "monday",
+          "tuesday",
+          "wednesday",
+          "thursday",
+          "friday",
+          "saturday"
+        ],
+        "variations": {},
+        "archived": false,
+        "recurrence": {
+          "type": "days",
+          "daysOfWeek": [
+            "sunday",
+            "monday",
+            "tuesday",
+            "wednesday",
+            "thursday",
+            "friday",
+            "saturday"
+          ],
+          "onPeriods": 1,
+          "offPeriods": 0,
+          "startTag": "server996",
+          "startOffset": 773,
+          "endOffset": 773
+        },
+        "order_value": -50
+      }
+    },
+    {
+      "kind": "override",
+      "id": "5831a6ec-244d-40d2-88dc-81a7173ecffd",
+      "set": {
+        "/archived": false
+      }
+    },
+    {
+      "kind": "override",
+      "id": "3d376821-2591-42af-a6e5-86c5ac854d25",
+      "set": {
+        "/archived": false,
+        "/recurrence/startTag": "996"
+      }
+    },
+    {
+      "kind": "override",
+      "id": "f948a0fc-4ef5-4ba0-8458-8612c29a4537",
+      "set": {
+        "/archived": true
+      }
+    },
+    {
+      "kind": "override",
+      "id": "6e7e34c6-751b-4ab6-8835-07550612f5a9",
+      "set": {
+        "/days": [
+          "tuesday"
+        ],
+        "/recurrence/daysOfWeek": [
+          "tuesday"
+        ],
+        "/recurrence/startOffset": 698,
+        "/recurrence/startTag": "server996",
+        "/title": "Hot Deals → Glittering Market - First Day"
+      }
+    },
+    {
+      "kind": "override",
+      "id": "fe4d455d-6f36-45b2-92c2-24c32521473f",
+      "set": {
+        "/recurrence/startOffset": 698,
+        "/recurrence/startTag": "server996"
+      }
+    },
+    {
+      "kind": "override",
+      "id": "a977dd2f-9247-4c5b-bab1-5956e0a8e974",
+      "set": {
+        "/recurrence/startOffset": 703,
+        "/recurrence/startTag": "server996"
+      }
+    },
+    {
+      "kind": "override",
+      "id": "1285d867-8664-424e-925c-3ef8afbbf0fd",
+      "set": {
+        "/archived": true
+      }
+    },
+    {
+      "kind": "override",
+      "id": "ev-1739558845321",
+      "set": {
+        "/days": [
+          "saturday"
+        ],
+        "/includeInBriefing": true,
+        "/recurrence/daysOfWeek": [
+          "saturday"
+        ],
+        "/recurrence/startDate": "2025-01-05",
+        "/remindTomorrow": true,
+        "/title": "Winter Storm - 2hours 02:00, 09:00, 19:00"
+      }
+    },
+    {
+      "kind": "override",
+      "id": "b9828dca-503c-4514-99ca-eabe1e2014af",
+      "set": {
+        "/recurrence/endOffset": 731,
+        "/recurrence/startTag": "server996"
+      }
+    },
+    {
+      "kind": "override",
+      "id": "5870d28b-5d10-4dd9-83fb-612e4c28e0b0",
+      "set": {},
+      "remove": [
+        "/recurrence/endOffset"
+      ]
+    },
+    {
+      "kind": "override",
+      "id": "a061f2df-34c9-4bdd-9fa2-a95e11470268",
+      "set": {},
+      "remove": [
+        "/recurrence/endOffset"
+      ]
+    },
+    {
+      "kind": "override",
+      "id": "516e99c1-b08f-49fb-afa4-825b76080229",
+      "set": {
+        "/archived": true
+      }
+    },
+    {
+      "kind": "override",
+      "id": "ev-9",
+      "set": {
+        "/archived": true
       }
     }
   ]

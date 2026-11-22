@@ -153,3 +153,8 @@ npm run typecheck          # tsc --noEmit
 ```
 
 Run `npm run typecheck` and the relevant test suites before opening a PR.
+
+
+## Download live configurations
+
+Use `npm run download:configs` to preview live `conf/` against `public/conf`. See [DOWNLOAD_CONFIGS.md](DOWNLOAD_CONFIGS.md) for explicit execution, conflict protection, backups, and existing AWS authentication. This tool downloads only and does not deploy content.

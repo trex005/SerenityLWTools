@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 2,
+  "updated": "2026-08-23T06:17:35-02:00",
+  "operations": [
+    {
+      "kind": "override",
+      "id": "ev-9",
+      "set": {
+        "/archived": true
+      }
+    },
+    {
+      "kind": "override",
+      "id": "5831a6ec-244d-40d2-88dc-81a7173ecffd",
+      "set": {
+        "/archived": true
+      }
+    },
+    {
+      "kind": "override",
+      "id": "516e99c1-b08f-49fb-afa4-825b76080229",
+      "set": {
+        "/archived": true
+      }
+    },
+    {
+      "kind": "override",
+      "id": "e5263084-2b0f-4289-9ed1-ede774a62176",
+      "set": {
+        "/title": "SHINYs in 932,942-943,952-957,966-969,977-981,990-993,1000-1002,1011-1012,1020-1022,1029-1032,1039-1042,1047-1050 "
+      }
+    }
+  ]
+}

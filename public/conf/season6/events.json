@@ -1,31 +1,224 @@
 {
   "schemaVersion": 2,
-  "updated": "2026-01-03T15:28:02-02:00",
+  "updated": "2026-09-03T09:22:03-02:00",
   "operations": [
     {
-      "kind": "override",
-      "id": "ev-11",
-      "set": {
-        "/includeInBriefing": true,
-        "/startTime": "10:00"
+      "kind": "owned",
+      "event": {
+        "id": "863ecb60-9cb5-4e76-92fb-9b16057189d3",
+        "title": "Capture Cities (Level 1 opens)",
+        "description": "",
+        "remindTomorrow": true,
+        "remindEndOfDay": false,
+        "includeInBriefing": true,
+        "includeOnWebsite": true,
+        "isAllDay": false,
+        "startTime": "12:00",
+        "endTime": "",
+        "days": [
+          "wednesday"
+        ],
+        "variations": {},
+        "archived": false,
+        "recurrence": {
+          "type": "weeks",
+          "daysOfWeek": [
+            "wednesday"
+          ],
+          "onPeriods": 1,
+          "offPeriods": 0,
+          "startTag": "season6",
+          "startOffset": 2,
+          "endOffset": 2,
+          "startDate": "2025-01-05"
+        }
+      }
+    },
+    {
+      "kind": "owned",
+      "event": {
+        "id": "403b8446-59ef-4771-a697-fd4315b56b32",
+        "title": "Capture Cities (Level 2 opens)",
+        "description": "",
+        "remindTomorrow": true,
+        "remindEndOfDay": false,
+        "includeInBriefing": true,
+        "includeOnWebsite": true,
+        "isAllDay": false,
+        "startTime": "12:00",
+        "endTime": "",
+        "days": [
+          "saturday"
+        ],
+        "variations": {},
+        "archived": false,
+        "recurrence": {
+          "type": "weeks",
+          "daysOfWeek": [
+            "saturday"
+          ],
+          "onPeriods": 1,
+          "offPeriods": 0,
+          "startTag": "season6",
+          "startOffset": 5,
+          "endOffset": 5
+        }
+      }
+    },
+    {
+      "kind": "owned",
+      "event": {
+        "id": "c948ba6b-3499-4b8f-a341-2a4ac693bb6b",
+        "title": "Capture Cities (Level 3 openes)",
+        "description": "",
+        "remindTomorrow": true,
+        "remindEndOfDay": false,
+        "includeInBriefing": true,
+        "includeOnWebsite": true,
+        "isAllDay": false,
+        "startTime": "12:00",
+        "endTime": "",
+        "days": [
+          "wednesday"
+        ],
+        "variations": {},
+        "archived": false,
+        "recurrence": {
+          "type": "weeks",
+          "daysOfWeek": [
+            "wednesday"
+          ],
+          "onPeriods": 1,
+          "offPeriods": 0,
+          "startTag": "season6",
+          "startOffset": 9,
+          "endOffset": 9
+        }
+      }
+    },
+    {
+      "kind": "owned",
+      "event": {
+        "id": "a9c4d315-08f2-42af-951a-834f13b81a68",
+        "title": "Capture Properties POSSIBLE",
+        "description": "",
+        "remindTomorrow": true,
+        "remindEndOfDay": false,
+        "includeInBriefing": true,
+        "includeOnWebsite": true,
+        "isAllDay": false,
+        "startTime": "20:00",
+        "endTime": "",
+        "days": [
+          "sunday",
+          "monday",
+          "tuesday",
+          "wednesday",
+          "thursday",
+          "friday",
+          "saturday"
+        ],
+        "variations": {},
+        "archived": false,
+        "recurrence": {
+          "type": "days",
+          "daysOfWeek": [
+            "sunday",
+            "monday",
+            "tuesday",
+            "wednesday",
+            "thursday",
+            "friday",
+            "saturday"
+          ],
+          "onPeriods": 1,
+          "offPeriods": 0,
+          "startTag": "season6",
+          "startOffset": 0,
+          "endOffset": 13,
+          "startDate": "2025-01-05"
+        }
+      }
+    },
+    {
+      "kind": "owned",
+      "event": {
+        "id": "b9828dca-503c-4514-99ca-eabe1e2014af",
+        "title": "Faction Clash - Possible WAR!",
+        "description": "",
+        "remindTomorrow": true,
+        "remindEndOfDay": false,
+        "includeInBriefing": true,
+        "includeOnWebsite": true,
+        "isAllDay": false,
+        "startTime": "12:00",
+        "endTime": "13:00",
+        "days": [
+          "wednesday",
+          "saturday"
+        ],
+        "variations": {},
+        "archived": false,
+        "recurrence": {
+          "type": "weeks",
+          "daysOfWeek": [
+            "wednesday",
+            "saturday"
+          ],
+          "onPeriods": 1,
+          "offPeriods": 0,
+          "startTag": "season6",
+          "startOffset": 7,
+          "endOffset": 55,
+          "startDate": "2025-01-05"
+        }
+      }
+    },
+    {
+      "kind": "owned",
+      "event": {
+        "id": "eaeab53d-88e7-4bef-aa4c-c51d4e7c721d",
+        "title": "Faction Clash - Possible WAR!",
+        "description": "",
+        "remindTomorrow": true,
+        "remindEndOfDay": false,
+        "includeInBriefing": true,
+        "includeOnWebsite": true,
+        "isAllDay": false,
+        "startTime": "20:00",
+        "endTime": "21:00",
+        "days": [
+          "wednesday",
+          "saturday"
+        ],
+        "variations": {},
+        "archived": false,
+        "recurrence": {
+          "type": "weeks",
+          "daysOfWeek": [
+            "wednesday",
+            "saturday"
+          ],
+          "onPeriods": 1,
+          "offPeriods": 0,
+          "startTag": "season6",
+          "startOffset": 7,
+          "endOffset": 48
+        }
       }
     },
     {
       "kind": "override",
-      "id": "41b7230f-eac7-478d-8f95-2955050d1da0",
+      "id": "ev-3",
       "set": {
-        "/archived": false,
-        "/includeInBriefing": true,
-        "/recurrence/startOffset": 22,
-        "/recurrence/startTag": "s4"
+        "/archived": true
       }
     },
     {
       "kind": "override",
-      "id": "fe4d455d-6f36-45b2-92c2-24c32521473f",
+      "id": "5d775721-b174-405a-9f95-1045c52954c4",
       "set": {
-        "/recurrence/startOffset": 15,
-        "/recurrence/startTag": "s4"
+        "/archived": true
       }
     },
     {
@@ -51,35 +244,6 @@
     },
     {
       "kind": "override",
-      "id": "226d3b1b-ce75-444f-ac11-5ee3fe3af4b4",
-      "set": {
-        "/archived": false,
-        "/days": [
-          "tuesday",
-          "wednesday",
-          "thursday",
-          "friday",
-          "saturday",
-          "sunday"
-        ],
-        "/includeInBriefing": true,
-        "/recurrence/daysOfWeek": [
-          "tuesday",
-          "wednesday",
-          "thursday",
-          "friday",
-          "saturday",
-          "sunday"
-        ],
-        "/recurrence/endOffset": 42,
-        "/recurrence/offPeriods": 3,
-        "/recurrence/startOffset": 8,
-        "/recurrence/startTag": "s4",
-        "/recurrence/type": "weeks"
-      }
-    },
-    {
-      "kind": "override",
       "id": "f948a0fc-4ef5-4ba0-8458-8612c29a4537",
       "set": {
         "/archived": true
@@ -93,306 +257,19 @@
       }
     },
     {
-      "kind": "owned",
-      "event": {
-        "id": "048dbc91-fd90-4b78-9542-63810db6d450",
-        "title": "Blood Night (Also 10:30 & 18:30)",
-        "description": "",
-        "remindTomorrow": true,
-        "remindEndOfDay": false,
-        "includeInBriefing": true,
-        "includeOnWebsite": true,
-        "isAllDay": false,
-        "startTime": "02:30",
-        "endTime": "",
-        "days": [
-          "sunday",
-          "monday",
-          "tuesday",
-          "wednesday",
-          "thursday",
-          "friday",
-          "saturday"
-        ],
-        "variations": {},
-        "order": {},
-        "archived": false,
-        "recurrence": {
-          "type": "days",
-          "onPeriods": 1,
-          "offPeriods": 0,
-          "daysOfWeek": [
-            "sunday",
-            "monday",
-            "tuesday",
-            "wednesday",
-            "thursday",
-            "friday",
-            "saturday"
-          ],
-          "startTag": "season6",
-          "startOffset": 0
-        }
+      "kind": "override",
+      "id": "e1a61d22-c57e-45aa-ab6c-d648c529bb89",
+      "set": {
+        "/title": "Alliance, Campaign, VIP, War Merit Shop, store.lastwar.com - FINAL DAY"
       }
     },
     {
-      "kind": "owned",
-      "event": {
-        "id": "b3fe6ebf-d529-4e2a-ae39-d464518e2981",
-        "title": "Trade Posts Level 1 & 2",
-        "description": "",
-        "remindTomorrow": true,
-        "remindEndOfDay": false,
-        "includeInBriefing": true,
-        "includeOnWebsite": true,
-        "isAllDay": false,
-        "startTime": "12:00",
-        "endTime": "",
-        "days": [
-          "tuesday"
-        ],
-        "variations": {},
-        "order": {},
-        "archived": false,
-        "recurrence": {
-          "type": "weeks",
-          "onPeriods": 1,
-          "offPeriods": 0,
-          "daysOfWeek": [
-            "tuesday"
-          ],
-          "startTag": "season6",
-          "startOffset": 15
-        }
-      }
-    },
-    {
-      "kind": "owned",
-      "event": {
-        "id": "d30d51a9-9323-4173-ac6d-5ccfd76dabd8",
-        "title": "Trade Posts Level 3 & 4",
-        "description": "",
-        "remindTomorrow": true,
-        "remindEndOfDay": false,
-        "includeInBriefing": true,
-        "includeOnWebsite": true,
-        "isAllDay": false,
-        "startTime": "12:00",
-        "endTime": "",
-        "days": [
-          "friday"
-        ],
-        "variations": {},
-        "order": {},
-        "archived": false,
-        "recurrence": {
-          "type": "weeks",
-          "onPeriods": 1,
-          "offPeriods": 0,
-          "daysOfWeek": [
-            "friday"
-          ],
-          "startTag": "season6",
-          "startOffset": 18
-        }
-      }
-    },
-    {
-      "kind": "owned",
-      "event": {
-        "id": "ea06e966-cb21-4bbb-ada4-804ad9058e5a",
-        "title": "Magatama Shop FINAL DAY",
-        "description": "",
-        "remindTomorrow": true,
-        "remindEndOfDay": true,
-        "includeInBriefing": true,
-        "includeOnWebsite": true,
-        "isAllDay": true,
-        "startTime": "09:00",
-        "endTime": "",
-        "days": [
-          "sunday"
-        ],
-        "variations": {},
-        "order": {
-          "sunday": -3
-        },
-        "archived": false,
-        "recurrence": {
-          "type": "weeks",
-          "onPeriods": 1,
-          "offPeriods": 0,
-          "daysOfWeek": [
-            "sunday"
-          ],
-          "startTag": "season6",
-          "startOffset": 6
-        }
-      }
-    },
-    {
-      "kind": "owned",
-      "event": {
-        "id": "b7402058-f966-46f3-ad4b-c0752de3e9a5",
-        "title": "Blood Night Hunter FIRST DAY",
-        "description": "",
-        "remindTomorrow": true,
-        "remindEndOfDay": false,
-        "includeInBriefing": true,
-        "includeOnWebsite": true,
-        "isAllDay": false,
-        "startTime": "02:30",
-        "endTime": "",
-        "days": [
-          "monday"
-        ],
-        "variations": {},
-        "order": {},
-        "archived": false,
-        "recurrence": {
-          "type": "weeks",
-          "onPeriods": 1,
-          "offPeriods": 0,
-          "daysOfWeek": [
-            "monday"
-          ],
-          "startTag": "season6",
-          "startOffset": 7,
-          "endOffset": 7
-        }
-      }
-    },
-    {
-      "kind": "owned",
-      "event": {
-        "id": "0057122e-78a1-4a4f-99c4-c872979eb63c",
-        "title": "Divine Tree",
-        "description": "",
-        "remindTomorrow": false,
-        "remindEndOfDay": true,
-        "includeInBriefing": true,
-        "includeOnWebsite": true,
-        "isAllDay": true,
-        "startTime": "09:00",
-        "endTime": "",
-        "days": [
-          "tuesday",
-          "wednesday",
-          "thursday",
-          "friday",
-          "saturday"
-        ],
-        "variations": {},
-        "order": {
-          "monday": -1,
-          "tuesday": -1,
-          "wednesday": -1,
-          "thursday": -1,
-          "friday": -1,
-          "saturday": -1,
-          "sunday": -1
-        },
-        "archived": false,
-        "recurrence": {
-          "type": "weeks",
-          "onPeriods": 1,
-          "offPeriods": 0,
-          "daysOfWeek": [
-            "tuesday",
-            "wednesday",
-            "thursday",
-            "friday",
-            "saturday"
-          ],
-          "startTag": "season6",
-          "startOffset": 8
-        }
-      }
-    },
-    {
-      "kind": "owned",
-      "event": {
-        "id": "348dc5be-2b8c-4bca-a60f-e13c13dfed33",
-        "title": "Copper Conquest",
-        "description": "",
-        "remindTomorrow": true,
-        "remindEndOfDay": false,
-        "includeInBriefing": true,
-        "includeOnWebsite": true,
-        "isAllDay": false,
-        "startTime": "12:00",
-        "endTime": "",
-        "days": [
-          "wednesday",
-          "saturday"
-        ],
-        "variations": {},
-        "order": {},
-        "archived": false,
-        "recurrence": {
-          "type": "weeks",
-          "onPeriods": 1,
-          "offPeriods": 0,
-          "daysOfWeek": [
-            "wednesday",
-            "saturday"
-          ],
-          "startTag": "season6",
-          "startOffset": 23,
-          "endOffset": 51
-        }
-      }
-    },
-    {
-      "kind": "owned",
-      "event": {
-        "id": "99b985e4-470d-4334-8982-b7fa20cd7698",
-        "title": "Faction Duel Contest",
-        "description": "",
-        "remindTomorrow": true,
-        "remindEndOfDay": false,
-        "includeInBriefing": true,
-        "includeOnWebsite": true,
-        "isAllDay": true,
-        "startTime": "09:00",
-        "endTime": "",
-        "days": [
-          "monday",
-          "tuesday",
-          "wednesday",
-          "thursday",
-          "friday",
-          "saturday"
-        ],
-        "variations": {},
-        "order": {
-          "monday": -2,
-          "tuesday": -2,
-          "wednesday": -2,
-          "thursday": -2,
-          "friday": -2,
-          "saturday": -2,
-          "sunday": -2
-        },
-        "archived": false,
-        "recurrence": {
-          "type": "weeks",
-          "onPeriods": 1,
-          "offPeriods": 0,
-          "daysOfWeek": [
-            "monday",
-            "tuesday",
-            "wednesday",
-            "thursday",
-            "friday",
-            "saturday"
-          ],
-          "startTag": "season6",
-          "startOffset": 42,
-          "endOffset": 47
-        }
+      "kind": "override",
+      "id": "226d3b1b-ce75-444f-ac11-5ee3fe3af4b4",
+      "set": {
+        "/recurrence/startOffset": 8,
+        "/recurrence/startTag": "season6"
       }
     }
   ]
 }
-

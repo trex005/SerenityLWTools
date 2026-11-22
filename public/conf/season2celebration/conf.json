@@ -1,0 +1,7 @@
+{
+  "updated": "2025-12-14T12:43:37.648Z",
+  "brand"  : {    "name": "LW Season 6", "favicon": "/conf/main/favicon.ico"},
+  "tags"   : { "season2celebration": {"startDate": "2026-08-24"} },
+  "parents": ["main"],
+  "storage": {"eventsSuffix": "schema-v2-20260816"}
+}

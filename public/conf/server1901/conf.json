@@ -1,19 +1,20 @@
 {
   "updated": "2025-12-14T12:43:37.648Z",
   "brand": {
-    "name": "Server 1901",
-    "favicon": "/conf/1901/favicon.ico"
+    "name": "1901",
+    "favicon": "/conf/server1901/favicon.ico"
   },
   "tags": {
-    "1901": {
+    "server1901": {
       "startDate": "2025-10-19"
     },
+    "season2celebration":{"startDate": "2026-08-24"},
     "main": {
       "startDate": "2025-10-13"
     }
   },
   "parents": [
-    "main"
+    "season2celebration","main"
   ],
   "storage": {
     "eventsSuffix": "schema-v2-20260816"

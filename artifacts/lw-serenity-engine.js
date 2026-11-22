@@ -97,10 +97,15 @@ var LWSerenityEngine = (() => {
       return event.dateIncludeOverrides[targetDateKey];
     }
     const recurrence = event.recurrence;
-    if (!recurrence || recurrence.type !== "days" && recurrence.type !== "weeks") return false;
+    if (!recurrence || recurrence.type !== "days" && recurrence.type !== "weeks" && recurrence.type !== "month_end") return false;
     try {
       const start = resolveRecurrenceDateKey(recurrence.startTag, recurrence.startOffset, tagConfig);
       const end = recurrence.endOffset === void 0 ? void 0 : resolveRecurrenceDateKey(recurrence.startTag, recurrence.endOffset, tagConfig);
+      if (recurrence.type === "month_end") {
+        const day = dateKeyToDay(targetDateKey);
+        if (day < dateKeyToDay(start) || end && day > dateKeyToDay(end)) return false;
+        return new Date((day + 1) * DAY_MS).getUTCDate() === 1;
+      }
       return occursInCycle(
         targetDateKey,
         start,

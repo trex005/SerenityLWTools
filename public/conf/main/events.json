@@ -1,40 +1,50 @@
 {
   "schemaVersion": 2,
-  "updated"      : "2026-08-16T22:26:43-02:00",
-  "operations"   : [
+  "updated": "2026-11-07T22:50:49-02:00",
+  "operations": [
     {
-      "kind" : "owned",
+      "kind": "owned",
       "event": {
-        "id"               : "ev-3",
-        "archived"         : false,
-        "title"            : "Zombie Siege",
-        "description"      : "",
-        "isAllDay"         : false,
-        "startTime"        : "19:45",
-        "endTime"          : "",
-        "days"             : [
-          "sunday",    "monday",    "tuesday",   "wednesday", "thursday",
-          "friday",    "saturday"
+        "id": "ev-3",
+        "archived": false,
+        "title": "Zombie Siege",
+        "description": "",
+        "isAllDay": false,
+        "startTime": "19:45",
+        "endTime": "",
+        "days": [
+          "sunday",
+          "monday",
+          "tuesday",
+          "wednesday",
+          "thursday",
+          "friday",
+          "saturday"
         ],
-        "recurrence"       : {
-          "type"       : "days",
-          "onPeriods"  : 1,
-          "offPeriods" : 2,
-          "daysOfWeek" : [
-            "sunday",    "monday",    "tuesday",   "wednesday", "thursday",
-            "friday",    "saturday"
+        "recurrence": {
+          "type": "days",
+          "onPeriods": 1,
+          "offPeriods": 2,
+          "daysOfWeek": [
+            "sunday",
+            "monday",
+            "tuesday",
+            "wednesday",
+            "thursday",
+            "friday",
+            "saturday"
           ],
-          "startTag"   : "main",
+          "startTag": "main",
           "startOffset": 631,
-          "startDate"  : "2025-01-05"
+          "startDate": "2025-01-05"
         },
-        "remindTomorrow"   : true,
-        "includeOnWebsite" : true,
+        "remindTomorrow": true,
+        "includeOnWebsite": true,
         "includeInBriefing": true
       }
     },
     {
-      "kind" : "owned",
+      "kind": "owned",
       "event": {
         "id": "ev-6",
         "archived": false,
@@ -43,17 +53,23 @@
         "isAllDay": true,
         "startTime": "09:00",
         "endTime": "10:00",
-        "days": ["monday", "tuesday"],
+        "days": [
+          "monday",
+          "tuesday"
+        ],
         "variations": {},
         "recurrence": {
-          "type"       : "weeks",
-          "onPeriods"  : 1,
-          "offPeriods" : 0,
-          "daysOfWeek" : ["monday", "tuesday"],
-          "interval"   : 1,
-          "startTag"   : "main",
+          "type": "weeks",
+          "onPeriods": 1,
+          "offPeriods": 0,
+          "daysOfWeek": [
+            "monday",
+            "tuesday"
+          ],
+          "interval": 1,
+          "startTag": "main",
           "startOffset": 87,
-          "startDate"  : "2025-01-05"
+          "startDate": "2025-01-05"
         },
         "remindEndOfDay": false,
         "includeOnWebsite": true,
@@ -63,59 +79,69 @@
       }
     },
     {
-      "kind" : "owned",
+      "kind": "owned",
       "event": {
-        "id"               : "ev-7",
-        "archived"         : false,
-        "title"            : "Desert Storm - Mid-day",
-        "description"      : "",
-        "isAllDay"         : false,
-        "startTime"        : "17:50",
-        "endTime"          : "",
-        "days"             : ["friday"],
-        "variations"       : {},
-        "recurrence"       : {
-          "type"       : "weeks",
-          "onPeriods"  : 1,
-          "offPeriods" : 0,
-          "daysOfWeek" : ["friday"],
-          "interval"   : 1,
-          "startTag"   : "main",
+        "id": "ev-7",
+        "archived": false,
+        "title": "Desert Storm - Mid-day",
+        "description": "",
+        "isAllDay": false,
+        "startTime": "17:50",
+        "endTime": "",
+        "days": [
+          "friday"
+        ],
+        "variations": {},
+        "recurrence": {
+          "type": "weeks",
+          "onPeriods": 1,
+          "offPeriods": 0,
+          "daysOfWeek": [
+            "friday"
+          ],
+          "interval": 1,
+          "startTag": "main",
           "startOffset": -279
         },
-        "remindTomorrow"   : true,
+        "remindTomorrow": true,
         "includeInBriefing": true,
-        "includeOnWebsite" : true
+        "includeOnWebsite": true
       }
     },
     {
-      "kind" : "owned",
+      "kind": "owned",
       "event": {
-        "id"               : "ev-9",
-        "archived"         : false,
-        "title"            : "VS: Save SHINYs for Tuesday",
-        "description"      : "",
-        "isAllDay"         : true,
-        "startTime"        : "09:00",
-        "endTime"          : "10:00",
-        "days"             : ["monday", "sunday"],
-        "variations"       : {},
-        "recurrence"       : {
-          "type"       : "weeks",
-          "onPeriods"  : 1,
-          "offPeriods" : 2,
-          "daysOfWeek" : ["monday", "sunday"],
-          "startTag"   : "main",
+        "id": "ev-9",
+        "archived": false,
+        "title": "VS: Save SHINYs for Tuesday",
+        "description": "",
+        "isAllDay": true,
+        "startTime": "09:00",
+        "endTime": "10:00",
+        "days": [
+          "monday",
+          "sunday"
+        ],
+        "variations": {},
+        "recurrence": {
+          "type": "weeks",
+          "onPeriods": 1,
+          "offPeriods": 2,
+          "daysOfWeek": [
+            "monday",
+            "sunday"
+          ],
+          "startTag": "main",
           "startOffset": 416
         },
-        "remindTomorrow"   : true,
-        "includeOnWebsite" : true,
+        "remindTomorrow": true,
+        "includeOnWebsite": true,
         "includeInBriefing": true,
-        "order_value"      : -1
+        "order_value": -1
       }
     },
     {
-      "kind" : "owned",
+      "kind": "owned",
       "event": {
         "id": "ev-11",
         "archived": false,
@@ -124,17 +150,21 @@
         "isAllDay": true,
         "startTime": "12:00",
         "endTime": "",
-        "days": ["sunday"],
+        "days": [
+          "sunday"
+        ],
         "variations": {},
         "recurrence": {
-          "type"       : "weeks",
-          "daysOfWeek" : ["sunday"],
-          "interval"   : 1,
-          "onPeriods"  : 1,
-          "offPeriods" : 0,
-          "startTag"   : "main",
+          "type": "weeks",
+          "daysOfWeek": [
+            "sunday"
+          ],
+          "interval": 1,
+          "onPeriods": 1,
+          "offPeriods": 0,
+          "startTag": "main",
           "startOffset": -283,
-          "startDate"  : "2025-01-05"
+          "startDate": "2025-01-05"
         },
         "remindTomorrow": true,
         "includeOnWebsite": true,
@@ -143,35 +173,39 @@
       }
     },
     {
-      "kind" : "owned",
+      "kind": "owned",
       "event": {
-        "id"               : "ev-13",
-        "archived"         : false,
-        "title"            : "VS: Radar, Stamina, Drone data/parts, Hero XP/Shards",
-        "description"      : "",
-        "isAllDay"         : true,
-        "startTime"        : "09:00",
-        "endTime"          : "10:00",
-        "days"             : ["monday"],
-        "variations"       : {},
-        "recurrence"       : {
-          "type"       : "weeks",
-          "daysOfWeek" : ["monday"],
-          "interval"   : 1,
-          "onPeriods"  : 1,
-          "offPeriods" : 0,
-          "startTag"   : "main",
+        "id": "ev-13",
+        "archived": false,
+        "title": "VS: Radar, Stamina, Drone data/parts, Hero XP/Shards, Gather RSS",
+        "description": "",
+        "isAllDay": true,
+        "startTime": "09:00",
+        "endTime": "10:00",
+        "days": [
+          "monday"
+        ],
+        "variations": {},
+        "recurrence": {
+          "type": "weeks",
+          "daysOfWeek": [
+            "monday"
+          ],
+          "interval": 1,
+          "onPeriods": 1,
+          "offPeriods": 0,
+          "startTag": "main",
           "startOffset": -283,
-          "startDate"  : "2025-01-05"
+          "startDate": "2025-01-05"
         },
-        "includeOnWebsite" : true,
-        "remindTomorrow"   : true,
+        "includeOnWebsite": true,
+        "remindTomorrow": true,
         "includeInBriefing": true,
-        "order_value"      : -1
+        "order_value": -1
       }
     },
     {
-      "kind" : "owned",
+      "kind": "owned",
       "event": {
         "id": "ev-16",
         "archived": false,
@@ -180,15 +214,19 @@
         "isAllDay": true,
         "startTime": "09:00",
         "endTime": "10:00",
-        "days": ["thursday"],
+        "days": [
+          "thursday"
+        ],
         "variations": {},
         "recurrence": {
-          "type"       : "weeks",
-          "daysOfWeek" : ["thursday"],
-          "interval"   : 1,
-          "onPeriods"  : 1,
-          "offPeriods" : 0,
-          "startTag"   : "main",
+          "type": "weeks",
+          "daysOfWeek": [
+            "thursday"
+          ],
+          "interval": 1,
+          "onPeriods": 1,
+          "offPeriods": 0,
+          "startTag": "main",
           "startOffset": -283
         },
         "includeOnWebsite": true,
@@ -198,7 +236,7 @@
       }
     },
     {
-      "kind" : "owned",
+      "kind": "owned",
       "event": {
         "id": "ev-17",
         "archived": false,
@@ -207,17 +245,21 @@
         "isAllDay": true,
         "startTime": "09:00",
         "endTime": "10:00",
-        "days": ["friday"],
+        "days": [
+          "friday"
+        ],
         "variations": {},
         "recurrence": {
-          "type"       : "weeks",
-          "daysOfWeek" : ["friday"],
-          "interval"   : 1,
-          "onPeriods"  : 1,
-          "offPeriods" : 0,
-          "startTag"   : "main",
+          "type": "weeks",
+          "daysOfWeek": [
+            "friday"
+          ],
+          "interval": 1,
+          "onPeriods": 1,
+          "offPeriods": 0,
+          "startTag": "main",
           "startOffset": -283,
-          "startDate"  : "2025-01-05"
+          "startDate": "2025-01-05"
         },
         "includeOnWebsite": true,
         "remindTomorrow": true,
@@ -226,35 +268,39 @@
       }
     },
     {
-      "kind" : "owned",
+      "kind": "owned",
       "event": {
-        "id"               : "ev-18",
-        "archived"         : false,
-        "title"            : "VS: Enemy Buster, UR Trucks/Tasks, Speed Ups",
-        "description"      : "",
-        "isAllDay"         : true,
-        "startTime"        : "09:00",
-        "endTime"          : "10:00",
-        "days"             : ["saturday"],
-        "variations"       : {},
-        "recurrence"       : {
-          "type"       : "weeks",
-          "daysOfWeek" : ["saturday"],
-          "interval"   : 1,
-          "onPeriods"  : 1,
-          "offPeriods" : 0,
-          "startTag"   : "main",
+        "id": "ev-18",
+        "archived": false,
+        "title": "VS: Enemy Buster, UR Trucks/Tasks, Speed Ups",
+        "description": "",
+        "isAllDay": true,
+        "startTime": "09:00",
+        "endTime": "10:00",
+        "days": [
+          "saturday"
+        ],
+        "variations": {},
+        "recurrence": {
+          "type": "weeks",
+          "daysOfWeek": [
+            "saturday"
+          ],
+          "interval": 1,
+          "onPeriods": 1,
+          "offPeriods": 0,
+          "startTag": "main",
           "startOffset": -283,
-          "startDate"  : "2025-01-05"
+          "startDate": "2025-01-05"
         },
-        "includeOnWebsite" : true,
-        "remindTomorrow"   : true,
+        "includeOnWebsite": true,
+        "remindTomorrow": true,
         "includeInBriefing": true,
-        "order_value"      : -1
+        "order_value": -1
       }
     },
     {
-      "kind" : "owned",
+      "kind": "owned",
       "event": {
         "id": "ev-1739555974133",
         "archived": false,
@@ -263,131 +309,165 @@
         "isAllDay": false,
         "startTime": "00:00",
         "endTime": "",
-        "days": ["saturday"],
+        "days": [
+          "saturday"
+        ],
         "variations": {},
         "recurrence": {
-          "type"       : "weeks",
-          "daysOfWeek" : ["saturday"],
-          "interval"   : 1,
-          "onPeriods"  : 1,
-          "offPeriods" : 0,
-          "startTag"   : "main",
+          "type": "weeks",
+          "daysOfWeek": [
+            "saturday"
+          ],
+          "interval": 1,
+          "onPeriods": 1,
+          "offPeriods": 0,
+          "startTag": "main",
           "startOffset": -283
         },
-        "dateIncludeOverrides": {"2025-04-12": true},
+        "dateIncludeOverrides": {
+          "2025-04-12": true
+        },
         "remindTomorrow": true,
         "includeOnWebsite": true
       }
     },
     {
-      "kind" : "owned",
+      "kind": "owned",
       "event": {
-        "id"               : "ev-1739556183702",
-        "archived"         : true,
-        "title"            : "Honorable campaign",
-        "description"      : "",
-        "isAllDay"         : true,
-        "startTime"        : "09:00",
-        "endTime"          : "10:00",
-        "days"             : ["tuesday", "thursday", "sunday"],
-        "variations"       : {},
-        "recurrence"       : {
-          "type"       : "weeks",
-          "daysOfWeek" : ["tuesday", "thursday", "sunday"],
-          "interval"   : 1,
-          "onPeriods"  : 1,
-          "offPeriods" : 0,
-          "startTag"   : "main",
+        "id": "ev-1739556183702",
+        "archived": true,
+        "title": "Honorable campaign",
+        "description": "",
+        "isAllDay": true,
+        "startTime": "09:00",
+        "endTime": "10:00",
+        "days": [
+          "tuesday",
+          "thursday",
+          "sunday"
+        ],
+        "variations": {},
+        "recurrence": {
+          "type": "weeks",
+          "daysOfWeek": [
+            "tuesday",
+            "thursday",
+            "sunday"
+          ],
+          "interval": 1,
+          "onPeriods": 1,
+          "offPeriods": 0,
+          "startTag": "main",
           "startOffset": 417
         },
         "includeInBriefing": true,
-        "includeOnWebsite" : true
-      }
-    },
-    {
-      "kind" : "owned",
-      "event": {
-        "id"              : "ev-1739556209550",
-        "archived"        : true,
-        "title"           : "Honorable campaign - FINAL DAY",
-        "description"     : "",
-        "isAllDay"        : true,
-        "startTime"       : "09:00",
-        "endTime"         : "10:00",
-        "days"            : ["monday", "wednesday", "friday"],
-        "variations"      : {},
-        "recurrence"      : {
-          "type"       : "weeks",
-          "daysOfWeek" : ["monday", "wednesday", "friday"],
-          "interval"   : 1,
-          "onPeriods"  : 1,
-          "offPeriods" : 0,
-          "startTag"   : "main",
-          "startOffset": -283
-        },
-        "remindEndOfDay"  : true,
         "includeOnWebsite": true
       }
     },
     {
-      "kind" : "owned",
+      "kind": "owned",
       "event": {
-        "id"               : "ev-1739556688004",
-        "archived"         : false,
-        "title"            : "Zombie Invasion! (Loot goblins!)",
-        "description"      : "",
-        "isAllDay"         : true,
-        "startTime"        : "09:00",
-        "endTime"          : "10:00",
-        "days"             : ["wednesday", "thursday", "friday"],
-        "variations"       : {},
-        "recurrence"       : {
-          "type"       : "weeks",
-          "daysOfWeek" : ["wednesday", "thursday", "friday"],
-          "interval"   : 2,
-          "onPeriods"  : 1,
-          "offPeriods" : 1,
-          "startTag"   : "main",
+        "id": "ev-1739556209550",
+        "archived": true,
+        "title": "Honorable campaign - FINAL DAY",
+        "description": "",
+        "isAllDay": true,
+        "startTime": "09:00",
+        "endTime": "10:00",
+        "days": [
+          "monday",
+          "wednesday",
+          "friday"
+        ],
+        "variations": {},
+        "recurrence": {
+          "type": "weeks",
+          "daysOfWeek": [
+            "monday",
+            "wednesday",
+            "friday"
+          ],
+          "interval": 1,
+          "onPeriods": 1,
+          "offPeriods": 0,
+          "startTag": "main",
+          "startOffset": -283
+        },
+        "remindEndOfDay": true,
+        "includeOnWebsite": true
+      }
+    },
+    {
+      "kind": "owned",
+      "event": {
+        "id": "ev-1739556688004",
+        "archived": false,
+        "title": "Zombie Invasion! (Loot goblins!)",
+        "description": "",
+        "isAllDay": true,
+        "startTime": "09:00",
+        "endTime": "10:00",
+        "days": [
+          "wednesday",
+          "thursday",
+          "friday"
+        ],
+        "variations": {},
+        "recurrence": {
+          "type": "weeks",
+          "daysOfWeek": [
+            "wednesday",
+            "thursday",
+            "friday"
+          ],
+          "interval": 2,
+          "onPeriods": 1,
+          "offPeriods": 1,
+          "startTag": "main",
           "startOffset": 143,
-          "startDate"  : "2025-01-05"
+          "startDate": "2025-01-05"
         },
-        "includeOnWebsite" : true,
+        "includeOnWebsite": true,
         "includeInBriefing": true,
-        "remindTomorrow"   : true,
-        "order_value"      : 1
+        "remindTomorrow": true,
+        "order_value": 1
       }
     },
     {
-      "kind" : "owned",
+      "kind": "owned",
       "event": {
-        "id"               : "ev-1739556818565",
-        "archived"         : false,
-        "title"            : "Doomsday/Frontline",
-        "description"      : "",
-        "isAllDay"         : true,
-        "startTime"        : "09:00",
-        "endTime"          : "10:00",
-        "days"             : ["sunday"],
-        "variations"       : {},
-        "recurrence"       : {
-          "type"       : "weeks",
-          "onPeriods"  : 1,
-          "offPeriods" : 1,
-          "daysOfWeek" : ["sunday"],
-          "interval"   : 1,
-          "startTag"   : "main",
+        "id": "ev-1739556818565",
+        "archived": false,
+        "title": "Doomsday/Frontline",
+        "description": "",
+        "isAllDay": true,
+        "startTime": "09:00",
+        "endTime": "10:00",
+        "days": [
+          "sunday"
+        ],
+        "variations": {},
+        "recurrence": {
+          "type": "weeks",
+          "onPeriods": 1,
+          "offPeriods": 1,
+          "daysOfWeek": [
+            "sunday"
+          ],
+          "interval": 1,
+          "startTag": "main",
           "startOffset": 325,
-          "startDate"  : "2025-01-05"
+          "startDate": "2025-01-05"
         },
-        "remindEndOfDay"   : true,
-        "remindTomorrow"   : true,
-        "includeOnWebsite" : true,
+        "remindEndOfDay": true,
+        "remindTomorrow": true,
+        "includeOnWebsite": true,
         "includeInBriefing": true,
-        "order_value"      : 1
+        "order_value": 1
       }
     },
     {
-      "kind" : "owned",
+      "kind": "owned",
       "event": {
         "id": "ev-1739556987954",
         "archived": false,
@@ -396,15 +476,23 @@
         "isAllDay": true,
         "startTime": "09:00",
         "endTime": "10:00",
-        "days": ["wednesday", "thursday", "friday"],
+        "days": [
+          "wednesday",
+          "thursday",
+          "friday"
+        ],
         "variations": {},
         "recurrence": {
-          "type"       : "weeks",
-          "daysOfWeek" : ["wednesday", "thursday", "friday"],
-          "interval"   : 2,
-          "onPeriods"  : 1,
-          "offPeriods" : 1,
-          "startTag"   : "main",
+          "type": "weeks",
+          "daysOfWeek": [
+            "wednesday",
+            "thursday",
+            "friday"
+          ],
+          "interval": 2,
+          "onPeriods": 1,
+          "offPeriods": 1,
+          "startTag": "main",
           "startOffset": 150
         },
         "remindTomorrow": true,
@@ -414,7 +502,7 @@
       }
     },
     {
-      "kind" : "owned",
+      "kind": "owned",
       "event": {
         "id": "ev-1739558845321",
         "archived": false,
@@ -423,15 +511,19 @@
         "isAllDay": true,
         "startTime": "09:00",
         "endTime": "10:00",
-        "days": ["monday"],
+        "days": [
+          "monday"
+        ],
         "variations": {},
         "recurrence": {
-          "type"       : "weeks",
-          "daysOfWeek" : ["monday"],
-          "interval"   : 1,
-          "onPeriods"  : 1,
-          "offPeriods" : 0,
-          "startTag"   : "main",
+          "type": "weeks",
+          "daysOfWeek": [
+            "monday"
+          ],
+          "interval": 1,
+          "onPeriods": 1,
+          "offPeriods": 0,
+          "startTag": "main",
           "startOffset": -283
         },
         "includeOnWebsite": true,
@@ -439,267 +531,331 @@
       }
     },
     {
-      "kind" : "owned",
+      "kind": "owned",
       "event": {
-        "id"               : "ev-1740123329685",
-        "archived"         : false,
-        "title"            : "Desert Storm - Late",
-        "description"      : "",
-        "isAllDay"         : false,
-        "startTime"        : "22:50",
-        "endTime"          : "",
-        "days"             : ["friday"],
-        "variations"       : {},
-        "recurrence"       : {
-          "type"       : "weeks",
-          "onPeriods"  : 1,
-          "offPeriods" : 0,
-          "daysOfWeek" : ["friday"],
-          "interval"   : 1,
-          "startTag"   : "main",
+        "id": "ev-1740123329685",
+        "archived": false,
+        "title": "Desert Storm - Late",
+        "description": "",
+        "isAllDay": false,
+        "startTime": "22:50",
+        "endTime": "",
+        "days": [
+          "friday"
+        ],
+        "variations": {},
+        "recurrence": {
+          "type": "weeks",
+          "onPeriods": 1,
+          "offPeriods": 0,
+          "daysOfWeek": [
+            "friday"
+          ],
+          "interval": 1,
+          "startTag": "main",
           "startOffset": -279
         },
-        "remindTomorrow"   : true,
+        "remindTomorrow": true,
         "includeInBriefing": true,
-        "includeOnWebsite" : true
+        "includeOnWebsite": true
       }
     },
     {
-      "kind" : "owned",
+      "kind": "owned",
       "event": {
-        "id"               : "ev-1740278810425",
-        "archived"         : false,
-        "title"            : "Rampage Bosses/Frontline",
-        "description"      : "• Bosses spawn at 0:00, 6:00, and 12:00",
-        "isAllDay"         : true,
-        "startTime"        : "09:00",
-        "endTime"          : "10:00",
-        "days"             : ["sunday"],
-        "variations"       : {},
-        "recurrence"       : {
-          "type"       : "weeks",
-          "onPeriods"  : 1,
-          "offPeriods" : 1,
-          "daysOfWeek" : ["sunday"],
-          "interval"   : 1,
-          "startTag"   : "main",
-          "startOffset": 332,
-          "startDate"  : "2025-01-05"
-        },
-        "remindEndOfDay"   : true,
-        "includeOnWebsite" : true,
-        "order_value"      : 5,
-        "includeInBriefing": true,
-        "remindTomorrow"   : true
-      }
-    },
-    {
-      "kind" : "owned",
-      "event": {
-        "id"               : "87a66ed0-70ea-4dfc-8519-ced7ef52be6e",
-        "archived"         : true,
-        "title"            : "Marshal (Alliance Exercise)",
-        "description"      : "",
-        "isAllDay"         : false,
-        "startTime"        : "21:40",
-        "endTime"          : "",
-        "days"             : [
-          "monday",    "sunday",    "thursday",  "friday",    "tuesday",
-          "saturday",  "wednesday"
+        "id": "ev-1740278810425",
+        "archived": false,
+        "title": "Rampage Bosses/Frontline",
+        "description": "• Bosses spawn at 0:00, 6:00, and 12:00",
+        "isAllDay": true,
+        "startTime": "09:00",
+        "endTime": "10:00",
+        "days": [
+          "sunday"
         ],
-        "recurrence"       : {
-          "type"       : "days",
-          "daysOfWeek" : [
-            "monday",    "sunday",    "thursday",  "friday",    "tuesday",
-            "saturday",  "wednesday"
+        "variations": {},
+        "recurrence": {
+          "type": "weeks",
+          "onPeriods": 1,
+          "offPeriods": 1,
+          "daysOfWeek": [
+            "sunday"
           ],
-          "interval"   : 2,
-          "onPeriods"  : 1,
-          "offPeriods" : 0,
-          "startTag"   : "main",
+          "interval": 1,
+          "startTag": "main",
+          "startOffset": 332,
+          "startDate": "2025-01-05"
+        },
+        "remindEndOfDay": true,
+        "includeOnWebsite": true,
+        "order_value": 5,
+        "includeInBriefing": true,
+        "remindTomorrow": true
+      }
+    },
+    {
+      "kind": "owned",
+      "event": {
+        "id": "87a66ed0-70ea-4dfc-8519-ced7ef52be6e",
+        "archived": true,
+        "title": "Marshal (Alliance Exercise)",
+        "description": "",
+        "isAllDay": false,
+        "startTime": "21:40",
+        "endTime": "",
+        "days": [
+          "monday",
+          "sunday",
+          "thursday",
+          "friday",
+          "tuesday",
+          "saturday",
+          "wednesday"
+        ],
+        "recurrence": {
+          "type": "days",
+          "daysOfWeek": [
+            "monday",
+            "sunday",
+            "thursday",
+            "friday",
+            "tuesday",
+            "saturday",
+            "wednesday"
+          ],
+          "interval": 2,
+          "onPeriods": 1,
+          "offPeriods": 0,
+          "startTag": "main",
           "startOffset": 3
         },
-        "remindTomorrow"   : true,
+        "remindTomorrow": true,
         "includeInBriefing": true,
-        "includeOnWebsite" : true
+        "includeOnWebsite": true
       }
     },
     {
-      "kind" : "owned",
+      "kind": "owned",
       "event": {
-        "id"               : "4329a998-b697-4b0d-ae72-c629390328b4",
-        "archived"         : false,
-        "title"            : "Storm Arena",
-        "description"      : "",
-        "isAllDay"         : true,
-        "startTime"        : "09:00",
-        "endTime"          : "10:00",
-        "days"             : [
-          "sunday",    "monday",    "tuesday",   "wednesday", "thursday",
-          "friday",    "saturday"
+        "id": "4329a998-b697-4b0d-ae72-c629390328b4",
+        "archived": false,
+        "title": "Storm Arena",
+        "description": "",
+        "isAllDay": true,
+        "startTime": "09:00",
+        "endTime": "10:00",
+        "days": [
+          "monday",
+          "tuesday",
+          "wednesday",
+          "thursday",
+          "friday",
+          "saturday"
         ],
-        "variations"       : {},
-        "recurrence"       : {
-          "type"       : "weeks",
-          "onPeriods"  : 1,
-          "offPeriods" : 2,
-          "daysOfWeek" : [
-            "sunday",    "monday",    "tuesday",   "wednesday", "thursday",
-            "friday",    "saturday"
+        "variations": {},
+        "recurrence": {
+          "type": "weeks",
+          "onPeriods": 1,
+          "offPeriods": 2,
+          "daysOfWeek": [
+            "monday",
+            "tuesday",
+            "wednesday",
+            "thursday",
+            "friday",
+            "saturday"
           ],
-          "interval"   : 1,
-          "startTag"   : "main",
+          "interval": 1,
+          "startTag": "main",
           "startOffset": 340,
-          "startDate"  : "2025-01-05"
+          "startDate": "2025-01-05"
         },
-        "remindEndOfDay"   : true,
+        "remindEndOfDay": true,
         "includeInBriefing": true,
-        "includeOnWebsite" : true,
-        "remindTomorrow"   : false,
-        "order_value"      : 1
+        "includeOnWebsite": true,
+        "remindTomorrow": false,
+        "order_value": 1
       }
     },
     {
-      "kind" : "owned",
+      "kind": "owned",
       "event": {
-        "id"              : "5c1804c1-eae9-48f9-a94d-495eea6eb156",
-        "archived"        : false,
-        "title"           : "3v3 Brawl - Minimum 5 wins",
-        "description"     : "",
-        "isAllDay"        : true,
-        "startTime"       : "09:00",
-        "endTime"         : "10:00",
-        "days"            : [
-          "sunday",    "monday",    "tuesday",   "wednesday", "thursday",
-          "friday",    "saturday"
+        "id": "5c1804c1-eae9-48f9-a94d-495eea6eb156",
+        "archived": false,
+        "title": "3v3 Brawl - Minimum 5 wins",
+        "description": "",
+        "isAllDay": true,
+        "startTime": "09:00",
+        "endTime": "10:00",
+        "days": [
+          "sunday",
+          "monday",
+          "tuesday",
+          "wednesday",
+          "thursday",
+          "friday",
+          "saturday"
         ],
-        "variations"      : {},
-        "recurrence"      : {
-          "type"       : "weeks",
-          "onPeriods"  : 2,
-          "offPeriods" : 1,
-          "daysOfWeek" : [
-            "sunday",    "monday",    "tuesday",   "wednesday", "thursday",
-            "friday",    "saturday"
+        "variations": {},
+        "recurrence": {
+          "type": "weeks",
+          "onPeriods": 2,
+          "offPeriods": 1,
+          "daysOfWeek": [
+            "sunday",
+            "monday",
+            "tuesday",
+            "wednesday",
+            "thursday",
+            "friday",
+            "saturday"
           ],
-          "interval"   : 1,
-          "startTag"   : "main",
+          "interval": 1,
+          "startTag": "main",
           "startOffset": 347
         },
-        "remindEndOfDay"  : true,
+        "remindEndOfDay": true,
         "includeOnWebsite": true,
-        "order_value"     : 1
+        "order_value": 1
       }
     },
     {
-      "kind" : "owned",
+      "kind": "owned",
       "event": {
-        "id"               : "5aec60d0-4d5f-4299-8f91-cc8590471e7b",
-        "archived"         : false,
-        "title"            : "Wanted Boss: Code 87 - Weak Against Tank",
-        "description"      : "",
-        "isAllDay"         : true,
-        "startTime"        : "09:00",
-        "endTime"          : "10:00",
-        "days"             : ["monday", "thursday"],
-        "variations"       : {},
-        "recurrence"       : {
-          "type"       : "weeks",
-          "daysOfWeek" : ["monday", "thursday"],
-          "interval"   : 1,
-          "onPeriods"  : 1,
-          "offPeriods" : 0,
-          "startTag"   : "main",
+        "id": "5aec60d0-4d5f-4299-8f91-cc8590471e7b",
+        "archived": false,
+        "title": "Wanted Boss: Code 87 - Weak Against Tank",
+        "description": "",
+        "isAllDay": true,
+        "startTime": "09:00",
+        "endTime": "10:00",
+        "days": [
+          "monday",
+          "thursday"
+        ],
+        "variations": {},
+        "recurrence": {
+          "type": "weeks",
+          "daysOfWeek": [
+            "monday",
+            "thursday"
+          ],
+          "interval": 1,
+          "onPeriods": 1,
+          "offPeriods": 0,
+          "startTag": "main",
           "startOffset": 153,
-          "startDate"  : "2025-01-05"
+          "startDate": "2025-01-05"
         },
-        "includeOnWebsite" : true,
+        "includeOnWebsite": true,
         "includeInBriefing": true,
-        "remindEndOfDay"   : false,
-        "order_value"      : 8
+        "remindEndOfDay": false,
+        "order_value": 8
       }
     },
     {
-      "kind" : "owned",
+      "kind": "owned",
       "event": {
-        "id"               : "6f0f73b6-24e7-491d-b6fa-39d73bb8711e",
-        "archived"         : false,
-        "title"            : "Wanted Boss:  Code 64 - Weak Against Missile",
-        "description"      : "",
-        "isAllDay"         : true,
-        "startTime"        : "09:00",
-        "endTime"          : "10:00",
-        "days"             : ["tuesday", "friday"],
-        "variations"       : {},
-        "recurrence"       : {
-          "type"       : "weeks",
-          "daysOfWeek" : ["tuesday", "friday"],
-          "interval"   : 1,
-          "onPeriods"  : 1,
-          "offPeriods" : 0,
-          "startTag"   : "main",
+        "id": "6f0f73b6-24e7-491d-b6fa-39d73bb8711e",
+        "archived": false,
+        "title": "Wanted Boss:  Code 64 - Weak Against Missile",
+        "description": "",
+        "isAllDay": true,
+        "startTime": "09:00",
+        "endTime": "10:00",
+        "days": [
+          "tuesday",
+          "friday"
+        ],
+        "variations": {},
+        "recurrence": {
+          "type": "weeks",
+          "daysOfWeek": [
+            "tuesday",
+            "friday"
+          ],
+          "interval": 1,
+          "onPeriods": 1,
+          "offPeriods": 0,
+          "startTag": "main",
           "startOffset": 153,
-          "startDate"  : "2025-01-05"
+          "startDate": "2025-01-05"
         },
-        "includeOnWebsite" : true,
+        "includeOnWebsite": true,
         "includeInBriefing": true,
-        "order_value"      : 8
+        "order_value": 8
       }
     },
     {
-      "kind" : "owned",
+      "kind": "owned",
       "event": {
-        "id"               : "5178bd44-1659-40df-9aa7-c76cf22ee563",
-        "archived"         : false,
-        "title"            : "Wanted Boss: Code 39 - Weak Against Air",
-        "description"      : "",
-        "isAllDay"         : true,
-        "startTime"        : "09:00",
-        "endTime"          : "10:00",
-        "days"             : ["wednesday", "saturday"],
-        "variations"       : {},
-        "recurrence"       : {
-          "type"       : "weeks",
-          "daysOfWeek" : ["wednesday", "saturday"],
-          "interval"   : 1,
-          "onPeriods"  : 1,
-          "offPeriods" : 0,
-          "startTag"   : "main",
+        "id": "5178bd44-1659-40df-9aa7-c76cf22ee563",
+        "archived": false,
+        "title": "Wanted Boss: Code 39 - Weak Against Air",
+        "description": "",
+        "isAllDay": true,
+        "startTime": "09:00",
+        "endTime": "10:00",
+        "days": [
+          "wednesday",
+          "saturday"
+        ],
+        "variations": {},
+        "recurrence": {
+          "type": "weeks",
+          "daysOfWeek": [
+            "wednesday",
+            "saturday"
+          ],
+          "interval": 1,
+          "onPeriods": 1,
+          "offPeriods": 0,
+          "startTag": "main",
           "startOffset": 153,
-          "startDate"  : "2025-01-05"
+          "startDate": "2025-01-05"
         },
-        "includeOnWebsite" : true,
+        "includeOnWebsite": true,
         "includeInBriefing": true,
-        "order_value"      : 8
+        "order_value": 8
       }
     },
     {
-      "kind" : "owned",
+      "kind": "owned",
       "event": {
         "id": "dfb867b9-9ffc-4a60-baf2-bd89a1d18681",
         "archived": false,
-        "title": "SHINYs in 933-936, 944-947, 958-961, 970-973, 982-986, 994-996, 1003-1006, 1013-1017, 1023-1026, 1033-1036, 1043-1044",
+        "title": "SHINYs in 933-936, 944-947, 958-961, 970-973, 982-986, 994,995, 1003-1006, 1013-1017, 1023-1026, 1033-1036, 1043-1044",
         "description": "",
         "isAllDay": true,
         "startTime": "09:00",
         "endTime": "",
         "days": [
-          "sunday",    "monday",    "tuesday",   "wednesday", "thursday",
-          "friday",    "saturday"
+          "sunday",
+          "monday",
+          "tuesday",
+          "wednesday",
+          "thursday",
+          "friday",
+          "saturday"
         ],
         "variations": {},
         "recurrence": {
-          "type"       : "days",
-          "daysOfWeek" : [
-            "sunday",    "monday",    "tuesday",   "wednesday", "thursday",
-            "friday",    "saturday"
+          "type": "days",
+          "daysOfWeek": [
+            "sunday",
+            "monday",
+            "tuesday",
+            "wednesday",
+            "thursday",
+            "friday",
+            "saturday"
           ],
-          "interval"   : 3,
-          "onPeriods"  : 1,
-          "offPeriods" : 2,
-          "startTag"   : "main",
+          "interval": 3,
+          "onPeriods": 1,
+          "offPeriods": 2,
+          "startTag": "main",
           "startOffset": 155,
-          "startDate"  : "2025-01-05"
+          "startDate": "2025-01-05"
         },
         "dateIncludeOverrides": {},
         "includeOnWebsite": true,
@@ -708,7 +864,7 @@
       }
     },
     {
-      "kind" : "owned",
+      "kind": "owned",
       "event": {
         "id": "7662a10a-144e-4dc5-8ae7-4c8af78b9e12",
         "archived": false,
@@ -718,22 +874,32 @@
         "startTime": "09:00",
         "endTime": "",
         "days": [
-          "sunday",    "monday",    "tuesday",   "wednesday", "thursday",
-          "friday",    "saturday"
+          "sunday",
+          "monday",
+          "tuesday",
+          "wednesday",
+          "thursday",
+          "friday",
+          "saturday"
         ],
         "variations": {},
         "recurrence": {
-          "type"       : "days",
-          "daysOfWeek" : [
-            "sunday",    "monday",    "tuesday",   "wednesday", "thursday",
-            "friday",    "saturday"
+          "type": "days",
+          "daysOfWeek": [
+            "sunday",
+            "monday",
+            "tuesday",
+            "wednesday",
+            "thursday",
+            "friday",
+            "saturday"
           ],
-          "interval"   : 3,
-          "onPeriods"  : 1,
-          "offPeriods" : 2,
-          "startTag"   : "main",
+          "interval": 3,
+          "onPeriods": 1,
+          "offPeriods": 2,
+          "startTag": "main",
           "startOffset": 153,
-          "startDate"  : "2025-01-05"
+          "startDate": "2025-01-05"
         },
         "dateIncludeOverrides": {},
         "includeOnWebsite": true,
@@ -742,41 +908,53 @@
       }
     },
     {
-      "kind" : "owned",
+      "kind": "owned",
       "event": {
         "id": "e5263084-2b0f-4289-9ed1-ede774a62176",
         "archived": false,
-        "title": "SHINYs in 932,942-943,952-957,966-969,977-981,990-993,1000-1002,1011-1012,1020-1022,1029-1032,1039-1042,1047-1050",
+        "title": "SHINYs in 942-943,952-957,966-969,977-981,990-993,1000-1002,1011-1012,1020-1022,1029-1032,1039-1042,1047-1050",
         "description": "",
         "isAllDay": true,
         "startTime": "09:00",
         "endTime": "",
         "days": [
-          "sunday",    "monday",    "tuesday",   "wednesday", "thursday",
-          "friday",    "saturday"
+          "sunday",
+          "monday",
+          "tuesday",
+          "wednesday",
+          "thursday",
+          "friday",
+          "saturday"
         ],
         "variations": {},
         "recurrence": {
-          "type"       : "days",
-          "daysOfWeek" : [
-            "sunday",    "monday",    "tuesday",   "wednesday", "thursday",
-            "friday",    "saturday"
+          "type": "days",
+          "daysOfWeek": [
+            "sunday",
+            "monday",
+            "tuesday",
+            "wednesday",
+            "thursday",
+            "friday",
+            "saturday"
           ],
-          "interval"   : 3,
-          "onPeriods"  : 1,
-          "offPeriods" : 2,
-          "startTag"   : "main",
+          "interval": 3,
+          "onPeriods": 1,
+          "offPeriods": 2,
+          "startTag": "main",
           "startOffset": 154,
-          "startDate"  : "2025-01-05"
+          "startDate": "2025-01-05"
         },
-        "dateIncludeOverrides": {"2025-07-05": true},
+        "dateIncludeOverrides": {
+          "2025-07-05": true
+        },
         "includeOnWebsite": true,
         "order_value": 9,
         "includeInBriefing": true
       }
     },
     {
-      "kind" : "owned",
+      "kind": "owned",
       "event": {
         "id": "41b7230f-eac7-478d-8f95-2955050d1da0",
         "archived": false,
@@ -786,24 +964,32 @@
         "startTime": "09:00",
         "endTime": "",
         "days": [
-          "tuesday",   "wednesday", "thursday",  "friday",    "saturday",
-          "sunday"
+          "tuesday",
+          "wednesday",
+          "thursday",
+          "friday",
+          "saturday"
         ],
         "variations": {},
         "recurrence": {
-          "type"       : "weeks",
-          "daysOfWeek" : [
-            "tuesday",   "wednesday", "thursday",  "friday",    "saturday",
-            "sunday"
+          "type": "weeks",
+          "daysOfWeek": [
+            "tuesday",
+            "wednesday",
+            "thursday",
+            "friday",
+            "saturday"
           ],
-          "interval"   : 4,
-          "onPeriods"  : 1,
-          "offPeriods" : 3,
-          "startTag"   : "main",
+          "interval": 4,
+          "onPeriods": 1,
+          "offPeriods": 3,
+          "startTag": "main",
           "startOffset": 649,
-          "startDate"  : "2025-01-05"
+          "startDate": "2025-01-05"
         },
-        "dateIncludeOverrides": {"2025-07-08": false},
+        "dateIncludeOverrides": {
+          "2025-07-08": false
+        },
         "remindEndOfDay": true,
         "includeOnWebsite": true,
         "order_value": 5,
@@ -811,7 +997,7 @@
       }
     },
     {
-      "kind" : "owned",
+      "kind": "owned",
       "event": {
         "id": "ff6b9bd0-e2e6-49fd-9fa6-7cea574f8d47",
         "archived": true,
@@ -820,81 +1006,109 @@
         "isAllDay": true,
         "startTime": "09:00",
         "endTime": "",
-        "days": ["tuesday", "wednesday", "thursday", "friday", "saturday"],
+        "days": [
+          "tuesday",
+          "wednesday",
+          "thursday",
+          "friday",
+          "saturday"
+        ],
         "variations": {},
         "recurrence": {
-          "type"       : "weeks",
-          "onPeriods"  : 1,
-          "offPeriods" : 3,
-          "daysOfWeek" : ["tuesday", "wednesday", "thursday", "friday", "saturday"],
-          "interval"   : 1,
-          "startTag"   : "main",
+          "type": "weeks",
+          "onPeriods": 1,
+          "offPeriods": 3,
+          "daysOfWeek": [
+            "tuesday",
+            "wednesday",
+            "thursday",
+            "friday",
+            "saturday"
+          ],
+          "interval": 1,
+          "startTag": "main",
           "startOffset": 327
         },
-        "dateIncludeOverrides": {"2025-03-28": false},
+        "dateIncludeOverrides": {
+          "2025-03-28": false
+        },
         "includeOnWebsite": true
       }
     },
     {
-      "kind" : "owned",
+      "kind": "owned",
       "event": {
-        "id"               : "fe4d455d-6f36-45b2-92c2-24c32521473f",
-        "archived"         : false,
-        "title"            : "Hot Deals → Glittering Market",
-        "description"      : "",
-        "isAllDay"         : true,
-        "startTime"        : "09:00",
-        "endTime"          : "",
-        "days"             : [
-          "tuesday",   "wednesday", "thursday",  "friday",    "saturday"
+        "id": "fe4d455d-6f36-45b2-92c2-24c32521473f",
+        "archived": false,
+        "title": "Hot Deals → Glittering Market",
+        "description": "",
+        "isAllDay": true,
+        "startTime": "09:00",
+        "endTime": "",
+        "days": [
+          "tuesday",
+          "wednesday",
+          "thursday",
+          "friday",
+          "saturday"
         ],
-        "variations"       : {},
-        "recurrence"       : {
-          "type"       : "weeks",
-          "onPeriods"  : 1,
-          "offPeriods" : 3,
-          "daysOfWeek" : ["tuesday", "wednesday", "thursday", "friday", "saturday"],
-          "interval"   : 1,
-          "startTag"   : "main",
+        "variations": {},
+        "recurrence": {
+          "type": "weeks",
+          "onPeriods": 1,
+          "offPeriods": 3,
+          "daysOfWeek": [
+            "tuesday",
+            "wednesday",
+            "thursday",
+            "friday",
+            "saturday"
+          ],
+          "interval": 1,
+          "startTag": "main",
           "startOffset": 277,
-          "startDate"  : "2025-01-05"
+          "startDate": "2025-01-05"
         },
-        "remindEndOfDay"   : true,
+        "remindEndOfDay": true,
         "includeInBriefing": true,
-        "includeOnWebsite" : true,
-        "remindTomorrow"   : false
+        "includeOnWebsite": true,
+        "remindTomorrow": false
       }
     },
     {
-      "kind" : "owned",
+      "kind": "owned",
       "event": {
-        "id"               : "8c78efe1-5b5c-427c-b5e1-7249a7922606",
-        "archived"         : false,
-        "title"            : "Ghost Ops - 3h starts:00:00, 06:00, 12:00, 18:00",
-        "description"      : "",
-        "isAllDay"         : true,
-        "startTime"        : "09:00",
-        "endTime"          : "",
-        "days"             : ["thursday"],
-        "variations"       : {},
-        "recurrence"       : {
-          "type"       : "weeks",
-          "daysOfWeek" : ["thursday"],
-          "interval"   : 1,
-          "onPeriods"  : 1,
-          "offPeriods" : 0,
-          "startTag"   : "main",
+        "id": "8c78efe1-5b5c-427c-b5e1-7249a7922606",
+        "archived": false,
+        "title": "Ghost Ops - 3h starts:00:00, 06:00, 12:00, 18:00",
+        "description": "",
+        "isAllDay": true,
+        "startTime": "09:00",
+        "endTime": "",
+        "days": [
+          "thursday"
+        ],
+        "variations": {},
+        "recurrence": {
+          "type": "weeks",
+          "daysOfWeek": [
+            "thursday"
+          ],
+          "interval": 1,
+          "onPeriods": 1,
+          "offPeriods": 0,
+          "startTag": "main",
           "startOffset": -283,
-          "startDate"  : "2025-01-05"
+          "startDate": "2025-01-05"
         },
-        "includeOnWebsite" : true,
+        "includeOnWebsite": true,
         "includeInBriefing": true,
-        "remindTomorrow"   : true,
-        "order_value"      : 1
+        "remindTomorrow": true,
+        "order_value": 1
       }
     },
     {
-      "kind" : "owned",
+      "kind": "owned",
       "event": {
         "id": "5831a6ec-244d-40d2-88dc-81a7173ecffd",
         "archived": true,
@@ -903,78 +1117,99 @@
         "isAllDay": true,
         "startTime": "09:00",
         "endTime": "",
-        "days": ["sunday", "monday", "thursday", "friday"],
+        "days": [
+          "sunday",
+          "monday",
+          "thursday",
+          "friday"
+        ],
         "variations": {},
         "recurrence": {
-          "type"       : "weeks",
-          "daysOfWeek" : ["sunday", "monday", "thursday", "friday"],
-          "interval"   : 3,
-          "onPeriods"  : 1,
-          "offPeriods" : 0,
-          "startTag"   : "main",
+          "type": "weeks",
+          "daysOfWeek": [
+            "sunday",
+            "monday",
+            "thursday",
+            "friday"
+          ],
+          "interval": 3,
+          "onPeriods": 1,
+          "offPeriods": 0,
+          "startTag": "main",
           "startOffset": 269
         },
-        "dateIncludeOverrides": {"2025-07-10": false, "2025-07-11": false},
+        "dateIncludeOverrides": {
+          "2025-07-10": false,
+          "2025-07-11": false
+        },
         "includeOnWebsite": true,
         "remindTomorrow": true,
         "order_value": -1
       }
     },
     {
-      "kind" : "owned",
+      "kind": "owned",
       "event": {
-        "id"               : "89b95f35-ae1a-485b-8aee-f012c758fa7b",
-        "archived"         : true,
-        "title"            : "VS: Save SHINYs for Saturday - old",
-        "description"      : "",
-        "isAllDay"         : true,
-        "startTime"        : "09:00",
-        "endTime"          : "",
-        "days"             : ["friday"],
-        "variations"       : {},
-        "recurrence"       : {
-          "type"       : "weeks",
-          "onPeriods"  : 1,
-          "offPeriods" : 2,
-          "daysOfWeek" : ["friday"],
-          "startTag"   : "main",
+        "id": "89b95f35-ae1a-485b-8aee-f012c758fa7b",
+        "archived": true,
+        "title": "VS: Save SHINYs for Saturday - old",
+        "description": "",
+        "isAllDay": true,
+        "startTime": "09:00",
+        "endTime": "",
+        "days": [
+          "friday"
+        ],
+        "variations": {},
+        "recurrence": {
+          "type": "weeks",
+          "onPeriods": 1,
+          "offPeriods": 2,
+          "daysOfWeek": [
+            "friday"
+          ],
+          "startTag": "main",
           "startOffset": 416
         },
-        "includeOnWebsite" : true,
-        "remindTomorrow"   : true,
+        "includeOnWebsite": true,
+        "remindTomorrow": true,
         "includeInBriefing": true,
-        "order_value"      : -1
+        "order_value": -1
       }
     },
     {
-      "kind" : "owned",
+      "kind": "owned",
       "event": {
-        "id"               : "4af5277e-a46b-4407-94cc-66452e907f1d",
-        "archived"         : false,
-        "title"            : "Sky Predator",
-        "description"      : "",
-        "isAllDay"         : false,
-        "startTime"        : "21:00",
-        "endTime"          : "",
-        "days"             : ["wednesday"],
-        "variations"       : {},
-        "recurrence"       : {
-          "type"       : "weeks",
-          "daysOfWeek" : ["wednesday"],
-          "interval"   : 2,
-          "onPeriods"  : 1,
-          "offPeriods" : 1,
-          "startTag"   : "main",
+        "id": "4af5277e-a46b-4407-94cc-66452e907f1d",
+        "archived": false,
+        "title": "Sky Predator",
+        "description": "",
+        "isAllDay": false,
+        "startTime": "21:00",
+        "endTime": "",
+        "days": [
+          "wednesday"
+        ],
+        "variations": {},
+        "recurrence": {
+          "type": "weeks",
+          "daysOfWeek": [
+            "wednesday"
+          ],
+          "interval": 2,
+          "onPeriods": 1,
+          "offPeriods": 1,
+          "startTag": "main",
           "startOffset": 274,
-          "startDate"  : "2025-01-05"
+          "startDate": "2025-01-05"
         },
-        "remindTomorrow"   : true,
+        "remindTomorrow": true,
         "includeInBriefing": true,
-        "includeOnWebsite" : true
+        "includeOnWebsite": true
       }
     },
     {
-      "kind" : "owned",
+      "kind": "owned",
       "event": {
         "id": "e1a61d22-c57e-45aa-ab6c-d648c529bb89",
         "archived": false,
@@ -985,17 +1220,21 @@
         "isAllDay": true,
         "startTime": "09:00",
         "endTime": "",
-        "days": ["sunday"],
+        "days": [
+          "sunday"
+        ],
         "variations": {},
         "recurrence": {
-          "type"       : "weeks",
-          "onPeriods"  : 1,
-          "offPeriods" : 0,
-          "daysOfWeek" : ["sunday"],
-          "interval"   : 1,
-          "startTag"   : "main",
+          "type": "weeks",
+          "onPeriods": 1,
+          "offPeriods": 0,
+          "daysOfWeek": [
+            "sunday"
+          ],
+          "interval": 1,
+          "startTag": "main",
           "startOffset": -11,
-          "startDate"  : "2025-01-05"
+          "startDate": "2025-01-05"
         },
         "includeInBriefing": true,
         "includeOnWebsite": true,
@@ -1003,62 +1242,70 @@
       }
     },
     {
-      "kind" : "owned",
+      "kind": "owned",
       "event": {
-        "id"               : "fc3ef9fe-0e81-4a26-b693-448794954e61",
-        "archived"         : false,
-        "title"            : "Desert Storm registration - FINAL DAY (by 23:00)",
-        "description"      : "",
-        "remindTomorrow"   : true,
-        "remindEndOfDay"   : false,
-        "isAllDay"         : true,
-        "startTime"        : "09:00",
-        "endTime"          : "",
-        "days"             : ["wednesday"],
-        "variations"       : {},
-        "recurrence"       : {
-          "type"       : "days",
-          "onPeriods"  : 1,
-          "offPeriods" : 0,
-          "daysOfWeek" : ["wednesday"],
-          "interval"   : 1,
-          "startTag"   : "main",
+        "id": "fc3ef9fe-0e81-4a26-b693-448794954e61",
+        "archived": false,
+        "title": "Desert Storm registration - FINAL DAY (by 23:00)",
+        "description": "",
+        "remindTomorrow": true,
+        "remindEndOfDay": false,
+        "isAllDay": true,
+        "startTime": "09:00",
+        "endTime": "",
+        "days": [
+          "wednesday"
+        ],
+        "variations": {},
+        "recurrence": {
+          "type": "days",
+          "onPeriods": 1,
+          "offPeriods": 0,
+          "daysOfWeek": [
+            "wednesday"
+          ],
+          "interval": 1,
+          "startTag": "main",
           "startOffset": 342,
-          "startDate"  : "2025-01-05"
+          "startDate": "2025-01-05"
         },
         "includeInBriefing": true,
-        "includeOnWebsite" : true,
-        "order_value"      : 7
+        "includeOnWebsite": true,
+        "order_value": 7
       }
     },
     {
-      "kind" : "owned",
+      "kind": "owned",
       "event": {
-        "id"              : "6ea962c6-2e91-4a52-a670-eb4cd3c7d328",
-        "archived"        : false,
-        "title"           : "Capitol Event - Garrison the capitol",
-        "description"     : "",
-        "remindTomorrow"  : true,
-        "remindEndOfDay"  : true,
-        "isAllDay"        : false,
-        "startTime"       : "13:30",
-        "endTime"         : "14:00",
-        "days"            : ["sunday"],
-        "variations"      : {},
-        "recurrence"      : {
-          "type"       : "weeks",
-          "onPeriods"  : 1,
-          "offPeriods" : 99,
-          "daysOfWeek" : ["sunday"],
-          "interval"   : 1,
-          "startTag"   : "main",
+        "id": "6ea962c6-2e91-4a52-a670-eb4cd3c7d328",
+        "archived": false,
+        "title": "Capitol Event - Garrison the capitol",
+        "description": "",
+        "remindTomorrow": true,
+        "remindEndOfDay": true,
+        "isAllDay": false,
+        "startTime": "13:30",
+        "endTime": "14:00",
+        "days": [
+          "sunday"
+        ],
+        "variations": {},
+        "recurrence": {
+          "type": "weeks",
+          "onPeriods": 1,
+          "offPeriods": 99,
+          "daysOfWeek": [
+            "sunday"
+          ],
+          "interval": 1,
+          "startTag": "main",
           "startOffset": 346
         },
         "includeOnWebsite": true
       }
     },
     {
-      "kind" : "owned",
+      "kind": "owned",
       "event": {
         "id": "4b3d8da0-2fc8-461b-923e-7423a403c28b",
         "archived": false,
@@ -1069,233 +1316,281 @@
         "isAllDay": true,
         "startTime": "09:00",
         "endTime": "",
-        "days": ["sunday"],
+        "days": [
+          "sunday"
+        ],
         "variations": {},
         "recurrence": {
-          "type"       : "weeks",
-          "onPeriods"  : 1,
-          "offPeriods" : 0,
-          "daysOfWeek" : ["sunday"],
-          "interval"   : 1,
-          "startTag"   : "main",
+          "type": "weeks",
+          "onPeriods": 1,
+          "offPeriods": 0,
+          "daysOfWeek": [
+            "sunday"
+          ],
+          "interval": 1,
+          "startTag": "main",
           "startOffset": -284
         },
-        "dateIncludeOverrides": {"2025-09-21": false},
+        "dateIncludeOverrides": {
+          "2025-09-21": false
+        },
         "includeInBriefing": false,
         "includeOnWebsite": false,
         "order_value": 10
       }
     },
     {
-      "kind" : "owned",
+      "kind": "owned",
       "event": {
-        "id"               : "18acf2e1-218e-46c2-a9e4-3b21584523c6",
-        "title"            : "Gale Arena - Minimum 5 attempts - 3 likes",
-        "description"      : "",
-        "remindTomorrow"   : false,
-        "remindEndOfDay"   : true,
+        "id": "18acf2e1-218e-46c2-a9e4-3b21584523c6",
+        "title": "Gale Arena - Minimum 5 attempts - 3 likes",
+        "description": "",
+        "remindTomorrow": false,
+        "remindEndOfDay": true,
         "includeInBriefing": true,
-        "includeOnWebsite" : true,
-        "isAllDay"         : true,
-        "startTime"        : "09:00",
-        "endTime"          : "",
-        "days"             : [
-          "sunday",    "monday",    "tuesday",   "wednesday", "thursday",
-          "friday",    "saturday"
+        "includeOnWebsite": true,
+        "isAllDay": true,
+        "startTime": "09:00",
+        "endTime": "",
+        "days": [
+          "sunday",
+          "monday",
+          "tuesday",
+          "wednesday",
+          "thursday",
+          "friday",
+          "saturday"
         ],
-        "variations"       : {},
-        "archived"         : true,
-        "recurrence"       : {
-          "type"       : "weeks",
-          "onPeriods"  : 1,
-          "offPeriods" : 0,
-          "daysOfWeek" : [
-            "sunday",    "monday",    "tuesday",   "wednesday", "thursday",
-            "friday",    "saturday"
+        "variations": {},
+        "archived": true,
+        "recurrence": {
+          "type": "weeks",
+          "onPeriods": 1,
+          "offPeriods": 0,
+          "daysOfWeek": [
+            "sunday",
+            "monday",
+            "tuesday",
+            "wednesday",
+            "thursday",
+            "friday",
+            "saturday"
           ],
-          "interval"   : 1,
-          "startTag"   : "main",
+          "interval": 1,
+          "startTag": "main",
           "startOffset": -283
         }
       }
     },
     {
-      "kind" : "owned",
+      "kind": "owned",
       "event": {
-        "id"               : "8be87ab4-5f71-47a4-b29a-54058a4c4aac",
-        "title"            : "Free/300 Stamina",
-        "description"      : "",
-        "remindTomorrow"   : false,
-        "remindEndOfDay"   : true,
+        "id": "8be87ab4-5f71-47a4-b29a-54058a4c4aac",
+        "title": "Free/300 Stamina",
+        "description": "",
+        "remindTomorrow": false,
+        "remindEndOfDay": true,
         "includeInBriefing": false,
-        "includeOnWebsite" : false,
-        "isAllDay"         : true,
-        "startTime"        : "09:00",
-        "endTime"          : "",
-        "days"             : ["monday", "wednesday"],
-        "variations"       : {},
-        "archived"         : false,
-        "recurrence"       : {
-          "type"       : "weeks",
-          "onPeriods"  : 1,
-          "offPeriods" : 1,
-          "daysOfWeek" : ["monday", "wednesday"],
-          "interval"   : 1,
-          "startTag"   : "main",
-          "startOffset": -284,
-          "startDate"  : "2025-01-05"
-        },
-        "order_value"      : 10
-      }
-    },
-    {
-      "kind" : "owned",
-      "event": {
-        "id"               : "151805d5-5c6a-4cc0-a62b-9ab90c54d5a0",
-        "title"            : "Free/300/500 Stamina - Drone/Radar & Loot Goblins",
-        "description"      : "",
-        "remindTomorrow"   : false,
-        "remindEndOfDay"   : true,
-        "includeInBriefing": false,
-        "includeOnWebsite" : false,
-        "isAllDay"         : true,
-        "startTime"        : "09:00",
-        "endTime"          : "",
-        "days"             : ["tuesday"],
-        "variations"       : {},
-        "archived"         : false,
-        "recurrence"       : {
-          "type"       : "weeks",
-          "onPeriods"  : 1,
-          "offPeriods" : 1,
-          "daysOfWeek" : ["tuesday"],
-          "interval"   : 1,
-          "startTag"   : "main",
-          "startOffset": -277,
-          "startDate"  : "2025-01-05"
-        },
-        "order_value"      : 10
-      }
-    },
-    {
-      "kind" : "owned",
-      "event": {
-        "id"               : "04434cb7-53c9-4aa5-b7a7-0dac1f6239c1",
-        "title"            : "Canyon Storm - Early",
-        "description"      : "",
-        "remindTomorrow"   : true,
-        "remindEndOfDay"   : false,
-        "includeInBriefing": true,
-        "includeOnWebsite" : true,
-        "isAllDay"         : false,
-        "startTime"        : "12:00",
-        "endTime"          : "",
-        "days"             : ["thursday"],
-        "variations"       : {},
-        "archived"         : false,
-        "recurrence"       : {
-          "type"       : "weeks",
-          "onPeriods"  : 1,
-          "offPeriods" : 0,
-          "daysOfWeek" : ["thursday"],
-          "interval"   : 1,
-          "startTag"   : "main",
-          "startOffset": -284,
-          "startDate"  : "2025-01-05"
-        },
-        "order_value"      : 6
-      }
-    },
-    {
-      "kind" : "owned",
-      "event": {
-        "id"               : "1ae7c08b-29e3-4ef3-a00f-ccc19f155ddb",
-        "title"            : "Sandworm (Alliance Exercise)",
-        "description"      : "",
-        "remindTomorrow"   : true,
-        "remindEndOfDay"   : false,
-        "includeInBriefing": true,
-        "includeOnWebsite" : true,
-        "isAllDay"         : false,
-        "startTime"        : "21:40",
-        "endTime"          : "",
-        "days"             : [
-          "sunday",    "monday",    "tuesday",   "wednesday", "thursday",
-          "friday",    "saturday"
+        "includeOnWebsite": false,
+        "isAllDay": true,
+        "startTime": "09:00",
+        "endTime": "",
+        "days": [
+          "monday",
+          "wednesday"
         ],
-        "variations"       : {},
-        "archived"         : true,
-        "recurrence"       : {
-          "type"       : "days",
-          "onPeriods"  : 1,
-          "offPeriods" : 1,
-          "daysOfWeek" : [
-            "sunday",    "monday",    "tuesday",   "wednesday", "thursday",
-            "friday",    "saturday"
+        "variations": {},
+        "archived": false,
+        "recurrence": {
+          "type": "weeks",
+          "onPeriods": 1,
+          "offPeriods": 1,
+          "daysOfWeek": [
+            "monday",
+            "wednesday"
           ],
-          "interval"   : 1,
-          "startTag"   : "main",
+          "interval": 1,
+          "startTag": "main",
+          "startOffset": -284,
+          "startDate": "2025-01-05"
+        },
+        "order_value": 10
+      }
+    },
+    {
+      "kind": "owned",
+      "event": {
+        "id": "151805d5-5c6a-4cc0-a62b-9ab90c54d5a0",
+        "title": "Free/300/500 Stamina - Drone/Radar & Loot Goblins",
+        "description": "",
+        "remindTomorrow": false,
+        "remindEndOfDay": true,
+        "includeInBriefing": false,
+        "includeOnWebsite": false,
+        "isAllDay": true,
+        "startTime": "09:00",
+        "endTime": "",
+        "days": [
+          "tuesday"
+        ],
+        "variations": {},
+        "archived": false,
+        "recurrence": {
+          "type": "weeks",
+          "onPeriods": 1,
+          "offPeriods": 1,
+          "daysOfWeek": [
+            "tuesday"
+          ],
+          "interval": 1,
+          "startTag": "main",
+          "startOffset": -277,
+          "startDate": "2025-01-05"
+        },
+        "order_value": 10
+      }
+    },
+    {
+      "kind": "owned",
+      "event": {
+        "id": "04434cb7-53c9-4aa5-b7a7-0dac1f6239c1",
+        "title": "Canyon Storm - Early",
+        "description": "",
+        "remindTomorrow": true,
+        "remindEndOfDay": false,
+        "includeInBriefing": true,
+        "includeOnWebsite": true,
+        "isAllDay": false,
+        "startTime": "12:00",
+        "endTime": "",
+        "days": [
+          "thursday"
+        ],
+        "variations": {},
+        "archived": false,
+        "recurrence": {
+          "type": "weeks",
+          "onPeriods": 1,
+          "offPeriods": 0,
+          "daysOfWeek": [
+            "thursday"
+          ],
+          "interval": 1,
+          "startTag": "main",
+          "startOffset": -284,
+          "startDate": "2025-01-05"
+        },
+        "order_value": 6
+      }
+    },
+    {
+      "kind": "owned",
+      "event": {
+        "id": "1ae7c08b-29e3-4ef3-a00f-ccc19f155ddb",
+        "title": "Sandworm (Alliance Exercise)",
+        "description": "",
+        "remindTomorrow": true,
+        "remindEndOfDay": false,
+        "includeInBriefing": true,
+        "includeOnWebsite": true,
+        "isAllDay": false,
+        "startTime": "21:40",
+        "endTime": "",
+        "days": [
+          "sunday",
+          "monday",
+          "tuesday",
+          "wednesday",
+          "thursday",
+          "friday",
+          "saturday"
+        ],
+        "variations": {},
+        "archived": true,
+        "recurrence": {
+          "type": "days",
+          "onPeriods": 1,
+          "offPeriods": 1,
+          "daysOfWeek": [
+            "sunday",
+            "monday",
+            "tuesday",
+            "wednesday",
+            "thursday",
+            "friday",
+            "saturday"
+          ],
+          "interval": 1,
+          "startTag": "main",
           "startOffset": 3
         }
       }
     },
     {
-      "kind" : "owned",
+      "kind": "owned",
       "event": {
-        "id"               : "aef21a44-6c6d-4d0d-8370-0053190f21b5",
-        "title"            : "Capitol Conquest",
-        "description"      : "",
-        "remindTomorrow"   : true,
-        "remindEndOfDay"   : false,
+        "id": "aef21a44-6c6d-4d0d-8370-0053190f21b5",
+        "title": "Capitol Conquest",
+        "description": "",
+        "remindTomorrow": true,
+        "remindEndOfDay": false,
         "includeInBriefing": true,
-        "includeOnWebsite" : true,
-        "isAllDay"         : false,
-        "startTime"        : "12:00",
-        "endTime"          : "",
-        "days"             : ["friday"],
-        "variations"       : {},
-        "archived"         : true,
-        "recurrence"       : {
-          "type"       : "weeks",
-          "onPeriods"  : 1,
-          "offPeriods" : 0,
-          "daysOfWeek" : ["friday"],
-          "interval"   : 1,
-          "startTag"   : "main",
+        "includeOnWebsite": true,
+        "isAllDay": false,
+        "startTime": "12:00",
+        "endTime": "",
+        "days": [
+          "friday"
+        ],
+        "variations": {},
+        "archived": true,
+        "recurrence": {
+          "type": "weeks",
+          "onPeriods": 1,
+          "offPeriods": 0,
+          "daysOfWeek": [
+            "friday"
+          ],
+          "interval": 1,
+          "startTag": "main",
           "startOffset": 398
         }
       }
     },
     {
-      "kind" : "owned",
+      "kind": "owned",
       "event": {
-        "id"               : "d60cae98-2318-4856-a8e0-b68c567f8306",
-        "title"            : "Canyon Storm - Late",
-        "description"      : "",
-        "remindTomorrow"   : true,
-        "remindEndOfDay"   : false,
+        "id": "d60cae98-2318-4856-a8e0-b68c567f8306",
+        "title": "Canyon Storm - Late",
+        "description": "",
+        "remindTomorrow": true,
+        "remindEndOfDay": false,
         "includeInBriefing": true,
-        "includeOnWebsite" : true,
-        "isAllDay"         : false,
-        "startTime"        : "23:00",
-        "endTime"          : "",
-        "days"             : ["thursday"],
-        "variations"       : {},
-        "archived"         : false,
-        "recurrence"       : {
-          "type"       : "weeks",
-          "onPeriods"  : 1,
-          "offPeriods" : 0,
-          "daysOfWeek" : ["thursday"],
-          "interval"   : 1,
-          "startTag"   : "main",
+        "includeOnWebsite": true,
+        "isAllDay": false,
+        "startTime": "23:00",
+        "endTime": "",
+        "days": [
+          "thursday"
+        ],
+        "variations": {},
+        "archived": false,
+        "recurrence": {
+          "type": "weeks",
+          "onPeriods": 1,
+          "offPeriods": 0,
+          "daysOfWeek": [
+            "thursday"
+          ],
+          "interval": 1,
+          "startTag": "main",
           "startOffset": -284,
-          "startDate"  : "2025-01-05"
+          "startDate": "2025-01-05"
         }
       }
     },
     {
-      "kind" : "owned",
+      "kind": "owned",
       "event": {
         "id": "ev-2",
         "title": "Wanted Boss: Code 87/64/39",
@@ -1304,28 +1599,36 @@
         "startTime": "09:00",
         "endTime": "10:00",
         "days": [
-          "monday",    "thursday",  "tuesday",   "wednesday", "friday",
+          "monday",
+          "thursday",
+          "tuesday",
+          "wednesday",
+          "friday",
           "saturday"
         ],
         "variations": {},
         "archived": true,
         "recurrence": {
-          "type"       : "weeks",
-          "daysOfWeek" : [
-            "monday",    "thursday",  "tuesday",   "wednesday", "friday",
+          "type": "weeks",
+          "daysOfWeek": [
+            "monday",
+            "thursday",
+            "tuesday",
+            "wednesday",
+            "friday",
             "saturday"
           ],
-          "interval"   : 1,
-          "onPeriods"  : 1,
-          "offPeriods" : 0,
-          "startTag"   : "main",
+          "interval": 1,
+          "onPeriods": 1,
+          "offPeriods": 0,
+          "startTag": "main",
           "startOffset": -283
         },
         "includeOnWebsite": true
       }
     },
     {
-      "kind" : "owned",
+      "kind": "owned",
       "event": {
         "id": "ev-1739559151491",
         "title": "Season II - Crimson Legion",
@@ -1333,16 +1636,22 @@
         "isAllDay": false,
         "startTime": "12:00",
         "endTime": "13:00",
-        "days": ["tuesday", "friday"],
+        "days": [
+          "tuesday",
+          "friday"
+        ],
         "variations": {},
         "archived": true,
         "recurrence": {
-          "type"       : "weeks",
-          "daysOfWeek" : ["tuesday", "friday"],
-          "interval"   : 1,
-          "onPeriods"  : 1,
-          "offPeriods" : 0,
-          "startTag"   : "main",
+          "type": "weeks",
+          "daysOfWeek": [
+            "tuesday",
+            "friday"
+          ],
+          "interval": 1,
+          "onPeriods": 1,
+          "offPeriods": 0,
+          "startTag": "main",
           "startOffset": 417
         },
         "includeInBriefing": true,
@@ -1350,7 +1659,7 @@
       }
     },
     {
-      "kind" : "owned",
+      "kind": "owned",
       "event": {
         "id": "0966e2c0-e0d7-41ea-9a8b-16453388e178",
         "title": "Warzone Duel: Capitol War",
@@ -1358,24 +1667,30 @@
         "isAllDay": false,
         "startTime": "12:00",
         "endTime": "",
-        "days": ["saturday"],
+        "days": [
+          "saturday"
+        ],
         "variations": {},
         "archived": true,
         "recurrence": {
-          "type"       : "weeks",
-          "daysOfWeek" : ["saturday"],
-          "interval"   : 1,
-          "onPeriods"  : 1,
-          "offPeriods" : 0,
-          "startTag"   : "main",
+          "type": "weeks",
+          "daysOfWeek": [
+            "saturday"
+          ],
+          "interval": 1,
+          "onPeriods": 1,
+          "offPeriods": 0,
+          "startTag": "main",
           "startOffset": 153
         },
-        "dateIncludeOverrides": {"2025-05-03": false},
+        "dateIncludeOverrides": {
+          "2025-05-03": false
+        },
         "includeOnWebsite": true
       }
     },
     {
-      "kind" : "owned",
+      "kind": "owned",
       "event": {
         "id": "0cdd036c-c5fc-4bb6-8c4a-85bcec205e61",
         "title": "Mason: Strike Back (Ironclad Vehicle)",
@@ -1383,16 +1698,22 @@
         "isAllDay": true,
         "startTime": "09:00",
         "endTime": "",
-        "days": ["tuesday", "monday"],
+        "days": [
+          "tuesday",
+          "monday"
+        ],
         "variations": {},
         "archived": true,
         "recurrence": {
-          "type"       : "weeks",
-          "daysOfWeek" : ["tuesday", "monday"],
-          "interval"   : 2,
-          "onPeriods"  : 1,
-          "offPeriods" : 0,
-          "startTag"   : "main",
+          "type": "weeks",
+          "daysOfWeek": [
+            "tuesday",
+            "monday"
+          ],
+          "interval": 2,
+          "onPeriods": 1,
+          "offPeriods": 0,
+          "startTag": "main",
           "startOffset": -283
         },
         "dateIncludeOverrides": {},
@@ -1400,7 +1721,7 @@
       }
     },
     {
-      "kind" : "owned",
+      "kind": "owned",
       "event": {
         "id": "c0a5849e-5065-450d-ac67-5dd9f5b138c9",
         "title": "Season I Celebration → Championship Duel → Predicts ",
@@ -1408,24 +1729,37 @@
         "isAllDay": true,
         "startTime": "09:00",
         "endTime": "",
-        "days": ["monday", "tuesday", "wednesday", "thursday"],
+        "days": [
+          "monday",
+          "tuesday",
+          "wednesday",
+          "thursday"
+        ],
         "variations": {},
         "archived": true,
         "recurrence": {
-          "type"       : "weeks",
-          "daysOfWeek" : ["monday", "tuesday", "wednesday", "thursday"],
-          "interval"   : 1,
-          "onPeriods"  : 1,
-          "offPeriods" : 0,
-          "startTag"   : "main",
+          "type": "weeks",
+          "daysOfWeek": [
+            "monday",
+            "tuesday",
+            "wednesday",
+            "thursday"
+          ],
+          "interval": 1,
+          "onPeriods": 1,
+          "offPeriods": 0,
+          "startTag": "main",
           "startOffset": -283
         },
-        "dateIncludeOverrides": {"2025-04-08": true, "2025-04-09": true},
+        "dateIncludeOverrides": {
+          "2025-04-08": true,
+          "2025-04-09": true
+        },
         "includeOnWebsite": true
       }
     },
     {
-      "kind" : "owned",
+      "kind": "owned",
       "event": {
         "id": "1d5cdb18-023b-4511-a73e-0ed1d300b76f",
         "title": "Season II Celebration → Black Market",
@@ -1434,21 +1768,31 @@
         "startTime": "09:00",
         "endTime": "",
         "days": [
-          "sunday",    "monday",    "tuesday",   "wednesday", "thursday",
-          "friday",    "saturday"
+          "sunday",
+          "monday",
+          "tuesday",
+          "wednesday",
+          "thursday",
+          "friday",
+          "saturday"
         ],
         "variations": {},
         "archived": true,
         "recurrence": {
-          "type"       : "days",
-          "daysOfWeek" : [
-            "sunday",    "monday",    "tuesday",   "wednesday", "thursday",
-            "friday",    "saturday"
+          "type": "days",
+          "daysOfWeek": [
+            "sunday",
+            "monday",
+            "tuesday",
+            "wednesday",
+            "thursday",
+            "friday",
+            "saturday"
           ],
-          "interval"   : 1,
-          "onPeriods"  : 1,
-          "offPeriods" : 0,
-          "startTag"   : "main",
+          "interval": 1,
+          "onPeriods": 1,
+          "offPeriods": 0,
+          "startTag": "main",
           "startOffset": 180
         },
         "dateIncludeOverrides": {
@@ -1474,7 +1818,7 @@
       }
     },
     {
-      "kind" : "owned",
+      "kind": "owned",
       "event": {
         "id": "5870d28b-5d10-4dd9-83fb-612e4c28e0b0",
         "title": "Meteorite - Round 1",
@@ -1482,28 +1826,35 @@
         "isAllDay": false,
         "startTime": "00:10",
         "endTime": "00:40",
-        "days": ["saturday"],
+        "days": [
+          "saturday"
+        ],
         "variations": {},
         "archived": false,
         "recurrence": {
-          "type"       : "weeks",
-          "daysOfWeek" : ["saturday"],
-          "interval"   : 1,
-          "onPeriods"  : 1,
-          "offPeriods" : 0,
-          "startTag"   : "main",
+          "type": "weeks",
+          "daysOfWeek": [
+            "saturday"
+          ],
+          "interval": 1,
+          "onPeriods": 1,
+          "offPeriods": 0,
+          "startTag": "main",
           "startOffset": -283,
-          "startDate"  : "2025-01-05",
-          "endOffset"  : 639
+          "startDate": "2025-01-05",
+          "endOffset": 639
         },
-        "dateIncludeOverrides": {"2025-05-03": true, "2025-07-05": true},
+        "dateIncludeOverrides": {
+          "2025-05-03": true,
+          "2025-07-05": true
+        },
         "includeOnWebsite": true,
         "includeInBriefing": true,
         "remindTomorrow": true
       }
     },
     {
-      "kind" : "owned",
+      "kind": "owned",
       "event": {
         "id": "a061f2df-34c9-4bdd-9fa2-a95e11470268",
         "title": "Meteorite - Round 2",
@@ -1511,104 +1862,127 @@
         "isAllDay": false,
         "startTime": "12:30",
         "endTime": "13:00",
-        "days": ["saturday"],
+        "days": [
+          "saturday"
+        ],
         "variations": {},
         "archived": false,
         "recurrence": {
-          "type"       : "weeks",
-          "daysOfWeek" : ["saturday"],
-          "interval"   : 1,
-          "onPeriods"  : 1,
-          "offPeriods" : 0,
-          "startTag"   : "main",
+          "type": "weeks",
+          "daysOfWeek": [
+            "saturday"
+          ],
+          "interval": 1,
+          "onPeriods": 1,
+          "offPeriods": 0,
+          "startTag": "main",
           "startOffset": 205,
-          "startDate"  : "2025-01-05",
-          "endOffset"  : 639
+          "startDate": "2025-01-05",
+          "endOffset": 639
         },
-        "dateIncludeOverrides": {"2025-05-03": true, "2025-07-19": true},
+        "dateIncludeOverrides": {
+          "2025-05-03": true,
+          "2025-07-19": true
+        },
         "includeOnWebsite": true,
         "includeInBriefing": true,
         "remindTomorrow": true
       }
     },
     {
-      "kind" : "owned",
+      "kind": "owned",
       "event": {
-        "id"              : "5a015825-f2c7-44ce-81c6-c09bcff682e2",
-        "title"           : "Beast Crisis",
-        "description"     : "",
-        "isAllDay"        : false,
-        "startTime"       : "12:00",
-        "endTime"         : "12:35",
-        "days"            : ["tuesday", "friday"],
-        "variations"      : {},
-        "archived"        : true,
-        "recurrence"      : {
-          "type"       : "weeks",
-          "daysOfWeek" : ["tuesday", "friday"],
-          "interval"   : 1,
-          "onPeriods"  : 1,
-          "offPeriods" : 0,
-          "startTag"   : "main",
+        "id": "5a015825-f2c7-44ce-81c6-c09bcff682e2",
+        "title": "Beast Crisis",
+        "description": "",
+        "isAllDay": false,
+        "startTime": "12:00",
+        "endTime": "12:35",
+        "days": [
+          "tuesday",
+          "friday"
+        ],
+        "variations": {},
+        "archived": true,
+        "recurrence": {
+          "type": "weeks",
+          "daysOfWeek": [
+            "tuesday",
+            "friday"
+          ],
+          "interval": 1,
+          "onPeriods": 1,
+          "offPeriods": 0,
+          "startTag": "main",
           "startOffset": 224
         },
         "includeOnWebsite": true,
-        "order_value"     : 4
+        "order_value": 4
       }
     },
     {
-      "kind" : "owned",
+      "kind": "owned",
       "event": {
-        "id"              : "1f65fd3a-b31b-4d67-9d46-0a53606e79a4",
-        "title"           : "Rare Soil War",
-        "description"     : "",
-        "isAllDay"        : false,
-        "startTime"       : "12:30",
-        "endTime"         : "13:10",
-        "days"            : ["wednesday", "saturday"],
-        "variations"      : {},
-        "archived"        : true,
-        "recurrence"      : {
-          "type"       : "weeks",
-          "daysOfWeek" : ["wednesday", "saturday"],
-          "interval"   : 1,
-          "onPeriods"  : 1,
-          "offPeriods" : 0,
-          "startTag"   : "main",
+        "id": "1f65fd3a-b31b-4d67-9d46-0a53606e79a4",
+        "title": "Rare Soil War",
+        "description": "",
+        "isAllDay": false,
+        "startTime": "12:30",
+        "endTime": "13:10",
+        "days": [
+          "wednesday",
+          "saturday"
+        ],
+        "variations": {},
+        "archived": true,
+        "recurrence": {
+          "type": "weeks",
+          "daysOfWeek": [
+            "wednesday",
+            "saturday"
+          ],
+          "interval": 1,
+          "onPeriods": 1,
+          "offPeriods": 0,
+          "startTag": "main",
           "startOffset": 224
         },
         "includeOnWebsite": true
       }
     },
     {
-      "kind" : "owned",
+      "kind": "owned",
       "event": {
-        "id"               : "e05c1e28-c800-48d1-8d3a-53898d5f2923",
-        "title"            : "Glacieradon",
-        "description"      : "",
-        "isAllDay"         : false,
-        "startTime"        : "21:00",
-        "endTime"          : "",
-        "days"             : ["wednesday"],
-        "variations"       : {},
-        "archived"         : false,
-        "recurrence"       : {
-          "type"       : "weeks",
-          "onPeriods"  : 1,
-          "offPeriods" : 1,
-          "daysOfWeek" : ["wednesday"],
-          "interval"   : 1,
-          "startTag"   : "main",
+        "id": "e05c1e28-c800-48d1-8d3a-53898d5f2923",
+        "title": "Glacieradon",
+        "description": "",
+        "isAllDay": false,
+        "startTime": "21:00",
+        "endTime": "",
+        "days": [
+          "wednesday"
+        ],
+        "variations": {},
+        "archived": false,
+        "recurrence": {
+          "type": "weeks",
+          "onPeriods": 1,
+          "offPeriods": 1,
+          "daysOfWeek": [
+            "wednesday"
+          ],
+          "interval": 1,
+          "startTag": "main",
           "startOffset": 297,
-          "startDate"  : "2025-01-05"
+          "startDate": "2025-01-05"
         },
-        "remindTomorrow"   : true,
+        "remindTomorrow": true,
         "includeInBriefing": true,
-        "includeOnWebsite" : true
+        "includeOnWebsite": true
       }
     },
     {
-      "kind" : "owned",
+      "kind": "owned",
       "event": {
         "id": "16f2e4b5-58d7-4c14-b409-ef1e3e1b84c6",
         "title": "Season III - Return of the Dead - Defend Alliance Center",
@@ -1616,16 +1990,22 @@
         "isAllDay": false,
         "startTime": "11:00",
         "endTime": "11:30",
-        "days": ["tuesday", "friday"],
+        "days": [
+          "tuesday",
+          "friday"
+        ],
         "variations": {},
         "archived": true,
         "recurrence": {
-          "type"       : "weeks",
-          "daysOfWeek" : ["tuesday", "friday"],
-          "interval"   : 1,
-          "onPeriods"  : 1,
-          "offPeriods" : 0,
-          "startTag"   : "main",
+          "type": "weeks",
+          "daysOfWeek": [
+            "tuesday",
+            "friday"
+          ],
+          "interval": 1,
+          "onPeriods": 1,
+          "offPeriods": 0,
+          "startTag": "main",
           "startOffset": 329
         },
         "remindTomorrow": true,
@@ -1634,60 +2014,70 @@
       }
     },
     {
-      "kind" : "owned",
+      "kind": "owned",
       "event": {
-        "id"              : "e41e6e5f-79c4-4927-9030-ced38b9229b6",
-        "title"           : "Spice Wars Battle!",
-        "description"     : "",
-        "remindTomorrow"  : true,
-        "remindEndOfDay"  : true,
-        "isAllDay"        : false,
-        "startTime"       : "12:30",
-        "endTime"         : "",
-        "days"            : ["wednesday", "saturday"],
-        "variations"      : {},
-        "archived"        : true,
-        "recurrence"      : {
-          "type"       : "weeks",
-          "onPeriods"  : 1,
-          "offPeriods" : 0,
-          "daysOfWeek" : ["wednesday", "saturday"],
-          "interval"   : 1,
-          "startTag"   : "main",
+        "id": "e41e6e5f-79c4-4927-9030-ced38b9229b6",
+        "title": "Spice Wars Battle!",
+        "description": "",
+        "remindTomorrow": true,
+        "remindEndOfDay": true,
+        "isAllDay": false,
+        "startTime": "12:30",
+        "endTime": "",
+        "days": [
+          "wednesday",
+          "saturday"
+        ],
+        "variations": {},
+        "archived": true,
+        "recurrence": {
+          "type": "weeks",
+          "onPeriods": 1,
+          "offPeriods": 0,
+          "daysOfWeek": [
+            "wednesday",
+            "saturday"
+          ],
+          "interval": 1,
+          "startTag": "main",
           "startOffset": 341
         },
         "includeOnWebsite": true
       }
     },
     {
-      "kind" : "owned",
+      "kind": "owned",
       "event": {
-        "id"               : "83c5acdd-07b9-4dee-b85c-27ef30fb10bd",
-        "title"            : "Season III - Capture Level 4 Trading Post",
-        "description"      : "",
-        "remindTomorrow"   : true,
-        "remindEndOfDay"   : true,
-        "isAllDay"         : false,
-        "startTime"        : "11:00",
-        "endTime"          : "",
-        "days"             : ["thursday"],
-        "variations"       : {},
-        "archived"         : true,
-        "recurrence"       : {
-          "type"       : "weeks",
-          "onPeriods"  : 1,
-          "offPeriods" : 0,
-          "daysOfWeek" : ["thursday"],
-          "interval"   : 1,
-          "startTag"   : "main",
+        "id": "83c5acdd-07b9-4dee-b85c-27ef30fb10bd",
+        "title": "Season III - Capture Level 4 Trading Post",
+        "description": "",
+        "remindTomorrow": true,
+        "remindEndOfDay": true,
+        "isAllDay": false,
+        "startTime": "11:00",
+        "endTime": "",
+        "days": [
+          "thursday"
+        ],
+        "variations": {},
+        "archived": true,
+        "recurrence": {
+          "type": "weeks",
+          "onPeriods": 1,
+          "offPeriods": 0,
+          "daysOfWeek": [
+            "thursday"
+          ],
+          "interval": 1,
+          "startTag": "main",
           "startOffset": 336
         },
         "includeInBriefing": true,
-        "includeOnWebsite" : true
+        "includeOnWebsite": true
       }
     },
     {
-      "kind" : "owned",
+      "kind": "owned",
       "event": {
         "id": "226d3b1b-ce75-444f-ac11-5ee3fe3af4b4",
         "title": "Hot Deals → Bounty Hunter",
@@ -1698,23 +2088,31 @@
         "startTime": "09:00",
         "endTime": "",
         "days": [
-          "sunday",    "tuesday",   "wednesday", "thursday",  "friday",
+          "sunday",
+          "tuesday",
+          "wednesday",
+          "thursday",
+          "friday",
           "saturday"
         ],
         "variations": {},
         "archived": false,
         "recurrence": {
-          "type"       : "weeks",
-          "daysOfWeek" : [
-            "sunday",    "tuesday",   "wednesday", "thursday",  "friday",
+          "type": "weeks",
+          "daysOfWeek": [
+            "sunday",
+            "tuesday",
+            "wednesday",
+            "thursday",
+            "friday",
             "saturday"
           ],
-          "interval"   : 1,
-          "onPeriods"  : 1,
-          "offPeriods" : 3,
-          "startTag"   : "main",
+          "interval": 1,
+          "onPeriods": 1,
+          "offPeriods": 3,
+          "startTag": "main",
           "startOffset": 635,
-          "startDate"  : "2025-01-05"
+          "startDate": "2025-01-05"
         },
         "includeOnWebsite": true,
         "includeInBriefing": true,
@@ -1722,34 +2120,38 @@
       }
     },
     {
-      "kind" : "owned",
+      "kind": "owned",
       "event": {
-        "id"               : "516e99c1-b08f-49fb-afa4-825b76080229",
-        "title"            : "VS: Save SHINYs for Saturday",
-        "description"      : "",
-        "remindTomorrow"   : true,
-        "remindEndOfDay"   : false,
+        "id": "516e99c1-b08f-49fb-afa4-825b76080229",
+        "title": "VS: Save SHINYs for Saturday",
+        "description": "",
+        "remindTomorrow": true,
+        "remindEndOfDay": false,
         "includeInBriefing": true,
-        "includeOnWebsite" : true,
-        "isAllDay"         : true,
-        "startTime"        : "09:00",
-        "endTime"          : "",
-        "days"             : ["friday"],
-        "variations"       : {},
-        "archived"         : false,
-        "recurrence"       : {
-          "type"       : "weeks",
-          "onPeriods"  : 1,
-          "offPeriods" : 2,
-          "daysOfWeek" : ["friday"],
-          "startTag"   : "main",
+        "includeOnWebsite": true,
+        "isAllDay": true,
+        "startTime": "09:00",
+        "endTime": "",
+        "days": [
+          "friday"
+        ],
+        "variations": {},
+        "archived": false,
+        "recurrence": {
+          "type": "weeks",
+          "onPeriods": 1,
+          "offPeriods": 2,
+          "daysOfWeek": [
+            "friday"
+          ],
+          "startTag": "main",
           "startOffset": 416
         },
-        "order_value"      : -1
+        "order_value": -1
       }
     },
     {
-      "kind" : "owned",
+      "kind": "owned",
       "event": {
         "id": "f948a0fc-4ef5-4ba0-8458-8612c29a4537",
         "title": "Register for Canyon Storm",
@@ -1761,50 +2163,58 @@
         "isAllDay": true,
         "startTime": "09:00",
         "endTime": "",
-        "days": ["sunday"],
+        "days": [
+          "sunday"
+        ],
         "variations": {},
         "archived": false,
         "recurrence": {
-          "type"       : "weeks",
-          "onPeriods"  : 1,
-          "offPeriods" : 0,
-          "daysOfWeek" : ["sunday"],
-          "startTag"   : "main",
+          "type": "weeks",
+          "onPeriods": 1,
+          "offPeriods": 0,
+          "daysOfWeek": [
+            "sunday"
+          ],
+          "startTag": "main",
           "startOffset": -283,
-          "startDate"  : "2025-01-05"
+          "startDate": "2025-01-05"
         },
         "order_value": 7
       }
     },
     {
-      "kind" : "owned",
+      "kind": "owned",
       "event": {
-        "id"               : "183e0c1e-249f-47f6-8324-b155e4efb389",
-        "title"            : "Register for Canyon Storm - Due 1 hour before reset",
-        "description"      : "",
-        "remindTomorrow"   : true,
-        "remindEndOfDay"   : false,
+        "id": "183e0c1e-249f-47f6-8324-b155e4efb389",
+        "title": "Register for Canyon Storm - Due 1 hour before reset",
+        "description": "",
+        "remindTomorrow": true,
+        "remindEndOfDay": false,
         "includeInBriefing": true,
-        "includeOnWebsite" : true,
-        "isAllDay"         : true,
-        "startTime"        : "09:00",
-        "endTime"          : "",
-        "days"             : ["monday"],
-        "variations"       : {},
-        "archived"         : false,
-        "recurrence"       : {
-          "type"       : "weeks",
-          "onPeriods"  : 1,
-          "offPeriods" : 0,
-          "daysOfWeek" : ["monday"],
-          "startTag"   : "main",
+        "includeOnWebsite": true,
+        "isAllDay": true,
+        "startTime": "09:00",
+        "endTime": "",
+        "days": [
+          "monday"
+        ],
+        "variations": {},
+        "archived": false,
+        "recurrence": {
+          "type": "weeks",
+          "onPeriods": 1,
+          "offPeriods": 0,
+          "daysOfWeek": [
+            "monday"
+          ],
+          "startTag": "main",
           "startOffset": -283
         },
-        "order_value"      : 7
+        "order_value": 7
       }
     },
     {
-      "kind" : "owned",
+      "kind": "owned",
       "event": {
         "id": "63321d8e-d4e1-48cf-bdf8-69b8ae9c4599",
         "title": "VS: Construction, UR Trucks/Tasks, Survivors, Armament Material, SAVE Radar",
@@ -1816,279 +2226,514 @@
         "isAllDay": true,
         "startTime": "09:00",
         "endTime": "",
-        "days": ["tuesday"],
+        "days": [
+          "tuesday"
+        ],
         "variations": {},
         "archived": false,
         "recurrence": {
-          "type"       : "weeks",
-          "daysOfWeek" : ["tuesday"],
-          "onPeriods"  : 1,
-          "offPeriods" : 0,
-          "startDate"  : "2026-07-07",
-          "startTag"   : "main",
+          "type": "weeks",
+          "daysOfWeek": [
+            "tuesday"
+          ],
+          "onPeriods": 1,
+          "offPeriods": 0,
+          "startDate": "2026-07-07",
+          "startTag": "main",
           "startOffset": -4
         },
         "order_value": -1
       }
     },
     {
-      "kind" : "owned",
+      "kind": "owned",
       "event": {
-        "id"               : "ad8755ba-ee0d-4cb3-8c3b-8aa5aa22e3f9",
-        "title"            : "VS: Research, Radar, Drone Components",
-        "description"      : "",
-        "remindTomorrow"   : true,
-        "remindEndOfDay"   : false,
+        "id": "ad8755ba-ee0d-4cb3-8c3b-8aa5aa22e3f9",
+        "title": "VS: Research, Radar, Drone Components",
+        "description": "",
+        "remindTomorrow": true,
+        "remindEndOfDay": false,
         "includeInBriefing": true,
-        "includeOnWebsite" : true,
-        "isAllDay"         : true,
-        "startTime"        : "09:00",
-        "endTime"          : "",
-        "days"             : ["wednesday"],
-        "variations"       : {},
-        "archived"         : false,
-        "recurrence"       : {
-          "type"       : "weeks",
-          "daysOfWeek" : ["wednesday"],
-          "onPeriods"  : 1,
-          "offPeriods" : 0,
-          "startDate"  : "2026-07-08",
-          "startTag"   : "main",
+        "includeOnWebsite": true,
+        "isAllDay": true,
+        "startTime": "09:00",
+        "endTime": "",
+        "days": [
+          "wednesday"
+        ],
+        "variations": {},
+        "archived": false,
+        "recurrence": {
+          "type": "weeks",
+          "daysOfWeek": [
+            "wednesday"
+          ],
+          "onPeriods": 1,
+          "offPeriods": 0,
+          "startDate": "2026-07-08",
+          "startTag": "main",
           "startOffset": -4
         },
-        "order_value"      : -1
+        "order_value": -1
       }
     },
     {
-      "kind" : "owned",
+      "kind": "owned",
       "event": {
-        "id"               : "5d775721-b174-405a-9f95-1045c52954c4",
-        "title"            : "Alliance Exercise",
-        "description"      : "",
-        "remindTomorrow"   : true,
-        "remindEndOfDay"   : false,
+        "id": "5d775721-b174-405a-9f95-1045c52954c4",
+        "title": "Alliance Exercise",
+        "description": "",
+        "remindTomorrow": true,
+        "remindEndOfDay": false,
         "includeInBriefing": true,
-        "includeOnWebsite" : true,
-        "isAllDay"         : false,
-        "startTime"        : "20:20",
-        "endTime"          : "",
-        "days"             : [
-          "sunday",    "monday",    "tuesday",   "wednesday", "thursday",
-          "friday",    "saturday"
+        "includeOnWebsite": true,
+        "isAllDay": false,
+        "startTime": "20:20",
+        "endTime": "",
+        "days": [
+          "sunday",
+          "monday",
+          "tuesday",
+          "wednesday",
+          "thursday",
+          "friday",
+          "saturday"
         ],
-        "variations"       : {},
-        "archived"         : false,
-        "recurrence"       : {
-          "type"       : "days",
-          "daysOfWeek" : [
-            "sunday",    "monday",    "tuesday",   "wednesday", "thursday",
-            "friday",    "saturday"
+        "variations": {},
+        "archived": false,
+        "recurrence": {
+          "type": "days",
+          "daysOfWeek": [
+            "sunday",
+            "monday",
+            "tuesday",
+            "wednesday",
+            "thursday",
+            "friday",
+            "saturday"
           ],
-          "onPeriods"  : 1,
-          "offPeriods" : 2,
-          "startDate"  : "2026-07-07",
-          "startTag"   : "main",
+          "onPeriods": 1,
+          "offPeriods": 2,
+          "startDate": "2026-07-07",
+          "startTag": "main",
           "startOffset": 631
         },
-        "order_value"      : 2
+        "order_value": 2
       }
     },
     {
-      "kind" : "owned",
+      "kind": "owned",
       "event": {
-        "id"               : "3d376821-2591-42af-a6e5-86c5ac854d25",
-        "title"            : "Street Rush",
-        "description"      : "",
-        "remindTomorrow"   : false,
-        "remindEndOfDay"   : true,
+        "id": "3d376821-2591-42af-a6e5-86c5ac854d25",
+        "title": "Street Rush",
+        "description": "",
+        "remindTomorrow": false,
+        "remindEndOfDay": true,
         "includeInBriefing": true,
-        "includeOnWebsite" : true,
-        "isAllDay"         : true,
-        "startTime"        : "09:00",
-        "endTime"          : "",
-        "days"             : [
-          "sunday",    "monday",    "tuesday",   "wednesday", "thursday",
-          "friday",    "saturday"
+        "includeOnWebsite": true,
+        "isAllDay": true,
+        "startTime": "09:00",
+        "endTime": "",
+        "days": [
+          "sunday",
+          "monday",
+          "tuesday",
+          "wednesday",
+          "thursday",
+          "friday",
+          "saturday"
         ],
-        "variations"       : {},
-        "archived"         : true,
-        "recurrence"       : {
-          "type"       : "days",
-          "daysOfWeek" : [
-            "sunday",    "monday",    "tuesday",   "wednesday", "thursday",
-            "friday",    "saturday"
+        "variations": {},
+        "archived": true,
+        "recurrence": {
+          "type": "days",
+          "daysOfWeek": [
+            "sunday",
+            "monday",
+            "tuesday",
+            "wednesday",
+            "thursday",
+            "friday",
+            "saturday"
           ],
-          "onPeriods"  : 1,
-          "offPeriods" : 0,
-          "startDate"  : "2026-07-07",
-          "startTag"   : "main",
+          "onPeriods": 1,
+          "offPeriods": 0,
+          "startDate": "2026-07-07",
+          "startTag": "main",
           "startOffset": 634,
-          "endOffset"  : 661
+          "endOffset": 661
         }
       }
     },
     {
-      "kind" : "owned",
+      "kind": "owned",
       "event": {
-        "id"               : "b21010b5-ca3e-479c-8df3-02bc4f594a69",
-        "title"            : "Goldvein War Battle",
-        "description"      : "",
-        "remindTomorrow"   : true,
-        "remindEndOfDay"   : false,
+        "id": "b21010b5-ca3e-479c-8df3-02bc4f594a69",
+        "title": "Goldvein War Battle",
+        "description": "",
+        "remindTomorrow": true,
+        "remindEndOfDay": false,
         "includeInBriefing": true,
-        "includeOnWebsite" : true,
-        "isAllDay"         : false,
-        "startTime"        : "12:00",
-        "endTime"          : "",
-        "days"             : ["saturday"],
-        "variations"       : {},
-        "archived"         : false,
-        "recurrence"       : {
-          "type"       : "weeks",
-          "daysOfWeek" : ["saturday"],
-          "onPeriods"  : 1,
-          "offPeriods" : 0,
-          "startDate"  : "2026-07-25",
-          "startTag"   : "main",
+        "includeOnWebsite": true,
+        "isAllDay": false,
+        "startTime": "12:00",
+        "endTime": "",
+        "days": [
+          "saturday"
+        ],
+        "variations": {},
+        "archived": false,
+        "recurrence": {
+          "type": "weeks",
+          "daysOfWeek": [
+            "saturday"
+          ],
+          "onPeriods": 1,
+          "offPeriods": 0,
+          "startDate": "2026-07-25",
+          "startTag": "main",
           "startOffset": 653,
-          "endOffset"  : 667
+          "endOffset": 667
         }
       }
     },
     {
-      "kind" : "owned",
+      "kind": "owned",
       "event": {
-        "id"               : "a977dd2f-9247-4c5b-bab1-5956e0a8e974",
-        "title"            : "Hot Deals → Glittering Market - FINAL DAY",
-        "description"      : "",
-        "remindTomorrow"   : true,
-        "remindEndOfDay"   : true,
+        "id": "a977dd2f-9247-4c5b-bab1-5956e0a8e974",
+        "title": "Hot Deals → Glittering Market - FINAL DAY",
+        "description": "",
+        "remindTomorrow": true,
+        "remindEndOfDay": true,
         "includeInBriefing": true,
-        "includeOnWebsite" : true,
-        "isAllDay"         : true,
-        "startTime"        : "09:00",
-        "endTime"          : "",
-        "days"             : ["sunday"],
-        "variations"       : {},
-        "archived"         : false,
-        "recurrence"       : {
-          "type"       : "weeks",
-          "daysOfWeek" : ["sunday"],
-          "onPeriods"  : 1,
-          "offPeriods" : 3,
-          "startDate"  : "2026-08-11",
-          "startTag"   : "main",
+        "includeOnWebsite": true,
+        "isAllDay": true,
+        "startTime": "09:00",
+        "endTime": "",
+        "days": [
+          "sunday"
+        ],
+        "variations": {},
+        "archived": false,
+        "recurrence": {
+          "type": "weeks",
+          "daysOfWeek": [
+            "sunday"
+          ],
+          "onPeriods": 1,
+          "offPeriods": 3,
+          "startDate": "2026-08-11",
+          "startTag": "main",
           "startOffset": 642
         }
       }
     },
     {
-      "kind" : "owned",
+      "kind": "owned",
       "event": {
-        "id"               : "bbfaaf83-8941-4591-a7a8-40d344b44b3b",
-        "title"            : "Free/300/500 Stamina - Drone/Radar & General's Trial",
-        "description"      : "",
-        "remindTomorrow"   : false,
-        "remindEndOfDay"   : true,
+        "id": "bbfaaf83-8941-4591-a7a8-40d344b44b3b",
+        "title": "Free/300/500 Stamina - Drone/Radar & General's Trial",
+        "description": "",
+        "remindTomorrow": false,
+        "remindEndOfDay": true,
         "includeInBriefing": false,
-        "includeOnWebsite" : false,
-        "isAllDay"         : true,
-        "startTime"        : "09:00",
-        "endTime"          : "",
-        "days"             : ["tuesday"],
-        "variations"       : {},
-        "archived"         : false,
-        "recurrence"       : {
-          "type"       : "weeks",
-          "daysOfWeek" : ["tuesday"],
-          "onPeriods"  : 1,
-          "offPeriods" : 0,
-          "startDate"  : "2026-08-11",
-          "startTag"   : "main",
+        "includeOnWebsite": false,
+        "isAllDay": true,
+        "startTime": "09:00",
+        "endTime": "",
+        "days": [
+          "tuesday"
+        ],
+        "variations": {},
+        "archived": false,
+        "recurrence": {
+          "type": "weeks",
+          "daysOfWeek": [
+            "tuesday"
+          ],
+          "onPeriods": 1,
+          "offPeriods": 1,
+          "startDate": "2026-08-11",
+          "startTag": "main",
           "startOffset": -4
         },
-        "order_value"      : 10
+        "order_value": 10
       }
     },
     {
-      "kind" : "owned",
+      "kind": "owned",
       "event": {
-        "id"               : "48530756-e01d-41e9-a299-0f44d3c4d7b8",
-        "title"            : "store.lastwar.com Check-in",
-        "description"      : "",
-        "remindTomorrow"   : false,
-        "remindEndOfDay"   : true,
+        "id": "48530756-e01d-41e9-a299-0f44d3c4d7b8",
+        "title": "store.lastwar.com Check-in",
+        "description": "",
+        "remindTomorrow": false,
+        "remindEndOfDay": true,
         "includeInBriefing": true,
-        "includeOnWebsite" : true,
-        "isAllDay"         : true,
-        "startTime"        : "09:00",
-        "endTime"          : "",
-        "days"             : ["monday"],
-        "variations"       : {},
-        "archived"         : false,
-        "recurrence"       : {
-          "type"       : "weeks",
-          "daysOfWeek" : ["monday"],
-          "onPeriods"  : 1,
-          "offPeriods" : 0,
-          "startDate"  : "2026-08-11",
-          "startTag"   : "main",
+        "includeOnWebsite": true,
+        "isAllDay": true,
+        "startTime": "09:00",
+        "endTime": "",
+        "days": [
+          "monday"
+        ],
+        "variations": {},
+        "archived": false,
+        "recurrence": {
+          "type": "weeks",
+          "daysOfWeek": [
+            "monday"
+          ],
+          "onPeriods": 1,
+          "offPeriods": 0,
+          "startDate": "2026-08-11",
+          "startTag": "main",
           "startOffset": -4
         },
-        "order_value"      : 9
+        "order_value": 9
       }
     },
     {
-      "kind" : "owned",
+      "kind": "owned",
       "event": {
-        "id"               : "1285d867-8664-424e-925c-3ef8afbbf0fd",
-        "title"            : "Register for Canyon Storm",
-        "description"      : "",
-        "remindTomorrow"   : false,
-        "remindEndOfDay"   : false,
+        "id": "1285d867-8664-424e-925c-3ef8afbbf0fd",
+        "title": "Register for Canyon Storm",
+        "description": "",
+        "remindTomorrow": false,
+        "remindEndOfDay": false,
         "includeInBriefing": true,
-        "includeOnWebsite" : true,
-        "isAllDay"         : true,
-        "startTime"        : "09:00",
-        "endTime"          : "",
-        "days"             : ["monday"],
-        "variations"       : {},
-        "archived"         : false,
-        "recurrence"       : {
-          "type"       : "weeks",
-          "daysOfWeek" : ["monday"],
-          "onPeriods"  : 1,
-          "offPeriods" : 0,
-          "startDate"  : "2026-08-11",
-          "startTag"   : "main",
+        "includeOnWebsite": true,
+        "isAllDay": true,
+        "startTime": "09:00",
+        "endTime": "",
+        "days": [
+          "monday"
+        ],
+        "variations": {},
+        "archived": false,
+        "recurrence": {
+          "type": "weeks",
+          "daysOfWeek": [
+            "monday"
+          ],
+          "onPeriods": 1,
+          "offPeriods": 0,
+          "startDate": "2026-08-11",
+          "startTag": "main",
           "startOffset": -283
         }
       }
     },
     {
-      "kind" : "owned",
+      "kind": "owned",
       "event": {
-        "id"               : "6e7e34c6-751b-4ab6-8835-07550612f5a9",
-        "title"            : "Hot Deals → Glittering Market",
-        "description"      : "",
-        "remindTomorrow"   : true,
-        "remindEndOfDay"   : false,
+        "id": "6e7e34c6-751b-4ab6-8835-07550612f5a9",
+        "title": "Hot Deals → Glittering Market",
+        "description": "",
+        "remindTomorrow": true,
+        "remindEndOfDay": false,
         "includeInBriefing": false,
-        "includeOnWebsite" : false,
-        "isAllDay"         : true,
-        "startTime"        : "09:00",
-        "endTime"          : "",
-        "days"             : ["monday"],
-        "variations"       : {},
-        "archived"         : false,
-        "recurrence"       : {
-          "type"       : "weeks",
-          "daysOfWeek" : ["monday"],
-          "onPeriods"  : 1,
-          "offPeriods" : 3,
-          "startDate"  : "2026-08-11",
-          "startTag"   : "main",
+        "includeOnWebsite": false,
+        "isAllDay": true,
+        "startTime": "09:00",
+        "endTime": "",
+        "days": [
+          "monday"
+        ],
+        "variations": {},
+        "archived": false,
+        "recurrence": {
+          "type": "weeks",
+          "daysOfWeek": [
+            "monday"
+          ],
+          "onPeriods": 1,
+          "offPeriods": 3,
+          "startDate": "2026-08-11",
+          "startTag": "main",
           "startOffset": 277
+        }
+      }
+    },
+    {
+      "kind": "owned",
+      "event": {
+        "id": "349ab5ca-8679-45e7-9949-2208e03c790a",
+        "title": "Loot Goblin Store - FINAL DAY",
+        "description": "",
+        "remindTomorrow": true,
+        "remindEndOfDay": true,
+        "includeInBriefing": true,
+        "includeOnWebsite": true,
+        "isAllDay": true,
+        "startTime": "09:00",
+        "endTime": "",
+        "days": [
+          "friday"
+        ],
+        "variations": {},
+        "archived": false,
+        "recurrence": {
+          "type": "weeks",
+          "daysOfWeek": [
+            "friday"
+          ],
+          "onPeriods": 1,
+          "offPeriods": 1,
+          "startTag": "main",
+          "startOffset": 4,
+          "startDate": "2025-01-05"
+        },
+        "order_value": 8
+      }
+    },
+    {
+      "kind": "owned",
+      "event": {
+        "id": "be913f10-2c14-4b73-a272-4c77ab0d617c",
+        "title": "Halloween Check-in",
+        "description": "",
+        "remindTomorrow": false,
+        "remindEndOfDay": true,
+        "includeInBriefing": true,
+        "includeOnWebsite": true,
+        "isAllDay": true,
+        "startTime": "09:00",
+        "endTime": "",
+        "days": [
+          "sunday",
+          "monday",
+          "tuesday",
+          "wednesday",
+          "thursday",
+          "friday",
+          "saturday"
+        ],
+        "variations": {},
+        "archived": false,
+        "recurrence": {
+          "type": "days",
+          "daysOfWeek": [
+            "sunday",
+            "monday",
+            "tuesday",
+            "wednesday",
+            "thursday",
+            "friday",
+            "saturday"
+          ],
+          "onPeriods": 1,
+          "offPeriods": 0,
+          "startTag": "main",
+          "startOffset": 746,
+          "endOffset": 752,
+          "startDate": "2025-01-05"
+        },
+        "order_value": -10
+      }
+    },
+    {
+      "kind": "owned",
+      "event": {
+        "id": "878e222f-ae36-4616-9f73-2bb31948fad2",
+        "title": "Halloween Check-in - First Day",
+        "description": "",
+        "remindTomorrow": true,
+        "remindEndOfDay": false,
+        "includeInBriefing": false,
+        "includeOnWebsite": false,
+        "isAllDay": true,
+        "startTime": "09:00",
+        "endTime": "",
+        "days": [
+          "sunday",
+          "monday",
+          "tuesday",
+          "wednesday",
+          "thursday",
+          "friday",
+          "saturday"
+        ],
+        "variations": {},
+        "archived": false,
+        "recurrence": {
+          "type": "days",
+          "daysOfWeek": [
+            "sunday",
+            "monday",
+            "tuesday",
+            "wednesday",
+            "thursday",
+            "friday",
+            "saturday"
+          ],
+          "onPeriods": 1,
+          "offPeriods": 0,
+          "startTag": "main",
+          "startOffset": 746,
+          "endOffset": 746,
+          "startDate": "2025-01-05"
+        },
+        "order_value": -10
+      }
+    },
+    {
+      "kind": "owned",
+      "event": {
+        "id": "166617c9-707f-40a4-bb86-28ea496b7c9d",
+        "title": "Storm Arena - FINAL DAY",
+        "description": "",
+        "remindTomorrow": true,
+        "remindEndOfDay": true,
+        "includeInBriefing": true,
+        "includeOnWebsite": true,
+        "isAllDay": true,
+        "startTime": "09:00",
+        "endTime": "",
+        "days": [
+          "sunday"
+        ],
+        "variations": {},
+        "archived": false,
+        "recurrence": {
+          "type": "weeks",
+          "daysOfWeek": [
+            "sunday"
+          ],
+          "onPeriods": 1,
+          "offPeriods": 3,
+          "startTag": "main",
+          "startOffset": 346,
+          "startDate": "2025-01-05"
+        }
+      }
+    },
+    {
+      "kind": "owned",
+      "event": {
+        "id": "e4c8595e-a3d1-4e45-b7bc-937729f74bde",
+        "title": "3v3 - FINAL DAY",
+        "description": "",
+        "remindTomorrow": true,
+        "remindEndOfDay": true,
+        "includeInBriefing": true,
+        "includeOnWebsite": true,
+        "isAllDay": true,
+        "startTime": "09:00",
+        "endTime": "",
+        "days": [
+          "sunday"
+        ],
+        "variations": {},
+        "archived": false,
+        "recurrence": {
+          "type": "weeks",
+          "daysOfWeek": [
+            "sunday"
+          ],
+          "onPeriods": 1,
+          "offPeriods": 3,
+          "startTag": "main",
+          "startOffset": 758
         }
       }
     }

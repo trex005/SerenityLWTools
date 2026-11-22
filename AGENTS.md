@@ -20,7 +20,7 @@
 - Event admin dialog consolidates "Include in" toggles (Scheduled, Website, Briefing, Previous Day, End of Day); keep Scheduled on to surface the event anywhere, and use Website to control the public briefing tab while Briefing/Reminder toggles gate their respective outputs.
 - Event ordering uses the global float `order_value`; missing values behave as `0`, ties sort by title, and legacy per-day `order` data should not be written or exported.
 - All scheduling logic, exports, and timestamps must run in the app timezone (GMT-2). Use the helpers in `lib/date-utils.ts` (`formatInAppTimezone`, `getStartOfAppDay`, `getEndOfAppDay`, `addAppDays`) for any date math or formatting; only the optional local-time display for event times should use the user's timezone.
-- Recurrence uses only the tag-relative `type: "days" | "weeks"` shape with `startTag`/`startOffset`, `onPeriods`/`offPeriods`, and `daysOfWeek`; legacy fields like `startDate`, `interval`, `daily/weekly` types, `pattern`, `phaseStartDate`, or `event.days` fallbacks are no longer read.
+- Recurrence uses the tag-relative `type: "days" | "weeks" | "month_end"` shape with `startTag`/`startOffset`, `onPeriods`/`offPeriods`, and `daysOfWeek`; month-end occurs on the last calendar day regardless of weekday, within the inclusive bounds. Legacy fields like `startDate`, `interval`, `daily/weekly` types, `pattern`, `phaseStartDate`, or `event.days` fallbacks are no longer read.
 - Portable schedule and report calculations belong in the DOM-free `lib/serenity-engine/` core. UI code must call that core rather than reimplement recurrence so the same compiled artifact can run inside LWMinions.
 - Cross-application one-time and interval schedules use the canonical `lib/serenity-engine/schedule-v1.schema.json` shape and the engine's `schedule-next` operation. Keep schema, TypeScript resolver, JSON ABI, and cross-runtime fixtures aligned when schedule behavior changes.
 - Canonical one-time schedules may specify either `duration_seconds` or an explicit `end` datetime; recurring schedules may specify `duration_seconds` per occurrence and an optional inclusive `until` cutoff.
@@ -34,6 +34,8 @@
 
 - `npm install` installs dependencies (npm is the package manager of record; `package-lock.json` is committed).
 - `npm run dev` launches the Vite dev server at `http://localhost:3000`.
+- `npm run download:configs` previews the complete live S3 `conf/` tree against `public/conf`; `--execute` downloads, and differing existing files require explicit `--overwrite` with backups. See `DOWNLOAD_CONFIGS.md`. Never run live application merely to test this tool.
+- `npm run test:download-configs` checks download-only behavior with fake S3 and isolated temporary directories.
 - `npm run build` compiles production assets to `out/` in seconds.
 - `npm run start` (or `preview`) serves the compiled build for QA.
 - `npm run typecheck` runs `tsc --noEmit`—keep it clean before opening a PR.

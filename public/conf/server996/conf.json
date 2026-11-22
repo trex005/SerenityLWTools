@@ -3,9 +3,8 @@
   "brand"  : {"name": "Server 996", "favicon": "/conf/996/favicon.ico"},
   "tags"   : {
     "server996": {"startDate": "2024-10-10"},
-    "season6"  : {"startDate": "2026-08-24"},
     "main"     : {"startDate": "2024-10-10"}
   },
-  "parents": ["season6", "main"],
+  "parents": ["main"],
   "storage": {"eventsSuffix": "schema-v2-20260816"}
 }

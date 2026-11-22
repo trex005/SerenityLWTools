@@ -5,7 +5,7 @@ export const ENGINE_VERSION = "0.5.0"
 export type TagMetadata = { startDate?: string; endDate?: string | null; [key: string]: unknown }
 export type TagConfig = { tags?: Record<string, TagMetadata | null>; [key: string]: unknown }
 export type Recurrence = {
-  type: "days" | "weeks" | "none"
+  type: "days" | "weeks" | "month_end" | "none"
   startTag: string
   startOffset: number
   endOffset?: number
@@ -94,12 +94,17 @@ export const eventOccursOnDate = (
     return event.dateIncludeOverrides[targetDateKey]
   }
   const recurrence = event.recurrence
-  if (!recurrence || (recurrence.type !== "days" && recurrence.type !== "weeks")) return false
+  if (!recurrence || (recurrence.type !== "days" && recurrence.type !== "weeks" && recurrence.type !== "month_end")) return false
   try {
     const start = resolveRecurrenceDateKey(recurrence.startTag, recurrence.startOffset, tagConfig)
     const end = recurrence.endOffset === undefined
       ? undefined
       : resolveRecurrenceDateKey(recurrence.startTag, recurrence.endOffset, tagConfig)
+    if (recurrence.type === "month_end") {
+      const day = dateKeyToDay(targetDateKey)
+      if (day < dateKeyToDay(start) || (end && day > dateKeyToDay(end))) return false
+      return new Date((day + 1) * DAY_MS).getUTCDate() === 1
+    }
     return occursInCycle(
       targetDateKey,
       start,

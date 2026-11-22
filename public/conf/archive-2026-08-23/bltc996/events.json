@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 2,
+  "updated": "2026-01-03T15:21:22-02:00",
+  "operations": [
+    {
+      "kind": "override",
+      "id": "ev-3",
+      "set": {
+        "/days": [
+          "monday"
+        ],
+        "/recurrence/daysOfWeek": [
+          "monday"
+        ],
+        "/startTime": "19:30"
+      }
+    },
+    {
+      "kind": "override",
+      "id": "1ae7c08b-29e3-4ef3-a00f-ccc19f155ddb",
+      "set": {
+        "/startTime": "20:00"
+      }
+    }
+  ]
+}

@@ -200,6 +200,8 @@ export function formatRecurrence(event: any, tagConfig: TagConfig = {}): string 
     return null
   }
 
+  if (event.recurrence.type === "month_end") return "Last day of every month"
+
   let periodDays: number
   let onPeriods: number
   let offPeriods: number

@@ -1,7 +1,279 @@
 {
   "schemaVersion": 2,
-  "updated": "2026-08-12T22:48:27-02:00",
+  "updated": "2026-10-26T03:30:37-02:00",
   "operations": [
+    {
+      "kind": "owned",
+      "event": {
+        "id": "105e5dc2-9b2f-4827-a998-71f385a6232b",
+        "title": "TBD - Pond capture",
+        "description": "",
+        "remindTomorrow": true,
+        "remindEndOfDay": false,
+        "includeInBriefing": true,
+        "includeOnWebsite": true,
+        "isAllDay": true,
+        "startTime": "12:00",
+        "endTime": "",
+        "days": [
+          "sunday",
+          "monday",
+          "tuesday",
+          "thursday",
+          "friday"
+        ],
+        "variations": {},
+        "archived": true,
+        "recurrence": {
+          "type": "weeks",
+          "daysOfWeek": [
+            "sunday",
+            "monday",
+            "tuesday",
+            "thursday",
+            "friday"
+          ],
+          "onPeriods": 1,
+          "offPeriods": 0,
+          "startTag": "996serenity",
+          "startOffset": 697,
+          "startDate": "2025-01-05"
+        },
+        "order_value": -50
+      }
+    },
+    {
+      "kind": "owned",
+      "event": {
+        "id": "78ac5ce7-b2f5-4b2a-ac93-06be57620ca9",
+        "title": "DESTOYING OUR FIRST CITY!",
+        "description": "",
+        "remindTomorrow": true,
+        "remindEndOfDay": false,
+        "includeInBriefing": true,
+        "includeOnWebsite": true,
+        "isAllDay": false,
+        "startTime": "00:00",
+        "endTime": "",
+        "days": [
+          "wednesday"
+        ],
+        "variations": {},
+        "archived": false,
+        "recurrence": {
+          "type": "weeks",
+          "daysOfWeek": [
+            "wednesday"
+          ],
+          "onPeriods": 1,
+          "offPeriods": 0,
+          "startTag": "996serenity",
+          "startOffset": 699,
+          "endOffset": 699,
+          "startDate": "2025-01-05"
+        }
+      }
+    },
+    {
+      "kind": "owned",
+      "event": {
+        "id": "4413b4c2-f8b6-4e45-a2d3-a2b192c81224",
+        "title": "Capture city!",
+        "description": "",
+        "remindTomorrow": true,
+        "remindEndOfDay": false,
+        "includeInBriefing": true,
+        "includeOnWebsite": true,
+        "isAllDay": false,
+        "startTime": "00:05",
+        "endTime": "",
+        "days": [
+          "sunday",
+          "monday",
+          "tuesday",
+          "wednesday",
+          "thursday",
+          "friday",
+          "saturday"
+        ],
+        "variations": {},
+        "archived": false,
+        "recurrence": {
+          "type": "days",
+          "daysOfWeek": [
+            "sunday",
+            "monday",
+            "tuesday",
+            "wednesday",
+            "thursday",
+            "friday",
+            "saturday"
+          ],
+          "onPeriods": 1,
+          "offPeriods": 0,
+          "startTag": "996serenity",
+          "startOffset": 706,
+          "endOffset": 706,
+          "startDate": "2025-01-05"
+        }
+      }
+    },
+    {
+      "kind": "owned",
+      "event": {
+        "id": "62dfd68d-ae32-4cf8-bee5-0bf919fe11b3",
+        "title": "Global Expedition - FINAL DAY",
+        "description": "",
+        "remindTomorrow": true,
+        "remindEndOfDay": true,
+        "includeInBriefing": true,
+        "includeOnWebsite": true,
+        "isAllDay": true,
+        "startTime": "09:00",
+        "endTime": "",
+        "days": [
+          "wednesday"
+        ],
+        "variations": {},
+        "archived": false,
+        "recurrence": {
+          "type": "weeks",
+          "daysOfWeek": [
+            "wednesday"
+          ],
+          "onPeriods": 1,
+          "offPeriods": 0,
+          "startTag": "996serenity",
+          "startOffset": 713,
+          "startDate": "2025-01-05",
+          "endOffset": 731
+        },
+        "order_value": -40
+      }
+    },
+    {
+      "kind": "owned",
+      "event": {
+        "id": "0a884c84-3b80-45ca-aaf6-eb74f8b164a6",
+        "title": "Outpost Conquest - BIG FIGHT!!!",
+        "description": "",
+        "remindTomorrow": true,
+        "remindEndOfDay": false,
+        "includeInBriefing": true,
+        "includeOnWebsite": true,
+        "isAllDay": false,
+        "startTime": "12:00",
+        "endTime": "",
+        "days": [
+          "wednesday"
+        ],
+        "variations": {},
+        "archived": false,
+        "recurrence": {
+          "type": "weeks",
+          "daysOfWeek": [
+            "wednesday"
+          ],
+          "onPeriods": 1,
+          "offPeriods": 0,
+          "startTag": "996serenity",
+          "startOffset": 713,
+          "endOffset": 727
+        }
+      }
+    },
+    {
+      "kind": "owned",
+      "event": {
+        "id": "090e0384-4d1d-4ce2-9074-c2e40bef500f",
+        "title": "Capturing a city!",
+        "description": "",
+        "remindTomorrow": true,
+        "remindEndOfDay": false,
+        "includeInBriefing": true,
+        "includeOnWebsite": true,
+        "isAllDay": false,
+        "startTime": "00:10",
+        "endTime": "",
+        "days": [
+          "saturday"
+        ],
+        "variations": {},
+        "archived": true,
+        "recurrence": {
+          "type": "weeks",
+          "daysOfWeek": [
+            "saturday"
+          ],
+          "onPeriods": 1,
+          "offPeriods": 0,
+          "startTag": "996serenity",
+          "startOffset": 0,
+          "startDate": "2025-01-05"
+        }
+      }
+    },
+    {
+      "kind": "owned",
+      "event": {
+        "id": "a7487f39-13f7-42f6-88a6-ca5ae8dc21f1",
+        "title": "Defend Capitol!",
+        "description": "",
+        "remindTomorrow": true,
+        "remindEndOfDay": false,
+        "includeInBriefing": true,
+        "includeOnWebsite": true,
+        "isAllDay": false,
+        "startTime": "13:00",
+        "endTime": "",
+        "days": [
+          "saturday"
+        ],
+        "variations": {},
+        "archived": true,
+        "recurrence": {
+          "type": "weeks",
+          "daysOfWeek": [
+            "saturday"
+          ],
+          "onPeriods": 1,
+          "offPeriods": 0,
+          "startTag": "996serenity",
+          "startOffset": 716
+        }
+      }
+    },
+    {
+      "kind": "owned",
+      "event": {
+        "id": "cf72d359-77f6-4529-8357-90c9ca07a50b",
+        "title": "Crystal & Campaign shops - FINAL DAY!",
+        "description": "",
+        "remindTomorrow": true,
+        "remindEndOfDay": true,
+        "includeInBriefing": true,
+        "includeOnWebsite": true,
+        "isAllDay": true,
+        "startTime": "09:00",
+        "endTime": "",
+        "days": [
+          "wednesday"
+        ],
+        "variations": {},
+        "archived": false,
+        "recurrence": {
+          "type": "weeks",
+          "daysOfWeek": [
+            "wednesday"
+          ],
+          "onPeriods": 1,
+          "offPeriods": 0,
+          "startTag": "996serenity",
+          "startOffset": 720,
+          "endOffset": 720
+        }
+      }
+    },
     {
       "kind": "override",
       "id": "ev-9",
@@ -22,6 +294,101 @@
       "set": {
         "/archived": true
       }
+    },
+    {
+      "kind": "override",
+      "id": "f948a0fc-4ef5-4ba0-8458-8612c29a4537",
+      "set": {
+        "/archived": true
+      }
+    },
+    {
+      "kind": "override",
+      "id": "863ecb60-9cb5-4e76-92fb-9b16057189d3",
+      "set": {
+        "/days": [
+          "monday",
+          "tuesday",
+          "wednesday",
+          "thursday",
+          "friday",
+          "saturday",
+          "sunday"
+        ],
+        "/recurrence/daysOfWeek": [
+          "monday",
+          "tuesday",
+          "wednesday",
+          "thursday",
+          "friday",
+          "saturday",
+          "sunday"
+        ],
+        "/recurrence/type": "days",
+        "/startTime": "20:00"
+      }
+    },
+    {
+      "kind": "override",
+      "id": "a9c4d315-08f2-42af-951a-834f13b81a68",
+      "set": {
+        "/title": "Remaining capture(s)"
+      }
+    },
+    {
+      "kind": "override",
+      "id": "b9828dca-503c-4514-99ca-eabe1e2014af",
+      "set": {
+        "/title": "Faction Clash"
+      }
+    },
+    {
+      "kind": "override",
+      "id": "eaeab53d-88e7-4bef-aa4c-c51d4e7c721d",
+      "set": {
+        "/recurrence/startDate": "2025-01-05",
+        "/title": "Faction Clash"
+      }
+    },
+    {
+      "kind": "override",
+      "id": "ev-1739556987954",
+      "set": {
+        "/recurrence/startDate": "2025-01-05",
+        "/title": "General's Trial - Select 1 level more than you can handle, we're a TEAM!"
+      }
+    },
+    {
+      "kind": "override",
+      "id": "ev-1739558845321",
+      "set": {
+        "/days": [
+          "monday"
+        ],
+        "/recurrence/daysOfWeek": [
+          "monday"
+        ]
+      }
+    },
+    {
+      "kind": "override",
+      "id": "ev-3",
+      "set": {
+        "/recurrence/startOffset": 630,
+        "/recurrence/startTag": "996serenity"
+      }
+    },
+    {
+      "kind": "override",
+      "id": "5d775721-b174-405a-9f95-1045c52954c4",
+      "set": {
+        "/recurrence/startOffset": 630,
+        "/recurrence/startTag": "996serenity"
+      }
+    },
+    {
+      "kind": "delete",
+      "id": "403b8446-59ef-4771-a697-fd4315b56b32"
     }
   ]
 }

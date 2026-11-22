@@ -1,6 +1,11 @@
 {
-  "updated": "2026-07-07T22:49:31-02:00",
+  "updated": "2026-10-25T02:10:00-02:00",
   "tips": [
+    {
+      "id": "e010d551-45d9-4fe0-82d5-082c1fa13f52",
+      "content": "<div>\n  <p>To ever win <strong>Warzone Duel</strong>, we need to grow our server - that means strengthening our top alliances <em>and</em> increasing the number of smaller alliances:</p>\n  <p><a href=\"/t/why-small-alliances-and-players\">Why small alliances and players matter</a></p>\n\n  <p>Our main issues are poor communication and the reputation some top alliances have for being bullies:</p>\n  <p><a href=\"/t/nap7-sports-analogy\">NAP-7 Sports Analogy</a></p>\n\n  <p>If we improve communication and commit to the success of the whole server, we can absolutely win:</p>\n  <p><a href=\"/t/996-plan\">The 996 Plan</a></p>\n</div>",
+      "type": "html"
+    },
     {
       "id": "8f2a9d9e-a306-417c-8912-8bd5037d2c83",
       "title": "Serenity Admin Schedule",

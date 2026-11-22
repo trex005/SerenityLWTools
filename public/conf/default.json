@@ -1,12 +1,48 @@
 {
-  "updated"   : "2025-10-28T07:28:53.729441Z",
-  "domains"   : {
-    "localhost"     : {"tag": "main"       },
-    "lwserenity.com": {"tag": "996serenity"},
-    "sswclub.com"   : {"tag": "996sswc"    },
-    "lw996.com"     : {"tag": "server996"  },
-    "lw1901.com"    : {"tag": "server1901" },
-    "rwn.lw1901.com": {"tag": "1901rwn"    }
-  },
-  "defaultTag": "main"
+    "updated":  "2026-11-11T05:44:28.5192593Z",
+    "domains":  {
+                    "localhost":  {
+                                      "tag":  "main"
+                                  },
+                    "lwserenity.com":  {
+                                           "tag":  "996serenity"
+                                       },
+                    "sswclub.com":  {
+                                        "tag":  "996sswc"
+                                    },
+                    "lw996.com":  {
+                                      "tag":  "server996"
+                                  },
+                    "lw1901.com":  {
+                                       "tag":  "server1901"
+                                   },
+                    "rwn.lw1901.com":  {
+                                           "tag":  "1901rwn"
+                                       },
+                    "www.sswclub.com":  {
+                                            "tag":  "996sswc"
+                                        },
+                    "www.lwserenity.com":  {
+                                               "tag":  "996serenity"
+                                           },
+                    "www.lw1901.com":  {
+                                           "tag":  "server1901"
+                                       },
+                    "rwninjas.com":  {
+                                         "tag":  "1901rwn"
+                                     },
+                    "www.rwninjas.com":  {
+                                             "tag":  "1901rwn"
+                                         },
+                    "goon.lw996.com":  {
+                                           "tag":  "996goon"
+                                       },
+                    "go0n.lw996.com":  {
+                                           "tag":  "996goon"
+                                       },
+                    "g0on.lw996.com":  {
+                                           "tag":  "996goon"
+                                       }
+                },
+    "defaultTag":  "main"
 }

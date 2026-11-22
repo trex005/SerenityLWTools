@@ -7,6 +7,9 @@ Outputs:
     event_schedule.json
     other_data.json
 
+Existing outputs are archived before replacement. Default runs archive under
+tmp/extract-cpt-data-backups. With --out-dir, archives go under its archive/ folder.
+
 Usage:
     Edit the configuration below, then run:
     python extract_cpt_data.py
@@ -21,6 +24,10 @@ import argparse
 import ast
 import json
 import re
+import shutil
+import tempfile
+from contextlib import ExitStack
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
@@ -33,6 +40,7 @@ INPUT_FILE = REPOSITORY_ROOT / "public" / "conf" / "cpt_servers.js"
 SERVERS_OUTPUT_FILE = REPOSITORY_ROOT / "public" / "conf" / "servers.json"
 EVENT_SCHEDULE_OUTPUT_FILE = REPOSITORY_ROOT / "public" / "conf" / "event_schedule.json"
 OTHER_DATA_OUTPUT_FILE = REPOSITORY_ROOT / "public" / "conf" / "other_data.json"
+BACKUP_DIR = REPOSITORY_ROOT / "tmp" / "extract-cpt-data-backups"
 
 
 def read_js(path: Path) -> str:
@@ -468,10 +476,10 @@ def build_other_data(text: str, unknown_json: list[dict]) -> dict[str, Any]:
 
 
 def write_json(path: Path, obj: Any) -> None:
-    path.write_text(
-        json.dumps(obj, indent=2, ensure_ascii=False) + "\n",
-        encoding="utf-8",
-    )
+    with tempfile.TemporaryDirectory(dir=path.parent) as folder:
+        staged = Path(folder) / path.name
+        staged.write_text(json.dumps(obj, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+        staged.replace(path)
 
 
 def main() -> None:
@@ -530,12 +538,33 @@ def main() -> None:
         schedule_path = args.out_dir / EVENT_SCHEDULE_OUTPUT_FILE.name
         other_path = args.out_dir / OTHER_DATA_OUTPUT_FILE.name
 
-    for output_path in (servers_path, schedule_path, other_path):
-        output_path.parent.mkdir(parents=True, exist_ok=True)
+    outputs = (
+        (servers_path.resolve(), servers),
+        (schedule_path.resolve(), event_schedule),
+        (other_path.resolve(), other_data),
+    )
+    archive_root = BACKUP_DIR if args.out_dir is None else args.out_dir.resolve() / "archive"
+    with ExitStack() as locks:
+        for parent in sorted({path.parent for path, _ in outputs}):
+            parent.mkdir(parents=True, exist_ok=True)
+            lock = parent / ".extract_cpt_data.lock"
+            try:
+                with lock.open("x"):
+                    locks.callback(lock.unlink)
+            except FileExistsError:
+                parser.exit(1, f"Extraction locked by {lock}.\n")
 
-    write_json(servers_path, servers)
-    write_json(schedule_path, event_schedule)
-    write_json(other_path, other_data)
+        existing = [path for path, _ in outputs if path.exists()]
+        if existing:
+            archive_root.mkdir(parents=True, exist_ok=True)
+            stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+            archive = Path(tempfile.mkdtemp(prefix=f"{stamp}-", dir=archive_root))
+            for path in existing:
+                shutil.copy2(path, archive / path.name)
+            print(f"Archived previous outputs -> {archive}", flush=True)
+
+        for path, data in outputs:
+            write_json(path, data)
 
     print(f"Extracted {len(servers):,} servers -> {servers_path}")
     print(f"Extracted {len(event_schedule)} schedule days -> {schedule_path}")

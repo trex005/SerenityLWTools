@@ -1,5 +1,34 @@
 {
   "schemaVersion": 2,
-  "updated": "2026-01-03T15:21:22-02:00",
-  "operations": []
+  "updated": "2026-10-25T22:04:05-02:00",
+  "operations": [
+    {
+      "kind": "override",
+      "id": "a9c4d315-08f2-42af-951a-834f13b81a68",
+      "set": {
+        "/days": [
+          "sunday",
+          "monday",
+          "tuesday",
+          "wednesday",
+          "thursday",
+          "friday"
+        ],
+        "/recurrence/daysOfWeek": [
+          "sunday",
+          "monday",
+          "tuesday",
+          "wednesday",
+          "thursday",
+          "friday"
+        ],
+        "/startTime": "00:05",
+        "/title": "Capture pond(s)"
+      }
+    },
+    {
+      "kind": "delete",
+      "id": "43e0a548-7276-47a5-b2ec-85d3161a8dd1"
+    }
+  ]
 }
