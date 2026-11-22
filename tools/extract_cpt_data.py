@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 """
 Extract embedded data from the CPT Hedge / Last War server webpack bundle.
+By default, discover the current bundles on the server page and save a combined
+cpt_servers.js alongside the extracted JSON. Pass a local bundle to run offline.
+Online mode requires curl on PATH.
 
 Outputs:
     servers.json
@@ -25,18 +28,23 @@ import ast
 import json
 import re
 import shutil
+import subprocess
 import tempfile
+from concurrent.futures import ThreadPoolExecutor
 from contextlib import ExitStack
 from datetime import datetime, timezone
+from html.parser import HTMLParser
 from pathlib import Path
 from typing import Any
+from urllib.parse import urljoin, urlsplit
 
 
 # Configuration
 # These defaults are anchored to the repository, regardless of where the
 # script is launched from. They may also be replaced with absolute paths.
 REPOSITORY_ROOT = Path(__file__).resolve().parent.parent
-INPUT_FILE = REPOSITORY_ROOT / "public" / "conf" / "cpt_servers.js"
+SERVERS_PAGE = "https://cpt-hedge.com/servers"
+BUNDLE_OUTPUT_FILE = REPOSITORY_ROOT / "public" / "conf" / "cpt_servers.js"
 SERVERS_OUTPUT_FILE = REPOSITORY_ROOT / "public" / "conf" / "servers.json"
 EVENT_SCHEDULE_OUTPUT_FILE = REPOSITORY_ROOT / "public" / "conf" / "event_schedule.json"
 OTHER_DATA_OUTPUT_FILE = REPOSITORY_ROOT / "public" / "conf" / "other_data.json"
@@ -45,6 +53,56 @@ BACKUP_DIR = REPOSITORY_ROOT / "tmp" / "extract-cpt-data-backups"
 
 def read_js(path: Path) -> str:
     return path.read_text(encoding="utf-8", errors="replace")
+
+
+class ServerPageScripts(HTMLParser):
+    def __init__(self) -> None:
+        super().__init__()
+        self.urls: dict[str, None] = {}
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        src = dict(attrs).get("src")
+        if tag != "script" or not src:
+            return
+        url = urljoin(SERVERS_PAGE, src)
+        parts = urlsplit(url)
+        if (parts.scheme, parts.netloc) == ("https", "cpt-hedge.com") and (
+            parts.path.startswith("/_next/static/chunks/") and parts.path.endswith(".js")
+        ):
+            self.urls[url] = None
+
+
+def download_text(url: str) -> str:
+    result = subprocess.run(
+        ["curl", "--fail", "--silent", "--show-error", "--max-time", "30", url],
+        capture_output=True,
+    )
+    if result.returncode:
+        detail = result.stderr.decode("utf-8", errors="replace").strip()
+        raise ValueError(f"Request failed for {url}: {detail}")
+    return result.stdout.decode("utf-8")
+
+
+def download_bundle() -> str:
+    page = ServerPageScripts()
+    page.feed(download_text(SERVERS_PAGE))
+    if not page.urls:
+        raise ValueError(f"No Next.js script URLs found on {SERVERS_PAGE}")
+
+    parts = []
+    with ThreadPoolExecutor(max_workers=6) as pool:
+        for url, source in zip(page.urls, pool.map(download_text, page.urls)):
+            has_server_data = 'JSON.parse(' in source and '"seasonStartTimestamps"' in source
+            has_schedule_data = 'JSON.parse(' in source and all(
+                field in source for field in ('"day"', '"events"', '"theme"')
+            )
+            if has_server_data or has_schedule_data or any(
+                marker in source for marker in ("35026:function", "44216:function")
+            ):
+                parts.append(source)
+                print(f"Using source bundle -> {url}")
+
+    return "\n;\n".join(parts)
 
 
 def scan_quoted_literal(text: str, start: int) -> tuple[str, int]:
@@ -475,26 +533,25 @@ def build_other_data(text: str, unknown_json: list[dict]) -> dict[str, Any]:
     }
 
 
-def write_json(path: Path, obj: Any) -> None:
+def write_output(path: Path, content: str) -> None:
     with tempfile.TemporaryDirectory(dir=path.parent) as folder:
         staged = Path(folder) / path.name
-        staged.write_text(json.dumps(obj, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+        staged.write_text(content, encoding="utf-8")
         staged.replace(path)
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(
         description=(
-            "Extract embedded datasets and static game data from cpt_servers.js. "
-            "Arguments override the configuration at the top of this file."
+            "Download the current CPT Hedge server bundles and extract their data, "
+            "or extract from a local bundle."
         )
     )
     parser.add_argument(
         "input",
         nargs="?",
         type=Path,
-        default=INPUT_FILE,
-        help=f"Input bundle (default: {INPUT_FILE})",
+        help="Local bundle to extract offline (default: download the current bundles)",
     )
     parser.add_argument(
         "--out-dir",
@@ -503,10 +560,13 @@ def main() -> None:
     )
     args = parser.parse_args()
 
-    text = read_js(args.input)
-
-    embedded = extract_json_parse_objects(text)
-    servers_obj, schedule_obj, unknown_json = classify_embedded_json(embedded)
+    try:
+        text = download_bundle() if args.input is None else read_js(args.input)
+        embedded = extract_json_parse_objects(text)
+        servers_obj, schedule_obj, unknown_json = classify_embedded_json(embedded)
+        other_data = build_other_data(text, unknown_json)
+    except (OSError, ValueError) as exc:
+        parser.exit(1, f"Could not acquire or extract the CPT Hedge bundle: {exc}\n")
 
     # Unwrap the single-letter webpack export keys for cleaner standalone files.
     servers = next(
@@ -527,22 +587,27 @@ def main() -> None:
         and {"day", "events"}.issubset(value[0])
     )
 
-    other_data = build_other_data(text, unknown_json)
-
     if args.out_dir is None:
+        bundle_path = BUNDLE_OUTPUT_FILE
         servers_path = SERVERS_OUTPUT_FILE
         schedule_path = EVENT_SCHEDULE_OUTPUT_FILE
         other_path = OTHER_DATA_OUTPUT_FILE
     else:
+        bundle_path = args.out_dir / BUNDLE_OUTPUT_FILE.name
         servers_path = args.out_dir / SERVERS_OUTPUT_FILE.name
         schedule_path = args.out_dir / EVENT_SCHEDULE_OUTPUT_FILE.name
         other_path = args.out_dir / OTHER_DATA_OUTPUT_FILE.name
 
-    outputs = (
-        (servers_path.resolve(), servers),
-        (schedule_path.resolve(), event_schedule),
-        (other_path.resolve(), other_data),
-    )
+    outputs = [
+        (path.resolve(), json.dumps(data, indent=2, ensure_ascii=False) + "\n")
+        for path, data in (
+            (servers_path, servers),
+            (schedule_path, event_schedule),
+            (other_path, other_data),
+        )
+    ]
+    if args.input is None:
+        outputs.insert(0, (bundle_path.resolve(), text))
     archive_root = BACKUP_DIR if args.out_dir is None else args.out_dir.resolve() / "archive"
     with ExitStack() as locks:
         for parent in sorted({path.parent for path, _ in outputs}):
@@ -563,9 +628,11 @@ def main() -> None:
                 shutil.copy2(path, archive / path.name)
             print(f"Archived previous outputs -> {archive}", flush=True)
 
-        for path, data in outputs:
-            write_json(path, data)
+        for path, content in outputs:
+            write_output(path, content)
 
+    if args.input is None:
+        print(f"Saved combined source bundle -> {bundle_path}")
     print(f"Extracted {len(servers):,} servers -> {servers_path}")
     print(f"Extracted {len(event_schedule)} schedule days -> {schedule_path}")
     print(f"Extracted static tables and logic -> {other_path}")
